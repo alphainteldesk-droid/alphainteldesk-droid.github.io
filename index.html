@@ -58,6 +58,16 @@
     border: 1px solid var(--line); border-radius: 6px; padding: 2px 8px; margin-bottom: 10px; }
   .soon { color: var(--muted); font-size: .92rem; margin: 0; }
 
+  .updated { color: var(--muted); font-size: .8rem; margin: -10px 0 14px;
+    font-family: "JetBrains Mono", monospace; }
+  .mk { list-style: none; margin: 0; padding: 0; }
+  .mk li { padding: 10px 0; border-top: 1px solid var(--line); }
+  .mk li:first-child { border-top: 0; padding-top: 0; }
+  .mk a { color: var(--text); font-weight: 500; }
+  .mk-q { display: block; color: var(--muted); font-size: .85rem; }
+  .mk-meta { display: block; font-size: .85rem; margin-top: 2px; color: var(--muted); }
+  .mk-meta b { color: var(--cyan); font-family: "JetBrains Mono", monospace; font-weight: 500; }
+
   .motw { border-color: var(--amber); }
   .motw .tag { display: block; margin-bottom: 8px; }
 
@@ -103,10 +113,11 @@
   <section id="closing-soon">
     <span class="tag">Closing soon</span>
     <h2>Upcoming expirations</h2>
+    <p class="updated" id="cs-updated"></p>
     <div class="grid">
-      <div class="card"><span class="venue">POLYMARKET</span>
+      <div class="card" id="cs-polymarket"><span class="venue">POLYMARKET</span>
         <p class="soon">Soonest-closing markets will appear here.</p></div>
-      <div class="card"><span class="venue">KALSHI</span>
+      <div class="card" id="cs-kalshi"><span class="venue">KALSHI</span>
         <p class="soon">Soonest-closing markets will appear here.</p></div>
       <div class="card"><span class="venue">ALPHA ARCADE</span>
         <p class="soon">Soonest-closing markets will appear here.</p></div>
@@ -193,6 +204,26 @@
     <p>&copy; 2026 Alpha Intel Desk</p>
   </div>
 </footer>
+
+<script>
+(function () {
+  var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+  var when = function (s) { return new Date(s).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); };
+  fetch('markets.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    ['polymarket', 'kalshi'].forEach(function (site) {
+      var box = document.getElementById('cs-' + site);
+      var list = (d.closing_soon || {})[site] || [];
+      if (!box || !list.length) return;
+      box.querySelector('.soon').outerHTML = '<ul class="mk">' + list.map(function (m) {
+        return '<li><a href="' + esc(m.url) + '" target="_blank" rel="noopener">' + esc(m.event) + '</a>' +
+          '<span class="mk-q">' + esc(m.market) + '</span>' +
+          '<span class="mk-meta"><b>' + esc(m.yes) + '% Yes</b> · closes ' + esc(when(m.closes)) + '</span></li>';
+      }).join('') + '</ul>';
+    });
+    if (d.updated) document.getElementById('cs-updated').textContent = 'Last updated ' + when(d.updated);
+  }).catch(function () {});
+})();
+</script>
 
 </body>
 </html>
