@@ -68,6 +68,25 @@
   .mk-meta { display: block; font-size: .85rem; margin-top: 2px; color: var(--muted); }
   .mk-meta b { color: var(--cyan); font-family: "JetBrains Mono", monospace; font-weight: 500; }
 
+  .live { color: var(--cyan); display: inline-flex; align-items: center; gap: 8px; }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan);
+    animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(63,219,230,.6); }
+    70% { box-shadow: 0 0 0 8px rgba(63,219,230,0); } 100% { box-shadow: 0 0 0 0 rgba(63,219,230,0); } }
+
+  /* Crosshair hover: brackets lock on like the logo */
+  .card { position: relative; transition: border-color .2s; }
+  .card::before, .card::after { content: ""; position: absolute; inset: 6px;
+    pointer-events: none; opacity: 0; transition: inset .25s, opacity .25s;
+    border: 2px solid var(--cyan); border-radius: 4px;
+    -webkit-mask: linear-gradient(#000 0 0) top left / 14px 14px no-repeat,
+      linear-gradient(#000 0 0) bottom right / 14px 14px no-repeat;
+            mask: linear-gradient(#000 0 0) top left / 14px 14px no-repeat,
+      linear-gradient(#000 0 0) bottom right / 14px 14px no-repeat; }
+  .card::after { -webkit-mask-position: top right, bottom left; mask-position: top right, bottom left; }
+  .card:hover { border-color: #2b4a66; }
+  .card:hover::before, .card:hover::after { opacity: 1; inset: -5px; }
+
   .motw { border-color: var(--amber); }
   .motw .tag { display: block; margin-bottom: 8px; }
 
@@ -111,7 +130,7 @@
   </div>
 
   <section id="closing-soon">
-    <span class="tag">Closing soon</span>
+    <span class="tag live"><i></i>Live · updated hourly</span>
     <h2>Upcoming expirations</h2>
     <p class="updated" id="cs-updated"></p>
     <div class="grid">
@@ -120,20 +139,21 @@
       <div class="card" id="cs-kalshi"><span class="venue">KALSHI</span>
         <p class="soon">Soonest-closing markets will appear here.</p></div>
       <div class="card"><span class="venue">ALPHA ARCADE</span>
-        <p class="soon">Soonest-closing markets will appear here.</p></div>
+        <p class="soon">Alpha Arcade coverage is on the way.</p></div>
     </div>
   </section>
 
   <section id="new-markets">
-    <span class="tag">Just listed</span>
+    <span class="tag live"><i></i>Live · updated hourly</span>
     <h2>New markets</h2>
+    <p class="updated">Listed in the last 48 hours, most traded first</p>
     <div class="grid">
-      <div class="card"><span class="venue">POLYMARKET</span>
+      <div class="card" id="nm-polymarket"><span class="venue">POLYMARKET</span>
         <p class="soon">The newest markets will appear here.</p></div>
-      <div class="card"><span class="venue">KALSHI</span>
+      <div class="card" id="nm-kalshi"><span class="venue">KALSHI</span>
         <p class="soon">The newest markets will appear here.</p></div>
       <div class="card"><span class="venue">ALPHA ARCADE</span>
-        <p class="soon">The newest markets will appear here.</p></div>
+        <p class="soon">Alpha Arcade coverage is on the way.</p></div>
     </div>
   </section>
 
@@ -210,16 +230,22 @@
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var when = function (s) { return new Date(s).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); };
   fetch('markets.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
-    ['polymarket', 'kalshi'].forEach(function (site) {
-      var box = document.getElementById('cs-' + site);
-      var list = (d.closing_soon || {})[site] || [];
-      if (!box || !list.length) return;
-      box.querySelector('.soon').outerHTML = '<ul class="mk">' + list.map(function (m) {
-        return '<li><a href="' + esc(m.url) + '" target="_blank" rel="noopener">' + esc(m.event) + '</a>' +
-          '<span class="mk-q">' + esc(m.market) + '</span>' +
-          '<span class="mk-meta"><b>' + esc(m.yes) + '% Yes</b> · closes ' + esc(when(m.closes)) + '</span></li>';
-      }).join('') + '</ul>';
-    });
+    var ago = function (s) { var h = Math.max(1, Math.round((Date.now() - new Date(s)) / 3600000));
+      return h < 24 ? h + 'h ago' : Math.round(h / 24) + 'd ago'; };
+    var fill = function (prefix, group, meta) {
+      ['polymarket', 'kalshi'].forEach(function (site) {
+        var box = document.getElementById(prefix + site);
+        var list = (d[group] || {})[site] || [];
+        if (!box || !list.length) return;
+        box.querySelector('.soon').outerHTML = '<ul class="mk">' + list.map(function (m) {
+          return '<li><a href="' + esc(m.url) + '" target="_blank" rel="noopener">' + esc(m.event) + '</a>' +
+            '<span class="mk-q">' + esc(m.market) + '</span>' +
+            '<span class="mk-meta"><b>' + esc(m.yes) + '% Yes</b> · ' + esc(meta(m)) + '</span></li>';
+        }).join('') + '</ul>';
+      });
+    };
+    fill('cs-', 'closing_soon', function (m) { return 'closes ' + when(m.closes); });
+    fill('nm-', 'new_markets', function (m) { return 'listed ' + ago(m.opened); });
     if (d.updated) document.getElementById('cs-updated').textContent = 'Last updated ' + when(d.updated);
   }).catch(function () {});
 })();

@@ -1,4 +1,4 @@
-# Alpha Intel Desk: builds markets.json (closing soon) from public Polymarket and Kalshi data.
+# Alpha Intel Desk: builds markets.json (closing soon + new markets) from public Polymarket and Kalshi data.
 import json, time, urllib.request
 from datetime import datetime, timezone, timedelta
 
@@ -55,7 +55,61 @@ for m in ks:
                 "closes": m["close_time"], "yes": round(float(yes) * 100), "volume": int(kv(m)),
                 "url": "https://kalshi.com/markets/" + ev.get("series_ticker", "").lower()})
 
-out = {"updated": n.strftime(f), "closing_soon": {"polymarket": poly, "kalshi": kal}}
+# ================= NEW MARKETS (listed in the last 48 hours) =================
+since = n - timedelta(hours=48)
+
+def new_poly():
+    base = ("https://gamma-api.polymarket.com/events?active=true&closed=false&limit=200"
+            "&start_date_min=" + since.strftime(f))
+    try:
+        evs = get(base + "&order=volume24hr&ascending=false")
+    except Exception:
+        evs = get(base)
+    v24 = lambda e: float(e.get("volume24hr") or 0)
+    evs = [e for e in evs if v24(e) >= 1000 and "Up or Down" not in e.get("title", "")
+           and e.get("markets")]
+    evs = sorted(evs, key=v24, reverse=True)[:3]
+    res = []
+    for e in evs:
+        m = max(e["markets"], key=lambda m: float(m.get("volumeNum") or m.get("volume") or 0))
+        yes = float(json.loads(m.get("outcomePrices") or '["0"]')[0])
+        res.append({"event": e["title"], "market": m.get("question", ""),
+                    "opened": e.get("startDate") or e.get("createdAt"), "yes": round(yes * 100),
+                    "volume": int(v24(e)), "url": "https://polymarket.com/event/" + e["slug"]})
+    return res
+
+def new_kalshi():
+    ms, cur = [], ""
+    for _ in range(5):
+        d = get("https://api.elections.kalshi.com/trade-api/v2/markets?status=open&mve_filter=exclude"
+                f"&limit=1000&min_created_ts={int(since.timestamp())}&cursor={cur}")
+        ms += d["markets"]
+        cur = d.get("cursor") or ""
+        if not cur:
+            break
+    ms = [m for m in ms if kv(m) >= 100]
+    ms = sorted(top_per_event(ms, lambda m: m["event_ticker"], kv), key=kv, reverse=True)[:3]
+    res = []
+    for m in ms:
+        ev = get("https://api.elections.kalshi.com/trade-api/v2/events/" + m["event_ticker"])["event"]
+        yes = m.get("last_price_dollars") or m.get("yes_bid_dollars") or "0"
+        res.append({"event": ev.get("title"), "market": m.get("yes_sub_title") or m["title"],
+                    "opened": m.get("open_time") or m.get("created_time"), "yes": round(float(yes) * 100),
+                    "volume": int(kv(m)),
+                    "url": "https://kalshi.com/markets/" + ev.get("series_ticker", "").lower()})
+    return res
+
+new = {}
+for name, fn in (("polymarket", new_poly), ("kalshi", new_kalshi)):
+    try:
+        new[name] = fn()
+    except Exception as err:
+        print("New markets", name, "failed:", err)
+        new[name] = []
+
+out = {"updated": n.strftime(f), "closing_soon": {"polymarket": poly, "kalshi": kal},
+       "new_markets": new}
 with open("markets.json", "w") as fh:
     json.dump(out, fh, indent=2)
-print("Wrote markets.json:", len(poly), "Polymarket,", len(kal), "Kalshi")
+print("Wrote markets.json:", len(poly), "Polymarket,", len(kal), "Kalshi closing soon |",
+      len(new["polymarket"]), "Polymarket,", len(new["kalshi"]), "Kalshi new")
