@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalshi vs Polymarket vs Alpha Arcade (2026): Which Prediction Market Fits You? | Alpha Intel Desk</title>
+<meta name="description" content="A plain-English comparison of Kalshi, Polymarket and Alpha Arcade: how each works, fees, how you pay, what you can trade, and which one fits you.">
+<link rel="canonical" href="https://alphainteldesk.com/kalshi-vs-polymarket-vs-alpha-arcade.html">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta property="og:title" content="Kalshi vs Polymarket vs Alpha Arcade: which fits you?">
+<meta property="og:description" content="How the three prediction markets compare on fees, payments, markets and more, in plain English.">
+<meta property="og:image" content="https://alphainteldesk.com/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@alphainteldesk">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "What is the difference between Kalshi, Polymarket and Alpha Arcade?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Kalshi is a US exchange regulated by the CFTC where you trade in US dollars. Polymarket is the world's biggest prediction market; its main site runs on crypto, and US traders use the separate, CFTC-regulated Polymarket US. Alpha Arcade is a newer, smaller prediction market that runs on the Algorand blockchain, trades in USDC and lets the community create markets."}},
+    {"@type": "Question", "name": "Why does Alpha Arcade run on Algorand?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Algorand is a decentralized public blockchain with instant finality (blocks settle in about 3 seconds), tiny fixed fees, no network outages since its 2019 launch, and leading post-quantum security. Alpha Arcade's markets and payouts are smart contracts on Algorand that anyone can verify."}},
+    {"@type": "Question", "name": "Which prediction market has the lowest fees?",
+     "acceptedAnswer": {"@type": "Answer", "text": "It depends on how you trade. On Kalshi and Polymarket US, fees are highest for contracts priced near 50 cents and shrink toward 1 cent or 99 cents, and orders that wait on the book (maker orders) pay less or nothing. Check each platform's current fee page before trading, since fee schedules change."}},
+    {"@type": "Question", "name": "Do I need crypto to use a prediction market?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Not for Kalshi or Polymarket US, which use US dollars. The main Polymarket site and Alpha Arcade use USDC, a dollar-backed stablecoin, though Alpha Arcade lets you deposit with a card through Coinbase."}},
+    {"@type": "Question", "name": "Can I see what other traders are doing?",
+     "acceptedAnswer": {"@type": "Answer", "text": "On Polymarket and Alpha Arcade, trades are recorded on a public blockchain, so wallet activity can be followed. Kalshi does not show who is trading."}}
+  ]
+}
+</script>
+<style>
+  :root { --navy:#0b1420; --panel:#111d2c; --line:#1f3044;
+    --cyan:#3fdbe6; --amber:#ffb347; --text:#e8eef5; --muted:#8fa3b8; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--navy); color:var(--text);
+    font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.65; }
+  a { color:var(--cyan); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .wrap { max-width:800px; margin:0 auto; padding:0 16px; }
+  header { border-bottom:1px solid var(--line); position:sticky; top:0;
+    background:rgba(11,20,32,.92); backdrop-filter:blur(8px); z-index:10; }
+  .bar { display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 16px; max-width:1120px; margin:0 auto; }
+  .brand { display:flex; align-items:center; gap:10px; color:var(--text);
+    font-weight:700; font-size:1.1rem; }
+  .brand img { width:36px; height:36px; }
+  nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; }
+  nav a { color:var(--muted); }
+  nav a:hover, nav a.on { color:var(--text); text-decoration:none; }
+  .tag { font-family:"JetBrains Mono",monospace; font-size:.75rem;
+    letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
+  h1 { font-size:clamp(1.6rem,4vw,2.3rem); margin:8px 0 12px; line-height:1.2; }
+  h2 { font-size:1.35rem; margin:44px 0 10px; }
+  h3 { font-size:1.05rem; margin:22px 0 6px; }
+  .lead { color:var(--muted); font-size:1.08rem; }
+  .meta { color:var(--muted); font-size:.82rem; font-family:"JetBrains Mono",monospace; }
+  main { padding:40px 0 8px; }
+  ul { padding-left:20px; } li { margin:4px 0; }
+
+  .short { background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--cyan);
+    border-radius:10px; padding:16px 20px; margin:24px 0; }
+  .short p { margin:6px 0; }
+
+  .table-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:12px; }
+  table { border-collapse:collapse; width:100%; min-width:620px; font-size:.92rem; }
+  th, td { text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  thead th { background:var(--panel); font-family:"JetBrains Mono",monospace; font-weight:500;
+    font-size:.74rem; letter-spacing:.12em; color:var(--cyan); }
+  tbody th { color:var(--muted); font-weight:500; width:22%; }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom:0; }
+
+  .venue { display:inline-block; font-family:"JetBrains Mono",monospace; font-size:.72rem;
+    letter-spacing:.12em; color:var(--cyan); border:1px solid var(--line); border-radius:6px;
+    padding:2px 8px; }
+  .pick { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin:16px 0; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+  .card h3 { margin:10px 0 6px; }
+  .card p { margin:0; color:var(--muted); font-size:.95rem; }
+
+  .cta { background:var(--panel); border:1px solid var(--amber); border-radius:12px;
+    padding:18px 20px; margin:36px 0 0; }
+  .cta p { margin:6px 0; }
+  .note { color:var(--muted); font-size:.88rem; }
+
+  footer { margin-top:48px; border-top:1px solid var(--line);
+    padding:28px 0 40px; color:var(--muted); font-size:.88rem; }
+  .foot { display:flex; flex-wrap:wrap; gap:24px; justify-content:space-between; }
+  .social { display:flex; gap:16px; flex-wrap:wrap; }
+  @media (max-width:640px) {
+    nav { gap:14px; font-size:.9rem; }
+    .bar { flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/#market-of-the-week">Market of the Week</a>
+      <a href="/#top-traders">Top Traders</a>
+      <a class="on" href="/#guides">Guides</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <span class="tag">Guide</span>
+  <h1>Kalshi vs Polymarket vs Alpha Arcade: which prediction market fits you?</h1>
+  <p class="lead">Three prediction markets, three very different setups. Here's how they compare on
+    how they work, what they cost, how you pay, and what you can trade, in plain English.</p>
+  <p class="meta">Updated November 4, 2026 · 6 min read</p>
+
+  <div class="short">
+    <p><strong>The short version</strong></p>
+    <p><strong>Kalshi</strong>: a US-regulated exchange where you trade in dollars. Biggest for sports
+      and economic events.</p>
+    <p><strong>Polymarket</strong>: the world's biggest prediction market. US traders use the
+      separate, US-regulated <strong>Polymarket US</strong>.</p>
+    <p><strong>Alpha Arcade</strong>: a newer, smaller market on the Algorand blockchain. Trades in
+      USDC, lets the community create markets, and pays rewards to liquidity providers.</p>
+  </div>
+
+  <h2>How prediction markets work (30-second refresher)</h2>
+  <p>Every market is a yes-or-no question, like "Will the Fed cut rates in December?" You buy
+    <strong>Yes</strong> or <strong>No</strong> shares priced between 1¢ and 99¢. If you're right, each
+    share pays $1. If you're wrong, it pays nothing. The price works like the crowd's odds: a Yes price
+    of 62¢ means traders put the chance at about 62%. All three platforms work this way. The
+    differences are in the details below.</p>
+
+  <h2>Side-by-side comparison</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th></th><th>KALSHI</th><th>POLYMARKET</th><th>ALPHA ARCADE</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>What it is</th>
+          <td>US exchange regulated by the CFTC</td>
+          <td>Global crypto-based market; US traders use the CFTC-regulated Polymarket US</td>
+          <td>Prediction market built on the Algorand blockchain</td></tr>
+        <tr><th>Runs on</th>
+          <td>Kalshi's own company servers</td>
+          <td>Settles on the Polygon blockchain; order matching on Polymarket's servers</td>
+          <td>The Algorand ($ALGO) blockchain, from the ground up</td></tr>
+        <tr><th>Size</th>
+          <td>Very large, especially in sports</td>
+          <td>The biggest worldwide</td>
+          <td>Much smaller and newer, growing fast</td></tr>
+        <tr><th>You trade in</th>
+          <td>US dollars</td>
+          <td>USDC on the main site; US dollars on Polymarket US</td>
+          <td>USDC (a dollar-backed stablecoin)</td></tr>
+        <tr><th>How you pay in</th>
+          <td>Bank transfer (ACH or wire)</td>
+          <td>Crypto (USDC) on the main site; dollars on Polymarket US</td>
+          <td>Card through Coinbase, or send USDC from a crypto wallet</td></tr>
+        <tr><th>Fees</th>
+          <td>Taker fees, highest for contracts near 50¢; lower for maker orders</td>
+          <td>Polymarket US: no maker fees; taker fees vary by category</td>
+          <td>Check the current fee schedule on the site</td></tr>
+        <tr><th>Popular markets</th>
+          <td>Sports, economics, weather, politics</td>
+          <td>Politics, world events, crypto, sports, culture</td>
+          <td>Sports, crypto, current events, community-made markets</td></tr>
+        <tr><th>Who you can see</th>
+          <td>Trader identities are private</td>
+          <td>Trades are public on the blockchain</td>
+          <td>Trades are public on the blockchain</td></tr>
+        <tr><th>Stand-out feature</th>
+          <td>Fully regulated, simple dollar accounts</td>
+          <td>The deepest markets and the most topics</td>
+          <td>Instant finality, never-down network; anyone can propose a market; LP rewards</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Fees, rules and availability change. Always check each platform's own site before
+    you trade.</p>
+
+  <h2>Kalshi</h2>
+  <p><span class="venue">KALSHI</span></p>
+  <p>Kalshi is a US company and a CFTC-regulated exchange, the same kind of oversight that covers
+    futures markets. You open an account like a brokerage account, fund it in dollars by bank
+    transfer, and trade without touching crypto.</p>
+  <h3>Fees</h3>
+  <p>Kalshi charges a fee when your order trades instantly against someone else's (a "taker" order).
+    The fee is largest for contracts priced around 50¢, about 1.75¢ per contract at that price, and
+    shrinks as prices move toward 1¢ or 99¢. Orders that wait on the book for someone to take them
+    ("maker" orders) pay a much smaller fee.</p>
+  <h3>Good to know</h3>
+  <ul>
+    <li>Sports make up most of Kalshi's trading, but it also lists Fed decisions, inflation and jobs
+      reports, weather, politics and culture.</li>
+    <li>Kalshi doesn't show who is trading, so you can't follow specific traders there.</li>
+  </ul>
+
+  <h2>Polymarket</h2>
+  <p><span class="venue">POLYMARKET</span></p>
+  <p>Polymarket is the largest prediction market in the world, with the widest range of topics:
+    elections, world events, crypto, sports and pop culture. There are now two versions:</p>
+  <ul>
+    <li><strong>Polymarket (international):</strong> runs on crypto. You trade with USDC from a
+      crypto wallet.</li>
+    <li><strong>Polymarket US:</strong> a separate, CFTC-regulated exchange for US traders. It
+      launched in December 2025, uses US dollars, and needs no crypto wallet.</li>
+  </ul>
+  <h3>Fees</h3>
+  <p>On Polymarket US, orders that wait on the book pay no fee. Orders that trade instantly pay a
+    fee that depends on the category (for example, more on crypto markets, less on politics) and,
+    like Kalshi, is largest around 50¢.</p>
+  <h3>Good to know</h3>
+  <ul>
+    <li>On the international site, every trade is on a public blockchain, so big wallets ("whales")
+      can be tracked.</li>
+    <li>The biggest markets attract millions of dollars in trading, so prices are usually tight on
+      popular questions.</li>
+  </ul>
+
+  <h2>Alpha Arcade</h2>
+  <p><span class="venue">ALPHA ARCADE</span></p>
+  <p>Alpha Arcade is a prediction market built on Algorand, a fast, low-cost blockchain. Each market
+    is a smart contract: Yes and No shares are tokens, your money is held in USDC, and winning shares
+    pay out $1 each in USDC when the market resolves. It uses an order book with limit orders, like
+    the bigger platforms.</p>
+  <h3>Why Algorand matters</h3>
+  <p>Kalshi is a traditional, company-run exchange. Polymarket settles trades on a blockchain
+    but matches orders on its own servers. Alpha Arcade runs on Algorand ($ALGO), a
+    decentralized public blockchain, from the ground up, and that brings real advantages:</p>
+  <ul>
+    <li><strong>Instant finality:</strong> a block settles in about 3 seconds, and once your trade
+      is in, it's final. No waiting for confirmations, no chain splits.</li>
+    <li><strong>Never gone down:</strong> Algorand has run without a network outage since its
+      mainnet launched in June 2019.</li>
+    <li><strong>Built for the quantum era:</strong> Algorand is a leader in post-quantum security.
+      It has protected its history with quantum-resistant signatures since 2022, added
+      quantum-resistant accounts in 2026, and is working toward full coverage by 2027.</li>
+    <li><strong>Tiny, steady fees:</strong> network fees are a fraction of a cent and don't spike
+      when the network gets busy.</li>
+    <li><strong>Open and checkable:</strong> markets and payouts are smart contracts on a public
+      chain, so anyone can verify them.</li>
+  </ul>
+  <h3>Getting started</h3>
+  <p>You don't need to own crypto first. Alpha Arcade lets you deposit by card through Coinbase, and
+    if you already have USDC on Algorand you can send it straight in.</p>
+  <h3>What makes it different</h3>
+  <ul>
+    <li><strong>Community markets:</strong> users can propose and launch their own markets.</li>
+    <li><strong>Liquidity rewards:</strong> some markets pay rewards to traders who keep buy and sell
+      orders on the book, which suits patient traders who like to post limit orders.</li>
+    <li><strong>Less crowded:</strong> it's much smaller than Kalshi or Polymarket. That means fewer
+      big players, but also thinner order books, so check the spread before you trade.</li>
+    <li><strong>Public trades:</strong> like Polymarket's main site, trades are on-chain and can be
+      followed.</li>
+  </ul>
+
+  <h2>Which one fits you?</h2>
+  <div class="pick">
+    <div class="card"><span class="venue">KALSHI</span>
+      <h3>You want simple and regulated</h3>
+      <p>You're in the US, want a dollar account funded from your bank, and mostly trade sports or
+        economic events.</p></div>
+    <div class="card"><span class="venue">POLYMARKET</span>
+      <h3>You want the most markets</h3>
+      <p>You want the deepest markets and the widest range of topics, from elections to world
+        events. US traders: use Polymarket US.</p></div>
+    <div class="card"><span class="venue">ALPHA ARCADE</span>
+      <h3>You want to get in early</h3>
+      <p>You like a smaller, less crowded market, want to earn liquidity rewards, create your own
+        markets, or trade on a fast, decentralized blockchain.</p></div>
+  </div>
+  <p>Many traders use more than one. The same question can trade at different prices on different
+    platforms, and comparing them is part of finding an edge. That's exactly what Alpha Intel Desk
+    tracks.</p>
+
+  <h2>FAQ</h2>
+  <h3>Is this legal where I live?</h3>
+  <p>Each platform sets its own rules about who can join, and those rules change. Check the
+    platform's own site to confirm it's available where you live before signing up.</p>
+  <h3>Do I need crypto?</h3>
+  <p>Not for Kalshi or Polymarket US, which use dollars. Polymarket's international site and Alpha
+    Arcade use USDC, though Alpha Arcade lets you deposit with a card through Coinbase.</p>
+  <h3>Which has the lowest fees?</h3>
+  <p>It depends on how you trade. On both Kalshi and Polymarket US, fees are highest near 50¢, and
+    orders that wait on the book pay less (or nothing on Polymarket US). Compare the current fee
+    pages for the markets you actually trade.</p>
+  <h3>Why does Alpha Arcade run on Algorand?</h3>
+  <p>Algorand gives it instant finality, tiny fixed fees, a spotless uptime record since 2019 and
+    leading post-quantum security. Markets and payouts are smart contracts anyone can verify.</p>
+  <h3>Can I see what big traders are doing?</h3>
+  <p>On Polymarket and Alpha Arcade, yes: trades are public on the blockchain. Kalshi keeps traders
+    private, so there you can only see large trades, not who made them.</p>
+
+  <div class="cta">
+    <p><strong>Watch all three in one place</strong></p>
+    <p>Alpha Intel Desk tracks Kalshi, Polymarket and Alpha Arcade side by side: markets closing
+      soon, new listings and live odds, updated every hour.</p>
+    <p><a href="/">See the live board →</a> &nbsp;·&nbsp;
+      <a href="https://t.me/alphainteldesk" rel="noopener">Get the 7 AM brief on Telegram →</a></p>
+  </div>
+
+  <p class="note" style="margin-top:28px">Sources: each platform's public information and published
+    fee schedules, checked November 2026. Visit
+    <a href="https://kalshi.com" rel="noopener">Kalshi</a>,
+    <a href="https://polymarket.com" rel="noopener">Polymarket</a> and
+    <a href="https://www.alphaarcade.com" rel="noopener">Alpha Arcade</a> for current details.
+    Not financial advice. Read our <a href="/disclosures.html">disclosures</a>.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><strong style="color:var(--text)">Alpha Intel Desk</strong><br>Information is our edge.</div>
+      <div class="social">
+        <a href="https://x.com/alphainteldesk" rel="noopener">X</a>
+        <a href="https://t.me/alphainteldesk" rel="noopener">Telegram</a>
+        <a href="https://www.youtube.com/@alphainteldesk" rel="noopener">YouTube</a>
+        <a href="/about.html">About</a>
+        <a href="/disclosures.html">Disclosures</a>
+      </div>
+    </div>
+    <p>Not financial advice. Prediction markets involve risk, and you can lose money.
+      Some links on this site are referral links and may earn us a commission at no cost to you.</p>
+    <p>&copy; 2026 Alpha Intel Desk</p>
+  </div>
+</footer>
+
+</body>
+</html>
