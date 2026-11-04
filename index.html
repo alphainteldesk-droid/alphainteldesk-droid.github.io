@@ -47,6 +47,47 @@
   .tag { font-family: "JetBrains Mono", monospace; font-size: .75rem;
     letter-spacing: .2em; color: var(--amber); text-transform: uppercase; }
 
+  /* Stats strip */
+  .stats { display: grid; gap: 12px; margin-top: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+  .stat { background: var(--panel); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 16px; }
+  .stat b { display: block; font-family: "JetBrains Mono", monospace; font-weight: 500;
+    font-size: 1.6rem; line-height: 1.2; color: var(--cyan); }
+  .stat b.amber { color: var(--amber); }
+  .stat span { color: var(--muted); font-size: .86rem; }
+
+  /* Trending ticker */
+  .ticker { display: none; margin-top: 20px; border: 1px solid var(--line);
+    border-radius: 10px; overflow: hidden; background: #0d1826; }
+  .ticker.on { display: flex; }
+  .ticker-tag { flex: none; display: flex; align-items: center; gap: 8px; padding: 0 14px;
+    background: var(--amber); color: var(--navy); font-family: "JetBrains Mono", monospace;
+    font-size: .72rem; letter-spacing: .18em; }
+  .ticker-tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--navy);
+    animation: blink 1.4s infinite; }
+  @keyframes blink { 50% { opacity: .25; } }
+  .ticker-view { flex: 1; overflow: hidden;
+    -webkit-mask: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+            mask: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+  .ticker-track { display: flex; width: max-content; padding: 9px 0;
+    animation: slide var(--dur, 60s) linear infinite; }
+  .ticker:hover .ticker-track { animation-play-state: paused; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  .tk { display: flex; align-items: center; gap: 10px; margin-right: 12px; white-space: nowrap;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+    padding: 6px 12px; color: var(--text); font-size: .88rem; }
+  .tk:hover { border-color: var(--cyan); text-decoration: none; }
+  .tk .v { font-family: "JetBrains Mono", monospace; font-size: .66rem;
+    letter-spacing: .12em; color: var(--cyan); }
+  .tk .p { font-family: "JetBrains Mono", monospace; color: var(--cyan); }
+  .tk .w { color: var(--muted); font-size: .78rem; }
+  .tk .w.new { color: var(--amber); }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track { animation: none; }
+    .ticker-view { overflow-x: auto; }
+  }
+
   section { padding: 36px 0 8px; }
   h2 { font-size: 1.35rem; margin: 6px 0 16px; }
   .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
@@ -99,6 +140,8 @@
   @media (max-width: 640px) {
     nav { gap: 14px; font-size: .9rem; }
     .bar { flex-direction: column; align-items: flex-start; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .ticker-tag { padding: 0 10px; font-size: .62rem; letter-spacing: .12em; }
   }
 </style>
 </head>
@@ -127,6 +170,18 @@
     <h1>Real-time intelligence for prediction markets</h1>
     <p>Track whales, spot price gaps, and see how odds react to the news across
        Polymarket, Kalshi and Alpha Arcade.</p>
+
+    <div class="stats">
+      <div class="stat"><b>3</b><span>Prediction markets: Polymarket · Kalshi · Alpha Arcade</span></div>
+      <div class="stat"><b>24/7</b><span>Live market data</span></div>
+      <div class="stat"><b>Hourly</b><span>Odds and listings refreshed</span></div>
+      <div class="stat"><b class="amber">Free</b><span>No sign-up, no paywall</span></div>
+    </div>
+
+    <div class="ticker" id="ticker" aria-label="Trending prediction markets">
+      <div class="ticker-tag"><i></i>TRENDING</div>
+      <div class="ticker-view"><div class="ticker-track" id="ticker-track"></div></div>
+    </div>
   </div>
 
   <section id="closing-soon">
@@ -229,6 +284,8 @@
 (function () {
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var when = function (s) { return new Date(s).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); };
+  var day = function (s) { return new Date(s).toLocaleString([], { month: 'short', day: 'numeric' }); };
+  var names = { polymarket: 'POLYMARKET', kalshi: 'KALSHI' };
   fetch('markets.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     var ago = function (s) { var h = Math.max(1, Math.round((Date.now() - new Date(s)) / 3600000));
       return h < 24 ? h + 'h ago' : Math.round(h / 24) + 'd ago'; };
@@ -247,6 +304,35 @@
     fill('cs-', 'closing_soon', function (m) { return 'closes ' + when(m.closes); });
     fill('nm-', 'new_markets', function (m) { return 'listed ' + ago(m.opened); });
     if (d.updated) document.getElementById('cs-updated').textContent = 'Last updated ' + when(d.updated);
+
+    // Trending ticker: closing-soon and new markets from every venue, mixed together
+    var lists = ['polymarket', 'kalshi'].map(function (site) {
+      var l = [];
+      ((d.closing_soon || {})[site] || []).forEach(function (m) {
+        l.push({ site: site, m: m, w: 'closes ' + day(m.closes), cls: 'w' });
+      });
+      ((d.new_markets || {})[site] || []).forEach(function (m) {
+        l.push({ site: site, m: m, w: 'NEW', cls: 'w new' });
+      });
+      return l;
+    });
+    var items = [];
+    for (var i = 0; i < Math.max(lists[0].length, lists[1].length); i++) {
+      if (lists[0][i]) items.push(lists[0][i]);
+      if (lists[1][i]) items.push(lists[1][i]);
+    }
+    if (!items.length) return;
+    var html = items.map(function (it) {
+      return '<a class="tk" href="' + esc(it.m.url) + '" target="_blank" rel="noopener">' +
+        '<span class="v">' + names[it.site] + '</span>' +
+        '<span>' + esc(it.m.event) + '</span>' +
+        '<span class="p">' + esc(it.m.yes) + '%</span>' +
+        '<span class="' + it.cls + '">' + esc(it.w) + '</span></a>';
+    }).join('');
+    var track = document.getElementById('ticker-track');
+    track.innerHTML = html + html;
+    track.style.setProperty('--dur', Math.max(30, items.length * 6) + 's');
+    document.getElementById('ticker').className = 'ticker on';
   }).catch(function () {});
 })();
 </script>

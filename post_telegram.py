@@ -1,9 +1,10 @@
 # Alpha Intel Desk: posts the daily digest from markets.json to the Telegram channel.
 # The bot token comes from the GitHub secret TELEGRAM_BOT_TOKEN. Never put it in this file.
-import json, os, re, urllib.request
+import json, os, urllib.request
 from datetime import datetime
 from html import escape
 from zoneinfo import ZoneInfo
+from topics import topic
 
 CHANNEL = "@alphainteldesk"
 SITE = "https://alphainteldesk.com"
@@ -13,45 +14,12 @@ def when(s):
     t = datetime.fromisoformat(s.replace("Z", "+00:00")).astimezone(ET)
     return t.strftime("%b %-d, %-I:%M %p ET")
 
-# Topic emojis: the first match wins, so more specific topics come first.
-TOPICS = [
-    ("🏈", r"nfl|super bowl|football|touchdown|ncaaf"),
-    ("🏀", r"nba|wnba|basketball|ncaab|march madness"),
-    ("⚾", r"mlb|baseball|world series"),
-    ("🏒", r"nhl|hockey|stanley cup"),
-    ("⚽", r"soccer|premier league|champions league|epl|la liga|serie a|bundesliga|mls|fifa|world cup"),
-    ("🎾", r"tennis|atp|wta|wimbledon"),
-    ("⛳", r"golf|pga|masters"),
-    ("🥊", r"ufc|boxing|fight|mma"),
-    ("🏎️", r"f1|formula 1|grand prix|nascar"),
-    ("₿", r"bitcoin|btc"),
-    ("🪙", r"crypto|ethereum|eth|solana|xrp|dogecoin|algorand|algo"),
-    ("🏦", r"fed|fomc|interest rates?|rate cut|rate hike|inflation|cpi|gdp|jobs report|unemployment|recession"),
-    ("📈", r"s&p|nasdaq|dow|stocks?|earnings|tesla|nvidia|apple|ipo"),
-    ("🗳️", r"elections?|senate|house control|house seats?|governor|mayor|primary|midterms?|nominee|votes?|ballot"),
-    ("🏛️", r"trump|congress|supreme court|president|white house|shutdown|tariffs?"),
-    ("🌍", r"war|ukraine|russia|israel|iran|gaza|china|ceasefire|strait|nato"),
-    ("🌦️", r"weather|temperature|rain|snow|hurricane|storm|degrees"),
-    ("🎬", r"movie|box office|oscars?|emmys?|netflix|film|tv show"),
-    ("🎵", r"grammys?|album|song|spotify|billboard|taylor swift"),
-    ("🤖", r"ai|openai|chatgpt|gpt|anthropic|gemini"),
-    ("🚀", r"spacex|nasa|launch|starship|rocket"),
-    ("🐦", r"tweets?|elon|musk"),
-]
-
-def topic(text):
-    t = text.lower()
-    for emoji, words in TOPICS:
-        if re.search(r"\b(" + words + r")\b", t):
-            return emoji
-    return "📊"
-
 def line(m, tail):
     name = escape(m["event"])
     mk = m.get("market") or ""
     if mk and mk != m["event"] and len(mk) <= 40:
         name += " (" + escape(mk) + ")"
-    icon = topic(m["event"] + " " + mk)
+    icon = topic(m["event"] + " " + mk, m.get("url", ""))
     return f'{icon} <a href="{escape(m["url"])}">{name}</a>\n   <b>{m["yes"]}% Yes</b> · {tail}'
 
 d = json.load(open("markets.json"))
