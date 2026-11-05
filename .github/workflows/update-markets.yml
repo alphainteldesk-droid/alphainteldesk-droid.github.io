@@ -11,6 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 make_markets.py
+        env:
+          ALPHA_API_KEY: ${{ secrets.ALPHA_API_KEY }}
       - run: python3 make_desk.py
         continue-on-error: true
       - run: python3 post_new_markets.py
@@ -23,4 +25,4 @@ jobs:
           git add markets.json
           [ -f desk.json ] && git add desk.json
           [ -f posted.json ] && git add posted.json
-          git diff --cached --quiet || (git commit -m "Update markets" && git push)
+          git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -q && git push)
