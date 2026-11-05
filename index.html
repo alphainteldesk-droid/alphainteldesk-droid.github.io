@@ -174,21 +174,24 @@
   .glass[data-screen="gap"] { cursor:pointer; transition:border-color .2s; }
   .glass[data-screen="gap"]:hover { border-color:var(--amber); }
   .glass[data-screen="gap"]:hover .cta { background:#ffc670; }
+  .glass[data-screen="trend"] { cursor:pointer; transition:border-color .2s; }
+  .glass[data-screen="trend"]:hover { border-color:#7ff0f7; box-shadow:0 0 18px rgba(63,219,230,.45); }
+  .gh .go { font-size:11px; color:#a9bccf; font-weight:500; text-shadow:none; margin-right:5px; }
   .v { transition:color .4s; }
-  .glass .v.up { color:var(--cyan); text-shadow:0 0 8px rgba(63,219,230,.8); }
-  .glass .v.dn { color:var(--amber); text-shadow:0 0 8px rgba(255,179,71,.8); }
+  .glass .v.up { color:#3ee88a; text-shadow:0 0 8px rgba(62,232,138,.8); }
+  .glass .v.dn { color:#ff5c5c; text-shadow:0 0 8px rgba(255,92,92,.8); }
   .stamp { font-size:7.5px; color:#a9bccf; letter-spacing:.08em; margin-top:2px; }
-  .mq { margin-bottom:7px; } .mq .k { color:#c3d2e2; font-weight:500; font-size:10px; }
+  .mq { margin-bottom:3px; } .mq .k { color:#c3d2e2; font-weight:500; font-size:10px; }
   .big { font-size:13px; line-height:1.15; }
   .glass.lg { font-size:13.5px; line-height:1.6; }
-  .glass.lg.tight { font-size:12.5px; line-height:1.45; } .glass.lg .gh { font-size:9px; margin-bottom:6px; }
+  .glass.lg.tight { font-size:12.5px; line-height:1.3; } .glass.lg .gh { font-size:9px; margin-bottom:6px; }
   .swap { transition:opacity .35s; }
   .gap-q { font-family:"Space Grotesk",sans-serif; font-size:10.5px; line-height:1.25;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .gap-n { font-size:18px; color:var(--amber); }
   .gap-list { margin-top:4px; padding-top:4px; border-top:1px solid rgba(63,219,230,.2); line-height:1.6; }
   .v2 { color:var(--amber); }
-  .glass[data-screen="trend"] { line-height:1.85; font-size:14px; font-weight:500; color:#fff; }
+  .glass[data-screen="trend"] { line-height:1.5; font-size:13px; font-weight:500; color:#fff; }
   .glass[data-screen="gap"] .gap-q { font-size:14px; font-weight:700; color:#fff; white-space:normal; }
   .glass[data-screen="gap"] { font-size:12.5px; } .glass[data-screen="gap"] .trend { color:#e8eef5; }
   .trend { font-family:"Space Grotesk",sans-serif; white-space:nowrap; overflow:hidden;
@@ -248,10 +251,20 @@
   @media (prefers-reduced-motion: reduce) {
     .wire-track { animation:none; } .dot { animation:none; }
   }
-  .glass .pos { color:var(--cyan); } .glass .neg { color:var(--amber); }
+  .glass .pos { color:#3ee88a; text-shadow:0 0 6px rgba(62,232,138,.45); }
+  .glass .neg { color:#ff5c5c; text-shadow:0 0 6px rgba(255,92,92,.45); }
   .glass .v.flash { text-shadow:0 0 10px currentColor; }
   .chg { font-size:9px; font-weight:700; }
   .glass a.cover { position:absolute; inset:0; z-index:1; }
+
+  /* Live radar on the right-hand desk monitor */
+  .radar { position:absolute; left:82.47%; top:54.9%; width:5.87%; aspect-ratio:1; pointer-events:none; }
+  .radar svg { width:100%; height:100%; display:block; overflow:visible; }
+  .radar .sweep { transform-origin:0 0; animation:sweep 4s linear infinite; }
+  @keyframes sweep { to { transform:rotate(360deg); } }
+  .radar .blip { animation:blip 4s infinite; opacity:0; }
+  @keyframes blip { 0%{opacity:0} 4%{opacity:1} 60%{opacity:.15} 100%{opacity:0} }
+  @media (prefers-reduced-motion: reduce) { .radar .sweep, .radar .blip { animation:none; opacity:1; } }
 </style>
 </head>
 <body>
@@ -271,6 +284,21 @@
 
 <div class="desk" id="desk" role="img" aria-label="Alpha Intel Desk: a trading desk at sunrise with live market screens on the windows">
   <div class="sign">THE DESK IS OPEN</div>
+  <div class="radar" aria-hidden="true"><svg viewBox="-100 -100 200 200">
+    <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3fdbe6" stop-opacity="0"/><stop offset="1" stop-color="#3fdbe6" stop-opacity=".55"/></linearGradient></defs>
+    <circle r="96" fill="#06222a" opacity=".96"/>
+    <g fill="none" stroke="#3fdbe6" stroke-opacity=".35" stroke-width="1">
+      <circle r="18"/><circle r="36"/><circle r="54"/><circle r="72"/>
+      <path d="M-93 0H93M0-93V93M-66-66L66 66M66-66L-66 66"/></g>
+    <circle r="92" fill="none" stroke="#3fdbe6" stroke-width="3.5" style="filter:drop-shadow(0 0 4px #3fdbe6)"/>
+    <g class="sweep"><path d="M0 0L92 0A92 92 0 0 0 65 -65Z" fill="url(#rg)"/>
+      <line x1="0" y1="0" x2="92" y2="0" stroke="#bff8fb" stroke-width="2"/></g>
+    <g fill="#bff8fb" style="filter:drop-shadow(0 0 3px #3fdbe6)">
+      <circle class="blip" cx="36" cy="-58" r="3.5" style="animation-delay:3.33s"/>
+      <circle class="blip" cx="68" cy="-20" r="3.5" style="animation-delay:3.81s"/>
+      <circle class="blip" cx="40" cy="25" r="3.5" style="animation-delay:0.36s"/></g>
+  </svg></div>
   <div class="glass lg" data-screen="crypto">
     <div class="gh">CRYPTO <span class="dot"></span></div>
     <div class="row"><span class="k">BTC</span><span class="v" id="q-btc">&mdash;</span></div>
@@ -293,6 +321,12 @@
       <div class="mq"><div class="k">WTI</div><div class="big v">&mdash;</div><div class="chg"></div></div>
     </div>
   </div>
+  <div class="glass" data-screen="trend">
+    <a class="cover" href="https://trends.google.com/trending?geo=US" target="_blank" rel="noopener" aria-label="Open Google Trends"></a>
+    <div class="gh">TRENDING ON GOOGLE <span style="display:flex;align-items:center"><span class="go">&#8599;</span><span class="dot"></span></span></div>
+    <div id="trends"><div class="trend" style="color:#a9bccf">Loading trends&hellip;</div></div>
+    <div class="stamp" id="st-trends">UPDATED HOURLY</div>
+  </div>
   <div class="glass" data-screen="gap">
     <a class="cover" href="/gap-radar.html" aria-label="Open Gap Radar"></a>
     <div class="gh amber">GAP RADAR <span style="display:flex;align-items:center;gap:5px;color:#a9bccf;text-shadow:none;font-weight:500">SOON <span class="dot" style="background:var(--amber)"></span></span></div>
@@ -300,11 +334,6 @@
     <div style="margin-top:4px;color:#c3d2e2;font-family:'Space Grotesk',sans-serif;font-size:12.5px;line-height:1.4">
       Price gaps after fees: Kalshi, Polymarket and Alpha Arcade.</div>
     <div class="cta">OPEN GAP RADAR &rarr;</div>
-  </div>
-  <div class="glass" data-screen="trend">
-    <div class="gh">TRENDING ON GOOGLE <span class="dot"></span></div>
-    <div id="trends"><div class="trend" style="color:#a9bccf">Loading trends&hellip;</div></div>
-    <div class="stamp" id="st-trends">UPDATED HOURLY</div>
   </div>
 </div>
 <div class="strip" id="strip"></div>
@@ -486,8 +515,8 @@
     crypto:  [[43.6,8.6],[53.0,10.4],[53.0,38.0],[43.6,37.4]],
     markets: [[54.3,10.7],[62.6,12.3],[62.6,38.6],[54.3,38.2]],
     macro:   [[63.7,12.5],[68.9,13.5],[68.9,39.0],[63.7,38.8]],
-    gap:     [[70.5,12.9],[83.7,7.3],[83.7,51.2],[70.5,51.0]],
-    trend:   [[85.0,6.6],[99.2,2.4],[99.2,52.0],[85.0,51.9]]
+    trend:   [[70.5,12.9],[83.7,7.3],[83.7,51.2],[70.5,51.0]],
+    gap:     [[85.0,6.6],[99.2,2.4],[99.2,52.0],[85.0,51.9]]
   };
   var REF = 1200; /* screens are designed at a 1200 px-wide photo, then scaled */
 
