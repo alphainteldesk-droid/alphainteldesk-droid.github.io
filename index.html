@@ -178,7 +178,8 @@
   .glass .v.up { color:var(--cyan); text-shadow:0 0 8px rgba(63,219,230,.8); }
   .glass .v.dn { color:var(--amber); text-shadow:0 0 8px rgba(255,179,71,.8); }
   .stamp { font-size:7.5px; color:#a9bccf; letter-spacing:.08em; margin-top:2px; }
-  .big { font-size:14px; line-height:1.15; }
+  .mq { margin-bottom:7px; } .mq .k { color:#c3d2e2; font-weight:500; font-size:10px; }
+  .big { font-size:13px; line-height:1.15; }
   .glass.lg { font-size:13.5px; line-height:1.6; } .glass.lg .gh { font-size:9px; margin-bottom:6px; }
   .swap { transition:opacity .35s; }
   .gap-q { font-family:"Space Grotesk",sans-serif; font-size:10.5px; line-height:1.25;
@@ -285,8 +286,10 @@
   </div>
   <div class="glass" data-screen="macro">
     <div class="gh">MACRO <span class="dot"></span></div>
-    <div class="swap"><div class="k" style="color:#c3d2e2;font-weight:500">BRENT</div>
-      <div class="big v">&mdash;</div><div class="chg"></div></div>
+    <div class="swap">
+      <div class="mq"><div class="k">BRENT</div><div class="big v">&mdash;</div><div class="chg"></div></div>
+      <div class="mq"><div class="k">WTI</div><div class="big v">&mdash;</div><div class="chg"></div></div>
+    </div>
   </div>
   <div class="glass" data-screen="gap">
     <a class="cover" href="/gap-radar.html" aria-label="Open Gap Radar"></a>
@@ -558,8 +561,11 @@
       if (q[p[0]]) set('q-' + p[0], fmt(q[p[0]].price, p[1]), q[p[0]].change);
     });
     var t = q.sp500 && new Date(q.sp500.time);
-    document.getElementById('st-markets').textContent =
-      t && Date.now() - t < 40 * 60000 ? 'DELAYED 15 MIN' : 'CLOSED' + (t ? ' · ' + hm(q.sp500.time) : '');
+    var etDay = function (x) { return x.toLocaleDateString('en-US', { timeZone: 'America/New_York' }); };
+    var etHM = function (x) { return x.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' }); };
+    document.getElementById('st-markets').textContent = !t ? 'DELAYED' :
+      etDay(t) !== etDay(new Date()) ? t.toLocaleDateString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric' }).toUpperCase() + ' CLOSE' :
+      Date.now() - t < 40 * 60000 ? '15-MIN DELAY' : "TODAY'S CLOSE";
     [['brent', 'BRENT', '$', 2, ''], ['wti', 'WTI', '$', 2, ''], ['dxy', 'DXY', '', 2, ''], ['tnx', '10-YR', '', 2, '%']]
       .forEach(function (p) { var x = q[p[0]]; if (x) macro.push([p[1], p[2] + fmt(x.price, p[3]) + p[4], x.change]); });
     showCrypto(d.crypto || {});
@@ -575,24 +581,27 @@
   }).catch(function () { copyStrip(); });
 
   /* Macro screen rotates through Brent, WTI, DXY and the 10-year */
-  var mi = -1;
+  var mi = -2;
   function rotate() {
     if (!macro.length) return;
-    mi = (mi + 1) % macro.length;
-    var m = macro[mi];
+    mi = (mi + 2) % macro.length;
+    var pair = [macro[mi], macro[(mi + 1) % macro.length]];
     document.querySelectorAll('.swap').forEach(function (box) {
       box.style.opacity = 0;
       setTimeout(function () {
-        box.querySelector('.k').textContent = m[0];
-        var v = box.querySelector('.big'); v.textContent = m[1];
-        v.className = 'big v ' + (m[2] > 0 ? 'pos' : m[2] < 0 ? 'neg' : '');
-        var c = box.querySelector('.chg'); c.textContent = (m[2] > 0 ? '+' : '') + fmt(m[2], 2) + '%';
-        c.className = 'chg ' + (m[2] > 0 ? 'pos' : m[2] < 0 ? 'neg' : '');
+        box.querySelectorAll('.mq').forEach(function (q, n) {
+          var m = pair[n]; if (!m) return;
+          q.querySelector('.k').textContent = m[0];
+          var v = q.querySelector('.big'); v.textContent = m[1];
+          v.className = 'big v ' + (m[2] > 0 ? 'pos' : m[2] < 0 ? 'neg' : '');
+          var c = q.querySelector('.chg'); c.textContent = (m[2] > 0 ? '+' : '') + fmt(m[2], 2) + '%';
+          c.className = 'chg ' + (m[2] > 0 ? 'pos' : m[2] < 0 ? 'neg' : '');
+        });
         box.style.opacity = 1;
       }, 350);
     });
   }
-  setInterval(rotate, 3500);
+  setInterval(rotate, 4500);
 
   /* Crypto updates live in the browser every minute */
   function liveCrypto() {

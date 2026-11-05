@@ -107,9 +107,59 @@ for name, fn in (("polymarket", new_poly), ("kalshi", new_kalshi)):
         print("New markets", name, "failed:", err)
         new[name] = []
 
-out = {"updated": n.strftime(f), "closing_soon": {"polymarket": poly, "kalshi": kal},
-       "new_markets": new}
+# ================= ALPHA ARCADE (public market list via the Alpha Partners API) =================
+# Needs the GitHub secret ALPHA_API_KEY. Public market data only: no wallet, no orders.
+import os
+
+def alpha_markets():
+    key = os.environ.get("ALPHA_API_KEY")
+    if not key:
+        print("Alpha Arcade skipped: no ALPHA_API_KEY secret")
+        return [], []
+    req = urllib.request.Request("https://platform.alphaarcade.com/api/get-live-markets",
+                                 headers={"x-api-key": key, "User-Agent": "AlphaIntelDesk/1.0"})
+    d = json.load(urllib.request.urlopen(req, timeout=30))
+    ms = d if isinstance(d, list) else d.get("markets", [])
+    if ms:   # first runs: show which fields exist, so the boxes can be finished
+        print("Alpha Arcade:", len(ms), "live markets. Fields:", sorted(ms[0].keys()))
+        print("Alpha Arcade sample:", json.dumps({k: ms[0].get(k) for k in sorted(ms[0].keys())
+              if not isinstance(ms[0].get(k), (list, dict))})[:900])
+    def secs(v):
+        v = float(v or 0)
+        return v / 1000 if v > 1e11 else v
+    def prob(m):
+        p = m.get("yesProb")
+        if p is None and m.get("options"):
+            p = max((o.get("yesProb") or 0) for o in m["options"])
+        p = float(p or 0)
+        return p / 1e6 if p > 100 else (p / 100 if p > 1 else p)
+    av = lambda m: float(m.get("volume") or 0)
+    url = lambda m: "https://www.alphaarcade.com/market/" + m["slug"] if m.get("slug") else "https://www.alphaarcade.com"
+    now = n.timestamp()
+    def row(m, extra):
+        r = {"event": m.get("title") or m.get("topic") or "", "market": "", "yes": round(prob(m) * 100),
+             "volume": int(av(m)), "url": url(m)}
+        r.update(extra)
+        return r
+    soon = [m for m in ms if now < secs(m.get("endTs")) <= now + 7 * 86400]
+    soon = sorted(sorted(soon, key=av, reverse=True)[:3], key=lambda m: secs(m.get("endTs")))
+    soon = [row(m, {"closes": datetime.fromtimestamp(secs(m["endTs"]), timezone.utc).strftime(f)}) for m in soon]
+    made = lambda m: secs(m.get("createdAt") or m.get("created_at") or m.get("createdTs") or 0)
+    fresh = [m for m in ms if made(m) >= since.timestamp()]
+    fresh = sorted(fresh, key=av, reverse=True)[:3]
+    fresh = [row(m, {"opened": datetime.fromtimestamp(made(m), timezone.utc).strftime(f)}) for m in fresh]
+    return soon, fresh
+
+try:
+    alpha_soon, alpha_new = alpha_markets()
+except Exception as err:
+    print("Alpha Arcade failed:", err)
+    alpha_soon, alpha_new = [], []
+
+out = {"updated": n.strftime(f), "closing_soon": {"polymarket": poly, "kalshi": kal, "alpha": alpha_soon},
+       "new_markets": dict(new, alpha=alpha_new)}
 with open("markets.json", "w") as fh:
     json.dump(out, fh, indent=2)
 print("Wrote markets.json:", len(poly), "Polymarket,", len(kal), "Kalshi closing soon |",
-      len(new["polymarket"]), "Polymarket,", len(new["kalshi"]), "Kalshi new")
+      len(new["polymarket"]), "Polymarket,", len(new["kalshi"]), "Kalshi new |",
+      len(alpha_soon), "Alpha closing,", len(alpha_new), "Alpha new")
