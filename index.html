@@ -11,8 +11,9 @@
 <meta property="og:image" content="https://alphainteldesk.com/banner.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@alphainteldesk">
+<link rel="preload" as="image" href="banner.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy: #0b1420; --panel: #111d2c; --line: #1f3044;
@@ -143,6 +144,112 @@
     .stats { grid-template-columns: 1fr 1fr; }
     .ticker-tag { padding: 0 10px; font-size: .62rem; letter-spacing: .12em; }
   }
+  /* ===== Live Intel Desk ===== */
+  .desk { position:relative; width:100%; aspect-ratio:3/1; overflow:hidden;
+    background:#0b1420 url(banner.jpg) center/cover no-repeat; }
+  .glass { position:absolute; left:0; top:0; transform-origin:0 0;
+    padding:5px 8px; border-radius:3px;
+    background:rgba(5,11,20,.82); border:1px solid rgba(63,219,230,.55);
+    box-shadow:0 0 14px rgba(63,219,230,.18), inset 0 0 20px rgba(63,219,230,.06);
+    text-shadow:0 1px 2px rgba(0,0,0,.9);
+    font-family:"JetBrains Mono",monospace; font-size:10px; line-height:1.3;
+    color:var(--text); overflow:hidden; }
+  .glass a { color:inherit; text-decoration:none; }
+  .gh { display:flex; justify-content:space-between; align-items:center;
+    font-size:8.5px; font-weight:700; letter-spacing:.16em; color:var(--cyan); margin-bottom:3px;
+    text-shadow:0 0 6px rgba(63,219,230,.6); }
+  .gh.amber { text-shadow:0 0 6px rgba(255,179,71,.6); }
+  .gh.amber { color:var(--amber); }
+  .dot { width:5px; height:5px; border-radius:50%; background:var(--cyan);
+    animation:pulse 2s infinite; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(63,219,230,.6)} 70%{box-shadow:0 0 0 5px rgba(63,219,230,0)} 100%{box-shadow:0 0 0 0 rgba(63,219,230,0)} }
+  .row { display:flex; justify-content:space-between; gap:6px; white-space:nowrap; }
+  .row .k { color:#c3d2e2; font-weight:500; }
+  .glass .v, .glass .big, .glass .gap-n, .glass .v2 { font-weight:800; color:#ffffff; }
+  .glass .gap-n, .glass .v2 { color:var(--amber); }
+  .cta { margin-top:9px; text-align:center; padding:5px 6px; border-radius:3px;
+    background:var(--amber); color:var(--navy); font-weight:800; font-size:10px; letter-spacing:.12em;
+    text-shadow:none; animation:ctaglow 2.4s infinite; }
+  @keyframes ctaglow { 50% { box-shadow:0 0 12px rgba(255,179,71,.75); } }
+  .glass[data-screen="gap"] { cursor:pointer; transition:border-color .2s; }
+  .glass[data-screen="gap"]:hover { border-color:var(--amber); }
+  .glass[data-screen="gap"]:hover .cta { background:#ffc670; }
+  .v { transition:color .4s; }
+  .glass .v.up { color:var(--cyan); text-shadow:0 0 8px rgba(63,219,230,.8); }
+  .glass .v.dn { color:var(--amber); text-shadow:0 0 8px rgba(255,179,71,.8); }
+  .stamp { font-size:7.5px; color:#a9bccf; letter-spacing:.08em; margin-top:2px; }
+  .big { font-size:14px; line-height:1.15; }
+  .glass.lg { font-size:13.5px; line-height:1.6; } .glass.lg .gh { font-size:9px; margin-bottom:6px; }
+  .swap { transition:opacity .35s; }
+  .gap-q { font-family:"Space Grotesk",sans-serif; font-size:10.5px; line-height:1.25;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .gap-n { font-size:18px; color:var(--amber); }
+  .gap-list { margin-top:4px; padding-top:4px; border-top:1px solid rgba(63,219,230,.2); line-height:1.6; }
+  .v2 { color:var(--amber); }
+  .glass[data-screen="trend"] { line-height:1.6; font-size:13.5px; font-weight:500; color:#fff; }
+  .glass[data-screen="gap"] .gap-q { font-size:14px; font-weight:700; color:#fff; white-space:normal; }
+  .glass[data-screen="gap"] { font-size:12.5px; } .glass[data-screen="gap"] .trend { color:#e8eef5; }
+  .trend { font-family:"Space Grotesk",sans-serif; white-space:nowrap; overflow:hidden;
+    text-overflow:ellipsis; }
+  .trend b { display:inline-block; font-family:"JetBrains Mono",monospace; font-weight:800;
+    color:var(--navy); background:var(--cyan); font-size:8px; line-height:1; letter-spacing:.06em;
+    padding:2px 3px; border-radius:2px; margin-right:6px; vertical-align:1px; text-shadow:none; }
+
+  /* "THE DESK IS OPEN" neon sign */
+  .desk { container-type:inline-size; }
+  .sign { position:absolute; left:21.2%; top:5.5%; transform:translateX(-50%);
+    font-family:"JetBrains Mono",monospace; font-size:max(6px,1.05cqw); letter-spacing:.24em;
+    padding:.45em .9em .45em 1.1em; border:2px solid var(--amber); border-radius:.4em;
+    color:var(--amber); background:rgba(11,20,32,.6); white-space:nowrap;
+    animation:neon 5s infinite; }
+  @keyframes neon {
+    0%, 100% { opacity:1; text-shadow:0 0 6px rgba(255,179,71,.9), 0 0 18px rgba(255,179,71,.45);
+      box-shadow:0 0 10px rgba(255,179,71,.45), inset 0 0 8px rgba(255,179,71,.2); }
+    50% { opacity:1; text-shadow:0 0 3px rgba(255,179,71,.6); box-shadow:0 0 4px rgba(255,179,71,.25); }
+    80% { opacity:1; } 81% { opacity:.25; } 82% { opacity:1; } 84% { opacity:.35; } 85% { opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce) { .sign { animation:none; } }
+
+  /* Desk Wire */
+  .wire { display:flex; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:#0d1826; overflow:hidden; }
+  .wire-tag { flex:none; display:flex; align-items:center; gap:7px; padding:0 14px;
+    background:var(--amber); color:var(--navy); font-family:"JetBrains Mono",monospace;
+    font-size:.72rem; letter-spacing:.18em; }
+  .wire-tag i { width:7px; height:7px; border-radius:50%; background:var(--navy); animation:blink 1.4s infinite; }
+  @keyframes blink { 50% { opacity:.25; } }
+  .wire-view { flex:1; overflow:hidden; white-space:nowrap; padding:9px 0;
+    -webkit-mask:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);
+            mask:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent); }
+  .wire-track { display:inline-block; animation:slide 50s linear infinite; }
+  .wire:hover .wire-track { animation-play-state:paused; }
+  @keyframes slide { to { transform:translateX(-50%); } }
+  .wi { margin-right:34px; font-size:.88rem; color:var(--text); }
+  a.wi:hover { color:var(--cyan); text-decoration:none; }
+  .wi b { font-family:"JetBrains Mono",monospace; font-weight:500; font-size:.68rem;
+    letter-spacing:.12em; color:var(--cyan); margin-right:8px; }
+  .wi b.a { color:var(--amber); }
+
+  /* Phones: screens move below the photo and swipe */
+  .strip { display:none; }
+  @media (max-width:760px) {
+    .desk .glass, .desk .sign { display:none; }
+    .strip { display:flex; align-items:flex-start; gap:10px; overflow-x:auto; padding:12px 16px;
+      scroll-snap-type:x mandatory; }
+    .strip .glass { position:static; transform:none !important; flex:0 0 72%;
+      scroll-snap-align:start; font-size:13px; padding:12px 14px; border-radius:10px;
+      background:var(--panel); border-color:var(--line); }
+    .strip .gh { font-size:10px; } .strip .stamp { font-size:10px; }
+    .strip .big, .strip .gap-n { font-size:20px; } .strip .gap-q { font-size:14px; white-space:normal; }
+    .strip .trend b { font-size:10px; } .strip .cta { font-size:12px; padding:8px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wire-track { animation:none; } .dot { animation:none; }
+  }
+  .glass .pos { color:var(--cyan); } .glass .neg { color:var(--amber); }
+  .glass .v.flash { text-shadow:0 0 10px currentColor; }
+  .chg { font-size:9px; font-weight:700; }
+  .glass a.cover { position:absolute; inset:0; z-index:1; }
 </style>
 </head>
 <body>
@@ -160,13 +267,51 @@
   </div>
 </header>
 
-<img class="banner" src="banner.png"
-     alt="Alpha Intel Desk: a trading desk at sunrise with radar screens tracking whales, price gaps and odds moves">
+<div class="desk" id="desk" role="img" aria-label="Alpha Intel Desk: a trading desk at sunrise with live market screens on the windows">
+  <div class="sign">THE DESK IS OPEN</div>
+  <div class="glass lg" data-screen="crypto">
+    <div class="gh">CRYPTO <span class="dot"></span></div>
+    <div class="row"><span class="k">BTC</span><span class="v" id="q-btc">&mdash;</span></div>
+    <div class="row"><span class="k">ETH</span><span class="v" id="q-eth">&mdash;</span></div>
+    <div class="row"><span class="k">ALGO</span><span class="v" id="q-algo">&mdash;</span></div>
+    <div class="stamp" id="st-crypto">LIVE</div>
+  </div>
+  <div class="glass lg" data-screen="markets">
+    <div class="gh">MARKETS <span class="dot"></span></div>
+    <div class="row"><span class="k">DOW</span><span class="v" id="q-dow">&mdash;</span></div>
+    <div class="row"><span class="k">S&amp;P</span><span class="v" id="q-sp500">&mdash;</span></div>
+    <div class="row"><span class="k">VIX</span><span class="v" id="q-vix">&mdash;</span></div>
+    <div class="stamp" id="st-markets">DELAYED</div>
+  </div>
+  <div class="glass" data-screen="macro">
+    <div class="gh">MACRO <span class="dot"></span></div>
+    <div class="swap"><div class="k" style="color:#c3d2e2;font-weight:500">BRENT</div>
+      <div class="big v">&mdash;</div><div class="chg"></div></div>
+  </div>
+  <div class="glass" data-screen="gap">
+    <a class="cover" href="/gap-radar.html" aria-label="Open Gap Radar"></a>
+    <div class="gh amber">GAP RADAR <span style="display:flex;align-items:center;gap:5px;color:#a9bccf;text-shadow:none;font-weight:500">SOON <span class="dot" style="background:var(--amber)"></span></span></div>
+    <div class="gap-q">Same market, different price?</div>
+    <div style="margin-top:4px;color:#c3d2e2;font-family:'Space Grotesk',sans-serif;font-size:12.5px;line-height:1.4">
+      Price gaps after fees: Kalshi, Polymarket and Alpha Arcade.</div>
+    <div class="cta">OPEN GAP RADAR &rarr;</div>
+  </div>
+  <div class="glass" data-screen="trend">
+    <div class="gh">TRENDING ON GOOGLE <span class="dot"></span></div>
+    <div id="trends"><div class="trend" style="color:#a9bccf">Loading trends&hellip;</div></div>
+    <div class="stamp" id="st-trends">UPDATED HOURLY</div>
+  </div>
+</div>
+<div class="strip" id="strip"></div>
+<div class="wire" id="wire-bar" aria-label="Desk Wire: incoming market intel">
+  <div class="wire-tag"><i></i>DESK WIRE</div>
+  <div class="wire-view"><div class="wire-track" id="wire"></div></div>
+</div>
 
 <main class="wrap">
 
   <div class="intro">
-    <span class="tag">The desk is open</span>
+    <span class="tag">Polymarket · Kalshi · Alpha Arcade</span>
     <h1>Real-time intelligence for prediction markets</h1>
     <p>Track whales, spot price gaps, and see how odds react to the news across
        Polymarket, Kalshi and Alpha Arcade.</p>
@@ -176,11 +321,6 @@
       <div class="stat"><b>24/7</b><span>Live market data</span></div>
       <div class="stat"><b>Hourly</b><span>Odds and listings refreshed</span></div>
       <div class="stat"><b class="amber">Free</b><span>No sign-up, no paywall</span></div>
-    </div>
-
-    <div class="ticker" id="ticker" aria-label="Trending prediction markets">
-      <div class="ticker-tag"><i></i>TRENDING</div>
-      <div class="ticker-view"><div class="ticker-track" id="ticker-track"></div></div>
     </div>
   </div>
 
@@ -286,7 +426,7 @@
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var when = function (s) { return new Date(s).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); };
   var day = function (s) { return new Date(s).toLocaleString([], { month: 'short', day: 'numeric' }); };
-  var names = { polymarket: 'POLYMARKET', kalshi: 'KALSHI' };
+  var names = { polymarket: 'Polymarket', kalshi: 'Kalshi' };
   fetch('markets.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     var ago = function (s) { var h = Math.max(1, Math.round((Date.now() - new Date(s)) / 3600000));
       return h < 24 ? h + 'h ago' : Math.round(h / 24) + 'd ago'; };
@@ -306,14 +446,16 @@
     fill('nm-', 'new_markets', function (m) { return 'listed ' + ago(m.opened); });
     if (d.updated) document.getElementById('cs-updated').textContent = 'Last updated ' + when(d.updated);
 
-    // Trending ticker: closing-soon and new markets from every venue, mixed together
+    // Desk Wire: closing-soon and new markets from every venue, mixed together
     var lists = ['polymarket', 'kalshi'].map(function (site) {
       var l = [];
       ((d.closing_soon || {})[site] || []).forEach(function (m) {
-        l.push({ site: site, m: m, w: 'closes ' + day(m.closes), cls: 'w' });
+        l.push('<a class="wi" href="' + esc(m.url) + '" target="_blank" rel="noopener"><b class="a">CLOSING</b>' +
+          names[site] + ' · ' + esc(m.event) + ' · ' + esc(m.yes) + '% Yes · closes ' + esc(day(m.closes)) + '</a>');
       });
       ((d.new_markets || {})[site] || []).forEach(function (m) {
-        l.push({ site: site, m: m, w: 'NEW', cls: 'w new' });
+        l.push('<a class="wi" href="' + esc(m.url) + '" target="_blank" rel="noopener"><b>NEW</b>' +
+          names[site] + ' · ' + esc(m.event) + ' · ' + esc(m.yes) + '% Yes</a>');
       });
       return l;
     });
@@ -323,20 +465,147 @@
       if (lists[1][i]) items.push(lists[1][i]);
     }
     if (!items.length) return;
-    var html = items.map(function (it) {
-      return '<a class="tk" href="' + esc(it.m.url) + '" target="_blank" rel="noopener">' +
-        '<span class="v">' + names[it.site] + '</span>' +
-        '<span>' + esc(it.m.event) + '</span>' +
-        '<span class="p">' + esc(it.m.yes) + '%</span>' +
-        '<span class="' + it.cls + '">' + esc(it.w) + '</span></a>';
-    }).join('');
-    var track = document.getElementById('ticker-track');
-    track.innerHTML = html + html;
-    track.style.setProperty('--dur', Math.max(30, items.length * 6) + 's');
-    document.getElementById('ticker').className = 'ticker on';
+    var track = document.getElementById('wire');
+    track.innerHTML = items.join('') + items.join('');
+    track.style.animationDuration = Math.max(30, items.length * 7) + 's';
   }).catch(function () {});
 })();
 </script>
 
+<script>
+/* ===== Live Intel Desk: places the screens on the window glass and fills them with data ===== */
+(function () {
+  /* Where each screen sits on the photo: four corners as % of the image
+     (top-left, top-right, bottom-right, bottom-left). Matches the window glass. */
+  var QUADS = {
+    crypto:  [[43.6,8.6],[53.0,10.4],[53.0,38.0],[43.6,37.4]],
+    markets: [[54.3,10.7],[62.6,12.3],[62.6,38.6],[54.3,38.2]],
+    macro:   [[63.7,12.5],[68.9,13.5],[68.9,39.0],[63.7,38.8]],
+    gap:     [[70.5,12.9],[83.7,7.3],[83.7,51.2],[70.5,51.0]],
+    trend:   [[85.0,9.9],[99.2,6.2],[99.2,52.0],[85.0,51.9]]
+  };
+  var REF = 1200; /* screens are designed at a 1200 px-wide photo, then scaled */
+
+  function solve(A, b) { /* Gaussian elimination, 8x8 */
+    var n = 8, i, j, k;
+    for (i = 0; i < n; i++) A[i].push(b[i]);
+    for (i = 0; i < n; i++) {
+      var m = i; for (k = i + 1; k < n; k++) if (Math.abs(A[k][i]) > Math.abs(A[m][i])) m = k;
+      var t = A[i]; A[i] = A[m]; A[m] = t;
+      for (k = i + 1; k < n; k++) { var f = A[k][i] / A[i][i];
+        for (j = i; j <= n; j++) A[k][j] -= f * A[i][j]; }
+    }
+    var x = new Array(n);
+    for (i = n - 1; i >= 0; i--) { var s = A[i][n];
+      for (j = i + 1; j < n; j++) s -= A[i][j] * x[j]; x[i] = s / A[i][i]; }
+    return x;
+  }
+  function homography(w, h, q) { /* box w x h -> quad q */
+    var src = [[0,0],[w,0],[w,h],[0,h]], A = [], b = [];
+    for (var i = 0; i < 4; i++) {
+      var x = src[i][0], y = src[i][1], u = q[i][0], v = q[i][1];
+      A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); b.push(u);
+      A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); b.push(v);
+    }
+    var c = solve(A, b);
+    return "matrix3d(" + [c[0], c[3], 0, c[6], c[1], c[4], 0, c[7], 0, 0, 1, 0, c[2], c[5], 0, 1].join(",") + ")";
+  }
+  var desk = document.getElementById('desk');
+  function place() {
+    var W = desk.clientWidth, H = desk.clientHeight;
+    desk.querySelectorAll('.glass').forEach(function (g) {
+      var q = QUADS[g.dataset.screen].map(function (p) { return [p[0] / 100 * W, p[1] / 100 * H]; });
+      /* box size = average width/height of the quad at the reference size */
+      var s = REF / W;
+      var bw = (Math.hypot(q[1][0]-q[0][0], q[1][1]-q[0][1]) + Math.hypot(q[2][0]-q[3][0], q[2][1]-q[3][1])) / 2 * s;
+      var bh = (Math.hypot(q[3][0]-q[0][0], q[3][1]-q[0][1]) + Math.hypot(q[2][0]-q[1][0], q[2][1]-q[1][1])) / 2 * s;
+      g.style.width = bw + 'px'; g.style.height = bh + 'px';
+      g.style.transform = homography(bw, bh, q);
+    });
+  }
+  place(); window.addEventListener('resize', place);
+
+  /* Phone strip: copies of the screens, shown below the photo on small screens */
+  var strip = document.getElementById('strip');
+  function copyStrip() {
+    strip.innerHTML = '';
+    desk.querySelectorAll('.glass').forEach(function (g) {
+      var c = g.cloneNode(true); c.removeAttribute('style');
+      c.querySelectorAll('[id]').forEach(function (e) { e.removeAttribute('id'); });
+      strip.appendChild(c);
+    });
+  }
+
+  function fmt(n, d) { return Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function hm(s) { return new Date(s).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
+  function set(id, text, change) {
+    var e = document.getElementById(id); if (!e) return;
+    var changed = e.textContent !== text && e.textContent !== '\u2014';
+    e.textContent = text;
+    e.className = 'v ' + (change > 0 ? 'pos' : change < 0 ? 'neg' : '') + (changed ? ' flash' : '');
+    if (changed) setTimeout(function () { e.classList.remove('flash'); }, 1200);
+  }
+  var CRYPTO = { btc: 0, eth: 0, algo: 4 };
+  function showCrypto(c) {
+    Object.keys(CRYPTO).forEach(function (k) {
+      if (c[k]) set('q-' + k, '$' + fmt(c[k].price, CRYPTO[k]), c[k].change);
+    });
+  }
+  var macro = [];
+  fetch('desk.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    var q = d.quotes || {};
+    [['dow', 0], ['sp500', 0], ['vix', 2]].forEach(function (p) {
+      if (q[p[0]]) set('q-' + p[0], fmt(q[p[0]].price, p[1]), q[p[0]].change);
+    });
+    var t = q.sp500 && new Date(q.sp500.time);
+    document.getElementById('st-markets').textContent =
+      t && Date.now() - t < 40 * 60000 ? 'DELAYED 15 MIN' : 'MARKET CLOSED' + (t ? ' · ' + hm(q.sp500.time) : '');
+    [['brent', 'BRENT', '$', 2, ''], ['wti', 'WTI', '$', 2, ''], ['dxy', 'DXY', '', 2, ''], ['tnx', '10-YR', '', 2, '%']]
+      .forEach(function (p) { var x = q[p[0]]; if (x) macro.push([p[1], p[2] + fmt(x.price, p[3]) + p[4], x.change]); });
+    showCrypto(d.crypto || {});
+    var tr = (d.trends || []).slice(0, 6);
+    if (tr.length) document.getElementById('trends').innerHTML = tr.map(function (x) {
+      var s = document.createElement('div'); s.textContent = x.title.charAt(0).toUpperCase() + x.title.slice(1);
+      return '<div class="trend"><b>' + (x.geo === 'UK' ? 'UK' : 'US') + '</b>' + s.innerHTML + '</div>';
+    }).join('');
+    if (d.updated) document.getElementById('st-trends').textContent = 'UPDATED ' + hm(d.updated);
+    rotate(); copyStrip();
+  }).catch(function () { copyStrip(); });
+
+  /* Macro screen rotates through Brent, WTI, DXY and the 10-year */
+  var mi = -1;
+  function rotate() {
+    if (!macro.length) return;
+    mi = (mi + 1) % macro.length;
+    var m = macro[mi];
+    document.querySelectorAll('.swap').forEach(function (box) {
+      box.style.opacity = 0;
+      setTimeout(function () {
+        box.querySelector('.k').textContent = m[0];
+        var v = box.querySelector('.big'); v.textContent = m[1];
+        v.className = 'big v ' + (m[2] > 0 ? 'pos' : m[2] < 0 ? 'neg' : '');
+        var c = box.querySelector('.chg'); c.textContent = (m[2] > 0 ? '+' : '') + fmt(m[2], 2) + '%';
+        c.className = 'chg ' + (m[2] > 0 ? 'pos' : m[2] < 0 ? 'neg' : '');
+        box.style.opacity = 1;
+      }, 350);
+    });
+  }
+  setInterval(rotate, 3500);
+
+  /* Crypto updates live in the browser every minute */
+  function liveCrypto() {
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,algorand&vs_currencies=usd&include_24hr_change=true')
+      .then(function (r) { return r.json(); }).then(function (c) {
+        var map = { btc: 'bitcoin', eth: 'ethereum', algo: 'algorand' }, out = {};
+        Object.keys(map).forEach(function (k) { var x = c[map[k]];
+          if (x && x.usd) out[k] = { price: x.usd, change: x.usd_24h_change || 0 }; });
+        showCrypto(out);
+        document.getElementById('st-crypto').textContent = 'LIVE · ' + hm(new Date());
+        copyStrip();
+      }).catch(function () {});
+  }
+  liveCrypto(); setInterval(liveCrypto, 60000);
+})();
+</script>
 </body>
 </html>

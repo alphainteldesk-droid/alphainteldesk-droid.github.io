@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gap Radar: Prediction Market Price Gaps After Fees | Alpha Intel Desk</title>
+<meta name="description" content="Gap Radar compares prices for the same question on Kalshi, Polymarket and Alpha Arcade, after fees. Coming soon from Alpha Intel Desk.">
+<link rel="canonical" href="https://alphainteldesk.com/gap-radar.html">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta property="og:title" content="Gap Radar by Alpha Intel Desk">
+<meta property="og:description" content="Real-time intelligence for prediction markets.">
+<meta property="og:image" content="https://alphainteldesk.com/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@alphainteldesk">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#0b1420; --panel:#111d2c; --line:#1f3044;
+    --cyan:#3fdbe6; --amber:#ffb347; --text:#e8eef5; --muted:#8fa3b8; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--navy); color:var(--text);
+    font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.6; }
+  a { color:var(--cyan); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .wrap { max-width:760px; margin:0 auto; padding:0 16px; }
+  header { border-bottom:1px solid var(--line); position:sticky; top:0;
+    background:rgba(11,20,32,.92); backdrop-filter:blur(8px); z-index:10; }
+  .bar { display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 16px; max-width:1120px; margin:0 auto; }
+  .brand { display:flex; align-items:center; gap:10px; color:var(--text);
+    font-weight:700; font-size:1.1rem; }
+  .brand img { width:36px; height:36px; }
+  nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; }
+  nav a { color:var(--muted); }
+  nav a:hover, nav a.on { color:var(--text); text-decoration:none; }
+  .tag { font-family:"JetBrains Mono",monospace; font-size:.75rem;
+    letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
+  h1 { font-size:clamp(1.6rem,4vw,2.3rem); margin:8px 0 12px; line-height:1.2; }
+  h2 { font-size:1.25rem; margin:36px 0 10px; }
+  .lead { color:var(--muted); font-size:1.08rem; }
+  .card { background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:18px 20px; margin:12px 0; }
+  .card h3 { margin:0 0 4px; font-size:1.02rem; }
+  .card p { margin:0; color:var(--muted); }
+  .soon { font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--amber);
+    letter-spacing:.1em; margin-left:6px; }
+  main { padding:40px 0 8px; }
+  footer { margin-top:48px; border-top:1px solid var(--line);
+    padding:28px 0 40px; color:var(--muted); font-size:.88rem; }
+  .foot { display:flex; flex-wrap:wrap; gap:24px; justify-content:space-between; }
+  .social { display:flex; gap:16px; flex-wrap:wrap; }
+  @media (max-width:640px) {
+    nav { gap:14px; font-size:.9rem; }
+    .bar { flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/#market-of-the-week">Market of the Week</a>
+      <a href="/#top-traders">Top Traders</a>
+      <a href="/#guides">Guides</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <span class="tag">Coming soon</span>
+  <h1>Gap Radar</h1>
+  <p class="lead">The same question can trade at different prices on different prediction markets.
+    Gap Radar will show you where, and whether the gap is still there once fees are taken out.</p>
+
+  <div class="card"><h3>Three markets, one screen</h3>
+    <p>Kalshi, Polymarket and Alpha Arcade side by side. Other gap trackers skip Alpha Arcade. We don't.</p></div>
+  <div class="card"><h3>After fees, not before</h3>
+    <p>A 6¢ difference can shrink to 2¢, or to nothing, once each platform takes its fee. We do that math for you.</p></div>
+  <div class="card"><h3>Rules checked</h3>
+    <p>Two markets can look identical but settle differently, with a different deadline or data source.
+      We flag those, so a rules difference isn't mistaken for a real gap.</p></div>
+  <div class="card"><h3>Checked every hour</h3>
+    <p>Every gap shows when it was last checked. Prices move fast, and gaps can close at any time.</p></div>
+
+  <h2>What is prediction market arbitrage?</h2>
+  <p>Arbitrage means buying the same thing in two places at different prices. In prediction markets,
+    it usually means buying Yes on one platform and No on another when the two prices add up to less
+    than $1. In practice, fees, timing, rule differences and how much is actually available at that
+    price often wipe out the gap. Gap Radar shows you the numbers. It doesn't place trades or tell you
+    what to do.</p>
+
+  <h2>Be the first to know</h2>
+  <p>Join the free Telegram channel for the 7 AM desk brief, new-market alerts, and the day Gap Radar goes live.</p>
+  <p><a href="https://t.me/alphainteldesk" rel="noopener">Join t.me/alphainteldesk →</a> &nbsp;·&nbsp;
+    <a href="/">Back to the live desk</a></p>
+
+  <p style="color:var(--muted);font-size:.88rem;margin-top:28px">Gap Radar shows price differences for
+    information only. It is not a guarantee of profit and not financial advice. Read our
+    <a href="/disclosures.html">disclosures</a>.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><strong style="color:var(--text)">Alpha Intel Desk</strong><br>Information is our edge.</div>
+      <div class="social">
+        <a href="https://x.com/alphainteldesk" rel="noopener">X</a>
+        <a href="https://t.me/alphainteldesk" rel="noopener">Telegram</a>
+        <a href="https://www.youtube.com/@alphainteldesk" rel="noopener">YouTube</a>
+        <a href="/disclosures.html">Disclosures</a>
+      </div>
+    </div>
+    <p>Not financial advice. Prediction markets involve risk, and you can lose money.
+      Some links on this site are referral links and may earn us a commission at no cost to you.</p>
+    <p>&copy; 2026 Alpha Intel Desk</p>
+  </div>
+</footer>
+
+</body>
+</html>
