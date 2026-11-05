@@ -53,7 +53,7 @@ for name, sym in QUOTES:
     q = quote(sym)
     if q:
         out["quotes"][name] = q
-for key, fn in (("crypto", crypto), ("trends_us", lambda: trends("US")), ("trends_uk", lambda: trends("GB"))):
+for key, fn in (("crypto", crypto), ("trends_us", lambda: trends("US", 5)), ("trends_uk", lambda: trends("GB", 5))):
     try:
         out[key] = fn()
     except Exception as err:

@@ -186,7 +186,7 @@
   .gap-n { font-size:18px; color:var(--amber); }
   .gap-list { margin-top:4px; padding-top:4px; border-top:1px solid rgba(63,219,230,.2); line-height:1.6; }
   .v2 { color:var(--amber); }
-  .glass[data-screen="trend"] { line-height:1.6; font-size:13.5px; font-weight:500; color:#fff; }
+  .glass[data-screen="trend"] { line-height:1.85; font-size:14px; font-weight:500; color:#fff; }
   .glass[data-screen="gap"] .gap-q { font-size:14px; font-weight:700; color:#fff; white-space:normal; }
   .glass[data-screen="gap"] { font-size:12.5px; } .glass[data-screen="gap"] .trend { color:#e8eef5; }
   .trend { font-family:"Space Grotesk",sans-serif; white-space:nowrap; overflow:hidden;
@@ -482,7 +482,7 @@
     markets: [[54.3,10.7],[62.6,12.3],[62.6,38.6],[54.3,38.2]],
     macro:   [[63.7,12.5],[68.9,13.5],[68.9,39.0],[63.7,38.8]],
     gap:     [[70.5,12.9],[83.7,7.3],[83.7,51.2],[70.5,51.0]],
-    trend:   [[85.0,9.9],[99.2,6.2],[99.2,52.0],[85.0,51.9]]
+    trend:   [[85.0,6.6],[99.2,2.4],[99.2,52.0],[85.0,51.9]]
   };
   var REF = 1200; /* screens are designed at a 1200 px-wide photo, then scaled */
 
@@ -559,13 +559,15 @@
     });
     var t = q.sp500 && new Date(q.sp500.time);
     document.getElementById('st-markets').textContent =
-      t && Date.now() - t < 40 * 60000 ? 'DELAYED 15 MIN' : 'MARKET CLOSED' + (t ? ' · ' + hm(q.sp500.time) : '');
+      t && Date.now() - t < 40 * 60000 ? 'DELAYED 15 MIN' : 'CLOSED' + (t ? ' · ' + hm(q.sp500.time) : '');
     [['brent', 'BRENT', '$', 2, ''], ['wti', 'WTI', '$', 2, ''], ['dxy', 'DXY', '', 2, ''], ['tnx', '10-YR', '', 2, '%']]
       .forEach(function (p) { var x = q[p[0]]; if (x) macro.push([p[1], p[2] + fmt(x.price, p[3]) + p[4], x.change]); });
     showCrypto(d.crypto || {});
-    var tr = (d.trends || []).slice(0, 6);
+    var seen = {}, tr = (d.trends || []).filter(function (x) {
+      var k = (x.title || '').toLowerCase(); if (!k || seen[k]) return false; seen[k] = 1; return true;
+    }).slice(0, 6);
     if (tr.length) document.getElementById('trends').innerHTML = tr.map(function (x) {
-      var s = document.createElement('div'); s.textContent = x.title.charAt(0).toUpperCase() + x.title.slice(1);
+      var s = document.createElement('div'); s.textContent = x.title.replace(/\b[a-z]/g, function (c) { return c.toUpperCase(); });
       return '<div class="trend"><b>' + (x.geo === 'UK' ? 'UK' : 'US') + '</b>' + s.innerHTML + '</div>';
     }).join('');
     if (d.updated) document.getElementById('st-trends').textContent = 'UPDATED ' + hm(d.updated);
