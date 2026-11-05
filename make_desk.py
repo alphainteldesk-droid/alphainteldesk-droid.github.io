@@ -13,7 +13,7 @@ def get(url, raw=False):
     return data if raw else json.loads(data)
 
 # name shown on the desk -> Yahoo Finance symbol
-QUOTES = [("dow", "^DJI"), ("sp500", "^GSPC"), ("vix", "^VIX"), ("brent", "BZ=F"),
+QUOTES = [("dow", "^DJI"), ("sp500", "^GSPC"), ("nasdaq", "^IXIC"), ("vix", "^VIX"), ("brent", "BZ=F"),
           ("wti", "CL=F"), ("dxy", "DX-Y.NYB"), ("tnx", "^TNX")]
 
 def quote(sym):

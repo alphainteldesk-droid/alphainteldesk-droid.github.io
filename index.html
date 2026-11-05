@@ -180,7 +180,8 @@
   .stamp { font-size:7.5px; color:#a9bccf; letter-spacing:.08em; margin-top:2px; }
   .mq { margin-bottom:7px; } .mq .k { color:#c3d2e2; font-weight:500; font-size:10px; }
   .big { font-size:13px; line-height:1.15; }
-  .glass.lg { font-size:13.5px; line-height:1.6; } .glass.lg .gh { font-size:9px; margin-bottom:6px; }
+  .glass.lg { font-size:13.5px; line-height:1.6; }
+  .glass.lg.tight { font-size:12.5px; line-height:1.45; } .glass.lg .gh { font-size:9px; margin-bottom:6px; }
   .swap { transition:opacity .35s; }
   .gap-q { font-family:"Space Grotesk",sans-serif; font-size:10.5px; line-height:1.25;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -277,10 +278,11 @@
     <div class="row"><span class="k">ALGO</span><span class="v" id="q-algo">&mdash;</span></div>
     <div class="stamp" id="st-crypto">LIVE</div>
   </div>
-  <div class="glass lg" data-screen="markets">
+  <div class="glass lg tight" data-screen="markets">
     <div class="gh">MARKETS <span class="dot"></span></div>
     <div class="row"><span class="k">DOW</span><span class="v" id="q-dow">&mdash;</span></div>
     <div class="row"><span class="k">S&amp;P</span><span class="v" id="q-sp500">&mdash;</span></div>
+    <div class="row"><span class="k" title="Nasdaq Composite">NAS</span><span class="v" id="q-nasdaq">&mdash;</span></div>
     <div class="row"><span class="k">VIX</span><span class="v" id="q-vix">&mdash;</span></div>
     <div class="stamp" id="st-markets">DELAYED</div>
   </div>
@@ -557,7 +559,7 @@
   var macro = [];
   fetch('desk.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     var q = d.quotes || {};
-    [['dow', 0], ['sp500', 0], ['vix', 2]].forEach(function (p) {
+    [['dow', 0], ['sp500', 0], ['nasdaq', 0], ['vix', 2]].forEach(function (p) {
       if (q[p[0]]) set('q-' + p[0], fmt(q[p[0]].price, p[1]), q[p[0]].change);
     });
     var t = q.sp500 && new Date(q.sp500.time);
