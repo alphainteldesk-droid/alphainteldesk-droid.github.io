@@ -1,5 +1,5 @@
 # Alpha Intel Desk: cross-site matching engine (v1).
-# For every priced Alpha Arcade market closing in the next 14 days, find the same event on
+# For every open Alpha Arcade market (any end date), find the same event on
 # Polymarket and Kalshi, line up the outcomes, and score how sure we are they're the same market.
 #   SAME (90+)     same event, same outcome, end times line up  -> used for Gap Radar math
 #   SIMILAR (70-89) probably the same event, something differs   -> shown with a badge, never gap math
@@ -10,7 +10,8 @@ from datetime import datetime, timezone, timedelta
 from difflib import SequenceMatcher
 
 NOTE = "Matches are automatic. Always check each site's rules before you trade."
-DAYS = 14
+MAX_PAGES_POLY = 30      # Polymarket events, 500 per page
+MAX_PAGES_KALSHI = 80    # Kalshi events, 200 per page
 n = datetime.now(timezone.utc)
 f = "%Y-%m-%dT%H:%M:%SZ"
 
@@ -120,23 +121,34 @@ def sides(title):
 
 
 # ---------------- load the three sites ----------------
+def price(p):
+    """Alpha Arcade price in millionths -> percent; None when there's no price yet."""
+    return round(p / 1e4, 1) if p else None
+
+
+def lead_of(outs):
+    """The leading outcome: highest price, else the first team (not the draw)."""
+    priced = [k for k, v in outs.items() if v is not None]
+    if priced:
+        return max(priced, key=lambda k: outs[k])
+    return next((k for k in outs if k.lower() not in ("draw", "tie")), next(iter(outs)))
+
+
 def load_alpha():
     b = json.load(open("alpha_live.json"))
     out = []
     for m in b["markets"]:
         end = ts(m.get("endTs"))
-        if not (n.timestamp() < end <= n.timestamp() + DAYS * 86400):
+        if end <= n.timestamp():
             continue
         opts = m.get("options") or []
         if len(opts) == 1 or all((o.get("label") or "").lower() in ("yes", "no") for o in opts):
             yes = next((o for o in opts if (o.get("label") or "").lower() == "yes"), opts[0] if opts else {})
             sd = sides(m.get("title"))
             label = re.sub(r"(?i)^the\s+", "", sd[0]) if sd else "Yes"
-            outs = {label: (yes.get("yesProb") or 0) / 1e4}
+            outs = {label: price(yes.get("yesProb"))}
         else:
-            outs = {o.get("label") or "?": (o.get("yesProb") or 0) / 1e4 for o in opts}
-        if not any(outs.values()):
-            continue
+            outs = {o.get("label") or "?": price(o.get("yesProb")) for o in opts}
         out.append({"id": m.get("id"), "title": m.get("title") or "", "end": end, "outcomes": outs,
                     "rules": m.get("rules") or "", "fee": m.get("feeBasePercent"),
                     "url": "https://www.alphaarcade.com/market/" + (m.get("slug") or "")})
@@ -144,69 +156,72 @@ def load_alpha():
 
 
 def load_poly():
-    """Polymarket events closing within DAYS days, grouped by event, outcomes -> price (0-100)."""
-    ms = []
-    for page in range(20):
-        d = get("https://gamma-api.polymarket.com/markets?active=true&closed=false&limit=500"
-                f"&offset={page * 500}&end_date_min=" + n.strftime(f) +
-                "&end_date_max=" + (n + timedelta(days=DAYS + 1)).strftime(f))
-        ms += d
-        if len(d) < 500:
+    """All open Polymarket events, outcomes -> price (0-100)."""
+    evs, off = [], 0
+    for _ in range(MAX_PAGES_POLY):
+        d = get(f"https://gamma-api.polymarket.com/events?active=true&closed=false&limit=500&offset={off}")
+        if not d:
             break
-    evs = {}
-    for m in ms:
-        if "Up or Down" in (m.get("question") or ""):
+        evs += d
+        off += len(d)
+    out = []
+    for ev in evs:
+        if "Up or Down" in (ev.get("title") or ""):
             continue
-        ev = (m.get("events") or [{}])[0]
-        k = ev.get("slug") or m.get("slug")
-        e = evs.setdefault(k, {"title": ev.get("title") or m.get("question") or "", "outcomes": {},
-                               "text": "", "end": ts(m.get("gameStartTime") or m.get("endDate")),
-                               "rules": m.get("description") or "",
-                               "url": "https://polymarket.com/event/" + (k or "")})
-        try:
-            names = json.loads(m.get("outcomes") or "[]")
-            prices = [float(p) for p in json.loads(m.get("outcomePrices") or "[]")]
-        except (ValueError, TypeError):
-            continue
-        q = m.get("question") or ""
-        e["text"] += " " + q
-        if [x.lower() for x in names] == ["yes", "no"] and prices:
-            label = m.get("groupItemTitle") or q
-            e["outcomes"][label] = round(prices[0] * 100, 1)
-            e.setdefault("questions", {})[label] = q
-        else:
-            for nm, p in zip(names, prices):
-                e["outcomes"][nm] = round(p * 100, 1)
-                e.setdefault("questions", {})[nm] = q
-    return list(evs.values())
+        e = {"title": ev.get("title") or "", "outcomes": {}, "text": "", "end": 0,
+             "rules": ev.get("description") or "", "url": "https://polymarket.com/event/" + (ev.get("slug") or "")}
+        for m in ev.get("markets") or []:
+            if m.get("closed"):
+                continue
+            try:
+                names = json.loads(m.get("outcomes") or "[]")
+                prices = [float(p) for p in json.loads(m.get("outcomePrices") or "[]")]
+            except (ValueError, TypeError):
+                continue
+            q = m.get("question") or ""
+            e["text"] += " " + q
+            e["end"] = e["end"] or ts(m.get("gameStartTime") or m.get("endDate"))
+            if [x.lower() for x in names] == ["yes", "no"] and prices:
+                e["outcomes"][m.get("groupItemTitle") or q] = round(prices[0] * 100, 1)
+            else:
+                for nm, p in zip(names, prices):
+                    e["outcomes"][nm] = round(p * 100, 1)
+        e["end"] = e["end"] or ts(ev.get("endDate"))
+        if e["outcomes"]:
+            out.append(e)
+    return out
 
 
 def load_kalshi():
-    """Kalshi events closing within DAYS days; each market in an event is one outcome."""
-    t = int(time.time())
-    ms, cur = [], ""
-    for _ in range(15):
-        d = get("https://api.elections.kalshi.com/trade-api/v2/markets?status=open&mve_filter=exclude"
-                f"&limit=1000&min_close_ts={t}&max_close_ts={t + (DAYS + 1) * 86400}&cursor={cur}")
-        ms += d["markets"]
+    """All open Kalshi events; each market in an event is one outcome."""
+    evs, cur = [], ""
+    for _ in range(MAX_PAGES_KALSHI):
+        d = get("https://api.elections.kalshi.com/trade-api/v2/events?status=open&with_nested_markets=true"
+                f"&limit=200&cursor={cur}")
+        evs += d.get("events") or []
         cur = d.get("cursor") or ""
         if not cur:
             break
-    evs = {}
-    for m in ms:
-        k = m["event_ticker"]
-        e = evs.setdefault(k, {"title": m.get("title") or "", "outcomes": {}, "text": "",
-                               "end": ts(m.get("expected_expiration_time") or m.get("close_time")),
-                               "rules": m.get("rules_primary") or "",
-                               "url": "https://kalshi.com/markets/" + k.split("-")[0].lower()})
-        bid = float(m.get("yes_bid_dollars") or 0)
-        ask = float(m.get("yes_ask_dollars") or 0)
-        last = float(m.get("last_price_dollars") or 0)
-        p = (bid + ask) / 2 if bid > 0 and ask > 0 else last
-        label = m.get("yes_sub_title") or m.get("subtitle") or m.get("title") or ""
-        e["outcomes"][label] = round(p * 100, 1)
-        e["text"] += " " + (m.get("title") or "") + " " + label
-    return list(evs.values())
+    out = []
+    for ev in evs:
+        k = ev.get("event_ticker") or ""
+        e = {"title": ev.get("title") or "", "outcomes": {}, "text": ev.get("sub_title") or "", "end": 0,
+             "rules": "", "url": "https://kalshi.com/markets/" + (ev.get("series_ticker") or k.split("-")[0]).lower()}
+        for m in ev.get("markets") or []:
+            if m.get("status") not in (None, "active", "open"):
+                continue
+            bid = float(m.get("yes_bid_dollars") or 0)
+            ask = float(m.get("yes_ask_dollars") or 0)
+            last = float(m.get("last_price_dollars") or 0)
+            p = (bid + ask) / 2 if bid > 0 and ask > 0 else last
+            label = m.get("yes_sub_title") or m.get("subtitle") or m.get("title") or ""
+            e["outcomes"][label] = round(p * 100, 1) if p > 0 else None
+            e["text"] += " " + (m.get("title") or "") + " " + label
+            e["end"] = e["end"] or ts(m.get("expected_expiration_time") or m.get("close_time"))
+            e["rules"] = e["rules"] or (m.get("rules_primary") or "")
+        if e["outcomes"]:
+            out.append(e)
+    return out
 
 
 # ---------------- matching ----------------
@@ -251,14 +266,15 @@ def score(a, e):
     if an and en and an != en:
         return 0, [], {}                                        # different line or threshold
     omap = {l: map_outcome(l, e["outcomes"]) for l in a["outcomes"]}
-    lead = max(a["outcomes"], key=a["outcomes"].get)
+    lead = lead_of(a["outcomes"])
     s = name + (20 if omap.get(lead) else 0)
-    hours = abs(a["end"] - e["end"]) / 3600 if a["end"] and e["end"] else 99
-    s += 20 if hours <= 12 else 10 if hours <= 36 else 0
+    hours = abs(a["end"] - e["end"]) / 3600 if a["end"] and e["end"] else 9999
+    away = max(0.0, (a["end"] - n.timestamp()) / 3600)          # hours until the Alpha market ends
+    s += 20 if hours <= max(12, away * 0.02) else 10 if hours <= max(36, away * 0.05) else 0
     s += 10 if all(omap.values()) else 0
     flags = []
-    if hours > 12:
-        flags.append("end times differ by %dh" % hours)
+    if hours > max(12, away * 0.02):
+        flags.append("end dates differ by %s" % ("%dh" % hours if hours < 72 else "%d days" % (hours / 24)))
     if any(l.lower() == "draw" for l in a["outcomes"]) and not omap.get("Draw") and not omap.get("draw"):
         flags.append("draw handled differently")
     ra, re_ = a["rules"].lower(), e["rules"].lower()
@@ -267,10 +283,32 @@ def score(a, e):
     return min(100, round(s)), flags, omap
 
 
-def best_match(a, events):
+def build_index(events):
+    """word prefix -> events containing it (fast first pass)."""
+    idx = {}
+    for i, e in enumerate(events):
+        for w in set(key_words(e["title"] + " " + e["text"])):
+            idx.setdefault(w[:4], set()).add(i)
+    return idx
+
+
+def candidates(a, events, idx):
+    ws = set(key_words(a["title"]))
+    for w in list(ws):
+        ws.update(ALIAS.get(w, []))
+    hits = {}
+    for w in ws:
+        for i in idx.get(w[:4], ()):
+            hits[i] = hits.get(i, 0) + 1
+    need = 2 if len(ws) >= 2 else 1
+    return [events[i] for i, c in hits.items() if c >= need]
+
+
+def best_match(a, events, idx):
     best = (0, [], {}, None)
-    for e in events:
-        if a["end"] and e["end"] and abs(a["end"] - e["end"]) > 4 * 86400:
+    away = max(0.0, a["end"] - n.timestamp())
+    for e in candidates(a, events, idx):
+        if a["end"] and e["end"] and abs(a["end"] - e["end"]) > max(4 * 86400, away * 0.15):
             continue
         s, fl, om = score(a, e)
         if s > best[0]:
@@ -287,8 +325,9 @@ def main():
         except Exception as err:
             print("Matcher:", name, "failed:", err)
             sites[name] = []
-    print("Matcher: %d Alpha Arcade markets (next %d days) | %d Polymarket events | %d Kalshi events"
-          % (len(alpha), DAYS, len(sites["polymarket"]), len(sites["kalshi"])))
+    print("Matcher: %d Alpha Arcade markets | %d Polymarket events | %d Kalshi events"
+          % (len(alpha), len(sites["polymarket"]), len(sites["kalshi"])))
+    idxs = {k: build_index(v) for k, v in sites.items()}
     try:
         fix = json.load(open("match_fixes.json"))      # {"block": [["alpha id", "other url"], ...]}
     except Exception:
@@ -299,23 +338,23 @@ def main():
     for a in alpha:
         row = {"title": a["title"], "close": datetime.fromtimestamp(a["end"], timezone.utc).strftime(f),
                "sites": {"alpha": {"url": a["url"], "outcomes": a["outcomes"]}}, "flags": [], "score": 100}
-        lead = max(a["outcomes"], key=a["outcomes"].get)
+        lead = lead_of(a["outcomes"])
         row["outcome"] = lead
-        row["prices"] = {"alpha": round(a["outcomes"][lead], 1)}
+        row["prices"] = {"alpha": a["outcomes"][lead]}
         for name, evs in sites.items():
-            s, fl, om, e = best_match(a, evs)
+            s, fl, om, e = best_match(a, evs, idxs[name])
             if not e or s < 70 or (a["id"], e["url"]) in blocked:
                 continue
             row["sites"][name] = {"url": e["url"], "title": e["title"], "score": s, "flags": fl,
                                   "label": "SAME" if s >= 90 else "SIMILAR"}
-            if om.get(lead) is not None:
-                row["prices"][name] = e["outcomes"][om[lead]]
+            row["sites"][name]["matched_outcome"] = om.get(lead)
+            row["prices"][name] = e["outcomes"][om[lead]] if om.get(lead) is not None else None
             row["score"] = min(row["score"], s)
             row["flags"] += [x for x in fl if x not in row["flags"]]
         if len(row["sites"]) < 2:
             continue
         row["label"] = "SAME" if row["score"] >= 90 else "SIMILAR"
-        ps = list(row["prices"].values())
+        ps = [v for v in row["prices"].values() if v is not None]
         row["gap"] = round(max(ps) - min(ps), 1) if len(ps) > 1 and row["label"] == "SAME" else None
         out.append(row)
 
@@ -323,11 +362,15 @@ def main():
     json.dump({"updated": n.strftime(f), "note": NOTE, "matches": out}, open("matches.json", "w"), indent=1)
     same = sum(r["label"] == "SAME" for r in out)
     print("Matcher: %d matched (%d SAME, %d SIMILAR)" % (len(out), same, len(out) - same))
-    for r in out[:20]:
+    for r in out[:30]:
         p = r["prices"]
         print("  %-7s %3d | %s | %s | A %s P %s K %s | gap %s %s" % (
             r["label"], r["score"], r["title"][:48], r["outcome"][:22], p.get("alpha"),
             p.get("polymarket", "-"), p.get("kalshi", "-"), r["gap"], "; ".join(r["flags"])))
+        for site in ("polymarket", "kalshi"):          # what it matched, so we can check it
+            x = r["sites"].get(site)
+            if x:
+                print("        %s %d: %s -> %s" % (site[0].upper(), x["score"], x["title"][:60], x["matched_outcome"]))
 
 
 if __name__ == "__main__":
