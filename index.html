@@ -264,7 +264,7 @@
   .glass .neg { color:#ff5c5c; text-shadow:0 1px 2px rgba(0,0,0,.9); }
   .glass .v.flash { text-shadow:0 0 6px currentColor; }
   .chg { font-size:9px; font-weight:700; }
-  /* Gap Radar panel in the space under MONEY NEVER SLEEPS */
+  /* Gap Scanner panel in the space under MONEY NEVER SLEEPS */
   .deskwrap { position:relative; container-type:inline-size; }
   .gapbox { position:absolute; left:2.4%; top:55.6%; width:38.6%; height:42%; box-sizing:border-box; overflow:hidden;
     display:flex; flex-direction:column; padding:.55cqw .85cqw; border-radius:5px;
@@ -406,13 +406,13 @@
     <div class="stamp" id="st-conflict">WORLD HEADLINES</div>
   </div>
 </div>
-<section class="gapbox" id="gapbox" aria-label="Gap Radar: biggest price gaps after fees">
-  <div class="gb-h"><span class="gb-t"><i class="ldot"></i>GAP RADAR</span>
+<section class="gapbox" id="gapbox" aria-label="Gap Scanner: biggest price gaps after fees">
+  <div class="gb-h"><span class="gb-t"><i class="ldot"></i>GAP SCANNER</span>
     <span class="gb-s">BIGGEST PRICE GAPS AFTER FEES · <span id="gb-upd">HOURLY</span></span></div>
   <div class="gb-cols"><span>MARKET</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>GAP</span></div>
   <div id="gb-rows"><div class="gb-empty">Scanning Polymarket, Kalshi and Alpha Arcade&hellip;</div></div>
   <div class="gb-f"><span>No sports · fees estimated · check each site's rules before you trade</span>
-    <a class="gb-go" href="/gap-radar.html">OPEN GAP RADAR &rarr;</a></div>
+    <a class="gb-go" href="/gap-scanner.html">OPEN GAP SCANNER &rarr;</a></div>
 </section>
 </div>
 <div class="strip" id="strip"></div>
@@ -738,21 +738,21 @@
 })();
 </script>
 <script>
-(function () {   // Gap Radar panel
+(function () {   // Gap Scanner panel
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var hm = function (s) { return new Date(s).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); };
   fetch('gaps.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     document.getElementById('gb-upd').textContent = 'UPDATED ' + hm(d.updated).toUpperCase();
     var box = document.getElementById('gb-rows'), g = (d.gaps || []).slice(0, 5);
     if (!g.length) { box.innerHTML = '<div class="gb-empty">No gaps pass our filters right now. Prices are lined up across ' +
-      'Polymarket, Kalshi and Alpha Arcade. The radar checks again every hour.</div>'; return; }
+      'Polymarket, Kalshi and Alpha Arcade. The scanner checks again every hour.</div>'; return; }
     box.innerHTML = g.map(function (x) {
       var cell = function (site) {
         var p = x.prices[site], c = 'gb-p' + (site === 'alpha' ? ' a' : '') +
           (site === x.low.site ? ' lo' : site === x.high.site ? ' hi' : '') + (p == null ? ' na' : '');
         return '<span class="' + c + '">' + (p == null ? '&ndash;' : esc(Math.round(p)) + '&cent;') + '</span>';
       };
-      return '<a class="gb-r" href="/gap-radar.html"><span class="gb-m"><b>' + esc(x.title) + '</b><i>' + esc(x.outcome) +
+      return '<a class="gb-r" href="/gap-scanner.html"><span class="gb-m"><b>' + esc(x.title) + '</b><i>' + esc(x.outcome) +
         ' · ' + esc(x.category) + '</i></span>' + cell('polymarket') + cell('kalshi') + cell('alpha') +
         '<span class="gb-g">' + esc(x.net.toFixed(1)) + '&cent;</span></a>';
     }).join('');

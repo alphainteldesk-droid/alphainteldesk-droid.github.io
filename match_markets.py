@@ -1,9 +1,10 @@
 # Alpha Intel Desk: cross-site matching engine (v1).
 # For every open Alpha Arcade market (any end date), find the same event on
 # Polymarket and Kalshi, line up the outcomes, and score how sure we are they're the same market.
-#   SAME (90+)     same event, same outcome, end times line up  -> used for Gap Radar math
+#   SAME (90+)     same event, same outcome, end times line up  -> used for Gap Scanner math
 #   SIMILAR (70-89) probably the same event, something differs   -> shown with a badge, never gap math
 #   below 70        hidden
+# v2: also pairs Polymarket with Kalshi directly (non-sports), so Kalshi shows even when Alpha has no market.
 # Writes matches.json. Public market data only.
 import json, re, time, unicodedata, urllib.request
 from datetime import datetime, timezone, timedelta
@@ -40,7 +41,7 @@ esports bo1 bo3 bo5 2025 2026 2027 2028 jan feb mar apr may jun jul aug sep oct 
 how high low get what when which much many more than above below before after end year this next new
 happen out again any does did do reach hit price yes no there between during until""".split())
 PROPS = set("""total totals spread over under handicap points goals corners cards half quarter set sets
-map maps rounds exact score btts both margin first anytime player props""".split())
+map maps rounds exact score btts both margin first anytime player props period periods inning innings""".split())
 
 # US team nicknames -> city / region words (Kalshi often names teams by city)
 TEAMS = """76ers:philadelphia sixers:philadelphia celtics:boston nets:brooklyn knicks:new york raptors:toronto
@@ -104,7 +105,8 @@ def covers(side, text_words):
     share = sum(found) / len(sw)
     for w in sw:
         city = ALIAS.get(w)
-        if city and all(hit(c) for c in city if c not in STOP):
+        others = [x for x in sw if x != w and x not in ("trail", "maple", "red", "white", "blue")]
+        if city and not others and all(hit(c) for c in city if c not in STOP):
             share = 1.0
     if len(sw) >= 2 and not found[-1] and share < 1.0:
         share = min(share, 0.4)              # a first name alone is not enough
@@ -148,7 +150,8 @@ def load_alpha():
             continue
         opts = m.get("options") or []
         vol = float(m.get("volume") or 0)
-        if vol < 100:        # barely traded: exactly 50/50 is just the starting price
+        if vol < 100 or (vol < 2000 and not m.get("twentyFourHrVolume")):
+            # thin and no trades today: exactly 50/50 is just the starting price
             opts = [dict(o, yesProb=None) if o.get("yesProb") == 500000 else o for o in opts]
         if len(opts) == 1 or all((o.get("label") or "").lower() in ("yes", "no") for o in opts):
             yes = next((o for o in opts if (o.get("label") or "").lower() == "yes"), opts[0] if opts else {})
@@ -194,7 +197,8 @@ def load_poly():
             continue
         e = {"title": ev.get("title") or "", "outcomes": {}, "text": "", "end": 0,
              "volume": float(ev.get("volume") or 0), "volume24h": float(ev.get("volume24hr") or 0),
-             "rules": ev.get("description") or "", "url": "https://polymarket.com/event/" + (ev.get("slug") or "")}
+             "rules": ev.get("description") or "", "url": "https://polymarket.com/event/" + (ev.get("slug") or ""),
+             "categories": [t.get("label") or "" for t in (ev.get("tags") or []) if isinstance(t, dict)]}
         for m in ev.get("markets") or []:
             if m.get("closed"):
                 continue
@@ -235,7 +239,8 @@ def load_kalshi():
     for ev in evs:
         k = ev.get("event_ticker") or ""
         e = {"title": ev.get("title") or "", "outcomes": {}, "text": ev.get("sub_title") or "", "end": 0,
-             "volume": 0.0, "volume24h": 0.0, "rules": "", "url": "https://kalshi.com/markets/" + (ev.get("series_ticker") or k.split("-")[0]).lower()}
+             "volume": 0.0, "volume24h": 0.0, "rules": "", "url": "https://kalshi.com/markets/" + (ev.get("series_ticker") or k.split("-")[0]).lower(),
+             "categories": [ev.get("category") or ""], "alt": ""}
         for m in ev.get("markets") or []:
             if m.get("status") not in (None, "active", "open"):
                 continue
@@ -250,6 +255,8 @@ def load_kalshi():
             e["text"] += " " + (m.get("title") or "") + " " + label
             e["end"] = e["end"] or ts(m.get("expected_expiration_time") or m.get("close_time"))
             e["rules"] = e["rules"] or (m.get("rules_primary") or "")
+        if len(e["outcomes"]) == 1:          # one-market event: its question is often closer to other sites' titles
+            e["alt"] = (ev.get("markets") or [{}])[0].get("title") or ""
         if e["outcomes"]:
             out.append(e)
     return out
@@ -292,18 +299,22 @@ def score(a, e):
             return 0, [], {}
         name = 50 * (c[0] + c[1]) / 2
     else:
-        aw, ew = set(key_words(a["title"])), set(key_words(e["title"]))
-        if not aw or not ew:
+        aw, an, best_j = set(key_words(a["title"])), numbers(a["title"]), 0.0
+        for t in (e["title"], e.get("alt") or ""):
+            ew, en = set(key_words(t)), numbers(t)
+            if not aw or not ew or (an and en and an != en):
+                continue                                        # different line or threshold
+            both = aw & ew
+            j = len(both) / len(aw | ew)
+            if j >= 0.6 and len(both) >= min(2, len(aw)):
+                best_j = max(best_j, j)
+        if not best_j:
             return 0, [], {}
-        both = aw & ew
-        j = len(both) / len(aw | ew)
-        if j < 0.6 or len(both) < min(2, len(aw)):
-            return 0, [], {}
-        name = 50 * j
+        name = 50 * best_j
     if (PROPS & set(words(e["title"]))) and not (PROPS & set(words(a["title"]))):
         return 0, [], {}                                        # totals/spreads are a different market
     an, en = numbers(a["title"]), numbers(e["title"])
-    if an and en and an != en:
+    if sd and an and en and an != en:
         return 0, [], {}                                        # different line or threshold
     omap = {l: map_outcome(l, e["outcomes"]) for l in a["outcomes"]}
     lead = lead_of(a["outcomes"])
@@ -311,7 +322,8 @@ def score(a, e):
     hours = abs(a["end"] - e["end"]) / 3600 if a["end"] and e["end"] else 9999
     away = max(0.0, (a["end"] - n.timestamp()) / 3600)          # hours until the Alpha market ends
     s += 20 if hours <= max(12, away * 0.03) else 10 if hours <= max(36, away * 0.06) else 0
-    s += 10 if all(v is not None for v in omap.values()) else 0
+    mapped = sum(v is not None for v in omap.values())
+    s += 10 if mapped >= 0.6 * len(omap) else 0               # most outcomes line up (fields of candidates differ a bit)
     flags = []
     if hours > max(12, away * 0.03):
         flags.append("end dates differ by %s" % ("%dh" % hours if hours < 72 else "%d days" % (hours / 24)))
@@ -354,6 +366,51 @@ def best_match(a, events, idx):
         if s > best[0]:
             best = (s, fl, om, e)
     return best
+
+
+SPORTY = ("sport", "esports", "soccer", "football", "basketball", "baseball", "hockey", "nfl", "nba", "mls",
+          "nhl", "mlb", "ufc", "mma", "tennis", "f1", "golf", "league", "cricket", "boxing", "games")
+PK_MIN_POLY_VOLUME = 5000       # same floor make_gaps.py uses for Polymarket
+
+
+def sporty(e):
+    return any(any(t in (c or "").lower() for t in SPORTY) for c in e.get("categories") or []) \
+        or bool(sides(e["title"]))
+
+
+def poly_kalshi(poly, kalshi, used):
+    """Polymarket <-> Kalshi pairs with no Alpha market in between (non-sports only)."""
+    ks = [e for e in kalshi if not sporty(e)]
+    idx = build_index(ks)
+    best = {}                                          # kalshi url -> best row, so each Kalshi event is used once
+    for p in poly:
+        if p["url"] in used or sporty(p) or p["volume"] < PK_MIN_POLY_VOLUME:
+            continue
+        outs = p["outcomes"]
+        if len(outs) == 1:
+            outs = {"Yes": next(iter(outs.values()))}  # one-question event: compare it as Yes
+        a = {"id": p["url"], "title": p["title"], "end": p["end"], "outcomes": outs, "rules": p["rules"]}
+        s, fl, om, e = best_match(a, ks, idx)
+        if not e or s < 70:
+            continue
+        lead = lead_of(outs)
+        label = "SAME" if s >= 90 else "SIMILAR"
+        k = {"url": e["url"], "title": e["title"], "score": s, "flags": fl, "label": label,
+             "volume": round(e["volume"]), "volume24h": round(e["volume24h"]), "matched_outcome": om.get(lead),
+             "outcomes": {l: e["outcomes"][x] for l, x in om.items() if x is not None}}
+        row = {"title": p["title"], "close": datetime.fromtimestamp(p["end"] or e["end"], timezone.utc).strftime(f),
+               "sites": {"polymarket": {"url": p["url"], "title": p["title"], "score": s, "flags": fl, "label": label,
+                                        "volume": round(p["volume"]), "volume24h": round(p["volume24h"]),
+                                        "matched_outcome": lead, "outcomes": outs},
+                         "kalshi": k},
+               "flags": fl, "score": s, "categories": (p.get("categories") or []) + (e.get("categories") or []),
+               "outcome": lead, "prices": {"polymarket": outs[lead], "kalshi": k["outcomes"].get(lead)},
+               "label": label, "pair": "polymarket-kalshi"}
+        ps = [v for v in row["prices"].values() if v is not None]
+        row["gap"] = round(max(ps) - min(ps), 1) if len(ps) > 1 and label == "SAME" else None
+        if e["url"] not in best or s > best[e["url"]]["score"]:
+            best[e["url"]] = row
+    return list(best.values())
 
 
 def main():
@@ -403,6 +460,16 @@ def main():
         row["gap"] = round(max(ps) - min(ps), 1) if len(ps) > 1 and row["label"] == "SAME" else None
         out.append(row)
 
+    used = {r["sites"]["polymarket"]["url"] for r in out if "polymarket" in r["sites"]}
+    pk = poly_kalshi(sites["polymarket"], sites["kalshi"], used)
+    print("Matcher: %d Polymarket-Kalshi pairs (%d SAME)" % (len(pk), sum(r["label"] == "SAME" for r in pk)))
+    for r in sorted(pk, key=lambda r: -r["score"])[:25]:
+        x = r["sites"]["kalshi"]
+        print("  PK %-7s %3d | %s | %s | P %s K %s | K: %s -> %s" % (
+            r["label"], r["score"], r["title"][:44], r["outcome"][:18], r["prices"]["polymarket"],
+            r["prices"]["kalshi"], x["title"][:44], x["matched_outcome"]))
+    out += pk
+
     out.sort(key=lambda r: (r["label"] != "SAME", -(r["gap"] or 0)))
     json.dump({"updated": n.strftime(f), "note": NOTE, "matches": out}, open("matches.json", "w"), indent=1)
     same = sum(r["label"] == "SAME" for r in out)
@@ -411,7 +478,7 @@ def main():
         p = r["prices"]
         print("  %-7s %3d | %s | %s | A %s P %s K %s | gap %s | A vol $%s %s" % (
             r["label"], r["score"], r["title"][:48], r["outcome"][:22], p.get("alpha"),
-            p.get("polymarket", "-"), p.get("kalshi", "-"), r["gap"], r["sites"]["alpha"]["volume"],
+            p.get("polymarket", "-"), p.get("kalshi", "-"), r["gap"], r["sites"].get("alpha", {}).get("volume", "-"),
             "; ".join(r["flags"])))
         for site in ("polymarket", "kalshi"):          # what it matched, so we can check it
             x = r["sites"].get(site)
