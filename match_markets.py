@@ -10,8 +10,8 @@ from datetime import datetime, timezone, timedelta
 from difflib import SequenceMatcher
 
 NOTE = "Matches are automatic. Always check each site's rules before you trade."
-MAX_PAGES_POLY = 30      # Polymarket events, 500 per page
-MAX_PAGES_KALSHI = 80    # Kalshi events, 200 per page
+MAX_PAGES_POLY = 60      # Polymarket events, 100 per page
+MAX_PAGES_KALSHI = 150   # Kalshi events, 200 per page
 n = datetime.now(timezone.utc)
 f = "%Y-%m-%dT%H:%M:%SZ"
 
@@ -37,7 +37,9 @@ def ts(v):
 STOP = set("""fc cf afc sc ac cd sd ud club the will beat beats win wins winner vs v versus match game
 who of to a an in on at by be is it for and or de del la el los las le les u21 u23 women womens
 ufc wta atp nba nfl nhl mlb ncaa ncaaf ncaab epl mls lal ser bun cs2 counter strike dota lol valorant
-esports bo1 bo3 bo5 2025 2026 2027 2028 jan feb mar apr may jun jul aug sep oct nov dec""".split())
+esports bo1 bo3 bo5 2025 2026 2027 2028 jan feb mar apr may jun jul aug sep oct nov dec
+how high low get what when which much many more than above below before after end year this next new
+happen out again any does did do reach hit price yes no there between during until""".split())
 PROPS = set("""total totals spread over under handicap points goals corners cards half quarter set sets
 map maps rounds exact score btts both margin first anytime player props""".split())
 
@@ -61,7 +63,9 @@ yankees:new york mets:new york orioles:baltimore rays:tampa bay red sox:boston b
 guardians:cleveland tigers:detroit royals:kansas city twins:minnesota white sox:chicago astros:houston
 angels:los angeles athletics:oakland mariners:seattle braves:atlanta marlins:miami phillies:philadelphia
 nationals:washington cubs:chicago reds:cincinnati brewers:milwaukee pirates:pittsburgh dodgers:los angeles
-padres:san diego diamondbacks:arizona rockies:colorado mammoth:utah"""
+padres:san diego diamondbacks:arizona rockies:colorado mammoth:utah
+fire:chicago crew:columbus revolution:new england whitecaps:vancouver sounders:seattle timbers:portland
+dynamo:houston galaxy:los angeles union:philadelphia earthquakes:san jose rapids:colorado"""
 ALIAS = {}
 for pair in re.findall(r"([a-z0-9]+(?: sox| jays)?):([a-z ]+?)(?= [a-z0-9]+(?: sox| jays)?:|$)", TEAMS.replace("\n", " ")):
     ALIAS[pair[0]] = pair[1].split()
@@ -74,7 +78,7 @@ def words(s):
 
 
 def key_words(s):
-    return [w for w in words(s) if w not in STOP and not w.isdigit()]
+    return [w for w in words(s) if w not in STOP and not w.isdigit() and len(w) > 1]
 
 
 def numbers(s):
@@ -103,6 +107,8 @@ def covers(side, text_words):
         city = ALIAS.get(w)
         if city and all(hit(c) for c in city if c not in STOP):
             share = 1.0
+    if len(sw) >= 2 and not found[-1] and share < 1.0:
+        share = min(share, 0.4)              # a first name alone is not enough
     if len(sw) >= 2 and found[-1] and share >= 0.5:
         share = 1.0
     return share
@@ -159,7 +165,11 @@ def load_poly():
     """All open Polymarket events, outcomes -> price (0-100)."""
     evs, off = [], 0
     for _ in range(MAX_PAGES_POLY):
-        d = get(f"https://gamma-api.polymarket.com/events?active=true&closed=false&limit=500&offset={off}")
+        try:
+            d = get(f"https://gamma-api.polymarket.com/events?active=true&closed=false&limit=100&offset={off}")
+        except Exception as err:
+            print("Matcher: Polymarket stopped at offset", off, "-", err)
+            break
         if not d:
             break
         evs += d
@@ -196,8 +206,12 @@ def load_kalshi():
     """All open Kalshi events; each market in an event is one outcome."""
     evs, cur = [], ""
     for _ in range(MAX_PAGES_KALSHI):
-        d = get("https://api.elections.kalshi.com/trade-api/v2/events?status=open&with_nested_markets=true"
-                f"&limit=200&cursor={cur}")
+        try:
+            d = get("https://api.elections.kalshi.com/trade-api/v2/events?status=open&with_nested_markets=true"
+                    f"&limit=200&cursor={cur}")
+        except Exception as err:
+            print("Matcher: Kalshi stopped after", len(evs), "events -", err)
+            break
         evs += d.get("events") or []
         cur = d.get("cursor") or ""
         if not cur:
@@ -232,11 +246,16 @@ def map_outcome(label, outs):
             if k.lower() in ("draw", "tie") or "draw" in words(k) or "tie" in words(k):
                 return k
         return None
+    if label.lower() == "yes":
+        real = [k for k in outs if k.lower() != "no"]
+        return real[0] if len(real) == 1 else None
     best, bs = None, (0.0, 0)
     for k in outs:
         kw = words(k)
         if k.lower() in ("yes", "no") or "draw" in kw or "tie" in kw:
             continue
+        if numbers(label) and numbers(k) != numbers(label):
+            continue                                   # Above 4% is not Above $150
         s = (covers(label, key_words(k)), -len(kw))          # best match, then shortest label
         if s > bs:
             best, bs = k, s
@@ -248,7 +267,10 @@ def score(a, e):
     sd = sides(a["title"])
     text = key_words(e["title"] + " " + e["text"])
     if sd:
-        c = [covers(s, text) for s in sd]
+        real = [k for k in e["outcomes"] if k.lower() not in ("draw", "tie")]
+        if len(real) > 3:
+            return 0, [], {}                           # a field of many (a championship), not a head-to-head
+        c = [covers(x, text) for x in sd]
         if min(c) < 0.5:
             return 0, [], {}
         name = 50 * (c[0] + c[1]) / 2
@@ -256,8 +278,9 @@ def score(a, e):
         aw, ew = set(key_words(a["title"])), set(key_words(e["title"]))
         if not aw or not ew:
             return 0, [], {}
-        j = len(aw & ew) / len(aw | ew)
-        if j < 0.5:
+        both = aw & ew
+        j = len(both) / len(aw | ew)
+        if j < 0.6 or len(both) < min(2, len(aw)):
             return 0, [], {}
         name = 50 * j
     if (PROPS & set(words(e["title"]))) and not (PROPS & set(words(a["title"]))):
