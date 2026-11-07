@@ -222,6 +222,11 @@
   .wire-tag { flex:none; display:flex; align-items:center; gap:7px; padding:0 14px;
     background:var(--amber); color:var(--navy); font-family:"JetBrains Mono",monospace;
     font-size:.72rem; letter-spacing:.18em; }
+  .wire-tag .wt { white-space:nowrap; }
+  @media (max-width: 760px) {
+    .wire-tag { font-size:.58rem; letter-spacing:.12em; padding:6px 10px; line-height:1.25; }
+    .wire-tag .wt { white-space:normal; } .wire-tag .wt2 { display:block; }
+  }
   .wire-tag i { width:7px; height:7px; border-radius:50%; background:var(--navy); animation:blink 1.4s infinite; }
   @keyframes blink { 50% { opacity:.25; } }
   .wire-view { flex:1; overflow:hidden; white-space:nowrap; padding:9px 0;
@@ -359,8 +364,8 @@
   </div>
 </div>
 <div class="strip" id="strip"></div>
-<div class="wire" id="wire-bar" aria-label="Desk Wire: incoming market intel">
-  <div class="wire-tag"><i></i>DESK WIRE</div>
+<div class="wire" id="wire-bar" aria-label="Prediction Market Desk Wire: incoming market intel">
+  <div class="wire-tag"><i></i><span class="wt">PREDICTION MARKET <span class="wt2">DESK WIRE</span></span></div>
   <div class="wire-view"><div class="wire-track" id="wire"></div></div>
 </div>
 
@@ -389,8 +394,8 @@
         <p class="soon">Soonest-closing markets will appear here.</p></div>
       <div class="card" id="cs-kalshi"><span class="venue">KALSHI</span>
         <p class="soon">Soonest-closing markets will appear here.</p></div>
-      <div class="card"><span class="venue">ALPHA ARCADE</span>
-        <p class="soon">Alpha Arcade coverage is on the way.</p></div>
+      <div class="card" id="cs-alpha"><span class="venue">ALPHA ARCADE</span>
+        <p class="soon">Soonest-closing markets will appear here.</p></div>
     </div>
   </section>
 
@@ -403,8 +408,8 @@
         <p class="soon">The newest markets will appear here.</p></div>
       <div class="card" id="nm-kalshi"><span class="venue">KALSHI</span>
         <p class="soon">The newest markets will appear here.</p></div>
-      <div class="card"><span class="venue">ALPHA ARCADE</span>
-        <p class="soon">Alpha Arcade coverage is on the way.</p></div>
+      <div class="card" id="nm-alpha"><span class="venue">ALPHA ARCADE</span>
+        <p class="soon">The newest markets will appear here.</p></div>
     </div>
   </section>
 
@@ -482,19 +487,19 @@
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var when = function (s) { return new Date(s).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); };
   var day = function (s) { return new Date(s).toLocaleString([], { month: 'short', day: 'numeric' }); };
-  var names = { polymarket: 'Polymarket', kalshi: 'Kalshi' };
+  var names = { polymarket: 'Polymarket', kalshi: 'Kalshi', alpha: 'Alpha Arcade' };
   fetch('markets.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     var ago = function (s) { var h = Math.max(1, Math.round((Date.now() - new Date(s)) / 3600000));
       return h < 24 ? h + 'h ago' : Math.round(h / 24) + 'd ago'; };
     var fill = function (prefix, group, meta) {
-      ['polymarket', 'kalshi'].forEach(function (site) {
+      ['polymarket', 'kalshi', 'alpha'].forEach(function (site) {
         var box = document.getElementById(prefix + site);
         var list = (d[group] || {})[site] || [];
         if (!box || !list.length) return;
         box.querySelector('.soon').outerHTML = '<ul class="mk">' + list.map(function (m) {
           return '<li><a href="' + esc(m.url) + '" target="_blank" rel="noopener">' + esc(m.event) + '</a>' +
             '<span class="mk-q">' + esc(m.market) + '</span>' +
-            '<span class="mk-meta"><b>' + esc(m.yes) + '% Yes</b> · ' + esc(meta(m)) + '</span></li>';
+            '<span class="mk-meta"><b>' + esc(m.yes) + '% ' + (site === 'alpha' && m.market ? 'to win' : 'Yes') + '</b> · ' + esc(meta(m)) + '</span></li>';
         }).join('') + '</ul>';
       });
     };
@@ -503,22 +508,23 @@
     if (d.updated) document.getElementById('cs-updated').textContent = 'Last updated ' + when(d.updated);
 
     // Desk Wire: closing-soon and new markets from every venue, mixed together
-    var lists = ['polymarket', 'kalshi'].map(function (site) {
+    var odds = function (site, m) {   // multi-outcome Alpha Arcade markets: show the leader
+      return site === 'alpha' && m.market ? esc(m.market) + ' ' + esc(m.yes) + '%' : esc(m.yes) + '% Yes'; };
+    var lists = ['polymarket', 'kalshi', 'alpha'].map(function (site) {
       var l = [];
       ((d.closing_soon || {})[site] || []).forEach(function (m) {
         l.push('<a class="wi" href="' + esc(m.url) + '" target="_blank" rel="noopener"><b class="a">CLOSING</b>' +
-          names[site] + ' · ' + esc(m.event) + ' · ' + esc(m.yes) + '% Yes · closes ' + esc(day(m.closes)) + '</a>');
+          names[site] + ' · ' + esc(m.event) + ' · ' + odds(site, m) + ' · closes ' + esc(day(m.closes)) + '</a>');
       });
       ((d.new_markets || {})[site] || []).forEach(function (m) {
         l.push('<a class="wi" href="' + esc(m.url) + '" target="_blank" rel="noopener"><b>NEW</b>' +
-          names[site] + ' · ' + esc(m.event) + ' · ' + esc(m.yes) + '% Yes</a>');
+          names[site] + ' · ' + esc(m.event) + ' · ' + odds(site, m) + '</a>');
       });
       return l;
     });
     var items = [];
-    for (var i = 0; i < Math.max(lists[0].length, lists[1].length); i++) {
-      if (lists[0][i]) items.push(lists[0][i]);
-      if (lists[1][i]) items.push(lists[1][i]);
+    for (var i = 0; i < Math.max(lists[0].length, lists[1].length, lists[2].length); i++) {
+      lists.forEach(function (l) { if (l[i]) items.push(l[i]); });
     }
     if (!items.length) return;
     var track = document.getElementById('wire');
