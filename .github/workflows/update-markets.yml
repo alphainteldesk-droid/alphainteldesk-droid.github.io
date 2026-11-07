@@ -17,6 +17,8 @@ jobs:
         continue-on-error: true
       - run: python3 match_markets.py
         continue-on-error: true
+      - run: python3 make_gaps.py
+        continue-on-error: true
       - run: python3 post_new_markets.py
         continue-on-error: true
         env:
@@ -28,4 +30,6 @@ jobs:
           [ -f desk.json ] && git add desk.json
           [ -f posted.json ] && git add posted.json
           [ -f matches.json ] && git add matches.json
+          [ -f gaps.json ] && git add gaps.json
+          [ -f calendar.json ] && git add calendar.json
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -q && git push)
