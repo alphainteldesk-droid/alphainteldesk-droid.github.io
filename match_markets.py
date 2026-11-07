@@ -40,6 +40,9 @@ ufc wta atp nba nfl nhl mlb ncaa ncaaf ncaab epl mls lal ser bun cs2 counter str
 esports bo1 bo3 bo5 2025 2026 2027 2028 jan feb mar apr may jun jul aug sep oct nov dec
 how high low get what when which much many more than above below before after end year this next new
 happen out again any does did do reach hit price yes no there between during until""".split())
+# place/scope words: "in the US" and worldwide are different markets
+SCOPE = set("""us usa uk america american global worldwide world international europe european eu
+canada china india japan russia mexico brazil france germany state states federal national""".split())
 PROPS = set("""total totals spread over under handicap points goals corners cards half quarter set sets
 map maps rounds exact score btts both margin first anytime player props period periods inning innings""".split())
 
@@ -305,6 +308,8 @@ def score(a, e):
             if not aw or not ew or (an and en and an != en):
                 continue                                        # different line or threshold
             both = aw & ew
+            if (aw ^ ew) & SCOPE:
+                continue                                        # one says "US", the other doesn't
             j = len(both) / len(aw | ew)
             if j >= 0.6 and len(both) >= min(2, len(aw)):
                 best_j = max(best_j, j)
