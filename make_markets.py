@@ -111,62 +111,83 @@ for name, fn in (("polymarket", new_poly), ("kalshi", new_kalshi)):
 # Needs the GitHub secret ALPHA_API_KEY. Public market data only: no wallet, no orders.
 import os
 
-def alpha_markets():
+def alpha_from_api():
     key = os.environ.get("ALPHA_API_KEY")
     if not key:
-        print("Alpha Arcade skipped: no ALPHA_API_KEY secret")
-        return [], []
+        raise Exception("no ALPHA_API_KEY secret")
     req = urllib.request.Request("https://platform.alphaarcade.com/api/get-live-markets",
                                  headers={"x-api-key": key, "User-Agent": "curl/8.5.0", "Accept": "*/*"})
-    import time
-    waits = [15, 30, 60]       # Alpha Arcade sometimes returns a 502: try 4 times over ~2 minutes
-    for attempt in range(4):
+    import time, re
+    for attempt in range(3):   # Alpha Arcade sometimes returns a 502 to GitHub: try 3 times
         try:
             d = json.load(urllib.request.urlopen(req, timeout=45)); break
         except Exception as err:
             body = ""
             if hasattr(err, "read"):
-                try: body = err.read()[:200].decode("utf-8", "replace").replace("\n", " ")
+                try:
+                    page = err.read().decode("utf-8", "replace")
+                    ray = re.search(r"Ray ID:?\s*(?:<[^>]+>\s*)*([0-9a-f]{12,20})", page)
+                    body = "Cloudflare Ray ID " + ray.group(1) if ray else page[:80].replace("\n", " ")
                 except Exception: pass
-            print("Alpha Arcade try", attempt + 1, "failed:", err, "| server said:", body or "(nothing)")
-            if attempt == 3: raise
-            time.sleep(waits[attempt])
-    ms = d if isinstance(d, list) else d.get("markets", [])
+            print("Alpha Arcade try", attempt + 1, "failed:", err, "|", body or "(no details)")
+            if attempt == 2: raise
+            time.sleep(15)
+    return d if isinstance(d, list) else d.get("markets", [])
+
+def alpha_from_bridge():
+    """alpha_live.json is uploaded by the Chromebook bridge (alpha_bridge.py) when GitHub can't reach Alpha Arcade."""
+    b = json.load(open("alpha_live.json"))
+    age = (n - datetime.strptime(b["updated"], f).replace(tzinfo=timezone.utc)).total_seconds() / 3600
+    if age > 36:
+        raise Exception("alpha_live.json is %.0f hours old" % age)
+    print("Alpha Arcade: using alpha_live.json from the Chromebook bridge (%.1f h old)" % age)
+    return b["markets"]
+
+# Alpha Arcade blocks GitHub's servers (Cloudflare 502), so the Chromebook bridge supplies the data.
+# When Alpha Arcade fixes it, change False to True to call the API from GitHub again (bridge stays the backup).
+USE_ALPHA_API = False
+
+def alpha_markets():
+    if USE_ALPHA_API:
+        try:
+            ms = alpha_from_api(); src = "API"
+        except Exception as err:
+            print("Alpha Arcade API failed:", err, "- trying the Chromebook bridge file")
+            ms = alpha_from_bridge(); src = "bridge"
+    else:
+        ms = alpha_from_bridge(); src = "bridge"
     ms = [m for m in ms if not m.get("hidden")]
-    if ms:   # first runs: show which fields exist, so the boxes can be finished
-        print("Alpha Arcade:", len(ms), "live markets. Fields:", sorted(ms[0].keys()))
-        print("Alpha Arcade sample:", json.dumps({k: ms[0].get(k) for k in sorted(ms[0].keys())
-              if not isinstance(ms[0].get(k), (list, dict))})[:900])
-        wo = next((m for m in ms if m.get("options") and float(m.get("volume") or 0) > 0), None)
-        if wo:
-            o = wo["options"][0]
-            print("Alpha Arcade options:", len(wo["options"]), "in", wo.get("slug"), "| option fields:", sorted(o.keys()))
-            print("Alpha Arcade option sample:", json.dumps({k: o.get(k) for k in sorted(o.keys())
-                  if not isinstance(o.get(k), (list, dict))})[:700])
     def secs(v):
         v = float(v or 0)
         return v / 1000 if v > 1e11 else v
-    def prob(m):
-        p = m.get("yesProb")
-        if p is None and m.get("options"):
-            p = max((o.get("yesProb") or 0) for o in m["options"])
-        p = float(p or 0)
-        return p / 1e6 if p > 100 else (p / 100 if p > 1 else p)
+    def top(m):
+        """(label, prob 0-1) of the leading outcome. Prices are in millionths: 1,000,000 = 100%."""
+        opts = m.get("options") or []
+        if not opts:
+            return "", 0.0
+        if len(opts) == 1 or all((o.get("label") or "").lower() in ("yes", "no") for o in opts):
+            o = next((o for o in opts if (o.get("label") or "").lower() == "yes"), opts[0])
+            return "", float(o.get("yesProb") or 0) / 1e6
+        o = max(opts, key=lambda o: float(o.get("yesProb") or 0))
+        return o.get("label") or "", float(o.get("yesProb") or 0) / 1e6
     av = lambda m: float(m.get("volume") or 0)
     url = lambda m: "https://www.alphaarcade.com/market/" + m["slug"] if m.get("slug") else "https://www.alphaarcade.com"
+    priced = [m for m in ms if top(m)[1] > 0]          # skip markets with no price yet
     now = n.timestamp()
     def row(m, extra):
-        r = {"event": m.get("title") or m.get("topic") or "", "market": "", "yes": round(prob(m) * 100),
+        label, p = top(m)
+        r = {"event": m.get("title") or "", "market": label, "yes": round(p * 100),
              "volume": int(av(m)), "url": url(m)}
         r.update(extra)
         return r
-    soon = [m for m in ms if now < secs(m.get("endTs")) <= now + 7 * 86400]
+    soon = [m for m in priced if now < secs(m.get("endTs")) <= now + 7 * 86400]
     soon = sorted(sorted(soon, key=av, reverse=True)[:3], key=lambda m: secs(m.get("endTs")))
     soon = [row(m, {"closes": datetime.fromtimestamp(secs(m["endTs"]), timezone.utc).strftime(f)}) for m in soon]
-    made = lambda m: secs(m.get("createdAt") or m.get("created_at") or m.get("createdTs") or 0)
-    fresh = [m for m in ms if made(m) >= since.timestamp()]
+    made = lambda m: secs(m.get("createdAt") or 0)
+    fresh = [m for m in priced if made(m) >= since.timestamp()]
     fresh = sorted(fresh, key=av, reverse=True)[:3]
     fresh = [row(m, {"opened": datetime.fromtimestamp(made(m), timezone.utc).strftime(f)}) for m in fresh]
+    print("Alpha Arcade (%s): %d live, %d with a price" % (src, len(ms), len(priced)))
     return soon, fresh
 
 try:
