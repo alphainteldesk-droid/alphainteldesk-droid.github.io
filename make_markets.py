@@ -124,6 +124,12 @@ def alpha_markets():
         print("Alpha Arcade:", len(ms), "live markets. Fields:", sorted(ms[0].keys()))
         print("Alpha Arcade sample:", json.dumps({k: ms[0].get(k) for k in sorted(ms[0].keys())
               if not isinstance(ms[0].get(k), (list, dict))})[:900])
+        wo = next((m for m in ms if m.get("options") and float(m.get("volume") or 0) > 0), None)
+        if wo:
+            o = wo["options"][0]
+            print("Alpha Arcade options:", len(wo["options"]), "in", wo.get("slug"), "| option fields:", sorted(o.keys()))
+            print("Alpha Arcade option sample:", json.dumps({k: o.get(k) for k in sorted(o.keys())
+                  if not isinstance(o.get(k), (list, dict))})[:700])
     def secs(v):
         v = float(v or 0)
         return v / 1000 if v > 1e11 else v
