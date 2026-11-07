@@ -2,7 +2,7 @@
 # Markets (delayed quotes), oil, DXY, 10-year, VIX, crypto, Google Trends (US + UK)
 # and Conflict Radar (world conflict headlines from Google News, tagged by region).
 # Public data only. Runs every hour from the Update markets workflow.
-import json, urllib.request
+import json, re, urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 
@@ -57,17 +57,19 @@ CONFLICT_WORDS = ("war", "military", "troops", "missile", "strike", "drone", "ce
                   "hostage", "nuclear", "border", "offensive", "bomb", "killed", "forces", "drill", "naval",
                   "warship", "tension", "blockade", "escalat", "retaliat", "occupation")
 NOT_CONFLICT = ("nfl", "nba", "mlb", "nhl", "game", "season", "coach", "box office", "movie", "trailer",
-                "video game", "star wars", "price war", "culture war", "bidding war", "recipe", "stock")
+                "video game", "star wars", "price war", "culture war", "bidding war", "recipe", "stock",
+                "holy war", "rivalry", "podcast", "lifestyle", "fashion", "album", "byu", "playoff", "tournament")
 REGIONS = [  # first match wins
     ("MDE", "israel gaza hamas hezbollah lebanon iran iraq syria yemen houthi saudi qatar jordan red sea "
-            "west bank tehran tel aviv"),
+            "west bank tehran tel aviv iranian israeli palestinian lebanese syrian yemeni iraqi saudi"),
     ("EUR", "ukraine russia kremlin kyiv moscow putin zelensky nato poland belarus moldova serbia kosovo "
-            "baltic europe eu "),
+            "baltic europe eu ukrainian russian polish belarusian serbian european"),
     ("ASIA", "china taiwan beijing korea pyongyang japan india pakistan kashmir afghanistan myanmar "
-             "philippines south china sea thailand cambodia"),
-    ("AFR", "sudan congo somalia ethiopia nigeria sahel mali niger libya burkina kenya chad"),
+             "philippines south china sea thailand cambodia chinese taiwanese korean japanese indian pakistani afghan"),
+    ("AFR", "sudan congo somalia ethiopia nigeria sahel mali niger libya burkina kenya chad sudanese somali "
+            "ethiopian nigerian congolese libyan"),
     ("AMER", "venezuela cuba mexico cartel haiti colombia ecuador brazil panama canada pentagon "
-             "united states u.s. us "),
+             "venezuelan cuban mexican haitian colombian united states u.s. us "),
 ]
 
 
@@ -75,7 +77,7 @@ def conflict(n=12):
     url = ("https://news.google.com/rss/search?q=" + urllib.request.quote(CONFLICT_Q) +
            "&hl=en-US&gl=US&ceid=US:en")
     root = ET.fromstring(get(url, raw=True))
-    out, seen = [], set()
+    out, seen = [], []
     for i in root.iter("item"):
         full = (i.findtext("title") or "").strip()
         title, _, source = full.rpartition(" - ")
@@ -83,11 +85,11 @@ def conflict(n=12):
         low = " " + title.lower() + " "
         if not any(w in low for w in CONFLICT_WORDS) or any(w in low for w in NOT_CONFLICT):
             continue
-        key = " ".join(low.split()[:6])
-        if key in seen:
+        ws = set(re.findall(r"[a-z]{4,}", low))          # same story, different headline? skip it
+        if any(len(ws & k) >= 0.5 * min(len(ws), len(k)) for k in seen):
             continue
-        seen.add(key)
-        region = next((r for r, words in REGIONS if any(" " + w.strip() + " " in low or w.strip() in low.split()
+        seen.append(ws)
+        region = next((r for r, words in REGIONS if any(re.search(r"\b" + re.escape(w) + r"(?:\b|['\u2019]s)", low)
                                                          for w in words.split())), "WORLD")
         out.append({"region": region, "title": title, "source": source.strip(),
                     "url": (i.findtext("link") or "").strip(), "time": (i.findtext("pubDate") or "").strip()})
