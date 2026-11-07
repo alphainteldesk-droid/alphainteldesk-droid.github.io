@@ -27,6 +27,7 @@
   .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
 
   /* Top bar */
+  .tvtape { background:#05080d; border-bottom:1px solid var(--line); min-height:46px; overflow:hidden; }
   header { border-bottom: 1px solid var(--line); position: sticky; top: 0;
     background: rgba(11,20,32,.92); backdrop-filter: blur(8px); z-index: 10; }
   .bar { display: flex; align-items: center; justify-content: space-between;
@@ -149,7 +150,7 @@
     background:#0b1420 url(banner.jpg) center/cover no-repeat; }
   .glass { position:absolute; left:0; top:0; transform-origin:0 0;
     padding:5px 8px; border-radius:3px;
-    background:rgba(5,11,20,.82); border:1px solid rgba(63,219,230,.55);
+    background:rgba(5,11,20,.92); border:1px solid rgba(63,219,230,.55);
     box-shadow:0 0 14px rgba(63,219,230,.18), inset 0 0 20px rgba(63,219,230,.06);
     text-shadow:0 1px 2px rgba(0,0,0,.9);
     font-family:"JetBrains Mono",monospace; font-size:10px; line-height:1.3;
@@ -164,7 +165,7 @@
     animation:pulse 2s infinite; }
   @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(63,219,230,.6)} 70%{box-shadow:0 0 0 5px rgba(63,219,230,0)} 100%{box-shadow:0 0 0 0 rgba(63,219,230,0)} }
   .row { display:flex; justify-content:space-between; gap:6px; white-space:nowrap; }
-  .row .k { color:#c3d2e2; font-weight:500; }
+  .row .k { color:#eef4fa; font-weight:700; }
   .glass .v, .glass .big, .glass .gap-n, .glass .v2 { font-weight:800; color:#ffffff; }
   .glass .gap-n, .glass .v2 { color:var(--amber); }
   .cta { margin-top:9px; text-align:center; padding:5px 6px; border-radius:3px;
@@ -178,10 +179,10 @@
   .glass[data-screen="trend"]:hover { border-color:#7ff0f7; box-shadow:0 0 18px rgba(63,219,230,.45); }
   .gh .go { font-size:11px; color:#a9bccf; font-weight:500; text-shadow:none; margin-right:5px; }
   .v { transition:color .4s; }
-  .glass .v.up { color:#3ee88a; text-shadow:0 0 8px rgba(62,232,138,.8); }
-  .glass .v.dn { color:#ff5c5c; text-shadow:0 0 8px rgba(255,92,92,.8); }
+  .glass .v.up { color:#3ee88a; text-shadow:0 1px 2px rgba(0,0,0,.9); }
+  .glass .v.dn { color:#ff5c5c; text-shadow:0 1px 2px rgba(0,0,0,.9); }
   .stamp { font-size:7.5px; color:#a9bccf; letter-spacing:.08em; margin-top:2px; }
-  .mq { margin-bottom:3px; } .mq .k { color:#c3d2e2; font-weight:500; font-size:10px; }
+  .mq { margin-bottom:3px; } .mq .k { color:#eef4fa; font-weight:700; font-size:10px; }
   .big { font-size:13px; line-height:1.15; }
   .glass.lg { font-size:13.5px; line-height:1.6; }
   .glass.lg.tight { font-size:12.5px; line-height:1.3; } .glass.lg .gh { font-size:9px; margin-bottom:6px; }
@@ -251,9 +252,9 @@
   @media (prefers-reduced-motion: reduce) {
     .wire-track { animation:none; } .dot { animation:none; }
   }
-  .glass .pos { color:#3ee88a; text-shadow:0 0 6px rgba(62,232,138,.45); }
-  .glass .neg { color:#ff5c5c; text-shadow:0 0 6px rgba(255,92,92,.45); }
-  .glass .v.flash { text-shadow:0 0 10px currentColor; }
+  .glass .pos { color:#3ee88a; text-shadow:0 1px 2px rgba(0,0,0,.9); }
+  .glass .neg { color:#ff5c5c; text-shadow:0 1px 2px rgba(0,0,0,.9); }
+  .glass .v.flash { text-shadow:0 0 6px currentColor; }
   .chg { font-size:9px; font-weight:700; }
   .glass a.cover { position:absolute; inset:0; z-index:1; }
 
@@ -266,8 +267,29 @@
   @keyframes blip { 0%{opacity:0} 4%{opacity:1} 60%{opacity:.15} 100%{opacity:0} }
   @media (prefers-reduced-motion: reduce) { .radar .sweep, .radar .blip { animation:none; opacity:1; } }
 </style>
+<link rel="canonical" href="https://alphainteldesk.com/">
+<meta property="og:url" content="https://alphainteldesk.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Alpha Intel Desk">
 </head>
 <body>
+<!-- Live tape (TradingView, free widget; CFD prices move in real time) -->
+<div class="tvtape" aria-label="Live market tape">
+<div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+{"symbols":[
+ {"proName":"FOREXCOM:DJI","title":"DOW"},
+ {"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},
+ {"proName":"FOREXCOM:NSXUSD","title":"NASDAQ 100"},
+ {"proName":"CAPITALCOM:VIX","title":"VIX"},
+ {"proName":"TVC:UKOIL","title":"BRENT"},
+ {"proName":"TVC:USOIL","title":"WTI"},
+ {"proName":"TVC:GOLD","title":"GOLD"},
+ {"proName":"COINBASE:BTCUSD","title":"BTC"},
+ {"proName":"COINBASE:ETHUSD","title":"ETH"},
+ {"proName":"COINBASE:ALGOUSD","title":"ALGO"}],
+ "showSymbolLogo":true,"isTransparent":true,"displayMode":"compact","colorTheme":"dark","locale":"en"}
+</script></div></div>
 
 <header>
   <div class="bar">
