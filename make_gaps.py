@@ -1,0 +1,173 @@
+# Alpha Intel Desk: Gap Radar + Catalyst Calendar data.
+# Reads matches.json (from match_markets.py) and catalysts.json (hand-kept list of scheduled events).
+# Writes gaps.json  (top 10 price gaps after estimated fees, no sports, strict filters)
+#    and calendar.json (next scheduled catalysts + big non-sports markets resolving soon).
+# Wording rule: "price gap after fees" - never "guaranteed" or "arbitrage", no trade instructions.
+import json
+from datetime import datetime, timezone, timedelta
+
+f = "%Y-%m-%dT%H:%M:%SZ"
+n = datetime.now(timezone.utc)
+NOTE = ("Matches are automatic. Always check each site's rules before you trade. "
+        "Fees are estimates; prices are midpoints and don't include the bid/ask spread.")
+
+# ---------- filters (tune here) ----------
+MIN_PRICE, MAX_PRICE = 3, 97          # skip near-certain outcomes: tiny prices are noisy
+MAX_RAW_GAP = 35                      # bigger usually means a stale or mismatched market
+MIN_NET_GAP = 1.0                     # points left after estimated fees
+MIN_VOLUME = {"alpha": 50, "polymarket": 5000, "kalshi": 500}   # $ / $ / contracts traded
+MIN_HOURS_LEFT = 2                    # markets about to close move too fast to compare
+TOP = 10
+
+SPORT_TAGS = ("sport", "esports", "soccer", "football", "nfl", "nba", "mls", "nhl", "mlb", "ufc",
+              "tennis", "f1", "golf", "league", "copa", "serie", "efl", "counter-strike")
+NAMES = {"alpha": "Alpha Arcade", "polymarket": "Polymarket", "kalshi": "Kalshi"}
+
+
+def is_sports(cats):
+    return any(any(t in (c or "").lower() for t in SPORT_TAGS) for c in cats)
+
+
+def fee_rate(site, row):
+    """Taker fee rate r; fee per $1 contract = r * p * (1 - p)."""
+    if site == "kalshi":
+        return 0.07
+    if site == "alpha":
+        fb = row["sites"]["alpha"].get("fee")
+        return (fb / 1e6) if fb else 0.07          # feeBasePercent 70000 -> 0.07 (estimate)
+    cats = " ".join(row.get("categories") or []).lower()  # Polymarket Fee Structure V2 by category
+    if "geopolitic" in cats:
+        return 0.0
+    if "crypto" in cats:
+        return 0.07
+    if any(k in cats for k in ("politic", "election", "tech", "finance", "business")):
+        return 0.04
+    return 0.05
+
+
+def fee_pts(r, price_pct):
+    p = price_pct / 100
+    return 100 * r * p * (1 - p)
+
+
+def gaps(matches, alpha_fresh):
+    out = []
+    for row in matches:
+        if is_sports(row.get("categories") or []):
+            continue
+        try:
+            left = (datetime.strptime(row["close"], f).replace(tzinfo=timezone.utc) - n).total_seconds() / 3600
+        except (KeyError, ValueError):
+            continue
+        if left < MIN_HOURS_LEFT:
+            continue
+        # every site's price for every outcome: {outcome: {site: price}}
+        table = {}
+        for site, x in row["sites"].items():
+            if site == "alpha" and not alpha_fresh:
+                continue
+            if site != "alpha" and (x.get("label") != "SAME" or x.get("flags")):
+                continue                               # each site's match must be SAME with no warnings
+            if (x.get("volume") or 0) < MIN_VOLUME[site]:
+                continue
+            for o, p in (x.get("outcomes") or {}).items():
+                if p is not None and MIN_PRICE <= p <= MAX_PRICE:
+                    table.setdefault(o, {})[site] = p
+        best = None
+        for o, ps in table.items():
+            if len(ps) < 2:
+                continue
+            lo = min(ps, key=ps.get)
+            hi = max(ps, key=ps.get)
+            raw = ps[hi] - ps[lo]
+            if raw > MAX_RAW_GAP:
+                continue
+            fees = fee_pts(fee_rate(lo, row), ps[lo]) + fee_pts(fee_rate(hi, row), ps[hi])
+            net = raw - fees
+            if net >= MIN_NET_GAP and (best is None or net > best["net"]):
+                best = {"title": row["title"], "outcome": o, "close": row["close"],
+                        "prices": {s: ps.get(s) for s in ("polymarket", "kalshi", "alpha")},
+                        "low": {"site": lo, "name": NAMES[lo], "price": ps[lo], "url": row["sites"][lo]["url"]},
+                        "high": {"site": hi, "name": NAMES[hi], "price": ps[hi], "url": row["sites"][hi]["url"]},
+                        "urls": {s: x["url"] for s, x in row["sites"].items()},
+                        "volumes": {s: x.get("volume") for s, x in row["sites"].items()},
+                        "raw": round(raw, 1), "fees": round(fees, 1), "net": round(net, 1),
+                        "category": (row.get("categories") or ["Other"])[0]}
+        if best:
+            out.append(best)
+    out.sort(key=lambda g: -g["net"])
+    return out[:TOP]
+
+
+def calendar(matches):
+    """Scheduled catalysts (catalysts.json) + big non-sports markets resolving in the next 7 days."""
+    try:
+        cats = json.load(open("catalysts.json"))["events"]
+    except Exception as err:
+        print("Calendar: no catalysts.json -", err)
+        cats = []
+    pool = [m for m in matches if not is_sports(m.get("categories") or [])]
+
+    def market_card(m):
+        ps = {s: m["prices"].get(s) for s in ("polymarket", "kalshi", "alpha")}
+        live = [v for v in ps.values() if v is not None]
+        return {"title": m["title"], "outcome": m["outcome"], "prices": ps,
+                "urls": {s: x["url"] for s, x in m["sites"].items()}, "label": m.get("label"),
+                "coiled": bool(live) and any(40 <= v <= 60 for v in live)}
+
+    items = []
+    for c in cats:
+        try:
+            when = datetime.strptime(c["date"], f).replace(tzinfo=timezone.utc)
+        except (KeyError, ValueError):
+            continue
+        if not (n - timedelta(hours=2) <= when <= n + timedelta(days=45)):
+            continue
+        keys = [k.lower() for k in c.get("keys", [])]
+        linked = [m for m in pool if any(k in m["title"].lower() for k in keys)]
+        linked.sort(key=lambda m: -sum((x.get("volume") or 0) for s, x in m["sites"].items() if s != "kalshi"))
+        items.append({"date": c["date"], "name": c["name"], "source": c.get("source", ""), "kind": "scheduled",
+                      "market": market_card(linked[0]) if linked else None})
+    for m in pool:                                   # markets that resolve this week, on 2+ sites
+        try:
+            when = datetime.strptime(m["close"], f).replace(tzinfo=timezone.utc)
+        except (KeyError, ValueError):
+            continue
+        if n <= when <= n + timedelta(days=7) and len(m["sites"]) >= 2:
+            items.append({"date": m["close"], "name": "Resolves: " + m["title"], "kind": "resolves",
+                          "market": market_card(m)})
+    items.sort(key=lambda i: i["date"])
+    return items[:8]
+
+
+def main():
+    try:
+        mj = json.load(open("matches.json"))
+    except Exception as err:
+        print("Gaps: no matches.json -", err)
+        return
+    try:
+        a_up = datetime.strptime(json.load(open("alpha_live.json"))["updated"], f).replace(tzinfo=timezone.utc)
+        alpha_fresh = (n - a_up).total_seconds() < 3 * 3600
+    except Exception:
+        alpha_fresh = False
+    g = gaps(mj["matches"], alpha_fresh)
+    json.dump({"updated": n.strftime(f), "note": NOTE, "alpha_fresh": alpha_fresh, "gaps": g},
+              open("gaps.json", "w"), indent=1)
+    cal = calendar(mj["matches"])
+    json.dump({"updated": n.strftime(f), "note": NOTE, "items": cal}, open("calendar.json", "w"), indent=1)
+    print("Gaps: %d after filters (Alpha data fresh: %s)" % (len(g), alpha_fresh))
+    for x in g:
+        print("  net %4.1f (raw %4.1f - fees %3.1f) | %s | %s | low %s %s, high %s %s" % (
+            x["net"], x["raw"], x["fees"], x["title"][:44], x["outcome"][:20],
+            x["low"]["name"], x["low"]["price"], x["high"]["name"], x["high"]["price"]))
+    print("Calendar: %d items" % len(cal))
+    for i in cal:
+        mk = i["market"]
+        print("  %s | %s | %s" % (i["date"][:10], i["name"][:50],
+                                  ("%s P %s K %s A %s" % (mk["outcome"][:18], mk["prices"]["polymarket"],
+                                                           mk["prices"]["kalshi"], mk["prices"]["alpha"])) if mk else "-"))
+
+
+if __name__ == "__main__":
+    main()

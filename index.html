@@ -11,7 +11,7 @@
 <meta property="og:image" content="https://alphainteldesk.com/banner.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@alphainteldesk">
-<link rel="preload" as="image" href="banner.jpg">
+<link rel="preload" as="image" href="banner.jpg?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -147,7 +147,7 @@
   }
   /* ===== Live Intel Desk ===== */
   .desk { position:relative; width:100%; aspect-ratio:3/1; overflow:hidden;
-    background:#0b1420 url(banner.jpg) center/cover no-repeat; }
+    background:#0b1420 url(banner.jpg?v=2) center/cover no-repeat; }
   .glass { position:absolute; left:0; top:0; transform-origin:0 0;
     padding:5px 8px; border-radius:3px;
     background:rgba(5,11,20,.92); border:1px solid rgba(63,219,230,.55);
@@ -173,8 +173,11 @@
     text-shadow:none; animation:ctaglow 2.4s infinite; }
   @keyframes ctaglow { 50% { box-shadow:0 0 12px rgba(255,179,71,.75); } }
   .glass[data-screen="gap"] { cursor:pointer; transition:border-color .2s; }
-  .glass[data-screen="gap"]:hover { border-color:var(--amber); }
-  .glass[data-screen="gap"]:hover .cta { background:#ffc670; }
+  .glass[data-screen="gap"]:hover { border-color:#ff7a7a; box-shadow:0 0 18px rgba(255,92,92,.35); }
+  .glass .gh.red { color:#ff7a7a; text-shadow:0 0 6px rgba(255,92,92,.6); }
+  .glass .rg { display:inline-block; min-width:3.2em; margin-right:6px; padding:1px 3px; border-radius:2px;
+    text-align:center; background:rgba(255,92,92,.22); color:#ffb0b0; font:800 8px/1 "JetBrains Mono",monospace;
+    letter-spacing:.06em; vertical-align:1px; text-shadow:none; }
   .glass[data-screen="trend"] { cursor:pointer; transition:border-color .2s; }
   .glass[data-screen="trend"]:hover { border-color:#7ff0f7; box-shadow:0 0 18px rgba(63,219,230,.45); }
   .gh .go { font-size:11px; color:#a9bccf; font-weight:500; text-shadow:none; margin-right:5px; }
@@ -194,7 +197,7 @@
   .v2 { color:var(--amber); }
   .glass[data-screen="trend"] { line-height:1.5; font-size:13px; font-weight:500; color:#fff; }
   .glass[data-screen="gap"] .gap-q { font-size:14px; font-weight:700; color:#fff; white-space:normal; }
-  .glass[data-screen="gap"] { font-size:12.5px; } .glass[data-screen="gap"] .trend { color:#e8eef5; }
+  .glass[data-screen="gap"] { font-size:11.5px; line-height:1.55; } .glass[data-screen="gap"] .trend { color:#e8eef5; }
   .trend { font-family:"Space Grotesk",sans-serif; white-space:nowrap; overflow:hidden;
     text-overflow:ellipsis; }
   .trend b { display:inline-block; font-family:"JetBrains Mono",monospace; font-weight:800;
@@ -203,7 +206,7 @@
 
   /* "THE DESK IS OPEN" neon sign */
   .desk { container-type:inline-size; }
-  .sign { position:absolute; left:21.2%; top:5.5%; transform:translateX(-50%);
+  .sign { position:absolute; left:21.2%; top:3.2%; transform:translateX(-50%);
     font-family:"JetBrains Mono",monospace; font-size:max(6px,1.05cqw); letter-spacing:.24em;
     padding:.45em .9em .45em 1.1em; border:2px solid var(--amber); border-radius:.4em;
     color:var(--amber); background:rgba(11,20,32,.6); white-space:nowrap;
@@ -261,6 +264,47 @@
   .glass .neg { color:#ff5c5c; text-shadow:0 1px 2px rgba(0,0,0,.9); }
   .glass .v.flash { text-shadow:0 0 6px currentColor; }
   .chg { font-size:9px; font-weight:700; }
+  /* Gap Radar panel in the space under MONEY NEVER SLEEPS */
+  .deskwrap { position:relative; container-type:inline-size; }
+  .gapbox { position:absolute; left:2.4%; top:55.6%; width:38.6%; height:42%; box-sizing:border-box; overflow:hidden;
+    display:flex; flex-direction:column; padding:.55cqw .85cqw; border-radius:5px;
+    background:rgba(5,12,20,.9); border:1px solid rgba(255,179,71,.5);
+    box-shadow:0 0 22px rgba(255,179,71,.12), inset 0 0 22px rgba(63,219,230,.05);
+    color:#e8eef5; font:500 .78cqw/1.3 "Space Grotesk",sans-serif; z-index:2; }
+  .gb-h { display:flex; justify-content:space-between; align-items:center; margin-bottom:.35cqw; }
+  .gb-t { display:flex; align-items:center; gap:.4cqw; font:800 .8cqw "JetBrains Mono",monospace;
+    letter-spacing:.16em; color:var(--amber); text-shadow:0 0 6px rgba(255,179,71,.6); }
+  .gb-s { font:500 .52cqw "JetBrains Mono",monospace; letter-spacing:.1em; color:#a9bccf; }
+  .ldot { width:.45cqw; height:.45cqw; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px var(--cyan);
+    display:inline-block; animation:blink 1.4s infinite; }
+  .gb-cols, .gb-r { display:grid; grid-template-columns:1fr 3.4cqw 3.4cqw 3.4cqw 3.6cqw; gap:.4cqw; align-items:center; }
+  .gb-cols { font:600 .5cqw "JetBrains Mono",monospace; letter-spacing:.08em; color:#8fa3b8;
+    padding-bottom:.2cqw; border-bottom:1px solid rgba(63,219,230,.2); }
+  .gb-cols span:not(:first-child) { text-align:center; } .gb-cols .a { color:var(--amber); }
+  #gb-rows { flex:1; display:flex; flex-direction:column; justify-content:space-around; }
+  .gb-r { padding:.08cqw 0; line-height:1.22; border-bottom:1px solid rgba(255,255,255,.05); color:inherit; text-decoration:none; }
+  .gb-r:hover { background:rgba(63,219,230,.06); }
+  .gb-m { min-width:0; } .gb-m b { display:block; font-weight:700; font-size:.74cqw; color:#fff;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .gb-m i { font-style:normal; font-size:.58cqw; color:#a9bccf; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+  .gb-p { text-align:center; font:700 .74cqw "JetBrains Mono",monospace; color:#e8eef5; }
+  .gb-p.a { color:var(--amber); } .gb-p.lo { color:#3ee88a; } .gb-p.hi { color:#ff7a7a; } .gb-p.na { color:#56687c; font-weight:500; }
+  .gb-g { text-align:center; font:800 .82cqw "JetBrains Mono",monospace; color:#111; background:var(--amber);
+    border-radius:3px; padding:.12cqw 0; }
+  .gb-empty { color:#a9bccf; font-size:.72cqw; }
+  .gb-f { display:flex; justify-content:space-between; align-items:center; gap:.6cqw; margin-top:.25cqw;
+    font-size:.5cqw; color:#8fa3b8; }
+  .gb-go { flex:none; background:var(--amber); color:#111; font:800 .55cqw "JetBrains Mono",monospace;
+    letter-spacing:.1em; padding:.25cqw .5cqw; border-radius:2px; text-decoration:none; }
+  .gb-go:hover { background:#ffc670; text-decoration:none; }
+  @media (max-width: 760px) {
+    .gapbox { position:static; width:auto; height:auto; margin:10px; padding:12px; font-size:13px; }
+    .gb-h { flex-wrap:wrap; gap:4px; } .gb-t { font-size:12px; white-space:nowrap; } .gb-s { font-size:8px; } .gb-cols, .gb-r { grid-template-columns:1fr 38px 38px 38px 44px; gap:6px; }
+    .gb-cols { font-size:8px; } .gb-m b { font-size:12.5px; } .gb-m i { font-size:10.5px; }
+    .gb-p { font-size:12px; } .gb-g { font-size:12px; } .gb-empty { font-size:12px; }
+    .gb-f { font-size:9.5px; flex-direction:column; align-items:flex-start; } .gb-go { font-size:10px; padding:5px 8px; }
+    .ldot { width:7px; height:7px; } .gb-r { padding:6px 0; }
+  }
   .glass a.cover { position:absolute; inset:0; z-index:1; }
 
   /* Live radar on the right-hand desk monitor */
@@ -309,6 +353,7 @@
   </div>
 </header>
 
+<div class="deskwrap">
 <div class="desk" id="desk" role="img" aria-label="Alpha Intel Desk: a trading desk at sunrise with live market screens on the windows">
   <div class="sign">THE DESK IS OPEN</div>
   <div class="radar" aria-hidden="true"><svg viewBox="-100 -100 200 200">
@@ -355,13 +400,20 @@
     <div class="stamp" id="st-trends">UPDATED HOURLY</div>
   </div>
   <div class="glass" data-screen="gap">
-    <a class="cover" href="/gap-radar.html" aria-label="Open Gap Radar"></a>
-    <div class="gh amber">GAP RADAR <span style="display:flex;align-items:center;gap:5px;color:#a9bccf;text-shadow:none;font-weight:500">SOON <span class="dot" style="background:var(--amber)"></span></span></div>
-    <div class="gap-q">Same market, different price?</div>
-    <div style="margin-top:4px;color:#c3d2e2;font-family:'Space Grotesk',sans-serif;font-size:12.5px;line-height:1.4">
-      Price gaps after fees: Kalshi, Polymarket and Alpha Arcade.</div>
-    <div class="cta">OPEN GAP RADAR &rarr;</div>
+    <a class="cover" href="/conflict-radar.html" aria-label="Open Conflict Radar"></a>
+    <div class="gh red">CONFLICT RADAR <span style="display:flex;align-items:center"><span class="go">&#8599;</span><span class="dot" style="background:#ff5c5c"></span></span></div>
+    <div id="conflict"><div class="trend" style="color:#a9bccf">Loading headlines&hellip;</div></div>
+    <div class="stamp" id="st-conflict">WORLD HEADLINES</div>
   </div>
+</div>
+<section class="gapbox" id="gapbox" aria-label="Gap Radar: biggest price gaps after fees">
+  <div class="gb-h"><span class="gb-t"><i class="ldot"></i>GAP RADAR</span>
+    <span class="gb-s">BIGGEST PRICE GAPS AFTER FEES · <span id="gb-upd">HOURLY</span></span></div>
+  <div class="gb-cols"><span>MARKET</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>GAP</span></div>
+  <div id="gb-rows"><div class="gb-empty">Scanning Polymarket, Kalshi and Alpha Arcade&hellip;</div></div>
+  <div class="gb-f"><span>No sports · fees estimated · check each site's rules before you trade</span>
+    <a class="gb-go" href="/gap-radar.html">OPEN GAP RADAR &rarr;</a></div>
+</section>
 </div>
 <div class="strip" id="strip"></div>
 <div class="wire" id="wire-bar" aria-label="Prediction Market Desk Wire: incoming market intel">
@@ -636,6 +688,14 @@
       return '<div class="trend"><b>' + (x.geo === 'UK' ? 'UK' : 'US') + '</b>' + s.innerHTML + '</div>';
     }).join('');
     if (d.updated) document.getElementById('st-trends').textContent = 'UPDATED ' + hm(d.updated);
+    var cf = (d.conflict || []).slice(0, 6);
+    if (cf.length) {
+      document.getElementById('conflict').innerHTML = cf.map(function (x) {
+        var t = document.createElement('div'); t.textContent = x.title;
+        return '<div class="trend"><span class="rg">' + (x.region || 'WORLD').replace(/[^A-Z]/g, '') + '</span>' + t.innerHTML + '</div>';
+      }).join('');
+      document.getElementById('st-conflict').textContent = 'UPDATED ' + hm(d.updated);
+    }
     rotate(); copyStrip();
   }).catch(function () { copyStrip(); });
 
@@ -675,6 +735,28 @@
       }).catch(function () {});
   }
   liveCrypto(); setInterval(liveCrypto, 60000);
+})();
+</script>
+<script>
+(function () {   // Gap Radar panel
+  var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+  var hm = function (s) { return new Date(s).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); };
+  fetch('gaps.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    document.getElementById('gb-upd').textContent = 'UPDATED ' + hm(d.updated).toUpperCase();
+    var box = document.getElementById('gb-rows'), g = (d.gaps || []).slice(0, 5);
+    if (!g.length) { box.innerHTML = '<div class="gb-empty">No gaps pass our filters right now. Prices are lined up across ' +
+      'Polymarket, Kalshi and Alpha Arcade. The radar checks again every hour.</div>'; return; }
+    box.innerHTML = g.map(function (x) {
+      var cell = function (site) {
+        var p = x.prices[site], c = 'gb-p' + (site === 'alpha' ? ' a' : '') +
+          (site === x.low.site ? ' lo' : site === x.high.site ? ' hi' : '') + (p == null ? ' na' : '');
+        return '<span class="' + c + '">' + (p == null ? '&ndash;' : esc(Math.round(p)) + '&cent;') + '</span>';
+      };
+      return '<a class="gb-r" href="/gap-radar.html"><span class="gb-m"><b>' + esc(x.title) + '</b><i>' + esc(x.outcome) +
+        ' · ' + esc(x.category) + '</i></span>' + cell('polymarket') + cell('kalshi') + cell('alpha') +
+        '<span class="gb-g">' + esc(x.net.toFixed(1)) + '&cent;</span></a>';
+    }).join('');
+  }).catch(function () {});
 })();
 </script>
 </body>

@@ -10,7 +10,6 @@ from datetime import datetime, timezone, timedelta
 from difflib import SequenceMatcher
 
 NOTE = "Matches are automatic. Always check each site's rules before you trade."
-MAX_PAGES_POLY = 60      # Polymarket events, 100 per page
 MAX_PAGES_KALSHI = 150   # Kalshi events, 200 per page
 n = datetime.now(timezone.utc)
 f = "%Y-%m-%dT%H:%M:%SZ"
@@ -148,6 +147,9 @@ def load_alpha():
         if end <= n.timestamp():
             continue
         opts = m.get("options") or []
+        vol = float(m.get("volume") or 0)
+        if vol < 1:          # never traded: 50/50 is just the starting price
+            opts = [dict(o, yesProb=None) if o.get("yesProb") == 500000 else o for o in opts]
         if len(opts) == 1 or all((o.get("label") or "").lower() in ("yes", "no") for o in opts):
             yes = next((o for o in opts if (o.get("label") or "").lower() == "yes"), opts[0] if opts else {})
             sd = sides(m.get("title"))
@@ -156,6 +158,8 @@ def load_alpha():
         else:
             outs = {o.get("label") or "?": price(o.get("yesProb")) for o in opts}
         out.append({"id": m.get("id"), "title": m.get("title") or "", "end": end, "outcomes": outs,
+                    "volume": vol, "volume24h": float(m.get("twentyFourHrVolume") or 0),
+                    "categories": (m.get("primaryCategories") or []) + (m.get("categories") or []),
                     "rules": m.get("rules") or "", "fee": m.get("feeBasePercent"),
                     "url": "https://www.alphaarcade.com/market/" + (m.get("slug") or "")})
     return out
@@ -163,22 +167,33 @@ def load_alpha():
 
 def load_poly():
     """All open Polymarket events, outcomes -> price (0-100)."""
-    evs, off = [], 0
-    for _ in range(MAX_PAGES_POLY):
-        try:
-            d = get(f"https://gamma-api.polymarket.com/events?active=true&closed=false&limit=100&offset={off}")
-        except Exception as err:
-            print("Matcher: Polymarket stopped at offset", off, "-", err)
-            break
-        if not d:
-            break
-        evs += d
-        off += len(d)
+    # Polymarket won't page past ~2,000 results, so ask for one end-date window at a time
+    edges = [n + timedelta(days=d) for d in list(range(0, 15)) + [30, 60, 120, 240, 400, 800, 2000]]
+    seen, evs = set(), []
+    for lo, hi in zip(edges, edges[1:]):
+        off = 0
+        while off < 2000:
+            try:
+                d = get("https://gamma-api.polymarket.com/events?active=true&closed=false&limit=100"
+                        f"&offset={off}&end_date_min={lo.strftime(f)}&end_date_max={hi.strftime(f)}")
+            except Exception as err:
+                print("Matcher: Polymarket window", lo.strftime("%b %d"), "stopped at", off, "-", err)
+                break
+            if not d:
+                break
+            for ev in d:
+                k = ev.get("id") or ev.get("slug")
+                if k not in seen:
+                    seen.add(k); evs.append(ev)
+            off += len(d)
+            if len(d) < 100:
+                break
     out = []
     for ev in evs:
         if "Up or Down" in (ev.get("title") or ""):
             continue
         e = {"title": ev.get("title") or "", "outcomes": {}, "text": "", "end": 0,
+             "volume": float(ev.get("volume") or 0), "volume24h": float(ev.get("volume24hr") or 0),
              "rules": ev.get("description") or "", "url": "https://polymarket.com/event/" + (ev.get("slug") or "")}
         for m in ev.get("markets") or []:
             if m.get("closed"):
@@ -220,7 +235,7 @@ def load_kalshi():
     for ev in evs:
         k = ev.get("event_ticker") or ""
         e = {"title": ev.get("title") or "", "outcomes": {}, "text": ev.get("sub_title") or "", "end": 0,
-             "rules": "", "url": "https://kalshi.com/markets/" + (ev.get("series_ticker") or k.split("-")[0]).lower()}
+             "volume": 0.0, "volume24h": 0.0, "rules": "", "url": "https://kalshi.com/markets/" + (ev.get("series_ticker") or k.split("-")[0]).lower()}
         for m in ev.get("markets") or []:
             if m.get("status") not in (None, "active", "open"):
                 continue
@@ -228,8 +243,10 @@ def load_kalshi():
             ask = float(m.get("yes_ask_dollars") or 0)
             last = float(m.get("last_price_dollars") or 0)
             p = (bid + ask) / 2 if bid > 0 and ask > 0 else last
-            label = m.get("yes_sub_title") or m.get("subtitle") or m.get("title") or ""
+            label = m.get("yes_sub_title") or m.get("subtitle") or m.get("title") or ev.get("title") or "Yes"
             e["outcomes"][label] = round(p * 100, 1) if p > 0 else None
+            e["volume"] += float(m.get("volume_fp") or m.get("volume") or 0)
+            e["volume24h"] += float(m.get("volume_24h_fp") or m.get("volume_24h") or 0)
             e["text"] += " " + (m.get("title") or "") + " " + label
             e["end"] = e["end"] or ts(m.get("expected_expiration_time") or m.get("close_time"))
             e["rules"] = e["rules"] or (m.get("rules_primary") or "")
@@ -290,13 +307,13 @@ def score(a, e):
         return 0, [], {}                                        # different line or threshold
     omap = {l: map_outcome(l, e["outcomes"]) for l in a["outcomes"]}
     lead = lead_of(a["outcomes"])
-    s = name + (20 if omap.get(lead) else 0)
+    s = name + (20 if omap.get(lead) is not None else 0)
     hours = abs(a["end"] - e["end"]) / 3600 if a["end"] and e["end"] else 9999
     away = max(0.0, (a["end"] - n.timestamp()) / 3600)          # hours until the Alpha market ends
-    s += 20 if hours <= max(12, away * 0.02) else 10 if hours <= max(36, away * 0.05) else 0
-    s += 10 if all(omap.values()) else 0
+    s += 20 if hours <= max(12, away * 0.03) else 10 if hours <= max(36, away * 0.06) else 0
+    s += 10 if all(v is not None for v in omap.values()) else 0
     flags = []
-    if hours > max(12, away * 0.02):
+    if hours > max(12, away * 0.03):
         flags.append("end dates differ by %s" % ("%dh" % hours if hours < 72 else "%d days" % (hours / 24)))
     if any(l.lower() == "draw" for l in a["outcomes"]) and not omap.get("Draw") and not omap.get("draw"):
         flags.append("draw handled differently")
@@ -360,7 +377,9 @@ def main():
     out = []
     for a in alpha:
         row = {"title": a["title"], "close": datetime.fromtimestamp(a["end"], timezone.utc).strftime(f),
-               "sites": {"alpha": {"url": a["url"], "outcomes": a["outcomes"]}}, "flags": [], "score": 100}
+               "sites": {"alpha": {"url": a["url"], "outcomes": a["outcomes"], "volume": round(a["volume"]),
+                                   "volume24h": round(a["volume24h"]), "fee": a["fee"]}},
+               "flags": [], "score": 100, "categories": a["categories"]}
         lead = lead_of(a["outcomes"])
         row["outcome"] = lead
         row["prices"] = {"alpha": a["outcomes"][lead]}
@@ -369,8 +388,11 @@ def main():
             if not e or s < 70 or (a["id"], e["url"]) in blocked:
                 continue
             row["sites"][name] = {"url": e["url"], "title": e["title"], "score": s, "flags": fl,
-                                  "label": "SAME" if s >= 90 else "SIMILAR"}
+                                  "label": "SAME" if s >= 90 else "SIMILAR",
+                                  "volume": round(e["volume"]), "volume24h": round(e["volume24h"])}
             row["sites"][name]["matched_outcome"] = om.get(lead)
+            # this site's price for every Alpha outcome it lines up with
+            row["sites"][name]["outcomes"] = {l: e["outcomes"][k] for l, k in om.items() if k is not None}
             row["prices"][name] = e["outcomes"][om[lead]] if om.get(lead) is not None else None
             row["score"] = min(row["score"], s)
             row["flags"] += [x for x in fl if x not in row["flags"]]
@@ -387,9 +409,10 @@ def main():
     print("Matcher: %d matched (%d SAME, %d SIMILAR)" % (len(out), same, len(out) - same))
     for r in out[:30]:
         p = r["prices"]
-        print("  %-7s %3d | %s | %s | A %s P %s K %s | gap %s %s" % (
+        print("  %-7s %3d | %s | %s | A %s P %s K %s | gap %s | A vol $%s %s" % (
             r["label"], r["score"], r["title"][:48], r["outcome"][:22], p.get("alpha"),
-            p.get("polymarket", "-"), p.get("kalshi", "-"), r["gap"], "; ".join(r["flags"])))
+            p.get("polymarket", "-"), p.get("kalshi", "-"), r["gap"], r["sites"]["alpha"]["volume"],
+            "; ".join(r["flags"])))
         for site in ("polymarket", "kalshi"):          # what it matched, so we can check it
             x = r["sites"].get(site)
             if x:

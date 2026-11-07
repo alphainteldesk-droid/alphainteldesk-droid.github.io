@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conflict Radar: World Conflict Headlines and Prediction Market Odds | Alpha Intel Desk</title>
+<meta name="description" content="Conflict Radar: the latest world conflict headlines by region, next to the prediction markets that track them on Polymarket, Kalshi and Alpha Arcade. Updated through the day.">
+<link rel="canonical" href="https://alphainteldesk.com/conflict-radar.html">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta property="og:title" content="Conflict Radar by Alpha Intel Desk">
+<meta property="og:description" content="Real-time intelligence for prediction markets.">
+<meta property="og:image" content="https://alphainteldesk.com/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@alphainteldesk">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#0b1420; --panel:#111d2c; --line:#1f3044;
+    --cyan:#3fdbe6; --amber:#ffb347; --text:#e8eef5; --muted:#8fa3b8; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--navy); color:var(--text);
+    font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.6; }
+  a { color:var(--cyan); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .wrap { max-width:760px; margin:0 auto; padding:0 16px; }
+  header { border-bottom:1px solid var(--line); position:sticky; top:0;
+    background:rgba(11,20,32,.92); backdrop-filter:blur(8px); z-index:10; }
+  .bar { display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 16px; max-width:1120px; margin:0 auto; }
+  .brand { display:flex; align-items:center; gap:10px; color:var(--text);
+    font-weight:700; font-size:1.1rem; }
+  .brand img { width:36px; height:36px; }
+  nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; }
+  nav a { color:var(--muted); }
+  nav a:hover, nav a.on { color:var(--text); text-decoration:none; }
+  .tag { font-family:"JetBrains Mono",monospace; font-size:.75rem;
+    letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
+  h1 { font-size:clamp(1.6rem,4vw,2.3rem); margin:8px 0 12px; line-height:1.2; }
+  h2 { font-size:1.25rem; margin:36px 0 10px; }
+  .lead { color:var(--muted); font-size:1.08rem; }
+  .card { background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:18px 20px; margin:12px 0; }
+  .card h3 { margin:0 0 4px; font-size:1.02rem; }
+  .card p { margin:0; color:var(--muted); }
+  .soon { font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--amber);
+    letter-spacing:.1em; margin-left:6px; }
+  .board { margin:22px 0 8px; }
+  .gp { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:10px 0; }
+  .gp-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+  .gp-t { font-weight:700; color:var(--text); }
+  .gp-o { color:var(--muted); font-size:.92rem; }
+  .gp-net { flex:none; text-align:right; font-family:"JetBrains Mono",monospace; color:var(--amber);
+    font-size:1.35rem; font-weight:500; line-height:1.1; }
+  .gp-net small { display:block; font-size:.62rem; letter-spacing:.12em; color:var(--muted); }
+  .gp-px { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+  .px { border:1px solid var(--line); border-radius:8px; padding:6px 8px; text-align:center; color:var(--text); }
+  .px b { display:block; font-family:"JetBrains Mono",monospace; font-size:.62rem; letter-spacing:.1em; color:var(--muted); font-weight:500; }
+  .px span { font-size:1.1rem; font-weight:700; }
+  .px.aa { border-color:var(--amber); background:rgba(255,179,71,.08); } .px.aa b { color:var(--amber); }
+  .px.lo span { color:#3ee88a; } .px.hi span { color:#ff7a7a; }
+  .px.none span { color:var(--muted); font-weight:500; font-size:.9rem; }
+  a.px:hover { text-decoration:none; border-color:var(--cyan); }
+  .gp-math { margin-top:8px; font-family:"JetBrains Mono",monospace; font-size:.72rem; color:var(--muted); }
+  .note { color:var(--muted); font-size:.86rem; }
+  .live { display:inline-flex; align-items:center; gap:7px; }
+  .live i { width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:p 1.6s infinite; }
+  @keyframes p { 50% { opacity:.3; } }
+  .filters { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 6px; }
+  .filters button { background:var(--panel); color:var(--muted); border:1px solid var(--line); border-radius:999px;
+    padding:5px 12px; font:500 .8rem "JetBrains Mono",monospace; letter-spacing:.08em; cursor:pointer; }
+  .filters button.on, .filters button:hover { color:#fff; border-color:#ff7a7a; }
+  .hl { display:flex; gap:10px; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--line); }
+  .hl .rg { flex:none; min-width:52px; text-align:center; font:700 .68rem "JetBrains Mono",monospace; letter-spacing:.08em;
+    color:#ffb0b0; background:rgba(255,92,92,.18); border-radius:4px; padding:3px 4px; margin-top:3px; }
+  .hl a { color:var(--text); font-weight:500; } .hl small { display:block; color:var(--muted); font-size:.8rem; }
+  .mk { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin:10px 0; }
+  .mk-t { font-weight:700; } .mk-o { color:var(--muted); font-size:.88rem; }
+  .badge { font:600 .62rem "JetBrains Mono",monospace; letter-spacing:.1em; padding:2px 6px; border-radius:4px; margin-left:6px; }
+  .badge.same { background:rgba(62,232,138,.15); color:#3ee88a; } .badge.sim { background:rgba(255,179,71,.15); color:var(--amber); }
+  main { padding:40px 0 8px; }
+  footer { margin-top:48px; border-top:1px solid var(--line);
+    padding:28px 0 40px; color:var(--muted); font-size:.88rem; }
+  .foot { display:flex; flex-wrap:wrap; gap:24px; justify-content:space-between; }
+  .social { display:flex; gap:16px; flex-wrap:wrap; }
+  @media (max-width:640px) {
+    nav { gap:14px; font-size:.9rem; }
+    .bar { flex-direction:column; align-items:flex-start; }
+  }
+</style>
+<meta property="og:url" content="https://alphainteldesk.com/conflict-radar.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Alpha Intel Desk">
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/#market-of-the-week">Market of the Week</a>
+      <a href="/#top-traders">Top Traders</a>
+      <a href="/#guides">Guides</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <span class="tag live" style="color:#ff7a7a"><i style="background:#ff5c5c;box-shadow:0 0 8px #ff5c5c"></i>Live · world headlines</span>
+  <h1>Conflict Radar</h1>
+  <p class="lead">The latest world conflict headlines, tagged by region, next to the prediction markets that track
+    them. See the news and what Polymarket, Kalshi and Alpha Arcade think about it, in one place.</p>
+  <div class="filters" id="filters"></div>
+  <p class="note" id="cr-updated"></p>
+  <div id="heads"><p class="note">Loading headlines&hellip;</p></div>
+
+  <h2>World-event markets on all three sites</h2>
+  <p class="note">The same question, priced side by side. <b style="color:#3ee88a">SAME</b> means the markets match
+    on every site; <b style="color:var(--amber)">SIMILAR</b> means something differs, like the end date.
+    Matches are automatic. Always check each site's rules before you trade.</p>
+  <div id="mkts"><p class="note">Loading markets&hellip;</p></div>
+  <p style="color:var(--muted);font-size:.88rem;margin-top:28px">Headlines link to the original news source.
+    Alpha Intel Desk doesn't write or edit them. For information only, not financial advice. Read our
+    <a href="/disclosures.html">disclosures</a>.</p>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><strong style="color:var(--text)">Alpha Intel Desk</strong><br>Information is our edge.</div>
+      <div class="social">
+        <a href="https://x.com/alphainteldesk" rel="noopener">X</a>
+        <a href="https://t.me/alphainteldesk" rel="noopener">Telegram</a>
+        <a href="https://www.youtube.com/@alphainteldesk" rel="noopener">YouTube</a>
+        <a href="/disclosures.html">Disclosures</a>
+      </div>
+    </div>
+    <p>Not financial advice. Prediction markets involve risk, and you can lose money.
+      Some links on this site are referral links and may earn us a commission at no cost to you.</p>
+    <p>&copy; 2026 Alpha Intel Desk</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+  var when = function (s) { var t = new Date(s); return isNaN(t) ? '' : t.toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); };
+  var NAMES = { MDE: 'Middle East', EUR: 'Europe', ASIA: 'Asia', AFR: 'Africa', AMER: 'Americas', WORLD: 'World' };
+  var all = [], pick = 'ALL';
+  function draw() {
+    var list = all.filter(function (h) { return pick === 'ALL' || h.region === pick; });
+    document.getElementById('heads').innerHTML = list.length ? list.map(function (h) {
+      return '<div class="hl"><span class="rg">' + esc(h.region) + '</span><div><a href="' + esc(h.url) +
+        '" target="_blank" rel="noopener">' + esc(h.title) + '</a><small>' + esc(h.source) + (h.time ? ' · ' + esc(when(h.time)) : '') +
+        '</small></div></div>';
+    }).join('') : '<p class="note">No headlines for this region right now.</p>';
+    document.querySelectorAll('#filters button').forEach(function (b) { b.classList.toggle('on', b.dataset.r === pick); });
+  }
+  fetch('desk.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    all = d.conflict || [];
+    document.getElementById('cr-updated').textContent = d.updated ? 'Last updated ' + when(d.updated) : '';
+    var regions = ['ALL'].concat(Object.keys(NAMES).filter(function (k) { return all.some(function (h) { return h.region === k; }); }));
+    document.getElementById('filters').innerHTML = regions.map(function (k) {
+      return '<button data-r="' + k + '">' + (k === 'ALL' ? 'All regions' : NAMES[k]) + '</button>';
+    }).join('');
+    document.querySelectorAll('#filters button').forEach(function (b) { b.onclick = function () { pick = b.dataset.r; draw(); }; });
+    draw();
+  }).catch(function () { document.getElementById('heads').innerHTML = '<p class="note">Headlines could not be loaded.</p>'; });
+  fetch('matches.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    var geo = (d.matches || []).filter(function (m) {
+      return (m.categories || []).some(function (c) { return /geopolit|middle east|iran|war|conflict/i.test(c); });
+    }).slice(0, 20);
+    document.getElementById('mkts').innerHTML = geo.length ? geo.map(function (m) {
+      var px = [['polymarket', 'POLYMARKET'], ['kalshi', 'KALSHI'], ['alpha', 'ALPHA ARCADE']].map(function (s) {
+        var p = (m.prices || {})[s[0]], u = (m.sites[s[0]] || {}).url;
+        var inner = '<b>' + s[1] + '</b><span>' + (p == null ? (u ? 'no price' : 'not listed') : esc(p) + '¢') + '</span>';
+        var cls = 'px' + (s[0] === 'alpha' ? ' aa' : '') + (p == null ? ' none' : '');
+        return u ? '<a class="' + cls + '" href="' + esc(u) + '" target="_blank" rel="noopener">' + inner + '</a>' : '<div class="' + cls + '">' + inner + '</div>';
+      }).join('');
+      return '<div class="mk"><div class="mk-t">' + esc(m.title) + '<span class="badge ' + (m.label === 'SAME' ? 'same">SAME' : 'sim">SIMILAR') +
+        '</span></div><div class="mk-o">' + esc(m.outcome) + ' · closes ' + esc(when(m.close)) + '</div><div class="gp-px">' + px + '</div></div>';
+    }).join('') : '<p class="note">No world-event markets matched across sites right now.</p>';
+  }).catch(function () { document.getElementById('mkts').innerHTML = '<p class="note">Markets could not be loaded.</p>'; });
+})();
+</script>
+</body>
+</html>
