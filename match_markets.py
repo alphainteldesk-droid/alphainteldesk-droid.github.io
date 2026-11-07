@@ -148,7 +148,7 @@ def load_alpha():
             continue
         opts = m.get("options") or []
         vol = float(m.get("volume") or 0)
-        if vol < 1:          # never traded: 50/50 is just the starting price
+        if vol < 100:        # barely traded: exactly 50/50 is just the starting price
             opts = [dict(o, yesProb=None) if o.get("yesProb") == 500000 else o for o in opts]
         if len(opts) == 1 or all((o.get("label") or "").lower() in ("yes", "no") for o in opts):
             yes = next((o for o in opts if (o.get("label") or "").lower() == "yes"), opts[0] if opts else {})

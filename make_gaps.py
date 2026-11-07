@@ -14,6 +14,8 @@ NOTE = ("Matches are automatic. Always check each site's rules before you trade.
 # ---------- filters (tune here) ----------
 MIN_PRICE, MAX_PRICE = 3, 97          # skip near-certain outcomes: tiny prices are noisy
 MAX_RAW_GAP = 35                      # bigger usually means a stale or mismatched market
+LONGSHOT = 10                         # if the lower price is under 10 cents...
+MAX_RATIO = 3                         # ...the higher one can't be more than 3x it (thin/stale book)
 MIN_NET_GAP = 1.0                     # points left after estimated fees
 MIN_VOLUME = {"alpha": 50, "polymarket": 5000, "kalshi": 500}   # $ / $ / contracts traded
 MIN_HOURS_LEFT = 2                    # markets about to close move too fast to compare
@@ -82,6 +84,8 @@ def gaps(matches, alpha_fresh):
             raw = ps[hi] - ps[lo]
             if raw > MAX_RAW_GAP:
                 continue
+            if ps[lo] < LONGSHOT and ps[hi] > MAX_RATIO * ps[lo]:
+                continue                               # long shot on one site, not on the other: thin book
             fees = fee_pts(fee_rate(lo, row), ps[lo]) + fee_pts(fee_rate(hi, row), ps[hi])
             net = raw - fees
             if net >= MIN_NET_GAP and (best is None or net > best["net"]):
