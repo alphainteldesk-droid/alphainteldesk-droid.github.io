@@ -15,6 +15,8 @@ jobs:
           ALPHA_API_KEY: ${{ secrets.ALPHA_API_KEY }}
       - run: python3 make_desk.py
         continue-on-error: true
+      - run: python3 match_markets.py
+        continue-on-error: true
       - run: python3 post_new_markets.py
         continue-on-error: true
         env:
@@ -25,4 +27,5 @@ jobs:
           git add markets.json
           [ -f desk.json ] && git add desk.json
           [ -f posted.json ] && git add posted.json
+          [ -f matches.json ] && git add matches.json
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -q && git push)
