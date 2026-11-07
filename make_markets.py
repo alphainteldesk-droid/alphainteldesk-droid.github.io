@@ -118,8 +118,16 @@ def alpha_markets():
         return [], []
     req = urllib.request.Request("https://platform.alphaarcade.com/api/get-live-markets",
                                  headers={"x-api-key": key, "User-Agent": "AlphaIntelDesk/1.0"})
-    d = json.load(urllib.request.urlopen(req, timeout=30))
+    import time
+    for attempt in range(3):   # Alpha Arcade sometimes returns a brief 502: try up to 3 times
+        try:
+            d = json.load(urllib.request.urlopen(req, timeout=30)); break
+        except Exception as err:
+            if attempt == 2: raise
+            print("Alpha Arcade try", attempt + 1, "failed:", err, "- retrying in 10 s")
+            time.sleep(10)
     ms = d if isinstance(d, list) else d.get("markets", [])
+    ms = [m for m in ms if not m.get("hidden")]
     if ms:   # first runs: show which fields exist, so the boxes can be finished
         print("Alpha Arcade:", len(ms), "live markets. Fields:", sorted(ms[0].keys()))
         print("Alpha Arcade sample:", json.dumps({k: ms[0].get(k) for k in sorted(ms[0].keys())
@@ -159,8 +167,13 @@ def alpha_markets():
 try:
     alpha_soon, alpha_new = alpha_markets()
 except Exception as err:
-    print("Alpha Arcade failed:", err)
-    alpha_soon, alpha_new = [], []
+    print("Alpha Arcade failed:", err, "- keeping the last good Alpha Arcade data")
+    try:
+        old = json.load(open("markets.json"))
+        alpha_soon = old.get("closing_soon", {}).get("alpha", [])
+        alpha_new = old.get("new_markets", {}).get("alpha", [])
+    except Exception:
+        alpha_soon, alpha_new = [], []
 
 out = {"updated": n.strftime(f), "closing_soon": {"polymarket": poly, "kalshi": kal, "alpha": alpha_soon},
        "new_markets": dict(new, alpha=alpha_new)}
