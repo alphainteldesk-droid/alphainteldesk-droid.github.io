@@ -4,6 +4,7 @@
 #   SAME (90+)     same event, same outcome, end times line up  -> used for Gap Scanner math
 #   SIMILAR (70-89) probably the same event, something differs   -> shown with a badge, never gap math
 #   below 70        hidden
+# v3: lines up 'Yes' markets with the matching deadline inside multi-deadline events.
 # v2: also pairs Polymarket with Kalshi directly (non-sports), so Kalshi shows even when Alpha has no market.
 # Writes matches.json. Public market data only.
 import json, re, time, unicodedata, urllib.request
@@ -214,7 +215,10 @@ def load_poly():
             e["text"] += " " + q
             e["end"] = e["end"] or ts(m.get("gameStartTime") or m.get("endDate"))
             if [x.lower() for x in names] == ["yes", "no"] and prices:
-                e["outcomes"][m.get("groupItemTitle") or q] = round(prices[0] * 100, 1)
+                lbl = m.get("groupItemTitle") or q
+                e["outcomes"][lbl] = round(prices[0] * 100, 1)
+                e.setdefault("ends", {})[lbl] = ts(m.get("endDate"))
+                e.setdefault("qs", {})[lbl] = q
             else:
                 for nm, p in zip(names, prices):
                     e["outcomes"][nm] = round(p * 100, 1)
@@ -253,6 +257,8 @@ def load_kalshi():
             p = (bid + ask) / 2 if bid > 0 and ask > 0 else last
             label = m.get("yes_sub_title") or m.get("subtitle") or m.get("title") or ev.get("title") or "Yes"
             e["outcomes"][label] = round(p * 100, 1) if p > 0 else None
+            e.setdefault("ends", {})[label] = ts(m.get("expected_expiration_time") or m.get("close_time"))
+            e.setdefault("qs", {})[label] = m.get("title") or ""
             e["volume"] += float(m.get("volume_fp") or m.get("volume") or 0)
             e["volume24h"] += float(m.get("volume_24h_fp") or m.get("volume_24h") or 0)
             e["text"] += " " + (m.get("title") or "") + " " + label
@@ -266,7 +272,18 @@ def load_kalshi():
 
 
 # ---------------- matching ----------------
-def map_outcome(label, outs):
+def by_deadline(real, ends, a_end):
+    """In a ladder of deadlines (before 2027 / before 2028 ...) pick the one that ends with the Alpha market."""
+    if not ends or not a_end:
+        return None
+    ds = sorted((abs(ends[k] - a_end) if ends.get(k) else 9e12, k) for k in real)
+    away = max(0.0, a_end - n.timestamp())
+    ok = ds[0][0] <= max(2 * 86400, away * 0.05)
+    clear = len(ds) < 2 or ds[1][0] - ds[0][0] >= 86400         # same end for all = a price ladder, not dates
+    return ds[0][1] if ok and clear else None
+
+
+def map_outcome(label, outs, ends=None, a_end=0):
     """Which outcome on the other site is the same as this Alpha outcome?"""
     if label.lower() in ("draw", "tie"):
         for k in outs:
@@ -275,7 +292,7 @@ def map_outcome(label, outs):
         return None
     if label.lower() == "yes":
         real = [k for k in outs if k.lower() != "no"]
-        return real[0] if len(real) == 1 else None
+        return real[0] if len(real) == 1 else by_deadline(real, ends, a_end)
     best, bs = None, (0.0, 0)
     for k in outs:
         kw = words(k)
@@ -303,7 +320,7 @@ def score(a, e):
         name = 50 * (c[0] + c[1]) / 2
     else:
         aw, an, best_j = set(key_words(a["title"])), numbers(a["title"]), 0.0
-        for t in (e["title"], e.get("alt") or ""):
+        for t in [e["title"], e.get("alt") or ""] + list((e.get("qs") or {}).values())[:8]:
             ew, en = set(key_words(t)), numbers(t)
             if not aw or not ew or (an and en and an != en):
                 continue                                        # different line or threshold
@@ -321,10 +338,11 @@ def score(a, e):
     an, en = numbers(a["title"]), numbers(e["title"])
     if sd and an and en and an != en:
         return 0, [], {}                                        # different line or threshold
-    omap = {l: map_outcome(l, e["outcomes"]) for l in a["outcomes"]}
+    omap = {l: map_outcome(l, e["outcomes"], e.get("ends"), a["end"]) for l in a["outcomes"]}
     lead = lead_of(a["outcomes"])
     s = name + (20 if omap.get(lead) is not None else 0)
-    hours = abs(a["end"] - e["end"]) / 3600 if a["end"] and e["end"] else 9999
+    e_end = (e.get("ends") or {}).get(omap.get(lead)) or e["end"]
+    hours = abs(a["end"] - e_end) / 3600 if a["end"] and e_end else 9999
     away = max(0.0, (a["end"] - n.timestamp()) / 3600)          # hours until the Alpha market ends
     s += 20 if hours <= max(12, away * 0.03) else 10 if hours <= max(36, away * 0.06) else 0
     mapped = sum(v is not None for v in omap.values())
@@ -365,7 +383,8 @@ def best_match(a, events, idx):
     best = (0, [], {}, None)
     away = max(0.0, a["end"] - n.timestamp())
     for e in candidates(a, events, idx):
-        if a["end"] and e["end"] and abs(a["end"] - e["end"]) > max(4 * 86400, away * 0.15):
+        ends = [x for x in [e["end"]] + list((e.get("ends") or {}).values()) if x]
+        if a["end"] and ends and min(abs(a["end"] - x) for x in ends) > max(4 * 86400, away * 0.15):
             continue
         s, fl, om = score(a, e)
         if s > best[0]:
@@ -436,7 +455,7 @@ def main():
         fix = {}
     blocked = {tuple(x) for x in fix.get("block", [])}
 
-    out = []
+    out, near = [], []
     for a in alpha:
         row = {"title": a["title"], "close": datetime.fromtimestamp(a["end"], timezone.utc).strftime(f),
                "sites": {"alpha": {"url": a["url"], "outcomes": a["outcomes"], "volume": round(a["volume"]),
@@ -447,6 +466,14 @@ def main():
         row["prices"] = {"alpha": a["outcomes"][lead]}
         for name, evs in sites.items():
             s, fl, om, e = best_match(a, evs, idxs[name])
+            if name == "kalshi" and (not e or s < 70) and a["volume"] >= 1000 and not sporty(a):
+                if not e:                              # nothing scored: show the Kalshi title sharing the most words
+                    aw = set(key_words(a["title"]))
+                    c = candidates(a, evs, idxs[name])
+                    e = max(c, key=lambda x: len(aw & set(key_words(x["title"]))), default=None)
+                    s, om = 0, {}
+                near.append((a["title"], s, e["title"] if e else "-", (om or {}).get(lead_of(a["outcomes"]))))
+                e = None if s < 70 else e
             if not e or s < 70 or (a["id"], e["url"]) in blocked:
                 continue
             row["sites"][name] = {"url": e["url"], "title": e["title"], "score": s, "flags": fl,
@@ -465,6 +492,9 @@ def main():
         row["gap"] = round(max(ps) - min(ps), 1) if len(ps) > 1 and row["label"] == "SAME" else None
         out.append(row)
 
+    print("Matcher: %d busy non-sports Alpha markets with no Kalshi match (best try shown):" % len(near))
+    for t, sc, kt, mo in near[:20]:
+        print("  NEAR %3d | %s | K: %s -> %s" % (sc, t[:44], kt[:48], mo))
     used = {r["sites"]["polymarket"]["url"] for r in out if "polymarket" in r["sites"]}
     pk = poly_kalshi(sites["polymarket"], sites["kalshi"], used)
     print("Matcher: %d Polymarket-Kalshi pairs (%d SAME)" % (len(pk), sum(r["label"] == "SAME" for r in pk)))
