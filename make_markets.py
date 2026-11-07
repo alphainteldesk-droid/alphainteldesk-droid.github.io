@@ -117,15 +117,20 @@ def alpha_markets():
         print("Alpha Arcade skipped: no ALPHA_API_KEY secret")
         return [], []
     req = urllib.request.Request("https://platform.alphaarcade.com/api/get-live-markets",
-                                 headers={"x-api-key": key, "User-Agent": "AlphaIntelDesk/1.0"})
+                                 headers={"x-api-key": key, "User-Agent": "curl/8.5.0", "Accept": "*/*"})
     import time
-    for attempt in range(3):   # Alpha Arcade sometimes returns a brief 502: try up to 3 times
+    waits = [15, 30, 60]       # Alpha Arcade sometimes returns a 502: try 4 times over ~2 minutes
+    for attempt in range(4):
         try:
-            d = json.load(urllib.request.urlopen(req, timeout=30)); break
+            d = json.load(urllib.request.urlopen(req, timeout=45)); break
         except Exception as err:
-            if attempt == 2: raise
-            print("Alpha Arcade try", attempt + 1, "failed:", err, "- retrying in 10 s")
-            time.sleep(10)
+            body = ""
+            if hasattr(err, "read"):
+                try: body = err.read()[:200].decode("utf-8", "replace").replace("\n", " ")
+                except Exception: pass
+            print("Alpha Arcade try", attempt + 1, "failed:", err, "| server said:", body or "(nothing)")
+            if attempt == 3: raise
+            time.sleep(waits[attempt])
     ms = d if isinstance(d, list) else d.get("markets", [])
     ms = [m for m in ms if not m.get("hidden")]
     if ms:   # first runs: show which fields exist, so the boxes can be finished
