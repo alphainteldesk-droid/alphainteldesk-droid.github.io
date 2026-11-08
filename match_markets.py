@@ -596,7 +596,8 @@ def movers(alpha, sites):
 # ---------------- calendar links ----------------
 def calendar_links(alpha, sites):
     """For each catalysts.json event with "find" word-sets, pick each site's own market for it
-    (title holds every word of any set; settles closest to the event date). Writes cal_links.json."""
+    (title holds every word of a set; earlier sets win, then the market settling closest to the event date).
+    Skips word-mention and combo markets. Writes cal_links.json."""
     try:
         cats = json.load(open("catalysts.json"))["events"]
     except Exception as err:
@@ -604,6 +605,7 @@ def calendar_links(alpha, sites):
         return
     pools = {"alpha": alpha, "polymarket": sites.get("polymarket", []), "kalshi": sites.get("kalshi", [])}
     rx = lambda w: re.compile(r"(?<![a-z0-9])" + re.escape(w.lower()))
+    skip = re.compile(r"\b(say|said|mention|mentions|combo|parlay)\b")   # word-mention and combo markets aren't the event itself
     out = {}
     for c in cats:
         finds = c.get("find") or []
@@ -614,12 +616,16 @@ def calendar_links(alpha, sites):
         if not finds or not (n.timestamp() - 2 * 86400 <= when <= n.timestamp() + 60 * 86400):
             continue
         sets = [[rx(w) for w in s] for s in finds]
+        nots = [rx(w) for w in c.get("not") or []]          # words that rule a market out for this event
         links = {}
         for site, evs in pools.items():
             hits = []
             for e in evs:
                 t = (e.get("title", "") + " " + e.get("alt", "")).lower()
-                if not any(all(r.search(t) for r in s) for s in sets):
+                if skip.search(t) or any(r.search(t) for r in nots):
+                    continue
+                si = next((i for i, s in enumerate(sets) if all(r.search(t) for r in s)), None)
+                if si is None:
                     continue
                 end = e.get("end") or 0
                 if not end or end < when - 2 * 86400 or end > when + 45 * 86400:
@@ -627,8 +633,9 @@ def calendar_links(alpha, sites):
                 priced = {k: v for k, v in (e.get("outcomes") or {}).items() if v is not None}
                 if not priced:
                     continue
-                hits.append((abs(end - when) // 86400, -(e.get("volume") or 0), e, priced))
-            hits.sort(key=lambda h: (h[0], h[1]))
+                hits.append((si, abs(end - when) // 86400, -(e.get("volume") or 0), e, priced))
+            hits.sort(key=lambda h: h[:3])                 # earlier word-set first, then closest date, then volume
+            hits = [h[1:] for h in hits]
             if hits:
                 _, _, e, priced = hits[0]
                 oc = min(priced, key=lambda k: (abs(priced[k] - 50), -priced[k]))   # the outcome most in play
