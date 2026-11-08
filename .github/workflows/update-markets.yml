@@ -1,7 +1,7 @@
 name: Update markets
 on:
   schedule:
-    - cron: "17 * * * *"          # backup: GitHub runs these late or skips them when busy
+    - cron: "*/20 * * * *"        # every 20 min: fresh Polymarket/Kalshi odds, gaps, movers, calendar (GitHub may run these a little late)
   push:
     paths:
       - alpha_live.json           # main trigger: the Chromebook bridge pushes this every hour

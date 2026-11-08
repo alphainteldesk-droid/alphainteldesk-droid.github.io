@@ -1024,11 +1024,14 @@
       : '<div class="gb-empty">' + T.empty + '</div>';
   }
   var cur = location.hash === '#movers' ? 'movers' : 'gaps';
-  Object.keys(TABS).forEach(function (t) {
-    fetch(TABS[t].file + '?v=' + Date.now()).then(function (r) { return r.json(); })
-      .then(function (d) { data[t] = d; if (t === cur) show(t); })
-      .catch(function () { data[t] = { updated: new Date().toISOString() }; if (t === cur) show(t); });
-  });
+  function load() {                                        // first load, then fresh data every 5 minutes (no page reload)
+    Object.keys(TABS).forEach(function (t) {
+      fetch(TABS[t].file + '?v=' + Date.now()).then(function (r) { return r.json(); })
+        .then(function (d) { var old = data[t]; data[t] = d; if (t === cur && (!old || old.updated !== d.updated)) show(t); })
+        .catch(function () { if (!data[t]) { data[t] = { updated: new Date().toISOString() }; if (t === cur) show(t); } });
+    });
+  }
+  load(); setInterval(load, 5 * 60000);
   show(cur);
   if (cur !== 'gaps') document.getElementById('gapbox').scrollIntoView();
   document.getElementById('gapbox').addEventListener('click', function (e) {
@@ -1182,14 +1185,22 @@
     var cell = grid.querySelector('.cal-e.sel'), mob = matchMedia('(max-width: 760px)').matches;
     if (mob && cell) cell.closest('.cal-d').after(det); else grid.after(det);
   }
-  fetch('calendar.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
-    items = d.items || [];
-    document.getElementById('cal-upd').textContent = 'Updated ' + new Date(d.updated).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    nextI = pickNext(); render(); drawNext(); tick();
-    setInterval(tick, 1000);
-    setInterval(function () { if (sel < 0) render(); }, 60000);   // keep the NOW line and glows current
-    if (location.hash === '#calendar') document.getElementById('calendar').scrollIntoView();
-  }).catch(function () { grid.innerHTML = '<p class="cal-none">Calendar unavailable right now. Try again shortly.</p>'; });
+  var calUpd = '';
+  function loadCal(firstLoad) {                            // first load, then fresh odds every 5 minutes (skipped while a detail box is open)
+    if (!firstLoad && sel >= 0) return;
+    fetch('calendar.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+      if (!firstLoad && d.updated === calUpd) return;
+      calUpd = d.updated; items = d.items || [];
+      document.getElementById('cal-upd').textContent = 'Updated ' + new Date(d.updated).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      nextI = pickNext(); render(); drawNext(); tick();
+      if (firstLoad) {
+        setInterval(tick, 1000);
+        setInterval(function () { if (sel < 0) render(); }, 60000);   // keep the NOW line and glows current
+        if (location.hash === '#calendar') document.getElementById('calendar').scrollIntoView();
+      }
+    }).catch(function () { if (firstLoad) grid.innerHTML = '<p class="cal-none">Calendar unavailable right now. Try again shortly.</p>'; });
+  }
+  loadCal(true); setInterval(function () { loadCal(false); }, 5 * 60000);
   document.getElementById('calendar').addEventListener('click', function (e) {
     var ev = e.target.closest('.cal-e'), mo = e.target.closest('.cal-more'), f = e.target.closest('.cal-f button');
     if (e.target.closest('.cal-next') && nextI >= 0) { filt = 'all'; sel = nextI; render(); detail(sel); det.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
@@ -1200,6 +1211,14 @@
       [].forEach.call(document.querySelectorAll('.cal-f button'), function (b) { b.classList.toggle('on', b === f); });
       render();
     }
+  });
+})();
+</script>
+<script>
+(function () {   // came back to a tab left open 20+ minutes: reload so every screen shows fresh data
+  var t0 = Date.now();
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && Date.now() - t0 > 20 * 60000) location.reload();
   });
 })();
 </script>
