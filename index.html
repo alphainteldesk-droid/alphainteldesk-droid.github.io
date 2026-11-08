@@ -280,6 +280,53 @@
   .glass .neg { color:#ff5c5c; text-shadow:0 1px 2px rgba(0,0,0,.9); }
   .glass .v.flash { text-shadow:0 0 6px currentColor; }
   .chg { font-size:9px; font-weight:700; }
+  /* Catalyst Calendar: 2 weeks, under the desk */
+  .calsec { max-width:1400px; margin:0 auto; padding:24px 16px 4px; scroll-margin-top:70px; }
+  .cal-h { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:10px 24px; margin-bottom:12px; }
+  .cal-h h2 { margin:0; font:800 1.35rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--amber);
+    text-shadow:0 0 8px rgba(255,179,71,.35); }
+  .cal-h p { margin:4px 0 0; color:var(--muted); font-size:.9rem; max-width:640px; }
+  .calsec .mk { color:var(--amber); }
+  .cal-f { display:flex; flex-wrap:wrap; gap:6px; }
+  .cal-f button { font:700 .7rem "JetBrains Mono",monospace; letter-spacing:.08em; padding:6px 10px; border-radius:3px;
+    background:none; color:var(--c, var(--muted)); border:1px solid var(--line); cursor:pointer; }
+  .cal-f button.on { color:#111; background:var(--c, var(--amber)); border-color:var(--c, var(--amber)); }
+  .cal-g { display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); gap:6px; }
+  .cal-dh { font:700 .72rem "JetBrains Mono",monospace; color:var(--muted); letter-spacing:.16em; text-align:center; }
+  .cal-d { background:var(--panel); border:1px solid var(--line); border-radius:6px; min-height:160px; padding:7px;
+    display:flex; flex-direction:column; gap:5px; min-width:0; }
+  .cal-d.wkend { background:#0d1825; }
+  .cal-d.today { border-color:var(--cyan); box-shadow:0 0 12px rgba(63,219,230,.2); }
+  .cal-dn { display:flex; justify-content:space-between; font:700 .76rem "JetBrains Mono",monospace; color:#a9bccf; }
+  .cal-dn b { color:var(--cyan); font-size:.66rem; letter-spacing:.12em; }
+  .cal-d.today .cal-dn span { color:var(--cyan); }
+  .cal-e { display:block; width:100%; text-align:left; background:rgba(255,255,255,.035); border:0; border-left:3px solid var(--c);
+    border-radius:3px; padding:5px 7px; color:var(--text); font:500 .8rem/1.28 "Space Grotesk",sans-serif; cursor:pointer; }
+  .cal-e:hover { background:rgba(63,219,230,.1); }
+  .cal-e.sel { background:rgba(255,179,71,.16); }
+  .cal-e small { display:block; font:700 .6rem "JetBrains Mono",monospace; color:var(--c); letter-spacing:.06em; margin-bottom:1px; }
+  .cal-more { background:none; border:0; color:var(--cyan); font:700 .7rem "JetBrains Mono",monospace; cursor:pointer; text-align:left; padding:2px 0; }
+  .cal-none { color:#3a4d63; font-size:.85rem; }
+  .cal-x { margin-top:10px; background:rgba(5,12,20,.92); border:1px solid rgba(255,179,71,.5); border-radius:6px; padding:14px 16px; }
+  .cal-xt { font:700 .72rem "JetBrains Mono",monospace; letter-spacing:.08em; color:var(--c); }
+  .cal-x h3 { margin:4px 0 6px; font-size:1.2rem; }
+  .cal-x p { margin:0 0 6px; color:#c4d2e0; }
+  .cal-src { font-size:.78rem; color:var(--muted); margin-top:6px; }
+  .cal-mk { margin-top:10px; border-top:1px solid var(--line); padding-top:10px; }
+  .cal-ml { font:700 .66rem "JetBrains Mono",monospace; letter-spacing:.12em; color:var(--muted); }
+  .cal-mt { margin:3px 0 8px; font-weight:700; }
+  .cal-ps { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+  .cal-p { display:flex; flex-direction:column; min-width:110px; padding:6px 10px; border:1px solid var(--line); border-radius:4px; color:var(--text); }
+  .cal-p span { font:700 .62rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--muted); }
+  .cal-p b { font:800 1.15rem "JetBrains Mono",monospace; }
+  .cal-p.a { border-color:rgba(255,179,71,.6); } .cal-p.a b { color:var(--amber); }
+  a.cal-p:hover { background:rgba(63,219,230,.1); text-decoration:none; }
+  .cal-p.na { opacity:.5; }
+  .cal-foot { color:var(--muted); font-size:.78rem; margin:10px 0 0; }
+  @media (max-width: 760px) {
+    .cal-g { grid-template-columns:1fr; } .cal-dh, .cal-d.empty:not(.today) { display:none; }
+    .cal-d { min-height:0; } .cal-h h2 { font-size:1.1rem; }
+  }
   /* Gap Scanner panel in the space under MONEY NEVER SLEEPS */
   .deskwrap { position:relative; container-type:inline-size; }
   .gapbox { position:absolute; left:.7%; top:46.4%; width:41.6%; height:53%; box-sizing:border-box; overflow:hidden;
@@ -294,7 +341,7 @@
     text-shadow:0 0 6px rgba(255,179,71,.35); }
   .gb-tabs { display:flex; gap:.3cqw; }
   .gb-tab { display:flex; align-items:center; gap:.35cqw; background:none; border:1px solid rgba(143,163,184,.25);
-    color:#8fa3b8; font:800 .84cqw "JetBrains Mono",monospace; letter-spacing:.14em; padding:.2cqw .55cqw;
+    color:#8fa3b8; font:800 1.15cqw "JetBrains Mono",monospace; letter-spacing:.12em; padding:.3cqw .85cqw;
     border-radius:3px; cursor:pointer; white-space:nowrap; }
   .gb-tab:hover { color:#e8eef5; }
   .gb-tab { position:relative; }
@@ -317,6 +364,7 @@
   .ldot { width:.45cqw; height:.45cqw; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px var(--cyan);
     display:inline-block; animation:blink 1.4s infinite; }
   .gb-cols, .gb-r { display:grid; grid-template-columns:1fr 4.1cqw 4.1cqw 4.1cqw 4.5cqw 1.8cqw; gap:.4cqw; align-items:center; }
+  #gapbox.mv .gb-cols, #gapbox.mv .gb-r { grid-template-columns:1fr 4.1cqw 3.8cqw 5.8cqw 4.2cqw 1.8cqw; }
   .gb-cols { font:600 .68cqw "JetBrains Mono",monospace; letter-spacing:.08em; color:#8fa3b8;
     padding-bottom:.2cqw; border-bottom:1px solid rgba(63,219,230,.2); }
   .gb-cols span:not(:first-child) { text-align:center; } .gb-cols .a { color:var(--amber); }
@@ -339,12 +387,13 @@
   @media (max-width: 760px) {
     .gapbox { position:static; width:auto; height:auto; margin:10px; padding:12px; font-size:13px; }
     .gb-h { flex-wrap:wrap; gap:4px; } .gb-t { font-size:12px; white-space:nowrap; } .gb-s { font-size:8px; } .gb-cols, .gb-r { grid-template-columns:1fr 38px 38px 38px 44px 24px; gap:5px; }
-    .gb-tab { font-size:10px; padding:4px 6px; letter-spacing:.08em; } .gb-sh { font-size:12px; padding:4px 0; }
+    .gb-tab { font-size:13px; padding:5px 9px; letter-spacing:.08em; } .gb-sh { font-size:12px; padding:4px 0; }
     .gb-why, .gb-d { font-size:9px; padding:3px 0; } .gb-s { text-align:left; white-space:normal; font-size:9px; }
     .gb-cols { font-size:8px; } .gb-m b { font-size:12.5px; } .gb-m i { font-size:10.5px; }
     .gb-p { font-size:12px; } .gb-g { font-size:12px; } .gb-empty { font-size:12px; }
     .gb-f { font-size:9.5px; flex-direction:column; align-items:flex-start; } .gb-go { font-size:10px; padding:5px 8px; }
     .ldot { width:7px; height:7px; } .gb-r { padding:6px 0; }
+    #gapbox.mv .gb-cols, #gapbox.mv .gb-r { grid-template-columns:1fr 40px 34px 50px 40px 24px; }
   }
   .glass a.cover { position:absolute; inset:0; z-index:1; }
 
@@ -372,11 +421,25 @@
  {"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},
  {"proName":"FOREXCOM:NSXUSD","title":"NASDAQ 100"},
  {"proName":"CAPITALCOM:VIX","title":"VIX"},
+ {"proName":"TVC:US10Y","title":"US 10Y"},
+ {"proName":"TVC:DXY","title":"DOLLAR"},
  {"proName":"TVC:UKOIL","title":"BRENT"},
  {"proName":"TVC:USOIL","title":"WTI"},
+ {"proName":"NYMEX:NG1!","title":"NAT GAS"},
  {"proName":"TVC:GOLD","title":"GOLD"},
+ {"proName":"TVC:SILVER","title":"SILVER"},
+ {"proName":"FX:EURUSD","title":"EUR/USD"},
+ {"proName":"FX:USDJPY","title":"USD/JPY"},
+ {"proName":"INDEX:NKY","title":"NIKKEI"},
+ {"proName":"INDEX:DEU40","title":"DAX"},
+ {"proName":"FOREXCOM:UKXGBP","title":"FTSE"},
+ {"proName":"NASDAQ:HOOD","title":"ROBINHOOD"},
+ {"proName":"NASDAQ:COIN","title":"COINBASE"},
+ {"proName":"NASDAQ:DKNG","title":"DRAFTKINGS"},
  {"proName":"COINBASE:BTCUSD","title":"BTC"},
  {"proName":"COINBASE:ETHUSD","title":"ETH"},
+ {"proName":"COINBASE:SOLUSD","title":"SOL"},
+ {"proName":"COINBASE:XRPUSD","title":"XRP"},
  {"proName":"COINBASE:ALGOUSD","title":"ALGO"}],
  "showSymbolLogo":true,"isTransparent":true,"displayMode":"compact","colorTheme":"dark","locale":"en"}
 </script></div></div>
@@ -450,11 +513,11 @@
     <div class="stamp" id="st-conflict">WORLD HEADLINES</div>
   </div>
 </div>
-<section class="gapbox" id="gapbox" aria-label="Gap Scanner, Movers and Calendar">
+<section class="gapbox" id="gapbox" aria-label="Gap Scanner and Movers">
   <div class="gb-h"><div class="gb-tabs" role="tablist">
       <button class="gb-tab on" data-t="gaps" role="tab" data-tip="The same question priced differently on Polymarket, Kalshi and Alpha Arcade, after estimated fees. Checked every hour."><i class="ldot"></i>GAP SCANNER</button>
       <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news.">MOVERS</button>
-      <button class="gb-tab" data-t="cal" role="tab" data-tip="What could move markets next: upcoming reports like CPI, jobs and the Fed, plus markets that settle soon.">CALENDAR</button></div>
+</div>
     <span class="gb-s"><span id="gb-sub">PRICE GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
   <div class="gb-cols" id="gb-cols"></div>
   <div id="gb-rows"><div class="gb-empty">Scanning Polymarket, Kalshi and Alpha Arcade&hellip;</div></div>
@@ -467,6 +530,23 @@
   <div class="wire-tag"><i></i><span class="wt">PREDICTION MARKET <span class="wt2">DESK WIRE</span></span></div>
   <div class="wire-view"><div class="wire-track" id="wire"></div></div>
 </div>
+
+<section class="calsec" id="calendar" aria-label="Catalyst Calendar: the next two weeks">
+  <div class="cal-h"><div><h2>CATALYST CALENDAR</h2>
+    <p>The next 2 weeks of dates that move markets: economic data, the Fed, earnings, politics, world events and more.
+      Times in US Eastern. A <span class="mk">&#9679;</span> means a related market is linked. <span id="cal-upd"></span></p></div>
+    <div class="cal-f">
+      <button class="on" data-f="all">ALL</button>
+      <button data-f="econ" style="--c:#3fdbe6">ECONOMY</button><button data-f="fed" style="--c:#ffb347">FED</button>
+      <button data-f="earnings" style="--c:#b18cff">EARNINGS</button><button data-f="politics" style="--c:#ff7a7a">POLITICS</button>
+      <button data-f="world" style="--c:#3ee88a">WORLD</button><button data-f="markets" style="--c:#5aa9ff">MARKET HOURS</button>
+      <button data-f="fyi" style="--c:#ff9ad5">WORTH KNOWING</button><button data-f="resolves" style="--c:#e8eef5">SETTLING</button>
+    </div></div>
+  <div class="cal-g" id="cal-g"><p class="cal-none">Loading the calendar&hellip;</p></div>
+  <div class="cal-x" id="cal-x" hidden></div>
+  <p class="cal-foot">Tap any event for details and related prices on Polymarket, Kalshi and Alpha Arcade. Dates come from official
+    schedules (BLS, BEA, Census, the Fed, company investor pages); an "expected date" is not yet confirmed. Not financial advice.</p>
+</section>
 
 <main class="wrap">
 
@@ -785,11 +865,13 @@
 })();
 </script>
 <script>
-(function () {   // Gap Scanner panel: tabs for Gap Scanner, Movers and Calendar
+(function () {   // Gap Scanner panel: tabs for Gap Scanner and Movers (the Calendar has its own section below)
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var hm = function (s) { return new Date(s).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); };
-  var day = function (s) { return new Date(s).toLocaleDateString([], { month: 'short', day: 'numeric' }); };
   var c = function (p) { return p == null ? '&ndash;' : esc(Math.round(p)) + '&cent;'; };
+  var money = function (v) { v = +v || 0; return '$' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(1) + 'K' : Math.round(v)); };
+  var settles = function (s) { var d = new Date(s), y = d.getFullYear() !== new Date().getFullYear();
+    return isNaN(d) ? '' : 'settles ' + d.toLocaleDateString('en-US', y ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' }); };
   var SHORT = { polymarket: 'POLY', kalshi: 'KALSHI', alpha: 'ALPHA' };
   var SITE = 'https://alphainteldesk.com/';
   var data = {}, shares = [];
@@ -800,13 +882,10 @@
       go: ['/gap-scanner.html', 'OPEN GAP SCANNER &rarr;'],
       empty: 'No gaps pass our filters right now. Prices are lined up across Polymarket, Kalshi and Alpha Arcade. The scanner checks again every hour.' },
     movers: { file: 'movers.json', sub: '24H MOVES',
-      cols: '<span>MARKET</span><span>SITE</span><span>NOW</span><span>24H</span><span>WHY?</span><span></span>',
+      cols: '<span>MARKET</span><span>SITE</span><span>NOW</span><span>24H CHANGE</span><span>WHY?</span><span></span>',
       note: 'No sports · moves of 5¢+ with real trading · "Why?" opens a news search',
-      empty: 'No big moves with real volume in the last 24 hours. Checked every hour.' },
-    cal: { file: 'calendar.json', sub: 'COMING UP',
-      cols: '<span>EVENT</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>WHEN</span><span></span>',
-      note: "Scheduled reports and markets that settle soon · check each site's rules before you trade",
-      empty: 'Nothing scheduled in the next few weeks.' }
+      go: ['#calendar', '2-WEEK CALENDAR &darr;'],
+      empty: 'No big moves with real volume in the last 24 hours. Checked every hour.' }
   };
   function share(i) {
     var s = shares[i]; if (!s) return;
@@ -824,56 +903,48 @@
         (site === x.low.site ? ' lo' : site === x.high.site ? ' hi' : '') + (p == null ? ' na' : '');
       return '<span class="' + cl + '">' + c(p) + '</span>';
     };
+    var vol = 0; Object.keys(x.volumes || {}).forEach(function (k) { vol += +x.volumes[k] || 0; });
+    var sub = [x.outcome, settles(x.close), vol ? money(vol) + ' traded' : ''].filter(Boolean).join(' · ');
     var txt = 'Price gap after est. fees: ' + x.net.toFixed(1) + '¢ on "' + x.title + '" (' + x.outcome + '): ' +
       x.low.name + ' ' + Math.round(x.low.price) + '¢ vs ' + x.high.name + ' ' + Math.round(x.high.price) +
       '¢. Check each site\'s rules. via @alphainteldesk';
-    return '<div class="gb-r"><a class="gb-m" href="/gap-scanner.html"><b>' + esc(x.title) + '</b><i>' + esc(x.outcome) +
-      ' · ' + esc(x.category) + '</i></a>' + cell('polymarket') + cell('kalshi') + cell('alpha') +
+    return '<div class="gb-r"><a class="gb-m" href="/gap-scanner.html"><b>' + esc(x.title) + '</b><i>' + esc(sub) + '</i></a>' +
+      cell('polymarket') + cell('kalshi') + cell('alpha') +
       '<span class="gb-g">' + esc(x.net.toFixed(1)) + '&cent;</span>' + shareBtn(txt, SITE + 'gap-scanner.html') + '</div>';
   }
   function moverRow(x) {
     var up = x.change > 0, ch = (up ? '+' : '') + Math.round(x.change) + '¢';
+    var sub = [x.outcome, x.prev != null ? 'was ' + Math.round(x.prev) + '¢' : '', x.vol24 ? money(x.vol24) + ' traded in 24h' : '']
+      .filter(Boolean).join(' · ');
     var txt = '"' + x.title + '" (' + x.outcome + ') moved ' + ch + ' in 24h on ' + x.name + ', now ' +
       Math.round(x.price) + '¢. via @alphainteldesk';
     return '<div class="gb-r"><a class="gb-m" href="' + esc(x.url) + '" target="_blank" rel="noopener"><b>' + esc(x.title) +
-      '</b><i>' + esc(x.outcome) + ' · ' + esc(x.category) + '</i></a>' +
+      '</b><i>' + esc(sub) + '</i></a>' +
       '<span class="gb-p' + (x.site === 'alpha' ? ' a' : '') + '">' + SHORT[x.site] + '</span>' +
       '<span class="gb-p">' + c(x.price) + '</span>' +
       '<span class="gb-p ' + (up ? 'lo' : 'hi') + '">' + esc(ch) + '</span>' +
       '<a class="gb-why" href="' + esc(x.why) + '" target="_blank" rel="noopener">WHY?</a>' +
       shareBtn(txt, SITE + '#movers') + '</div>';
   }
-  function calRow(x) {
-    var m = x.market, ps = m ? m.prices : {}, u = m ? (m.urls || {}) : {};
-    var link = u.alpha || u.polymarket || u.kalshi;
-    var name = x.name.replace(/^Resolves: /, '');
-    var sub = m ? (x.kind === 'resolves' ? 'Settles · ' + m.outcome : m.title + ' · ' + m.outcome) : (x.source || 'Scheduled');
-    var title = link ? '<a class="gb-m" href="' + esc(link) + '" target="_blank" rel="noopener">' : '<span class="gb-m">';
-    var txt = day(x.date) + ': ' + name + (m ? ' (' + m.title + ')' : '') + '. via @alphainteldesk';
-    return '<div class="gb-r">' + title + '<b>' + esc(name) + '</b><i>' + esc(sub) + '</i>' + (link ? '</a>' : '</span>') +
-      '<span class="gb-p">' + c(ps.polymarket) + '</span><span class="gb-p">' + c(ps.kalshi) + '</span>' +
-      '<span class="gb-p a">' + c(ps.alpha) + '</span><span class="gb-d">' + esc(day(x.date)) + '</span>' +
-      shareBtn(txt, SITE + '#calendar') + '</div>';
-  }
   function show(t) {
     var T = TABS[t], d = data[t];
     [].forEach.call(document.querySelectorAll('.gb-tab'), function (b) { b.classList.toggle('on', b.getAttribute('data-t') === t); });
+    document.getElementById('gapbox').classList.toggle('mv', t === 'movers');
     document.getElementById('gb-sub').textContent = T.sub;
     document.getElementById('gb-cols').innerHTML = T.cols;
     document.getElementById('gb-note').textContent = T.note;
     var go = document.getElementById('gb-go');
-    go.style.display = T.go ? '' : 'none';
-    if (T.go) { go.href = T.go[0]; go.innerHTML = T.go[1]; }
+    go.href = T.go[0]; go.innerHTML = T.go[1];
     var box = document.getElementById('gb-rows');
     if (!d) { box.innerHTML = '<div class="gb-empty">Loading&hellip;</div>'; return; }
     document.getElementById('gb-upd').textContent = hm(d.updated).toUpperCase();
     shares = [];
-    var list = t === 'gaps' ? d.gaps : t === 'movers' ? d.movers : d.items;
+    var list = t === 'gaps' ? d.gaps : d.movers;
     list = (list || []).slice(0, matchMedia('(max-width: 760px)').matches ? 5 : 4);
-    box.innerHTML = list.length ? list.map(t === 'gaps' ? gapRow : t === 'movers' ? moverRow : calRow).join('')
+    box.innerHTML = list.length ? list.map(t === 'gaps' ? gapRow : moverRow).join('')
       : '<div class="gb-empty">' + T.empty + '</div>';
   }
-  var cur = { '#movers': 'movers', '#calendar': 'cal' }[location.hash] || 'gaps';
+  var cur = location.hash === '#movers' ? 'movers' : 'gaps';
   Object.keys(TABS).forEach(function (t) {
     fetch(TABS[t].file + '?v=' + Date.now()).then(function (r) { return r.json(); })
       .then(function (d) { data[t] = d; if (t === cur) show(t); })
@@ -885,6 +956,100 @@
     var tab = e.target.closest('.gb-tab'), sh = e.target.closest('.gb-sh');
     if (tab) { cur = tab.getAttribute('data-t'); show(cur); }
     if (sh) { e.preventDefault(); share(+sh.getAttribute('data-i')); }
+  });
+})();
+</script>
+<script>
+(function () {   // Catalyst Calendar: next 14 days, all times shown in US Eastern
+  var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+  var c = function (p) { return p == null ? '&ndash;' : esc(Math.round(p)) + '&cent;'; };
+  var TZ = 'America/New_York';
+  var key = function (d) { return new Date(d).toLocaleDateString('en-CA', { timeZone: TZ }); };          // 2026-11-08
+  var tm = function (d) { return new Date(d).toLocaleTimeString('en-US', { timeZone: TZ, hour: 'numeric', minute: '2-digit' }) + ' ET'; };
+  var lng = function (d) { return new Date(d).toLocaleDateString('en-US', { timeZone: TZ, weekday: 'short', month: 'short', day: 'numeric' }); };
+  var CATS = { econ: ['ECONOMY', '#3fdbe6'], fed: ['FED', '#ffb347'], earnings: ['EARNINGS', '#b18cff'],
+    politics: ['POLITICS', '#ff7a7a'], world: ['WORLD', '#3ee88a'], markets: ['MARKET HOURS', '#5aa9ff'],
+    fyi: ['WORTH KNOWING', '#ff9ad5'], resolves: ['SETTLING', '#e8eef5'] };
+  var items = [], filt = 'all', sel = -1, open = {};
+  var grid = document.getElementById('cal-g'), det = document.getElementById('cal-x');
+
+  function when(x) {
+    if (x.kind === 'resolves') return 'Settles ' + tm(x.date);
+    var t = x.allday ? 'All day' : tm(x.date);
+    if (x.end) t = lng(x.date).replace(/^\w+, /, '') + ' to ' + lng(x.end + 'T17:00:00Z').replace(/^\w+, /, '');
+    return t + (x.est ? ' · expected date' : '');
+  }
+  function title(x) { return x.kind === 'resolves' ? x.market.title : x.name; }
+  function render() {
+    var today = key(new Date()), base = new Date(today + 'T12:00:00Z'), days = [], html = '';
+    for (var i = 0; i < 14; i++) days.push(key(new Date(base.getTime() + i * 864e5)));
+    var by = {}; days.forEach(function (d) { by[d] = []; });
+    items.forEach(function (x, i) {
+      if (filt !== 'all' && x.cat !== filt) return;
+      var k = key(x.date);
+      if (k < today && x.end && x.end >= today) k = today;                    // multi-day event still running
+      if (by[k]) by[k].push(i);
+    });
+    days.slice(0, 7).forEach(function (d) {
+      html += '<div class="cal-dh">' + new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }).toUpperCase() + '</div>';
+    });
+    days.forEach(function (d) {
+      var dt = new Date(d + 'T12:00:00Z'), wd = dt.getUTCDay(), list = by[d], cls = 'cal-d';
+      if (d === today) cls += ' today'; if (wd === 0 || wd === 6) cls += ' wkend'; if (!list.length) cls += ' empty';
+      html += '<div class="' + cls + '"><div class="cal-dn"><span>' +
+        dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' }) + '</span>' +
+        (d === today ? '<b>TODAY</b>' : '') + '</div>';
+      var cut = open[d] ? list.length : 5;
+      list.slice(0, cut).forEach(function (i) {
+        var x = items[i], C = CATS[x.cat] || CATS.econ;
+        html += '<button class="cal-e' + (i === sel ? ' sel' : '') + '" style="--c:' + C[1] + '" data-i="' + i + '">' +
+          '<small>' + esc(C[0]) + ' · ' + esc(x.kind === 'resolves' ? tm(x.date) : x.end ? 'THRU ' + lng(x.end + 'T17:00:00Z').replace(/^\w+, /, '').toUpperCase() : x.allday ? 'ALL DAY' : tm(x.date)) +
+          (x.market ? ' <span class="mk">&#9679;</span>' : '') + '</small>' + esc(title(x)) + '</button>';
+      });
+      if (list.length > cut) html += '<button class="cal-more" data-d="' + d + '">+' + (list.length - cut) + ' more</button>';
+      if (!list.length) html += '<span class="cal-none">&mdash;</span>';
+      html += '</div>';
+    });
+    grid.innerHTML = html;
+  }
+  function detail(i) {
+    var x = items[i], C = CATS[x.cat] || CATS.econ, m = x.market, h;
+    h = '<div class="cal-xt" style="--c:' + C[1] + '">' + esc(C[0]) + ' · ' + esc(lng(x.date)) + ' · ' + esc(when(x)) + '</div>' +
+      '<h3>' + esc(title(x)) + '</h3>';
+    if (x.note) h += '<p>' + esc(x.note) + '</p>';
+    if (x.kind === 'resolves') h += '<p>This market settles soon. Outcome shown: ' + esc(m.outcome) + '.</p>';
+    if (x.source) h += '<p class="cal-src">Source: ' + esc(x.source) + '</p>';
+    if (m) {
+      var u = m.urls || {}, chip = function (s, n) {
+        var inner = '<span>' + n + '</span><b>' + c(m.prices[s]) + '</b>';
+        return u[s] ? '<a class="cal-p' + (s === 'alpha' ? ' a' : '') + '" href="' + esc(u[s]) + '" target="_blank" rel="noopener">' + inner + '</a>'
+                    : '<span class="cal-p na">' + inner + '</span>';
+      };
+      h += '<div class="cal-mk"><div class="cal-ml">' + (x.kind === 'resolves' ? 'PRICES NOW' : 'RELATED MARKET') +
+        (m.label ? ' · ' + esc(m.label) : '') + '</div>' +
+        (x.kind === 'resolves' ? '' : '<div class="cal-mt">' + esc(m.title) + ' · ' + esc(m.outcome) + '</div>') +
+        '<div class="cal-ps">' + chip('polymarket', 'POLYMARKET') + chip('kalshi', 'KALSHI') + chip('alpha', 'ALPHA ARCADE') + '</div>' +
+        '<div class="cal-src">Matched automatically. Always check each site\'s rules before you trade.</div></div>';
+    }
+    det.innerHTML = h; det.hidden = false;
+    var cell = grid.querySelector('.cal-e.sel'), mob = matchMedia('(max-width: 760px)').matches;
+    if (mob && cell) cell.closest('.cal-d').after(det); else grid.after(det);   // phones: open right under the tapped day
+  }
+  fetch('calendar.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    items = d.items || [];
+    document.getElementById('cal-upd').textContent = 'Updated ' + new Date(d.updated).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    render();
+    if (location.hash === '#calendar') document.getElementById('calendar').scrollIntoView();
+  }).catch(function () { grid.innerHTML = '<p class="cal-none">Calendar unavailable right now. Try again shortly.</p>'; });
+  document.getElementById('calendar').addEventListener('click', function (e) {
+    var ev = e.target.closest('.cal-e'), mo = e.target.closest('.cal-more'), f = e.target.closest('.cal-f button');
+    if (ev) { sel = +ev.getAttribute('data-i'); render(); detail(sel); }
+    if (mo) { open[mo.getAttribute('data-d')] = true; render(); }
+    if (f) {
+      filt = f.getAttribute('data-f'); sel = -1; det.hidden = true; grid.after(det);
+      [].forEach.call(document.querySelectorAll('.cal-f button'), function (b) { b.classList.toggle('on', b === f); });
+      render();
+    }
   });
 })();
 </script>

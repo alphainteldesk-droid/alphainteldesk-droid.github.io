@@ -109,7 +109,7 @@ def gaps(matches, alpha_fresh):
 
 
 def calendar(matches):
-    """Scheduled catalysts (catalysts.json) + big non-sports markets resolving in the next 7 days."""
+    """Scheduled catalysts (catalysts.json) + big non-sports markets resolving in the next 14 days."""
     try:
         cats = json.load(open("catalysts.json"))["events"]
     except Exception as err:
@@ -130,7 +130,13 @@ def calendar(matches):
             when = datetime.strptime(c["date"], f).replace(tzinfo=timezone.utc)
         except (KeyError, ValueError):
             continue
-        if not (n - timedelta(hours=2) <= when <= n + timedelta(days=45)):
+        try:
+            last = datetime.strptime(c["end"] + "T23:59:59Z", f).replace(tzinfo=timezone.utc) if c.get("end") else when
+        except ValueError:
+            last = when
+        if c.get("allday"):
+            last = max(last, when + timedelta(hours=14))   # all-day events stay up for the rest of that day
+        if not (last >= n - timedelta(hours=2) and when <= n + timedelta(days=45)):
             continue
         keys = [k.lower() for k in c.get("keys", [])]
         linked = [m for m in pool if any(k in m["title"].lower() for k in keys)]
@@ -142,8 +148,11 @@ def calendar(matches):
             return (d > 10, -len(m["sites"]), -sum((x.get("volume") or 0) for s, x in m["sites"].items() if s != "kalshi"))
         linked.sort(key=near)
         items.append({"date": c["date"], "name": c["name"], "source": c.get("source", ""), "kind": "scheduled",
+                      "cat": c.get("cat", "econ"), "note": c.get("note", ""), "end": c.get("end"),
+                      "allday": bool(c.get("allday")), "est": bool(c.get("est")),
                       "market": market_card(linked[0]) if linked else None})
-    for m in pool:                                   # markets that resolve this week, on 2+ sites
+    res = []
+    for m in pool:                                   # markets that resolve in the next 2 weeks, on 2+ sites
         try:
             when = datetime.strptime(m["close"], f).replace(tzinfo=timezone.utc)
         except (KeyError, ValueError):
@@ -154,11 +163,14 @@ def calendar(matches):
         live = [v for v in m["prices"].values() if v is not None]
         if not any(8 <= v <= 92 for v in live):
             continue                                 # already decided (99c): not worth a calendar slot
-        if n <= when <= n + timedelta(days=7) and len(m["sites"]) >= 2:
-            items.append({"date": m["close"], "name": "Resolves: " + m["title"], "kind": "resolves",
-                          "market": market_card(m)})
+        if n <= when <= n + timedelta(days=14) and len(m["sites"]) >= 2:
+            vol = sum((x.get("volume") or 0) for s, x in m["sites"].items() if s != "kalshi")
+            res.append((vol, {"date": m["close"], "name": "Resolves: " + m["title"], "kind": "resolves",
+                              "cat": "resolves", "market": market_card(m)}))
+    res.sort(key=lambda r: -r[0])
+    items += [r[1] for r in res[:20]]                # the 20 busiest settling markets
     items.sort(key=lambda i: i["date"])
-    return items[:8]
+    return items
 
 
 def main():
