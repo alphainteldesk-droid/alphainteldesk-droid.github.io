@@ -134,7 +134,13 @@ def calendar(matches):
             continue
         keys = [k.lower() for k in c.get("keys", [])]
         linked = [m for m in pool if any(k in m["title"].lower() for k in keys)]
-        linked.sort(key=lambda m: -sum((x.get("volume") or 0) for s, x in m["sites"].items() if s != "kalshi"))
+        def near(m):                                 # markets that settle near the event first, then by volume
+            try:
+                d = abs((datetime.strptime(m["close"], f).replace(tzinfo=timezone.utc) - when).days)
+            except (KeyError, ValueError):
+                d = 999
+            return (d > 10, -len(m["sites"]), -sum((x.get("volume") or 0) for s, x in m["sites"].items() if s != "kalshi"))
+        linked.sort(key=near)
         items.append({"date": c["date"], "name": c["name"], "source": c.get("source", ""), "kind": "scheduled",
                       "market": market_card(linked[0]) if linked else None})
     for m in pool:                                   # markets that resolve this week, on 2+ sites
@@ -142,6 +148,9 @@ def calendar(matches):
             when = datetime.strptime(m["close"], f).replace(tzinfo=timezone.utc)
         except (KeyError, ValueError):
             continue
+        live = [v for v in m["prices"].values() if v is not None]
+        if not any(8 <= v <= 92 for v in live):
+            continue                                 # already decided (99c): not worth a calendar slot
         if n <= when <= n + timedelta(days=7) and len(m["sites"]) >= 2:
             items.append({"date": m["close"], "name": "Resolves: " + m["title"], "kind": "resolves",
                           "market": market_card(m)})

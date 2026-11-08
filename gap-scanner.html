@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8TDJGLE2W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D8TDJGLE2W');
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gap Scanner: Prediction Market Price Gaps After Fees | Alpha Intel Desk</title>
@@ -74,6 +82,9 @@
     nav { gap:14px; font-size:.9rem; }
     .bar { flex-direction:column; align-items:flex-start; }
   }
+  .gp-sh { margin-left:8px; background:none; border:1px solid rgba(63,219,230,.45); color:#3fdbe6;
+    font:700 .78rem "JetBrains Mono",monospace; border-radius:3px; padding:3px 8px; cursor:pointer; }
+  .gp-sh:hover { background:rgba(63,219,230,.15); }
 </style>
 <meta property="og:url" content="https://alphainteldesk.com/gap-scanner.html">
 <meta property="og:type" content="website">
@@ -186,8 +197,19 @@
         '<div class="gp-net">' + esc(g.net.toFixed(1)) + '¢<small>GAP AFTER FEES</small></div></div>' +
         '<div class="gp-px">' + px + '</div>' +
         '<div class="gp-math">' + esc(g.raw.toFixed(1)) + '¢ price gap − ' + esc(g.fees.toFixed(1)) + '¢ est. fees · lowest on ' +
-        esc(g.low.name) + ', highest on ' + esc(g.high.name) + '</div></div>';
+        esc(g.low.name) + ', highest on ' + esc(g.high.name) +
+        ' <button class="gp-sh" data-i="' + i + '">Share &#x2197;</button></div></div>';
     }).join('');
+    b.addEventListener('click', function (e) {
+      var btn = e.target.closest('.gp-sh'); if (!btn) return;
+      var g = d.gaps[+btn.getAttribute('data-i')], url = 'https://alphainteldesk.com/gap-scanner.html';
+      var text = 'Price gap after est. fees: ' + g.net.toFixed(1) + '¢ on "' + g.title + '" (' + g.outcome + '): ' +
+        g.low.name + ' ' + Math.round(g.low.price) + '¢ vs ' + g.high.name + ' ' + Math.round(g.high.price) +
+        '¢. Check each site\'s rules. via @alphainteldesk';
+      if (navigator.share) { navigator.share({ text: text, url: url }).catch(function () {}); return; }
+      window.open('https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url),
+        '_blank', 'noopener,width=600,height=500');
+    });
   }).catch(function () {
     document.getElementById('board').innerHTML = '<p class="note">The scanner data could not be loaded. Try again in a minute.</p>';
   });

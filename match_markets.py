@@ -4,10 +4,11 @@
 #   SAME (90+)     same event, same outcome, end times line up  -> used for Gap Scanner math
 #   SIMILAR (70-89) probably the same event, something differs   -> shown with a badge, never gap math
 #   below 70        hidden
+# v4: also writes movers.json (biggest 24h price moves with real volume) and keeps alpha_hist.json.
 # v3: lines up 'Yes' markets with the matching deadline inside multi-deadline events.
 # v2: also pairs Polymarket with Kalshi directly (non-sports), so Kalshi shows even when Alpha has no market.
 # Writes matches.json. Public market data only.
-import json, re, time, unicodedata, urllib.request
+import json, re, time, unicodedata, urllib.parse, urllib.request
 from datetime import datetime, timezone, timedelta
 from difflib import SequenceMatcher
 
@@ -219,6 +220,9 @@ def load_poly():
                 e["outcomes"][lbl] = round(prices[0] * 100, 1)
                 e.setdefault("ends", {})[lbl] = ts(m.get("endDate"))
                 e.setdefault("qs", {})[lbl] = q
+                if m.get("oneDayPriceChange") is not None:
+                    e.setdefault("chg", {})[lbl] = round(float(m.get("oneDayPriceChange") or 0) * 100, 1)
+                    e.setdefault("v24", {})[lbl] = float(m.get("volume24hr") or 0)
             else:
                 for nm, p in zip(names, prices):
                     e["outcomes"][nm] = round(p * 100, 1)
@@ -259,6 +263,12 @@ def load_kalshi():
             e["outcomes"][label] = round(p * 100, 1) if p > 0 else None
             e.setdefault("ends", {})[label] = ts(m.get("expected_expiration_time") or m.get("close_time"))
             e.setdefault("qs", {})[label] = m.get("title") or ""
+            pb = float(m.get("previous_yes_bid_dollars") or 0)
+            pa = float(m.get("previous_yes_ask_dollars") or 0)
+            prev = (pb + pa) / 2 if pb > 0 and pa > 0 else float(m.get("previous_price_dollars") or 0)
+            if p > 0 and prev > 0:
+                e.setdefault("chg", {})[label] = round((p - prev) * 100, 1)
+                e.setdefault("v24", {})[label] = float(m.get("volume_24h_fp") or m.get("volume_24h") or 0)
             e["volume"] += float(m.get("volume_fp") or m.get("volume") or 0)
             e["volume24h"] += float(m.get("volume_24h_fp") or m.get("volume_24h") or 0)
             e["text"] += " " + (m.get("title") or "") + " " + label
@@ -437,6 +447,82 @@ def poly_kalshi(poly, kalshi, used):
     return list(best.values())
 
 
+# ---------------- movers ----------------
+MOVE_MIN = 5                                        # points (cents) moved in 24h
+MOVE_VOL = {"polymarket": 10000, "kalshi": 2000, "alpha": 100}   # 24h volume: $ / contracts / $
+MOVE_TOP, MOVE_ALPHA, MOVE_MAX_CRYPTO = 10, 3, 2
+NAMES = {"alpha": "Alpha Arcade", "polymarket": "Polymarket", "kalshi": "Kalshi"}
+
+
+def why_link(title):
+    q = " ".join(key_words(title)[:6]) or title
+    return "https://news.google.com/search?" + urllib.parse.urlencode({"q": q, "hl": "en-US", "gl": "US", "ceid": "US:en"})
+
+
+def alpha_changes(alpha):
+    """Alpha has no 24h change in its data: keep hourly snapshots and compare with ~24h ago."""
+    try:
+        hist = json.load(open("alpha_hist.json"))
+    except Exception:
+        hist = []
+    now = n.timestamp()
+    snap = {a["id"]: {k: v for k, v in a["outcomes"].items() if v is not None} for a in alpha}
+    hist = [h for h in hist if now - h["t"] <= 26 * 3600] + [{"t": now, "p": snap}]
+    json.dump(hist, open("alpha_hist.json", "w"), separators=(",", ":"))
+    old = [h for h in hist if now - h["t"] >= 20 * 3600]
+    if not old:
+        print("Movers: Alpha history is %.1fh old, needs 20h before Alpha moves show" % ((now - hist[0]["t"]) / 3600))
+        return {}
+    base = old[-1]["p"]                                  # the snapshot closest to 24h ago
+    return {i: {k: round(v - base[i][k], 1) for k, v in o.items() if k in base.get(i, {})} for i, o in snap.items()}
+
+
+def movers(alpha, sites):
+    rows = []
+    soon = n.timestamp() + 2 * 86400                     # skip markets ending in 2 days (daily price ranges)
+    achg = alpha_changes(alpha)
+    for a in alpha:
+        if sporty(a) or a["end"] < soon or a["volume24h"] < MOVE_VOL["alpha"]:
+            continue
+        for k, c in (achg.get(a["id"]) or {}).items():
+            rows.append(("alpha", a, "Yes" if k == "Yes" or len(a["outcomes"]) == 1 else k, a["outcomes"][k], c, a["volume24h"]))
+    for site in ("polymarket", "kalshi"):
+        for e in sites[site]:
+            if sporty(e) or (e["end"] and e["end"] < soon):
+                continue
+            for k, c in (e.get("chg") or {}).items():
+                v = (e.get("v24") or {}).get(k, 0)
+                if v >= MOVE_VOL[site]:
+                    rows.append((site, e, "Yes" if len(e["outcomes"]) == 1 else k, e["outcomes"].get(k), c, v))
+    best = {}
+    for site, e, k, p, c, v in rows:
+        if p is None or not (3 <= p <= 97) or abs(c) < MOVE_MIN:
+            continue
+        key = (site, e["url"])
+        if key not in best or abs(c) > abs(best[key]["change"]):
+            best[key] = {"title": e["title"], "outcome": k, "site": site, "name": NAMES[site], "price": p,
+                         "change": c, "prev": round(p - c, 1), "vol24": round(v), "url": e["url"],
+                         "why": why_link(e["title"]), "category": (e.get("categories") or ["Other"])[0] or "Other",
+                         "crypto": any("crypto" in (x or "").lower() or "financ" in (x or "").lower()
+                                       for x in e.get("categories") or [])}
+    allr = sorted(best.values(), key=lambda r: -abs(r["change"]))
+    out, crypto = [r for r in allr if r["site"] == "alpha"][:MOVE_ALPHA], 0
+    for r in allr:
+        if len(out) >= MOVE_TOP:
+            break
+        if r in out or (r["crypto"] and crypto >= MOVE_MAX_CRYPTO):
+            continue
+        crypto += r["crypto"]
+        out.append(r)
+    out.sort(key=lambda r: -abs(r["change"]))
+    json.dump({"updated": n.strftime(f), "note": "Biggest 24-hour price moves with real trading behind them. No sports. "
+               "\"Why?\" opens a news search, not our analysis.", "movers": out}, open("movers.json", "w"), indent=1)
+    cnt = {s_: sum(r["site"] == s_ for r in allr) for s_ in NAMES}
+    print("Movers: %d shown | candidates Poly %d, Kalshi %d, Alpha %d" % (len(out), cnt["polymarket"], cnt["kalshi"], cnt["alpha"]))
+    for r in out:
+        print("  %+5.1f | %-11s | %s | %s | now %s | 24h vol %s" % (r["change"], r["name"], r["title"][:44], r["outcome"][:16], r["price"], r["vol24"]))
+
+
 def main():
     alpha = load_alpha()
     sites = {}
@@ -448,6 +534,10 @@ def main():
             sites[name] = []
     print("Matcher: %d Alpha Arcade markets | %d Polymarket events | %d Kalshi events"
           % (len(alpha), len(sites["polymarket"]), len(sites["kalshi"])))
+    try:
+        movers(alpha, sites)
+    except Exception as err:
+        print("Movers failed:", err)
     idxs = {k: build_index(v) for k, v in sites.items()}
     try:
         fix = json.load(open("match_fixes.json"))      # {"block": [["alpha id", "other url"], ...]}

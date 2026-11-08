@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8TDJGLE2W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D8TDJGLE2W');
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alpha Intel Desk | Prediction Market Intelligence</title>
@@ -270,36 +278,53 @@
     display:flex; flex-direction:column; padding:.55cqw .85cqw; border-radius:5px;
     background:rgba(5,12,20,.9); border:1px solid rgba(255,179,71,.5);
     box-shadow:0 0 22px rgba(255,179,71,.12), inset 0 0 22px rgba(63,219,230,.05);
-    color:#e8eef5; font:500 .78cqw/1.3 "Space Grotesk",sans-serif; z-index:2; }
+    color:#e8eef5; font:500 .88cqw/1.3 "Space Grotesk",sans-serif; z-index:2; }
   .gb-h { display:flex; justify-content:space-between; align-items:center; margin-bottom:.35cqw; }
   .gb-t { display:flex; align-items:center; gap:.4cqw; font:800 .8cqw "JetBrains Mono",monospace;
     letter-spacing:.16em; color:var(--amber); text-shadow:0 0 6px rgba(255,179,71,.6); }
-  .gb-s { font:500 .52cqw "JetBrains Mono",monospace; letter-spacing:.1em; color:#a9bccf; }
+  .gb-s { font:500 .6cqw "JetBrains Mono",monospace; letter-spacing:.1em; color:#a9bccf; text-align:right; }
+  .gb-tabs { display:flex; gap:.3cqw; }
+  .gb-tab { display:flex; align-items:center; gap:.35cqw; background:none; border:1px solid rgba(143,163,184,.25);
+    color:#8fa3b8; font:800 .74cqw "JetBrains Mono",monospace; letter-spacing:.14em; padding:.18cqw .5cqw;
+    border-radius:3px; cursor:pointer; white-space:nowrap; }
+  .gb-tab:hover { color:#e8eef5; }
+  .gb-tab.on { color:var(--amber); border-color:rgba(255,179,71,.6); text-shadow:0 0 6px rgba(255,179,71,.6);
+    background:rgba(255,179,71,.07); }
+  .gb-sh { background:none; border:1px solid rgba(63,219,230,.35); color:var(--cyan); font:700 .7cqw/1 sans-serif;
+    border-radius:3px; cursor:pointer; padding:.18cqw 0; }
+  .gb-sh:hover { background:rgba(63,219,230,.15); }
+  .gb-why { text-align:center; font:700 .6cqw "JetBrains Mono",monospace; color:var(--cyan); text-decoration:none;
+    border:1px solid rgba(63,219,230,.45); border-radius:3px; padding:.14cqw 0; }
+  .gb-why:hover { background:rgba(63,219,230,.15); text-decoration:none; }
+  .gb-d { text-align:center; font:600 .6cqw "JetBrains Mono",monospace; color:#a9bccf; }
+  a.gb-m { color:inherit; text-decoration:none; } a.gb-m:hover b { text-decoration:underline; }
   .ldot { width:.45cqw; height:.45cqw; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px var(--cyan);
     display:inline-block; animation:blink 1.4s infinite; }
-  .gb-cols, .gb-r { display:grid; grid-template-columns:1fr 3.8cqw 3.8cqw 3.8cqw 4cqw; gap:.4cqw; align-items:center; }
-  .gb-cols { font:600 .5cqw "JetBrains Mono",monospace; letter-spacing:.08em; color:#8fa3b8;
+  .gb-cols, .gb-r { display:grid; grid-template-columns:1fr 3.7cqw 3.7cqw 3.7cqw 4cqw 1.6cqw; gap:.4cqw; align-items:center; }
+  .gb-cols { font:600 .58cqw "JetBrains Mono",monospace; letter-spacing:.08em; color:#8fa3b8;
     padding-bottom:.2cqw; border-bottom:1px solid rgba(63,219,230,.2); }
   .gb-cols span:not(:first-child) { text-align:center; } .gb-cols .a { color:var(--amber); }
   #gb-rows { flex:1; display:flex; flex-direction:column; justify-content:space-around; }
   .gb-r { padding:.08cqw 0; line-height:1.22; border-bottom:1px solid rgba(255,255,255,.05); color:inherit; text-decoration:none; }
   .gb-r:hover { background:rgba(63,219,230,.06); }
-  .gb-m { min-width:0; } .gb-m b { display:block; font-weight:700; font-size:.74cqw; color:#fff;
+  .gb-m { min-width:0; } .gb-m b { display:block; font-weight:700; font-size:.86cqw; color:#fff;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .gb-m i { font-style:normal; font-size:.58cqw; color:#a9bccf; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
-  .gb-p { text-align:center; font:700 .74cqw "JetBrains Mono",monospace; color:#e8eef5; }
+  .gb-m i { font-style:normal; font-size:.66cqw; color:#a9bccf; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+  .gb-p { text-align:center; font:700 .84cqw "JetBrains Mono",monospace; color:#e8eef5; }
   .gb-p.a { color:var(--amber); } .gb-p.lo { color:#3ee88a; } .gb-p.hi { color:#ff7a7a; } .gb-p.na { color:#56687c; font-weight:500; }
-  .gb-g { text-align:center; font:800 .82cqw "JetBrains Mono",monospace; color:#111; background:var(--amber);
+  .gb-g { text-align:center; font:800 .9cqw "JetBrains Mono",monospace; color:#111; background:var(--amber);
     border-radius:3px; padding:.12cqw 0; }
-  .gb-empty { color:#a9bccf; font-size:.72cqw; }
+  .gb-empty { color:#a9bccf; font-size:.82cqw; }
   .gb-f { display:flex; justify-content:space-between; align-items:center; gap:.6cqw; margin-top:.25cqw;
-    font-size:.5cqw; color:#8fa3b8; }
-  .gb-go { flex:none; background:var(--amber); color:#111; font:800 .55cqw "JetBrains Mono",monospace;
+    font-size:.58cqw; color:#8fa3b8; }
+  .gb-go { flex:none; background:var(--amber); color:#111; font:800 .62cqw "JetBrains Mono",monospace;
     letter-spacing:.1em; padding:.25cqw .5cqw; border-radius:2px; text-decoration:none; }
   .gb-go:hover { background:#ffc670; text-decoration:none; }
   @media (max-width: 760px) {
     .gapbox { position:static; width:auto; height:auto; margin:10px; padding:12px; font-size:13px; }
-    .gb-h { flex-wrap:wrap; gap:4px; } .gb-t { font-size:12px; white-space:nowrap; } .gb-s { font-size:8px; } .gb-cols, .gb-r { grid-template-columns:1fr 38px 38px 38px 44px; gap:6px; }
+    .gb-h { flex-wrap:wrap; gap:4px; } .gb-t { font-size:12px; white-space:nowrap; } .gb-s { font-size:8px; } .gb-cols, .gb-r { grid-template-columns:1fr 38px 38px 38px 44px 24px; gap:5px; }
+    .gb-tab { font-size:10px; padding:4px 6px; letter-spacing:.08em; } .gb-sh { font-size:12px; padding:4px 0; }
+    .gb-why, .gb-d { font-size:9px; padding:3px 0; } .gb-s { text-align:left; }
     .gb-cols { font-size:8px; } .gb-m b { font-size:12.5px; } .gb-m i { font-size:10.5px; }
     .gb-p { font-size:12px; } .gb-g { font-size:12px; } .gb-empty { font-size:12px; }
     .gb-f { font-size:9.5px; flex-direction:column; align-items:flex-start; } .gb-go { font-size:10px; padding:5px 8px; }
@@ -406,13 +431,16 @@
     <div class="stamp" id="st-conflict">WORLD HEADLINES</div>
   </div>
 </div>
-<section class="gapbox" id="gapbox" aria-label="Gap Scanner: biggest price gaps after fees">
-  <div class="gb-h"><span class="gb-t"><i class="ldot"></i>GAP SCANNER</span>
-    <span class="gb-s">BIGGEST PRICE GAPS AFTER FEES · <span id="gb-upd">HOURLY</span></span></div>
-  <div class="gb-cols"><span>MARKET</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>GAP</span></div>
+<section class="gapbox" id="gapbox" aria-label="Gap Scanner, Movers and Calendar">
+  <div class="gb-h"><div class="gb-tabs" role="tablist">
+      <button class="gb-tab on" data-t="gaps" role="tab"><i class="ldot"></i>GAP SCANNER</button>
+      <button class="gb-tab" data-t="movers" role="tab">MOVERS</button>
+      <button class="gb-tab" data-t="cal" role="tab">CALENDAR</button></div>
+    <span class="gb-s"><span id="gb-sub">PRICE GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
+  <div class="gb-cols" id="gb-cols"></div>
   <div id="gb-rows"><div class="gb-empty">Scanning Polymarket, Kalshi and Alpha Arcade&hellip;</div></div>
-  <div class="gb-f"><span>No sports · fees estimated · check each site's rules before you trade</span>
-    <a class="gb-go" href="/gap-scanner.html">OPEN GAP SCANNER &rarr;</a></div>
+  <div class="gb-f"><span id="gb-note">No sports · fees estimated · check each site's rules before you trade</span>
+    <a class="gb-go" id="gb-go" href="/gap-scanner.html">OPEN GAP SCANNER &rarr;</a></div>
 </section>
 </div>
 <div class="strip" id="strip"></div>
@@ -738,25 +766,107 @@
 })();
 </script>
 <script>
-(function () {   // Gap Scanner panel
+(function () {   // Gap Scanner panel: tabs for Gap Scanner, Movers and Calendar
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var hm = function (s) { return new Date(s).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); };
-  fetch('gaps.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+  var day = function (s) { return new Date(s).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }); };
+  var c = function (p) { return p == null ? '&ndash;' : esc(Math.round(p)) + '&cent;'; };
+  var SHORT = { polymarket: 'POLY', kalshi: 'KALSHI', alpha: 'ALPHA' };
+  var SITE = 'https://alphainteldesk.com/';
+  var data = {}, shares = [];
+  var TABS = {
+    gaps: { file: 'gaps.json', sub: 'PRICE GAPS AFTER FEES',
+      cols: '<span>MARKET</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>GAP</span><span></span>',
+      note: "No sports · fees estimated · check each site's rules before you trade",
+      go: ['/gap-scanner.html', 'OPEN GAP SCANNER &rarr;'],
+      empty: 'No gaps pass our filters right now. Prices are lined up across Polymarket, Kalshi and Alpha Arcade. The scanner checks again every hour.' },
+    movers: { file: 'movers.json', sub: 'BIG 24H MOVES, REAL VOLUME',
+      cols: '<span>MARKET</span><span>SITE</span><span>NOW</span><span>24H</span><span>WHY?</span><span></span>',
+      note: 'No sports · moves of 5¢+ with real trading · "Why?" opens a news search',
+      empty: 'No big moves with real volume in the last 24 hours. Checked every hour.' },
+    cal: { file: 'calendar.json', sub: 'WHAT COULD MOVE MARKETS NEXT',
+      cols: '<span>EVENT</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>WHEN</span><span></span>',
+      note: "Scheduled reports and markets that settle soon · check each site's rules before you trade",
+      empty: 'Nothing scheduled in the next few weeks.' }
+  };
+  function share(i) {
+    var s = shares[i]; if (!s) return;
+    if (navigator.share) { navigator.share({ text: s.text, url: s.url }).catch(function () {}); return; }
+    window.open('https://x.com/intent/post?text=' + encodeURIComponent(s.text) + '&url=' + encodeURIComponent(s.url),
+      '_blank', 'noopener,width=600,height=500');
+  }
+  function shareBtn(text, url) {
+    shares.push({ text: text, url: url });
+    return '<button class="gb-sh" data-i="' + (shares.length - 1) + '" title="Share" aria-label="Share">&#x2197;</button>';
+  }
+  function gapRow(x) {
+    var cell = function (site) {
+      var p = x.prices[site], cl = 'gb-p' + (site === 'alpha' ? ' a' : '') +
+        (site === x.low.site ? ' lo' : site === x.high.site ? ' hi' : '') + (p == null ? ' na' : '');
+      return '<span class="' + cl + '">' + c(p) + '</span>';
+    };
+    var txt = 'Price gap after est. fees: ' + x.net.toFixed(1) + '¢ on "' + x.title + '" (' + x.outcome + '): ' +
+      x.low.name + ' ' + Math.round(x.low.price) + '¢ vs ' + x.high.name + ' ' + Math.round(x.high.price) +
+      '¢. Check each site\'s rules. via @alphainteldesk';
+    return '<div class="gb-r"><a class="gb-m" href="/gap-scanner.html"><b>' + esc(x.title) + '</b><i>' + esc(x.outcome) +
+      ' · ' + esc(x.category) + '</i></a>' + cell('polymarket') + cell('kalshi') + cell('alpha') +
+      '<span class="gb-g">' + esc(x.net.toFixed(1)) + '&cent;</span>' + shareBtn(txt, SITE + 'gap-scanner.html') + '</div>';
+  }
+  function moverRow(x) {
+    var up = x.change > 0, ch = (up ? '+' : '') + Math.round(x.change) + '¢';
+    var txt = '"' + x.title + '" (' + x.outcome + ') moved ' + ch + ' in 24h on ' + x.name + ', now ' +
+      Math.round(x.price) + '¢. via @alphainteldesk';
+    return '<div class="gb-r"><a class="gb-m" href="' + esc(x.url) + '" target="_blank" rel="noopener"><b>' + esc(x.title) +
+      '</b><i>' + esc(x.outcome) + ' · ' + esc(x.category) + '</i></a>' +
+      '<span class="gb-p' + (x.site === 'alpha' ? ' a' : '') + '">' + SHORT[x.site] + '</span>' +
+      '<span class="gb-p">' + c(x.price) + '</span>' +
+      '<span class="gb-p ' + (up ? 'lo' : 'hi') + '">' + esc(ch) + '</span>' +
+      '<a class="gb-why" href="' + esc(x.why) + '" target="_blank" rel="noopener">WHY?</a>' +
+      shareBtn(txt, SITE + '#movers') + '</div>';
+  }
+  function calRow(x) {
+    var m = x.market, ps = m ? m.prices : {}, u = m ? (m.urls || {}) : {};
+    var link = u.alpha || u.polymarket || u.kalshi;
+    var name = x.name.replace(/^Resolves: /, '');
+    var sub = m ? (x.kind === 'resolves' ? 'Settles · ' + m.outcome : m.title + ' · ' + m.outcome) : (x.source || 'Scheduled');
+    var title = link ? '<a class="gb-m" href="' + esc(link) + '" target="_blank" rel="noopener">' : '<span class="gb-m">';
+    var txt = day(x.date) + ': ' + name + (m ? ' (' + m.title + ')' : '') + '. via @alphainteldesk';
+    return '<div class="gb-r">' + title + '<b>' + esc(name) + '</b><i>' + esc(sub) + '</i>' + (link ? '</a>' : '</span>') +
+      '<span class="gb-p">' + c(ps.polymarket) + '</span><span class="gb-p">' + c(ps.kalshi) + '</span>' +
+      '<span class="gb-p a">' + c(ps.alpha) + '</span><span class="gb-d">' + esc(day(x.date)) + '</span>' +
+      shareBtn(txt, SITE + '#calendar') + '</div>';
+  }
+  function show(t) {
+    var T = TABS[t], d = data[t];
+    [].forEach.call(document.querySelectorAll('.gb-tab'), function (b) { b.classList.toggle('on', b.getAttribute('data-t') === t); });
+    document.getElementById('gb-sub').textContent = T.sub;
+    document.getElementById('gb-cols').innerHTML = T.cols;
+    document.getElementById('gb-note').textContent = T.note;
+    var go = document.getElementById('gb-go');
+    go.style.display = T.go ? '' : 'none';
+    if (T.go) { go.href = T.go[0]; go.innerHTML = T.go[1]; }
+    var box = document.getElementById('gb-rows');
+    if (!d) { box.innerHTML = '<div class="gb-empty">Loading&hellip;</div>'; return; }
     document.getElementById('gb-upd').textContent = 'UPDATED ' + hm(d.updated).toUpperCase();
-    var box = document.getElementById('gb-rows'), g = (d.gaps || []).slice(0, 5);
-    if (!g.length) { box.innerHTML = '<div class="gb-empty">No gaps pass our filters right now. Prices are lined up across ' +
-      'Polymarket, Kalshi and Alpha Arcade. The scanner checks again every hour.</div>'; return; }
-    box.innerHTML = g.map(function (x) {
-      var cell = function (site) {
-        var p = x.prices[site], c = 'gb-p' + (site === 'alpha' ? ' a' : '') +
-          (site === x.low.site ? ' lo' : site === x.high.site ? ' hi' : '') + (p == null ? ' na' : '');
-        return '<span class="' + c + '">' + (p == null ? '&ndash;' : esc(Math.round(p)) + '&cent;') + '</span>';
-      };
-      return '<a class="gb-r" href="/gap-scanner.html"><span class="gb-m"><b>' + esc(x.title) + '</b><i>' + esc(x.outcome) +
-        ' · ' + esc(x.category) + '</i></span>' + cell('polymarket') + cell('kalshi') + cell('alpha') +
-        '<span class="gb-g">' + esc(x.net.toFixed(1)) + '&cent;</span></a>';
-    }).join('');
-  }).catch(function () {});
+    shares = [];
+    var list = t === 'gaps' ? d.gaps : t === 'movers' ? d.movers : d.items;
+    list = (list || []).slice(0, matchMedia('(max-width: 760px)').matches ? 5 : 4);
+    box.innerHTML = list.length ? list.map(t === 'gaps' ? gapRow : t === 'movers' ? moverRow : calRow).join('')
+      : '<div class="gb-empty">' + T.empty + '</div>';
+  }
+  var cur = { '#movers': 'movers', '#calendar': 'cal' }[location.hash] || 'gaps';
+  Object.keys(TABS).forEach(function (t) {
+    fetch(TABS[t].file + '?v=' + Date.now()).then(function (r) { return r.json(); })
+      .then(function (d) { data[t] = d; if (t === cur) show(t); })
+      .catch(function () { data[t] = { updated: new Date().toISOString() }; if (t === cur) show(t); });
+  });
+  show(cur);
+  if (cur !== 'gaps') document.getElementById('gapbox').scrollIntoView();
+  document.getElementById('gapbox').addEventListener('click', function (e) {
+    var tab = e.target.closest('.gb-tab'), sh = e.target.closest('.gb-sh');
+    if (tab) { cur = tab.getAttribute('data-t'); show(cur); }
+    if (sh) { e.preventDefault(); share(+sh.getAttribute('data-i')); }
+  });
 })();
 </script>
 </body>
