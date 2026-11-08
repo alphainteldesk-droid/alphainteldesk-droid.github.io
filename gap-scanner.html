@@ -12,7 +12,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gap Scanner: Prediction Market Price Gaps After Fees | Alpha Intel Desk</title>
-<meta name="description" content="Gap Scanner: the biggest price gaps after fees for the same question on Kalshi, Polymarket and Alpha Arcade. Politics, world events, economy, crypto and tech. Updated hourly.">
+<meta name="description" content="Gap Scanner: the biggest price gaps after fees for the same question on Kalshi, Polymarket and Alpha Arcade. Politics, world events, economy, crypto and tech. Updated every 20 minutes.">
 <link rel="canonical" href="https://alphainteldesk.com/gap-scanner.html">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 <meta property="og:title" content="Gap Scanner by Alpha Intel Desk">
@@ -71,6 +71,8 @@
   .gp-sec { display:flex; align-items:center; gap:10px; margin:22px 0 10px; font-size:1.15rem; }
   .gp-sec span { background:var(--amber); color:#111; font:800 .7rem "JetBrains Mono",monospace; letter-spacing:.1em; padding:3px 7px; border-radius:3px; }
   .gp.g3 { border-color:rgba(255,179,71,.55); box-shadow:0 0 16px rgba(255,179,71,.1); }
+  .px .ch { font-style:normal; font-size:.7rem; font-family:"JetBrains Mono",monospace; }
+  .px .ch.up { color:#3ee88a; } .px .ch.dn { color:#ff7a7a; }
   .px small { display:block; margin-top:2px; font-family:"JetBrains Mono",monospace; font-size:.62rem; color:var(--muted); line-height:1.35; }
   .px small i { font-style:normal; color:#c4d2e0; }
   a.px:hover { text-decoration:none; border-color:var(--cyan); }
@@ -112,7 +114,7 @@
 </header>
 
 <main class="wrap">
-  <span class="tag live"><i></i>Live · updated hourly</span>
+  <span class="tag live"><i></i>Live · updated every 20 min</span>
   <h1>Gap Scanner</h1>
   <p class="lead">The same question can trade at different prices on different prediction markets.
     Gap Scanner shows the 10 biggest price gaps across Polymarket, Kalshi and Alpha Arcade, after estimated fees.
@@ -192,7 +194,12 @@
     return '<small>Vol <i>' + u(t) + '</i>' + (d != null ? '<br>24h <i>' + u(d) + '</i>' : '') + '</small>';
   }
   fetch('gaps.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
-    document.getElementById('gr-updated').textContent = 'Last checked ' + when(d.updated);
+    var stamp = function () {
+      var m = Math.max(0, Math.round((Date.now() - new Date(d.updated).getTime()) / 60000));
+      document.getElementById('gr-updated').textContent = 'Last checked ' + when(d.updated) + ' (' +
+        (m < 1 ? 'just now' : m < 60 ? m + ' min ago' : Math.floor(m / 60) + 'h ' + (m % 60) + 'm ago') + ') · ▲▼ = price change since the previous check';
+    };
+    stamp(); setInterval(stamp, 30000);
     var b = document.getElementById('board');
     if (!d.gaps || !d.gaps.length) {
       b.innerHTML = '<div class="gp"><div class="gp-t">No gaps pass our filters right now.</div>' +
@@ -209,7 +216,8 @@
         var p = g.prices[s[0]], u = (g.urls || {})[s[0]];
         var cls = 'px' + (s[0] === 'alpha' ? ' aa' : '') + (s[0] === g.low.site ? ' lo' : s[0] === g.high.site ? ' hi' : '') +
           (p == null ? ' none' : '');
-        var inner = '<b>' + s[1] + '</b><span>' + (p == null ? (u ? 'not compared' : 'not listed') : esc(p) + '¢') + '</span>' + vol(g, s[0]);
+        var ch = (g.chg || {})[s[0]], arrow = ch ? ' <em class="ch ' + (ch > 0 ? 'up' : 'dn') + '">' + (ch > 0 ? '▲' : '▼') + ' ' + Math.abs(ch) + '¢</em>' : '';
+        var inner = '<b>' + s[1] + '</b><span>' + (p == null ? (u ? 'not compared' : 'not listed') : esc(p) + '¢' + arrow) + '</span>' + vol(g, s[0]);
         return u ? '<a class="' + cls + '" href="' + esc(u) + '" target="_blank" rel="noopener">' + inner + '</a>'
                  : '<div class="' + cls + '">' + inner + '</div>';
       }).join('');
@@ -233,6 +241,15 @@
     });
   }).catch(function () {
     document.getElementById('board').innerHTML = '<p class="note">The scanner data could not be loaded. Try again in a minute.</p>';
+  });
+})();
+</script>
+<script>
+(function () {   // fresh prices: reload every 10 minutes while open, or on return to a tab left 10+ minutes
+  var t0 = Date.now();
+  setInterval(function () { if (document.visibilityState === 'visible' && Date.now() - t0 > 10 * 60000) location.reload(); }, 60000);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && Date.now() - t0 > 10 * 60000) location.reload();
   });
 })();
 </script>

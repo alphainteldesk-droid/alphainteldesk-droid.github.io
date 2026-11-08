@@ -465,6 +465,10 @@
   .gb-more { display:flex; justify-content:space-between; align-items:center; gap:.6cqw; padding:.35cqw .5cqw; margin-top:.15cqw;
     border:1px dashed rgba(63,219,230,.4); border-radius:3px; color:var(--cyan); font:700 .82cqw "JetBrains Mono",monospace; letter-spacing:.04em; text-decoration:none; }
   .gb-more span { color:var(--amber); font-size:.72cqw; letter-spacing:.1em; }
+  .gb-ch { font-style:normal; font-size:.55cqw; margin-left:.15cqw; vertical-align:.25cqw; }
+  .gb-ch.up { color:var(--green, #3ee88a); } .gb-ch.dn { color:#ff7a7a; }
+  .gb-p.moved { animation:gbflash 1.6s ease-out 2; border-radius:3px; }
+  @keyframes gbflash { 0% { background:rgba(63,219,230,.35); } 100% { background:transparent; } }
   .gb-more:hover { background:rgba(63,219,230,.14); text-decoration:none; animation-play-state:paused; }
   .gb-more { animation:gbblip 2.4s ease-in-out infinite; }   /* radar-blip pulse: whole link fades brighter/darker */
   @keyframes gbblip {
@@ -493,7 +497,7 @@
     .gb-why, .gb-d { font-size:9px; padding:3px 0; } .gb-s { text-align:left; white-space:normal; font-size:9px; }
     .gb-cols { font-size:8px; } .gb-m b { font-size:12.5px; } .gb-m i { font-size:10.5px; }
     .gb-more { font-size:11px; padding:8px; } .gb-more span { font-size:9.5px; white-space:nowrap; }
-    .gb-p { font-size:12px; } .gb-p.na small { font-size:7.5px; } .gb-3 { font-size:8px; padding:1px 3px; margin-right:4px; vertical-align:1px; } .gb-g { font-size:12px; } .gb-empty { font-size:12px; }
+    .gb-p { font-size:12px; } .gb-p.na small { font-size:7.5px; } .gb-ch { font-size:8px; margin-left:1px; vertical-align:2px; } .gb-3 { font-size:8px; padding:1px 3px; margin-right:4px; vertical-align:1px; } .gb-g { font-size:12px; } .gb-empty { font-size:12px; }
     .gb-f { font-size:9.5px; flex-direction:column; align-items:flex-start; } .gb-go { font-size:10px; padding:5px 8px; }
     .ldot { width:7px; height:7px; } .gb-r { padding:6px 0; }
     #gapbox.mv .gb-cols, #gapbox.mv .gb-r { grid-template-columns:1fr 40px 34px 50px 40px 24px; }
@@ -974,6 +978,11 @@
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var hm = function (s) { return new Date(s).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); };
   var c = function (p) { return p == null ? '&ndash;' : esc(Math.round(p)) + '&cent;'; };
+  var ago = function (s) {                                 // "UPDATED 4 MIN AGO"
+    var m = Math.max(0, Math.round((Date.now() - new Date(s).getTime()) / 60000));
+    return 'UPDATED ' + (m < 1 ? 'JUST NOW' : m < 60 ? m + ' MIN AGO' : Math.floor(m / 60) + 'H ' + (m % 60) + 'M AGO');
+  };
+  setInterval(function () { var d = data[cur]; if (d && d.updated) document.getElementById('gb-upd').textContent = ago(d.updated); }, 30000);
   var money = function (v) { v = +v || 0; return '$' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(1) + 'K' : Math.round(v)); };
   var settles = function (s) { var d = new Date(s), y = d.getFullYear() !== new Date().getFullYear();
     return isNaN(d) ? '' : 'settles ' + d.toLocaleDateString('en-US', y ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' }); };
@@ -1007,7 +1016,9 @@
       var p = x.prices[site], cl = 'gb-p' + (site === 'alpha' ? ' a' : '') +
         (site === x.low.site ? ' lo' : site === x.high.site ? ' hi' : '') + (p == null ? ' na' : '');
       var u = (x.urls || {})[site];
-      return '<span class="' + cl + '">' + (p == null ? '<small>' + (u ? 'not<br>compared' : 'not<br>listed') + '</small>' : c(p)) + '</span>';
+      var ch = (x.chg || {})[site], arrow = ch ? '<i class="gb-ch ' + (ch > 0 ? 'up' : 'dn') + '" title="' + (ch > 0 ? '+' : '') + ch +
+        '¢ since the last update">' + (ch > 0 ? '▲' : '▼') + '</i>' : '';
+      return '<span class="' + cl + (ch ? ' moved' : '') + '">' + (p == null ? '<small>' + (u ? 'not<br>compared' : 'not<br>listed') + '</small>' : c(p) + arrow) + '</span>';
     };
     var vol = 0; Object.keys(x.volumes || {}).forEach(function (k) { vol += +x.volumes[k] || 0; });
     var sub = [x.outcome, settles(x.close), vol ? money(vol) + ' traded' : ''].filter(Boolean).join(' · ');
@@ -1044,7 +1055,7 @@
     go.style.display = t === 'gaps' ? 'none' : '';          // the gaps tab has its own "more gaps" link row
     var box = document.getElementById('gb-rows');
     if (!d) { box.innerHTML = '<div class="gb-empty">Loading&hellip;</div>'; return; }
-    document.getElementById('gb-upd').textContent = hm(d.updated).toUpperCase();
+    document.getElementById('gb-upd').textContent = ago(d.updated);
     shares = [];
     var list;
     if (t === 'gaps') {                                    // homepage: only gaps priced on all three sites (max 3), then a link to the rest

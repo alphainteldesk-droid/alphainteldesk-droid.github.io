@@ -196,6 +196,14 @@ def main():
     except Exception:
         alpha_fresh = False
     g = gaps(mj["matches"], alpha_fresh)
+    try:                                             # price change per site since the last update (shown as ▲ / ▼)
+        old = {(o["title"], o["outcome"]): o["prices"] for o in json.load(open("gaps.json")).get("gaps", [])}
+    except Exception:
+        old = {}
+    for x in g:
+        was = old.get((x["title"], x["outcome"])) or {}
+        x["chg"] = {s: round(p - was[s], 1) for s, p in x["prices"].items()
+                    if p is not None and was.get(s) is not None and abs(p - was[s]) >= 0.5}
     json.dump({"updated": n.strftime(f), "note": NOTE, "alpha_fresh": alpha_fresh, "gaps": g},
               open("gaps.json", "w"), indent=1)
     cal = calendar(mj["matches"])
