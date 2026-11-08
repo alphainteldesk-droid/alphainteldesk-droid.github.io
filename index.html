@@ -599,7 +599,7 @@
 </div>
 <section class="gapbox" id="gapbox" aria-label="Gap Scanner and Movers">
   <div class="gb-h"><div class="gb-tabs" role="tablist">
-      <button class="gb-tab on" data-t="gaps" role="tab" data-tip="Markets priced on all three sites (Polymarket, Kalshi and Alpha Arcade) where the same question costs a different amount, after estimated fees. More gaps on the full Gap Scanner page. Checked every 20 minutes."><i class="ldot"></i>GAP SCANNER</button>
+      <button class="gb-tab on" data-t="gaps" role="tab" data-tip="The same question priced differently across Polymarket, Kalshi and Alpha Arcade, after estimated fees. Markets on all three sites come first. More gaps on the full Gap Scanner page. Checked every 20 minutes."><i class="ldot"></i>GAP SCANNER</button>
       <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news.">MOVERS</button>
 </div>
     <span class="gb-s"><span id="gb-sub">PRICE GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
@@ -964,9 +964,9 @@
   var TABS = {
     gaps: { file: 'gaps.json', sub: 'PRICE GAPS AFTER FEES',
       cols: '<span>MARKET</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>GAP</span><span></span>',
-      note: "Priced on all 3 sites · no sports · fees estimated · check each site's rules before you trade",
+      note: "All 3 sites first · no sports · fees estimated · check each site's rules before you trade",
       go: ['/gap-scanner.html', 'OPEN GAP SCANNER &rarr;'],
-      empty: 'No gap on all three sites right now. Prices are lined up across Polymarket, Kalshi and Alpha Arcade. Checked every 20 minutes.' },
+      empty: 'No gaps pass our filters right now. Prices are lined up across Polymarket, Kalshi and Alpha Arcade. Checked every 20 minutes.' },
     movers: { file: 'movers.json', sub: '24H MOVES',
       cols: '<span>MARKET</span><span>SITE</span><span>NOW</span><span>24H CHANGE</span><span>WHY?</span><span></span>',
       note: 'No sports · moves of 5¢+ with real trading · "Why?" opens a news search',
@@ -1028,9 +1028,10 @@
     shares = [];
     var list;
     if (t === 'gaps') {                                    // homepage: only gaps priced on all three sites (max 3), then a link to the rest
-      list = (d.gaps || []).filter(function (g) { return g.all3; }).slice(0, 3);
+      var g3 = (d.gaps || []).filter(function (g) { return g.all3; }), g2 = (d.gaps || []).filter(function (g) { return !g.all3; });
+      list = g3.concat(g2).slice(0, 3);                   // all-three-site gaps first; two-site gaps fill any empty row
       box.innerHTML = (list.length ? list.map(gapRow).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
-        '<a class="gb-more" href="/gap-scanner.html">+ More price gaps across the sites <span>OPEN GAP SCANNER &rarr;</span></a>';
+        '<a class="gb-more" href="/gap-scanner.html">Click here for more price gaps <span>OPEN GAP SCANNER &rarr;</span></a>';
       return;
     }
     list = (d.movers || []).slice(0, matchMedia('(max-width: 760px)').matches ? 5 : 4);
