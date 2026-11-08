@@ -1,8 +1,14 @@
 name: Update markets
 on:
   schedule:
-    - cron: "17 * * * *"
+    - cron: "17 * * * *"          # backup: GitHub runs these late or skips them when busy
+  push:
+    paths:
+      - alpha_live.json           # main trigger: the Chromebook bridge pushes this every hour
   workflow_dispatch:
+concurrency:
+  group: update-markets           # never two runs at once; a new one waits for the last
+  cancel-in-progress: false
 permissions:
   contents: write
 jobs:
