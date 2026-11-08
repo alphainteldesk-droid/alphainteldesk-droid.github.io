@@ -288,6 +288,13 @@
     color:#8fa3b8; font:800 .74cqw "JetBrains Mono",monospace; letter-spacing:.14em; padding:.18cqw .5cqw;
     border-radius:3px; cursor:pointer; white-space:nowrap; }
   .gb-tab:hover { color:#e8eef5; }
+  .gb-tab { position:relative; }
+  .gb-tab[data-tip]:hover::after { content:attr(data-tip); position:absolute; left:0; top:calc(100% + .4cqw); z-index:6;
+    width:17cqw; white-space:normal; text-align:left; text-shadow:none; letter-spacing:0; text-transform:none;
+    font:500 .68cqw/1.4 "Space Grotesk",sans-serif; color:#e8eef5; background:#0b1724;
+    border:1px solid rgba(63,219,230,.5); border-radius:4px; padding:.45cqw .6cqw; box-shadow:0 4px 14px rgba(0,0,0,.6);
+    pointer-events:none; }
+  @media (hover: none) { .gb-tab[data-tip]:hover::after { display:none; } }
   .gb-tab.on { color:var(--amber); border-color:rgba(255,179,71,.6); text-shadow:0 0 6px rgba(255,179,71,.6);
     background:rgba(255,179,71,.07); }
   .gb-sh { background:none; border:1px solid rgba(63,219,230,.35); color:var(--cyan); font:700 .7cqw/1 sans-serif;
@@ -433,9 +440,9 @@
 </div>
 <section class="gapbox" id="gapbox" aria-label="Gap Scanner, Movers and Calendar">
   <div class="gb-h"><div class="gb-tabs" role="tablist">
-      <button class="gb-tab on" data-t="gaps" role="tab"><i class="ldot"></i>GAP SCANNER</button>
-      <button class="gb-tab" data-t="movers" role="tab">MOVERS</button>
-      <button class="gb-tab" data-t="cal" role="tab">CALENDAR</button></div>
+      <button class="gb-tab on" data-t="gaps" role="tab" data-tip="The same question priced differently on Polymarket, Kalshi and Alpha Arcade, after estimated fees. Checked every hour."><i class="ldot"></i>GAP SCANNER</button>
+      <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news.">MOVERS</button>
+      <button class="gb-tab" data-t="cal" role="tab" data-tip="What could move markets next: upcoming reports like CPI, jobs and the Fed, plus markets that settle soon.">CALENDAR</button></div>
     <span class="gb-s"><span id="gb-sub">PRICE GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
   <div class="gb-cols" id="gb-cols"></div>
   <div id="gb-rows"><div class="gb-empty">Scanning Polymarket, Kalshi and Alpha Arcade&hellip;</div></div>

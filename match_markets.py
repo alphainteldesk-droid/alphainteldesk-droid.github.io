@@ -4,6 +4,7 @@
 #   SAME (90+)     same event, same outcome, end times line up  -> used for Gap Scanner math
 #   SIMILAR (70-89) probably the same event, something differs   -> shown with a badge, never gap math
 #   below 70        hidden
+# v5: dates written differently line up (December 31 = Before Jan 1, 2027); return = returns.
 # v4: also writes movers.json (biggest 24h price moves with real volume) and keeps alpha_hist.json.
 # v3: lines up 'Yes' markets with the matching deadline inside multi-deadline events.
 # v2: also pairs Polymarket with Kalshi directly (non-sports), so Kalshi shows even when Alpha has no market.
@@ -41,7 +42,7 @@ who of to a an in on at by be is it for and or de del la el los las le les u21 u
 ufc wta atp nba nfl nhl mlb ncaa ncaaf ncaab epl mls lal ser bun cs2 counter strike dota lol valorant
 esports bo1 bo3 bo5 2025 2026 2027 2028 jan feb mar apr may jun jul aug sep oct nov dec
 how high low get what when which much many more than above below before after end year this next new
-happen out again any does did do reach hit price yes no there between during until""".split())
+happen out again any does did do reach hit price yes no there between during until into become becomes""".split())
 # place/scope words: "in the US" and worldwide are different markets
 SCOPE = set("""us usa uk america american global worldwide world international europe european eu
 canada china india japan russia mexico brazil france germany state states federal national""".split())
@@ -165,6 +166,9 @@ def load_alpha():
             outs = {label: price(yes.get("yesProb"))}
         else:
             outs = {o.get("label") or "?": price(o.get("yesProb")) for o in opts}
+            live = {k: v for k, v in outs.items()
+                    if (label_date(k, end) or end) >= n.timestamp() - 2 * 86400}   # drop deadlines already passed
+            outs = live or outs
         out.append({"id": m.get("id"), "title": m.get("title") or "", "end": end, "outcomes": outs,
                     "volume": vol, "volume24h": float(m.get("twentyFourHrVolume") or 0),
                     "categories": (m.get("primaryCategories") or []) + (m.get("categories") or []),
@@ -205,7 +209,7 @@ def load_poly():
              "rules": ev.get("description") or "", "url": "https://polymarket.com/event/" + (ev.get("slug") or ""),
              "categories": [t.get("label") or "" for t in (ev.get("tags") or []) if isinstance(t, dict)]}
         for m in ev.get("markets") or []:
-            if m.get("closed"):
+            if m.get("closed") or m.get("acceptingOrders") is False:
                 continue
             try:
                 names = json.loads(m.get("outcomes") or "[]")
@@ -293,6 +297,51 @@ def by_deadline(real, ends, a_end):
     return ds[0][1] if ok and clear else None
 
 
+MONTHS = {m: i + 1 for i, m in enumerate("jan feb mar apr may jun jul aug sep oct nov dec".split())}
+
+
+def label_date(label, ref=None):
+    """'December 31' / 'Dec 31, 2026' / 'Before Jan 1, 2027' / 'Before 2027' / 'In 2026' -> timestamp, else None."""
+    t = (label or "").lower()
+    m = re.search(r"\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})(?:st|nd|rd|th)?(?:,?\s*(\d{4}))?", t)
+    if m:
+        mo, d = MONTHS[m.group(1)], int(m.group(2))
+        try:
+            if m.group(3):
+                dt = datetime(int(m.group(3)), mo, d, tzinfo=timezone.utc)
+            elif ref:                                # no year: the last time that date falls before the market ends
+                r = datetime.fromtimestamp(ref, timezone.utc)
+                dt = datetime(r.year, mo, d, tzinfo=timezone.utc)
+                if dt > r + timedelta(days=2):
+                    dt = datetime(r.year - 1, mo, d, tzinfo=timezone.utc)
+            else:                                    # no year: the next time that date comes round
+                dt = datetime(n.year, mo, d, tzinfo=timezone.utc)
+                if dt < n - timedelta(days=1):
+                    dt = datetime(n.year + 1, mo, d, tzinfo=timezone.utc)
+        except ValueError:
+            return None
+    else:
+        y = re.fullmatch(r"\s*(before|by|in|end of)?\s*(20\d\d)\s*", t)
+        if not y:
+            return None
+        dt = datetime(int(y.group(2)) + (y.group(1) == "before"), 1, 1, tzinfo=timezone.utc)
+        return dt.timestamp() - 86400                # Before 2027 / In 2026 = by Dec 31, 2026
+    if "before" in t:
+        dt -= timedelta(days=1)                      # Before Jan 1, 2027 = by Dec 31, 2026
+    return dt.timestamp()
+
+
+def by_date_label(label, outs, ends, a_end=0):
+    """Alpha option 'December 31' -> the other site's market for the same deadline."""
+    d = label_date(label, a_end or None)
+    if d is None:
+        return None
+    real = [k for k in outs if k.lower() != "no"]
+    when = {k: (ends or {}).get(k) or label_date(k) for k in real}
+    when = {k: v for k, v in when.items() if v}
+    return by_deadline(list(when), when, d)
+
+
 def map_outcome(label, outs, ends=None, a_end=0):
     """Which outcome on the other site is the same as this Alpha outcome?"""
     if label.lower() in ("draw", "tie"):
@@ -303,6 +352,9 @@ def map_outcome(label, outs, ends=None, a_end=0):
     if label.lower() == "yes":
         real = [k for k in outs if k.lower() != "no"]
         return real[0] if len(real) == 1 else by_deadline(real, ends, a_end)
+    k = by_date_label(label, outs, ends, a_end)
+    if k:
+        return k
     best, bs = None, (0.0, 0)
     for k in outs:
         kw = words(k)
@@ -334,10 +386,10 @@ def score(a, e):
             ew, en = set(key_words(t)), numbers(t)
             if not aw or not ew or (an and en and an != en):
                 continue                                        # different line or threshold
-            both = aw & ew
+            both = {w for w in aw if any(same_word(w, x) for x in ew)}
             if (aw ^ ew) & SCOPE:
                 continue                                        # one says "US", the other doesn't
-            j = len(both) / len(aw | ew)
+            j = len(both) / (len(aw) + len(ew) - len(both))
             if j >= 0.6 and len(both) >= min(2, len(aw)):
                 best_j = max(best_j, j)
         if not best_j:
