@@ -67,6 +67,8 @@
   .px.aa { border-color:var(--amber); background:rgba(255,179,71,.08); } .px.aa b { color:var(--amber); }
   .px.lo span { color:#3ee88a; } .px.hi span { color:#ff7a7a; }
   .px.none span { color:var(--muted); font-weight:500; font-size:.9rem; }
+  .px small { display:block; margin-top:2px; font-family:"JetBrains Mono",monospace; font-size:.62rem; color:var(--muted); line-height:1.35; }
+  .px small i { font-style:normal; color:#c4d2e0; }
   a.px:hover { text-decoration:none; border-color:var(--cyan); }
   .gp-math { margin-top:8px; font-family:"JetBrains Mono",monospace; font-size:.72rem; color:var(--muted); }
   .note { color:var(--muted); font-size:.86rem; }
@@ -116,6 +118,8 @@
   <p class="note">How to read it: <span style="color:#3ee88a">green</span> is the lowest price for that outcome,
     <span style="color:#ff7a7a">red</span> the highest. The gap is the difference in cents per $1 share, minus
     each site's estimated taker fee. Prices are midpoints, so the bid/ask spread can shrink a gap further.
+    Vol is the total traded on each site's market, 24h the last day (Polymarket and Alpha Arcade in dollars,
+    Kalshi in contracts). Low volume can mean a price is hard to trade at.
     Matches are automatic. Always check each site's rules before you trade.</p>
   <h2>How the scanner picks gaps</h2>
 
@@ -175,6 +179,13 @@
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var when = function (s) { return new Date(s).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); };
   var SITES = [['polymarket', 'POLYMARKET'], ['kalshi', 'KALSHI'], ['alpha', 'ALPHA ARCADE']];
+  var big = function (v) { v = +v || 0; return v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(1) + 'K' : String(Math.round(v)); };
+  function vol(g, s) {                                     // Kalshi reports contracts, the others dollars
+    var t = (g.volumes || {})[s], d = (g.volumes24 || {})[s];
+    if (t == null) return '';
+    var u = s === 'kalshi' ? function (v) { return big(v) + ' contracts'; } : function (v) { return '$' + big(v); };
+    return '<small>Vol <i>' + u(t) + '</i>' + (d != null ? '<br>24h <i>' + u(d) + '</i>' : '') + '</small>';
+  }
   fetch('gaps.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     document.getElementById('gr-updated').textContent = 'Last checked ' + when(d.updated);
     var b = document.getElementById('board');
@@ -188,7 +199,7 @@
         var p = g.prices[s[0]], u = (g.urls || {})[s[0]];
         var cls = 'px' + (s[0] === 'alpha' ? ' aa' : '') + (s[0] === g.low.site ? ' lo' : s[0] === g.high.site ? ' hi' : '') +
           (p == null ? ' none' : '');
-        var inner = '<b>' + s[1] + '</b><span>' + (p == null ? (u ? 'not compared' : 'not listed') : esc(p) + '¢') + '</span>';
+        var inner = '<b>' + s[1] + '</b><span>' + (p == null ? (u ? 'not compared' : 'not listed') : esc(p) + '¢') + '</span>' + vol(g, s[0]);
         return u ? '<a class="' + cls + '" href="' + esc(u) + '" target="_blank" rel="noopener">' + inner + '</a>'
                  : '<div class="' + cls + '">' + inner + '</div>';
       }).join('');

@@ -96,6 +96,7 @@ def gaps(matches, alpha_fresh):
                         "high": {"site": hi, "name": NAMES[hi], "price": ps[hi], "url": row["sites"][hi]["url"]},
                         "urls": {s: x["url"] for s, x in row["sites"].items()},
                         "volumes": {s: x.get("volume") for s, x in row["sites"].items()},
+                        "volumes24": {s: x.get("volume24h") for s, x in row["sites"].items()},
                         "raw": round(raw, 1), "fees": round(fees, 1), "net": round(net, 1),
                         "category": (row.get("categories") or ["Other"])[0]}
         if best:
