@@ -67,6 +67,9 @@
   .px.aa { border-color:var(--amber); background:rgba(255,179,71,.08); } .px.aa b { color:var(--amber); }
   .px.lo span { color:#3ee88a; } .px.hi span { color:#ff7a7a; }
   .px.none span { color:var(--muted); font-weight:500; font-size:.9rem; }
+  .gp-sec { display:flex; align-items:center; gap:10px; margin:22px 0 10px; font-size:1.15rem; }
+  .gp-sec span { background:var(--amber); color:#111; font:800 .7rem "JetBrains Mono",monospace; letter-spacing:.1em; padding:3px 7px; border-radius:3px; }
+  .gp.g3 { border-color:rgba(255,179,71,.55); box-shadow:0 0 16px rgba(255,179,71,.1); }
   .px small { display:block; margin-top:2px; font-family:"JetBrains Mono",monospace; font-size:.62rem; color:var(--muted); line-height:1.35; }
   .px small i { font-style:normal; color:#c4d2e0; }
   a.px:hover { text-decoration:none; border-color:var(--cyan); }
@@ -123,9 +126,9 @@
     Matches are automatic. Always check each site's rules before you trade.</p>
   <h2>How the scanner picks gaps</h2>
 
-  <div class="card"><h3>All three sites, true matches only</h3>
-    <p>A market only shows when it's listed and priced on all three sites: Polymarket, Kalshi and Alpha Arcade.
-      It has to match on every site: same event, same outcome, same end date and no rule warnings.
+  <div class="card"><h3>All three sites first, true matches only</h3>
+    <p>Gaps priced on all three sites (Polymarket, Kalshi and Alpha Arcade) are listed first. Below them come gaps
+      between two sites. Every market has to match: same event, same outcome, same end date and no rule warnings.
       "Similar" markets never count.</p></div>
   <div class="card"><h3>Real trading behind it</h3>
     <p>We skip markets with almost no trading, prices under 3¢ or over 97¢, markets about to close, and gaps
@@ -191,11 +194,16 @@
     document.getElementById('gr-updated').textContent = 'Last checked ' + when(d.updated);
     var b = document.getElementById('board');
     if (!d.gaps || !d.gaps.length) {
-      b.innerHTML = '<div class="gp"><div class="gp-t">No market listed on all three sites has a gap after fees right now.</div>' +
+      b.innerHTML = '<div class="gp"><div class="gp-t">No gaps pass our filters right now.</div>' +
         '<div class="gp-o">That happens when prices line up across Polymarket, Kalshi and Alpha Arcade. The scanner checks again every 20 minutes.</div></div>';
       return;
     }
+    var n3 = d.gaps.filter(function (g) { return g.all3; }).length;
     b.innerHTML = d.gaps.map(function (g, i) {
+      var head = '';                                       // section headings: all three sites, then two sites
+      if (i === 0 && n3) head = '<h2 class="gp-sec"><span>ALL 3</span>On all three sites</h2>';
+      if (i === n3) head = '<h2 class="gp-sec">' + (n3 ? 'More price gaps (2 sites)' : 'Price gaps (2 sites)') + '</h2>' +
+        (n3 ? '' : '<p class="note">No market priced on all three sites has a gap after fees right now.</p>');
       var px = SITES.map(function (s) {
         var p = g.prices[s[0]], u = (g.urls || {})[s[0]];
         var cls = 'px' + (s[0] === 'alpha' ? ' aa' : '') + (s[0] === g.low.site ? ' lo' : s[0] === g.high.site ? ' hi' : '') +
@@ -204,7 +212,7 @@
         return u ? '<a class="' + cls + '" href="' + esc(u) + '" target="_blank" rel="noopener">' + inner + '</a>'
                  : '<div class="' + cls + '">' + inner + '</div>';
       }).join('');
-      return '<div class="gp"><div class="gp-top"><div><div class="gp-t">' + (i + 1) + '. ' + esc(g.title) + '</div>' +
+      return head + '<div class="gp' + (g.all3 ? ' g3' : '') + '"><div class="gp-top"><div><div class="gp-t">' + (i + 1) + '. ' + esc(g.title) + '</div>' +
         '<div class="gp-o">' + esc(g.outcome) + ' · ' + esc(g.category) + ' · closes ' + esc(when(g.close)) + '</div></div>' +
         '<div class="gp-net">' + esc(g.net.toFixed(1)) + '¢<small>GAP AFTER FEES</small></div></div>' +
         '<div class="gp-px">' + px + '</div>' +

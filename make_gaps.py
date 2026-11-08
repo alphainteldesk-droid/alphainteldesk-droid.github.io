@@ -1,6 +1,6 @@
 # Alpha Intel Desk: Gap Scanner + Catalyst Calendar data.
 # Reads matches.json (from match_markets.py) and catalysts.json (hand-kept list of scheduled events).
-# Writes gaps.json  (top 10 price gaps after estimated fees, no sports, strict filters, priced on all 3 sites)
+# Writes gaps.json  (price gaps after estimated fees, no sports, strict filters: all-3-site gaps first, then top 10 two-site)
 #    and calendar.json (next scheduled catalysts + big non-sports markets resolving soon).
 # Wording rule: "price gap after fees" - never "guaranteed" or "arbitrage", no trade instructions.
 import json
@@ -21,7 +21,8 @@ MIN_VOLUME = {"alpha": 50, "polymarket": 5000, "kalshi": 500}   # $ / $ / contra
 MIN_HOURS_LEFT = 2                    # markets about to close move too fast to compare
 TOP = 10
 MIN_ALPHA_ROWS = 4                    # Alpha Arcade is our edge: keep at least this many Alpha rows in the top 10
-ALL_THREE = True                      # James, Nov 8: the Gap Scanner only shows outcomes priced on ALL THREE sites
+# James, Nov 8: gaps priced on ALL THREE sites come first (tagged all3); two-site gaps fill in after them,
+# so the homepage box is always full and the full page shows "On all 3 sites" then "More price gaps (2 sites)".
 
 SPORT_TAGS = ("sport", "esports", "soccer", "football", "nfl", "nba", "mls", "nhl", "mlb", "ufc",
               "tennis", "f1", "golf", "league", "copa", "serie", "efl", "counter-strike")
@@ -79,7 +80,7 @@ def gaps(matches, alpha_fresh):
                     table.setdefault(o, {})[site] = p
         best = None
         for o, ps in table.items():
-            if len(ps) < (3 if ALL_THREE else 2):
+            if len(ps) < 2:
                 continue
             lo = min(ps, key=ps.get)
             hi = max(ps, key=ps.get)
@@ -90,7 +91,8 @@ def gaps(matches, alpha_fresh):
                 continue                               # long shot on one site, not on the other: thin book
             fees = fee_pts(fee_rate(lo, row), ps[lo]) + fee_pts(fee_rate(hi, row), ps[hi])
             net = raw - fees
-            if net >= MIN_NET_GAP and (best is None or net > best["net"]):
+            three = len(ps) == 3
+            if net >= MIN_NET_GAP and (best is None or (three, net) > (best["all3"], best["net"])):
                 best = {"title": row["title"], "outcome": o, "close": row["close"],
                         "prices": {s: ps.get(s) for s in ("polymarket", "kalshi", "alpha")},
                         "low": {"site": lo, "name": NAMES[lo], "price": ps[lo], "url": row["sites"][lo]["url"]},
@@ -98,16 +100,18 @@ def gaps(matches, alpha_fresh):
                         "urls": {s: x["url"] for s, x in row["sites"].items()},
                         "volumes": {s: x.get("volume") for s, x in row["sites"].items()},
                         "volumes24": {s: x.get("volume24h") for s, x in row["sites"].items()},
-                        "raw": round(raw, 1), "fees": round(fees, 1), "net": round(net, 1),
+                        "raw": round(raw, 1), "fees": round(fees, 1), "net": round(net, 1), "all3": three,
                         "category": (row.get("categories") or ["Other"])[0]}
         if best:
             out.append(best)
     out.sort(key=lambda g: -g["net"])
-    has_a = [g for g in out if g["prices"].get("alpha") is not None]
+    three = [g for g in out if g["all3"]]              # every all-three-sites gap, always shown first
+    rest = [g for g in out if not g["all3"]]
+    has_a = [g for g in rest if g["prices"].get("alpha") is not None]
     keep = has_a[:MIN_ALPHA_ROWS]
-    keep += [g for g in out if g not in keep][:TOP - len(keep)]
+    keep += [g for g in rest if g not in keep][:TOP - len(keep)]
     keep.sort(key=lambda g: -g["net"])
-    return keep
+    return three + keep
 
 
 def calendar(matches):
