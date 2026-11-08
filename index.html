@@ -451,6 +451,10 @@
   .gb-m { min-width:0; } .gb-m b { display:block; font-weight:700; font-size:1.1cqw; color:#fff;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .gb-m i { font-style:normal; font-size:.84cqw; color:#a9bccf; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+  .gb-more { display:flex; justify-content:space-between; align-items:center; gap:.6cqw; padding:.35cqw .5cqw; margin-top:.15cqw;
+    border:1px dashed rgba(63,219,230,.4); border-radius:3px; color:var(--cyan); font:700 .82cqw "JetBrains Mono",monospace; letter-spacing:.04em; text-decoration:none; }
+  .gb-more span { color:var(--amber); font-size:.72cqw; letter-spacing:.1em; }
+  .gb-more:hover { background:rgba(63,219,230,.1); text-decoration:none; }
   .gb-3 { display:inline-block; margin-right:.4cqw; padding:.05cqw .3cqw; border-radius:2px; vertical-align:.12cqw;
     background:var(--amber); color:#111; font:800 .6cqw "JetBrains Mono",monospace; letter-spacing:.08em; }
   .gb-p { text-align:center; font:700 1.08cqw "JetBrains Mono",monospace; color:#e8eef5; }
@@ -469,6 +473,7 @@
     .gb-tab { font-size:13px; padding:5px 9px; letter-spacing:.08em; } .gb-sh { font-size:12px; padding:4px 0; }
     .gb-why, .gb-d { font-size:9px; padding:3px 0; } .gb-s { text-align:left; white-space:normal; font-size:9px; }
     .gb-cols { font-size:8px; } .gb-m b { font-size:12.5px; } .gb-m i { font-size:10.5px; }
+    .gb-more { font-size:11px; padding:8px; } .gb-more span { font-size:9.5px; white-space:nowrap; }
     .gb-p { font-size:12px; } .gb-3 { font-size:8px; padding:1px 3px; margin-right:4px; vertical-align:1px; } .gb-g { font-size:12px; } .gb-empty { font-size:12px; }
     .gb-f { font-size:9.5px; flex-direction:column; align-items:flex-start; } .gb-go { font-size:10px; padding:5px 8px; }
     .ldot { width:7px; height:7px; } .gb-r { padding:6px 0; }
@@ -594,7 +599,7 @@
 </div>
 <section class="gapbox" id="gapbox" aria-label="Gap Scanner and Movers">
   <div class="gb-h"><div class="gb-tabs" role="tablist">
-      <button class="gb-tab on" data-t="gaps" role="tab" data-tip="The same question priced differently across Polymarket, Kalshi and Alpha Arcade, after estimated fees. ALL 3 = priced on all three sites (shown first). Checked every 20 minutes."><i class="ldot"></i>GAP SCANNER</button>
+      <button class="gb-tab on" data-t="gaps" role="tab" data-tip="Markets priced on all three sites (Polymarket, Kalshi and Alpha Arcade) where the same question costs a different amount, after estimated fees. More gaps on the full Gap Scanner page. Checked every 20 minutes."><i class="ldot"></i>GAP SCANNER</button>
       <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news.">MOVERS</button>
 </div>
     <span class="gb-s"><span id="gb-sub">PRICE GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
@@ -959,9 +964,9 @@
   var TABS = {
     gaps: { file: 'gaps.json', sub: 'PRICE GAPS AFTER FEES',
       cols: '<span>MARKET</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>GAP</span><span></span>',
-      note: "ALL 3 = on all three sites · no sports · fees estimated · check each site's rules before you trade",
+      note: "Priced on all 3 sites · no sports · fees estimated · check each site's rules before you trade",
       go: ['/gap-scanner.html', 'OPEN GAP SCANNER &rarr;'],
-      empty: 'No gaps pass our filters right now. Prices are lined up across Polymarket, Kalshi and Alpha Arcade. The scanner checks again every 20 minutes.' },
+      empty: 'No gap on all three sites right now. Prices are lined up across Polymarket, Kalshi and Alpha Arcade. Checked every 20 minutes.' },
     movers: { file: 'movers.json', sub: '24H MOVES',
       cols: '<span>MARKET</span><span>SITE</span><span>NOW</span><span>24H CHANGE</span><span>WHY?</span><span></span>',
       note: 'No sports · moves of 5¢+ with real trading · "Why?" opens a news search',
@@ -989,7 +994,7 @@
     var txt = 'Price gap after est. fees: ' + x.net.toFixed(1) + '¢ on "' + x.title + '" (' + x.outcome + '): ' +
       x.low.name + ' ' + Math.round(x.low.price) + '¢ vs ' + x.high.name + ' ' + Math.round(x.high.price) +
       '¢. Check each site\'s rules. via @alphainteldesk';
-    return '<div class="gb-r"><a class="gb-m" href="/gap-scanner.html"><b>' + (x.all3 ? '<span class="gb-3">ALL 3</span>' : '') + esc(x.title) + '</b><i>' + esc(sub) + '</i></a>' +
+    return '<div class="gb-r"><a class="gb-m" href="/gap-scanner.html"><b>' + esc(x.title) + '</b><i>' + esc(sub) + '</i></a>' +
       cell('polymarket') + cell('kalshi') + cell('alpha') +
       '<span class="gb-g">' + esc(x.net.toFixed(1)) + '&cent;</span>' + shareBtn(txt, SITE + 'gap-scanner.html') + '</div>';
   }
@@ -1016,14 +1021,20 @@
     document.getElementById('gb-note').textContent = T.note;
     var go = document.getElementById('gb-go');
     go.href = T.go[0]; go.innerHTML = T.go[1];
+    go.style.display = t === 'gaps' ? 'none' : '';          // the gaps tab has its own "more gaps" link row
     var box = document.getElementById('gb-rows');
     if (!d) { box.innerHTML = '<div class="gb-empty">Loading&hellip;</div>'; return; }
     document.getElementById('gb-upd').textContent = hm(d.updated).toUpperCase();
     shares = [];
-    var list = t === 'gaps' ? d.gaps : d.movers;
-    list = (list || []).slice(0, matchMedia('(max-width: 760px)').matches ? 5 : 4);
-    box.innerHTML = list.length ? list.map(t === 'gaps' ? gapRow : moverRow).join('')
-      : '<div class="gb-empty">' + T.empty + '</div>';
+    var list;
+    if (t === 'gaps') {                                    // homepage: only gaps priced on all three sites (max 3), then a link to the rest
+      list = (d.gaps || []).filter(function (g) { return g.all3; }).slice(0, 3);
+      box.innerHTML = (list.length ? list.map(gapRow).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
+        '<a class="gb-more" href="/gap-scanner.html">+ More price gaps across the sites <span>OPEN GAP SCANNER &rarr;</span></a>';
+      return;
+    }
+    list = (d.movers || []).slice(0, matchMedia('(max-width: 760px)').matches ? 5 : 4);
+    box.innerHTML = list.length ? list.map(moverRow).join('') : '<div class="gb-empty">' + T.empty + '</div>';
   }
   var cur = location.hash === '#movers' ? 'movers' : 'gaps';
   function load() {                                        // first load, then fresh data every 5 minutes (no page reload)
