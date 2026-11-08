@@ -1,6 +1,6 @@
 # Alpha Intel Desk: Gap Scanner + Catalyst Calendar data.
 # Reads matches.json (from match_markets.py) and catalysts.json (hand-kept list of scheduled events).
-# Writes gaps.json  (top 10 price gaps after estimated fees, no sports, strict filters)
+# Writes gaps.json  (top 10 price gaps after estimated fees, no sports, strict filters, priced on all 3 sites)
 #    and calendar.json (next scheduled catalysts + big non-sports markets resolving soon).
 # Wording rule: "price gap after fees" - never "guaranteed" or "arbitrage", no trade instructions.
 import json
@@ -21,6 +21,7 @@ MIN_VOLUME = {"alpha": 50, "polymarket": 5000, "kalshi": 500}   # $ / $ / contra
 MIN_HOURS_LEFT = 2                    # markets about to close move too fast to compare
 TOP = 10
 MIN_ALPHA_ROWS = 4                    # Alpha Arcade is our edge: keep at least this many Alpha rows in the top 10
+ALL_THREE = True                      # James, Nov 8: the Gap Scanner only shows outcomes priced on ALL THREE sites
 
 SPORT_TAGS = ("sport", "esports", "soccer", "football", "nfl", "nba", "mls", "nhl", "mlb", "ufc",
               "tennis", "f1", "golf", "league", "copa", "serie", "efl", "counter-strike")
@@ -78,7 +79,7 @@ def gaps(matches, alpha_fresh):
                     table.setdefault(o, {})[site] = p
         best = None
         for o, ps in table.items():
-            if len(ps) < 2:
+            if len(ps) < (3 if ALL_THREE else 2):
                 continue
             lo = min(ps, key=ps.get)
             hi = max(ps, key=ps.get)

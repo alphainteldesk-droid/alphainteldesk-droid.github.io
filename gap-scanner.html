@@ -123,8 +123,9 @@
     Matches are automatic. Always check each site's rules before you trade.</p>
   <h2>How the scanner picks gaps</h2>
 
-  <div class="card"><h3>Only true matches</h3>
-    <p>Each market has to match on every site: same event, same outcome, same end date and no rule warnings.
+  <div class="card"><h3>All three sites, true matches only</h3>
+    <p>A market only shows when it's listed and priced on all three sites: Polymarket, Kalshi and Alpha Arcade.
+      It has to match on every site: same event, same outcome, same end date and no rule warnings.
       "Similar" markets never count.</p></div>
   <div class="card"><h3>Real trading behind it</h3>
     <p>We skip markets with almost no trading, prices under 3¢ or over 97¢, markets about to close, and gaps
@@ -137,7 +138,7 @@
   <div class="card"><h3>Rules checked</h3>
     <p>Two markets can look identical but settle differently, with a different deadline or data source.
       Those are left out, so a rules difference isn't mistaken for a real gap.</p></div>
-  <div class="card"><h3>Checked every hour</h3>
+  <div class="card"><h3>Checked every 20 minutes</h3>
     <p>Every gap shows when it was last checked. Prices move fast, and gaps can close at any time.</p></div>
 
   <h2>What is prediction market arbitrage?</h2>
@@ -190,8 +191,8 @@
     document.getElementById('gr-updated').textContent = 'Last checked ' + when(d.updated);
     var b = document.getElementById('board');
     if (!d.gaps || !d.gaps.length) {
-      b.innerHTML = '<div class="gp"><div class="gp-t">No gaps pass our filters right now.</div>' +
-        '<div class="gp-o">That happens when prices line up across sites. The scanner checks again every hour.</div></div>';
+      b.innerHTML = '<div class="gp"><div class="gp-t">No market listed on all three sites has a gap after fees right now.</div>' +
+        '<div class="gp-o">That happens when prices line up across Polymarket, Kalshi and Alpha Arcade. The scanner checks again every 20 minutes.</div></div>';
       return;
     }
     b.innerHTML = d.gaps.map(function (g, i) {

@@ -592,7 +592,7 @@
 </div>
 <section class="gapbox" id="gapbox" aria-label="Gap Scanner and Movers">
   <div class="gb-h"><div class="gb-tabs" role="tablist">
-      <button class="gb-tab on" data-t="gaps" role="tab" data-tip="The same question priced differently on Polymarket, Kalshi and Alpha Arcade, after estimated fees. Checked every hour."><i class="ldot"></i>GAP SCANNER</button>
+      <button class="gb-tab on" data-t="gaps" role="tab" data-tip="Markets listed on all three sites (Polymarket, Kalshi and Alpha Arcade) where the same question is priced differently, after estimated fees. Checked every 20 minutes."><i class="ldot"></i>GAP SCANNER</button>
       <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news.">MOVERS</button>
 </div>
     <span class="gb-s"><span id="gb-sub">PRICE GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
@@ -957,14 +957,14 @@
   var TABS = {
     gaps: { file: 'gaps.json', sub: 'PRICE GAPS AFTER FEES',
       cols: '<span>MARKET</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>GAP</span><span></span>',
-      note: "No sports · fees estimated · check each site's rules before you trade",
+      note: "Listed on all 3 sites · no sports · fees estimated · check each site's rules before you trade",
       go: ['/gap-scanner.html', 'OPEN GAP SCANNER &rarr;'],
-      empty: 'No gaps pass our filters right now. Prices are lined up across Polymarket, Kalshi and Alpha Arcade. The scanner checks again every hour.' },
+      empty: 'No market listed on all three sites has a gap after fees right now. Prices are lined up across Polymarket, Kalshi and Alpha Arcade. The scanner checks again every 20 minutes.' },
     movers: { file: 'movers.json', sub: '24H MOVES',
       cols: '<span>MARKET</span><span>SITE</span><span>NOW</span><span>24H CHANGE</span><span>WHY?</span><span></span>',
       note: 'No sports · moves of 5¢+ with real trading · "Why?" opens a news search',
       go: ['#calendar', '2-WEEK CALENDAR &darr;'],
-      empty: 'No big moves with real volume in the last 24 hours. Checked every hour.' }
+      empty: 'No big moves with real volume in the last 24 hours. Checked every 20 minutes.' }
   };
   function share(i) {
     var s = shares[i]; if (!s) return;
