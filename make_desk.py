@@ -2,7 +2,7 @@
 # Markets (delayed quotes), oil, DXY, 10-year, VIX, crypto, Google Trends (US + UK)
 # and Conflict Radar (world conflict headlines from Google News, tagged by region).
 # Public data only. Runs every hour from the Update markets workflow.
-import json, re, urllib.request
+import json, re, urllib.parse, urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 
@@ -59,6 +59,25 @@ CONFLICT_WORDS = ("war", "military", "troops", "missile", "strike", "drone", "ce
 NOT_CONFLICT = ("nfl", "nba", "mlb", "nhl", "game", "season", "coach", "box office", "movie", "trailer",
                 "video game", "star wars", "price war", "culture war", "bidding war", "recipe", "stock",
                 "holy war", "rivalry", "podcast", "lifestyle", "fashion", "album", "byu", "playoff", "tournament")
+# Paywalled outlets: their links make visitors pay, so the radar only shows free-to-read sources.
+PAYWALLED = ("wsj.com", "washingtonpost.com", "nytimes.com", "bloomberg.com", "ft.com", "economist.com",
+             "theatlantic.com", "barrons.com", "thetimes.co.uk", "thetimes.com", "telegraph.co.uk", "haaretz.com",
+             "newyorker.com", "foreignaffairs.com", "foreignpolicy.com", "businessinsider.com", "theinformation.com",
+             "latimes.com", "bostonglobe.com", "wired.com", "spectator.co.uk", "asia.nikkei.com", "scmp.com",
+             "japantimes.co.jp", "seekingalpha.com", "marketwatch.com", "thetimes.co.uk", "newstatesman.com",
+             "nationalreview.com", "thediplomat.com", "stratfor.com", "janes.com")
+PAYWALLED_NAMES = ("wsj", "wall street journal", "washington post", "new york times", "nytimes", "bloomberg",
+                   "financial times", "the economist", "the atlantic", "barron", "the times", "telegraph",
+                   "haaretz", "new yorker", "foreign affairs", "foreign policy", "business insider",
+                   "the information", "los angeles times", "boston globe", "wired", "the spectator",
+                   "nikkei", "south china morning post", "japan times", "seeking alpha", "marketwatch")
+
+
+def paywalled(domain, name):
+    d, nm = (domain or "").lower(), (name or "").lower().strip()
+    return any(d == p or d.endswith("." + p) for p in PAYWALLED) or any(nm == p or nm.startswith(p) for p in PAYWALLED_NAMES)
+
+
 REGIONS = [  # first match wins
     ("MDE", "israel gaza hamas hezbollah lebanon iran iraq syria yemen houthi saudi qatar jordan red sea "
             "west bank tehran tel aviv iranian israeli palestinian lebanese syrian yemeni iraqi saudi"),
@@ -74,7 +93,8 @@ REGIONS = [  # first match wins
 
 
 def conflict(n=12):
-    url = ("https://news.google.com/rss/search?q=" + urllib.request.quote(CONFLICT_Q) +
+    q = CONFLICT_Q + "".join(" -site:" + s for s in ("wsj.com", "washingtonpost.com", "nytimes.com", "bloomberg.com", "ft.com"))
+    url = ("https://news.google.com/rss/search?q=" + urllib.request.quote(q) +
            "&hl=en-US&gl=US&ceid=US:en")
     root = ET.fromstring(get(url, raw=True))
     out, seen = [], []
@@ -82,6 +102,12 @@ def conflict(n=12):
         full = (i.findtext("title") or "").strip()
         title, _, source = full.rpartition(" - ")
         title = title or full
+        src = i.find("source")
+        domain = urllib.parse.urlparse(src.get("url") or "").netloc if src is not None else ""
+        if src is not None and (src.text or "").strip():
+            source = src.text
+        if paywalled(domain, source):
+            continue                                     # skip paywalled outlets: links must be free to read
         low = " " + title.lower() + " "
         if not any(w in low for w in CONFLICT_WORDS) or any(w in low for w in NOT_CONFLICT):
             continue
