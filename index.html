@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://alphainteldesk.com/banner.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@alphainteldesk">
-<link rel="preload" as="image" href="banner.jpg?v=2">
+<link rel="preload" as="image" href="banner.jpg?v=4">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -155,7 +155,7 @@
   }
   /* ===== Live Intel Desk ===== */
   .desk { position:relative; width:100%; aspect-ratio:3/1; overflow:hidden;
-    background:#0b1420 url(banner.jpg?v=2) center/cover no-repeat; }
+    background:#0b1420 url(banner.jpg?v=4) center/cover no-repeat; }
   .glass { position:absolute; left:0; top:0; transform-origin:0 0;
     padding:5px 8px; border-radius:3px;
     background:rgba(5,11,20,.92); border:1px solid rgba(63,219,230,.55);
@@ -212,6 +212,14 @@
     color:var(--navy); background:var(--cyan); font-size:8px; line-height:1; letter-spacing:.06em;
     padding:2px 3px; border-radius:2px; margin-right:6px; vertical-align:1px; text-shadow:none; }
 
+  /* "MONEY NEVER SLEEPS" (live text, was part of the photo) */
+  .tagline, .rt { position:absolute; left:21.3%; transform:translateX(-50%); margin:0; white-space:nowrap;
+    font-family:"Space Grotesk",sans-serif; text-shadow:0 1px 3px rgba(0,0,0,.6); }
+  .tagline { top:26.6%; font-size:max(8px,1.62cqw); font-weight:500; color:#eef2f7; line-height:1.2; }
+  .rt { top:33.9%; font-size:max(6px,1.18cqw); font-weight:400; color:#b6c1c7; line-height:1.2; }
+  .mns { position:absolute; left:21.2%; top:40.6%; transform:translateX(-50%); white-space:nowrap;
+    font:700 max(7px,1.22cqw) "JetBrains Mono",monospace; letter-spacing:.42em; padding-left:.42em;
+    color:var(--amber); text-shadow:0 0 8px rgba(255,179,71,.45); }
   /* "THE DESK IS OPEN" neon sign */
   .desk { container-type:inline-size; }
   .sign { position:absolute; left:21.2%; top:3.2%; transform:translateX(-50%);
@@ -274,57 +282,57 @@
   .chg { font-size:9px; font-weight:700; }
   /* Gap Scanner panel in the space under MONEY NEVER SLEEPS */
   .deskwrap { position:relative; container-type:inline-size; }
-  .gapbox { position:absolute; left:.7%; top:55.6%; width:41.6%; height:43.9%; box-sizing:border-box; overflow:hidden;
+  .gapbox { position:absolute; left:.7%; top:46.4%; width:41.6%; height:53%; box-sizing:border-box; overflow:hidden;
     display:flex; flex-direction:column; padding:.55cqw .85cqw; border-radius:5px;
     background:rgba(5,12,20,.9); border:1px solid rgba(255,179,71,.5);
     box-shadow:0 0 22px rgba(255,179,71,.12), inset 0 0 22px rgba(63,219,230,.05);
-    color:#e8eef5; font:500 .88cqw/1.3 "Space Grotesk",sans-serif; z-index:2; }
+    color:#e8eef5; font:500 1cqw/1.3 "Space Grotesk",sans-serif; z-index:2; }
   .gb-h { display:flex; justify-content:space-between; align-items:center; margin-bottom:.35cqw; }
   .gb-t { display:flex; align-items:center; gap:.4cqw; font:800 .8cqw "JetBrains Mono",monospace;
     letter-spacing:.16em; color:var(--amber); text-shadow:0 0 6px rgba(255,179,71,.6); }
-  .gb-s { font:500 .6cqw "JetBrains Mono",monospace; letter-spacing:.1em; color:#a9bccf; text-align:right; }
+  .gb-s { font:500 .68cqw "JetBrains Mono",monospace; letter-spacing:.1em; color:#a9bccf; text-align:right; }
   .gb-tabs { display:flex; gap:.3cqw; }
   .gb-tab { display:flex; align-items:center; gap:.35cqw; background:none; border:1px solid rgba(143,163,184,.25);
-    color:#8fa3b8; font:800 .74cqw "JetBrains Mono",monospace; letter-spacing:.14em; padding:.18cqw .5cqw;
+    color:#8fa3b8; font:800 .84cqw "JetBrains Mono",monospace; letter-spacing:.14em; padding:.2cqw .55cqw;
     border-radius:3px; cursor:pointer; white-space:nowrap; }
   .gb-tab:hover { color:#e8eef5; }
   .gb-tab { position:relative; }
   .gb-tab[data-tip]:hover::after { content:attr(data-tip); position:absolute; left:0; top:calc(100% + .4cqw); z-index:6;
-    width:17cqw; white-space:normal; text-align:left; text-shadow:none; letter-spacing:0; text-transform:none;
-    font:500 .68cqw/1.4 "Space Grotesk",sans-serif; color:#e8eef5; background:#0b1724;
+    width:19cqw; white-space:normal; text-align:left; text-shadow:none; letter-spacing:0; text-transform:none;
+    font:500 .8cqw/1.4 "Space Grotesk",sans-serif; color:#e8eef5; background:#0b1724;
     border:1px solid rgba(63,219,230,.5); border-radius:4px; padding:.45cqw .6cqw; box-shadow:0 4px 14px rgba(0,0,0,.6);
     pointer-events:none; }
   @media (hover: none) { .gb-tab[data-tip]:hover::after { display:none; } }
   .gb-tab.on { color:var(--amber); border-color:rgba(255,179,71,.6); text-shadow:0 0 6px rgba(255,179,71,.6);
     background:rgba(255,179,71,.07); }
-  .gb-sh { background:none; border:1px solid rgba(63,219,230,.35); color:var(--cyan); font:700 .7cqw/1 sans-serif;
+  .gb-sh { background:none; border:1px solid rgba(63,219,230,.35); color:var(--cyan); font:700 .82cqw/1 sans-serif;
     border-radius:3px; cursor:pointer; padding:.18cqw 0; }
   .gb-sh:hover { background:rgba(63,219,230,.15); }
-  .gb-why { text-align:center; font:700 .6cqw "JetBrains Mono",monospace; color:var(--cyan); text-decoration:none;
+  .gb-why { text-align:center; font:700 .7cqw "JetBrains Mono",monospace; color:var(--cyan); text-decoration:none;
     border:1px solid rgba(63,219,230,.45); border-radius:3px; padding:.14cqw 0; }
   .gb-why:hover { background:rgba(63,219,230,.15); text-decoration:none; }
-  .gb-d { text-align:center; font:600 .6cqw "JetBrains Mono",monospace; color:#a9bccf; }
+  .gb-d { text-align:center; font:600 .7cqw "JetBrains Mono",monospace; color:#a9bccf; }
   a.gb-m { color:inherit; text-decoration:none; } a.gb-m:hover b { text-decoration:underline; }
   .ldot { width:.45cqw; height:.45cqw; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px var(--cyan);
     display:inline-block; animation:blink 1.4s infinite; }
-  .gb-cols, .gb-r { display:grid; grid-template-columns:1fr 3.7cqw 3.7cqw 3.7cqw 4cqw 1.6cqw; gap:.4cqw; align-items:center; }
-  .gb-cols { font:600 .58cqw "JetBrains Mono",monospace; letter-spacing:.08em; color:#8fa3b8;
+  .gb-cols, .gb-r { display:grid; grid-template-columns:1fr 4.1cqw 4.1cqw 4.1cqw 4.5cqw 1.8cqw; gap:.4cqw; align-items:center; }
+  .gb-cols { font:600 .68cqw "JetBrains Mono",monospace; letter-spacing:.08em; color:#8fa3b8;
     padding-bottom:.2cqw; border-bottom:1px solid rgba(63,219,230,.2); }
   .gb-cols span:not(:first-child) { text-align:center; } .gb-cols .a { color:var(--amber); }
   #gb-rows { flex:1; display:flex; flex-direction:column; justify-content:space-around; }
   .gb-r { padding:.08cqw 0; line-height:1.22; border-bottom:1px solid rgba(255,255,255,.05); color:inherit; text-decoration:none; }
   .gb-r:hover { background:rgba(63,219,230,.06); }
-  .gb-m { min-width:0; } .gb-m b { display:block; font-weight:700; font-size:.86cqw; color:#fff;
+  .gb-m { min-width:0; } .gb-m b { display:block; font-weight:700; font-size:1.1cqw; color:#fff;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .gb-m i { font-style:normal; font-size:.66cqw; color:#a9bccf; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
-  .gb-p { text-align:center; font:700 .84cqw "JetBrains Mono",monospace; color:#e8eef5; }
+  .gb-m i { font-style:normal; font-size:.84cqw; color:#a9bccf; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+  .gb-p { text-align:center; font:700 1.08cqw "JetBrains Mono",monospace; color:#e8eef5; }
   .gb-p.a { color:var(--amber); } .gb-p.lo { color:#3ee88a; } .gb-p.hi { color:#ff7a7a; } .gb-p.na { color:#56687c; font-weight:500; }
-  .gb-g { text-align:center; font:800 .9cqw "JetBrains Mono",monospace; color:#111; background:var(--amber);
+  .gb-g { text-align:center; font:800 1.12cqw "JetBrains Mono",monospace; color:#111; background:var(--amber);
     border-radius:3px; padding:.12cqw 0; }
-  .gb-empty { color:#a9bccf; font-size:.82cqw; }
+  .gb-empty { color:#a9bccf; font-size:.95cqw; }
   .gb-f { display:flex; justify-content:space-between; align-items:center; gap:.6cqw; margin-top:.25cqw;
-    font-size:.58cqw; color:#8fa3b8; }
-  .gb-go { flex:none; background:var(--amber); color:#111; font:800 .62cqw "JetBrains Mono",monospace;
+    font-size:.68cqw; color:#8fa3b8; }
+  .gb-go { flex:none; background:var(--amber); color:#111; font:800 .72cqw "JetBrains Mono",monospace;
     letter-spacing:.1em; padding:.25cqw .5cqw; border-radius:2px; text-decoration:none; }
   .gb-go:hover { background:#ffc670; text-decoration:none; }
   @media (max-width: 760px) {
@@ -388,6 +396,9 @@
 <div class="deskwrap">
 <div class="desk" id="desk" role="img" aria-label="Alpha Intel Desk: a trading desk at sunrise with live market screens on the windows">
   <div class="sign">THE DESK IS OPEN</div>
+  <p class="tagline">The only edge you need.</p>
+  <p class="rt">Real-time intelligence for prediction markets.</p>
+  <div class="mns">MONEY NEVER SLEEPS</div>
   <div class="radar" aria-hidden="true"><svg viewBox="-100 -100 200 200">
     <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#3fdbe6" stop-opacity="0"/><stop offset="1" stop-color="#3fdbe6" stop-opacity=".55"/></linearGradient></defs>
