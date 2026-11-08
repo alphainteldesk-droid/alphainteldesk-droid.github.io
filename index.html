@@ -290,7 +290,8 @@
   .gb-h { display:flex; justify-content:space-between; align-items:center; margin-bottom:.35cqw; }
   .gb-t { display:flex; align-items:center; gap:.4cqw; font:800 .8cqw "JetBrains Mono",monospace;
     letter-spacing:.16em; color:var(--amber); text-shadow:0 0 6px rgba(255,179,71,.6); }
-  .gb-s { font:500 .68cqw "JetBrains Mono",monospace; letter-spacing:.1em; color:#a9bccf; text-align:right; }
+  .gb-s { font:700 .74cqw "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--amber); text-align:right; white-space:nowrap;
+    text-shadow:0 0 6px rgba(255,179,71,.35); }
   .gb-tabs { display:flex; gap:.3cqw; }
   .gb-tab { display:flex; align-items:center; gap:.35cqw; background:none; border:1px solid rgba(143,163,184,.25);
     color:#8fa3b8; font:800 .84cqw "JetBrains Mono",monospace; letter-spacing:.14em; padding:.2cqw .55cqw;
@@ -339,7 +340,7 @@
     .gapbox { position:static; width:auto; height:auto; margin:10px; padding:12px; font-size:13px; }
     .gb-h { flex-wrap:wrap; gap:4px; } .gb-t { font-size:12px; white-space:nowrap; } .gb-s { font-size:8px; } .gb-cols, .gb-r { grid-template-columns:1fr 38px 38px 38px 44px 24px; gap:5px; }
     .gb-tab { font-size:10px; padding:4px 6px; letter-spacing:.08em; } .gb-sh { font-size:12px; padding:4px 0; }
-    .gb-why, .gb-d { font-size:9px; padding:3px 0; } .gb-s { text-align:left; }
+    .gb-why, .gb-d { font-size:9px; padding:3px 0; } .gb-s { text-align:left; white-space:normal; font-size:9px; }
     .gb-cols { font-size:8px; } .gb-m b { font-size:12.5px; } .gb-m i { font-size:10.5px; }
     .gb-p { font-size:12px; } .gb-g { font-size:12px; } .gb-empty { font-size:12px; }
     .gb-f { font-size:9.5px; flex-direction:column; align-items:flex-start; } .gb-go { font-size:10px; padding:5px 8px; }
@@ -787,7 +788,7 @@
 (function () {   // Gap Scanner panel: tabs for Gap Scanner, Movers and Calendar
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var hm = function (s) { return new Date(s).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); };
-  var day = function (s) { return new Date(s).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' }); };
+  var day = function (s) { return new Date(s).toLocaleDateString([], { month: 'short', day: 'numeric' }); };
   var c = function (p) { return p == null ? '&ndash;' : esc(Math.round(p)) + '&cent;'; };
   var SHORT = { polymarket: 'POLY', kalshi: 'KALSHI', alpha: 'ALPHA' };
   var SITE = 'https://alphainteldesk.com/';
@@ -798,11 +799,11 @@
       note: "No sports · fees estimated · check each site's rules before you trade",
       go: ['/gap-scanner.html', 'OPEN GAP SCANNER &rarr;'],
       empty: 'No gaps pass our filters right now. Prices are lined up across Polymarket, Kalshi and Alpha Arcade. The scanner checks again every hour.' },
-    movers: { file: 'movers.json', sub: 'BIG 24H MOVES, REAL VOLUME',
+    movers: { file: 'movers.json', sub: '24H MOVES',
       cols: '<span>MARKET</span><span>SITE</span><span>NOW</span><span>24H</span><span>WHY?</span><span></span>',
       note: 'No sports · moves of 5¢+ with real trading · "Why?" opens a news search',
       empty: 'No big moves with real volume in the last 24 hours. Checked every hour.' },
-    cal: { file: 'calendar.json', sub: 'WHAT COULD MOVE MARKETS NEXT',
+    cal: { file: 'calendar.json', sub: 'COMING UP',
       cols: '<span>EVENT</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>WHEN</span><span></span>',
       note: "Scheduled reports and markets that settle soon · check each site's rules before you trade",
       empty: 'Nothing scheduled in the next few weeks.' }
@@ -865,7 +866,7 @@
     if (T.go) { go.href = T.go[0]; go.innerHTML = T.go[1]; }
     var box = document.getElementById('gb-rows');
     if (!d) { box.innerHTML = '<div class="gb-empty">Loading&hellip;</div>'; return; }
-    document.getElementById('gb-upd').textContent = 'UPDATED ' + hm(d.updated).toUpperCase();
+    document.getElementById('gb-upd').textContent = hm(d.updated).toUpperCase();
     shares = [];
     var list = t === 'gaps' ? d.gaps : t === 'movers' ? d.movers : d.items;
     list = (list || []).slice(0, matchMedia('(max-width: 760px)').matches ? 5 : 4);

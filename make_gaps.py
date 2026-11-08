@@ -148,6 +148,9 @@ def calendar(matches):
             when = datetime.strptime(m["close"], f).replace(tzinfo=timezone.utc)
         except (KeyError, ValueError):
             continue
+        if any(k in " ".join(m.get("categories") or []).lower()
+               for k in ("entertain", "culture", "pop", "music", "movie", "film", "tv", "netflix", "celebr", "award")):
+            continue                                 # chart/awards markets aren't market-moving events
         live = [v for v in m["prices"].values() if v is not None]
         if not any(8 <= v <= 92 for v in live):
             continue                                 # already decided (99c): not worth a calendar slot

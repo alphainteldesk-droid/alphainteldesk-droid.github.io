@@ -4,6 +4,8 @@
 #   SAME (90+)     same event, same outcome, end times line up  -> used for Gap Scanner math
 #   SIMILAR (70-89) probably the same event, something differs   -> shown with a badge, never gap math
 #   below 70        hidden
+# v6: deadlines read from the label first (Kalshi expiration can be weeks later); empty Polymarket books
+#     ignored; Movers skip price-bracket ladders and word-mention markets, rank by move x volume.
 # v5: dates written differently line up (December 31 = Before Jan 1, 2027); return = returns.
 # v4: also writes movers.json (biggest 24h price moves with real volume) and keeps alpha_hist.json.
 # v3: lines up 'Yes' markets with the matching deadline inside multi-deadline events.
@@ -220,6 +222,9 @@ def load_poly():
             e["text"] += " " + q
             e["end"] = e["end"] or ts(m.get("gameStartTime") or m.get("endDate"))
             if [x.lower() for x in names] == ["yes", "no"] and prices:
+                bb, ba = m.get("bestBid"), m.get("bestAsk")
+                if bb is not None and ba is not None and float(ba) - float(bb) > 0.5:
+                    continue                           # nobody really bidding/asking: the price is a placeholder
                 lbl = m.get("groupItemTitle") or q
                 e["outcomes"][lbl] = round(prices[0] * 100, 1)
                 e.setdefault("ends", {})[lbl] = ts(m.get("endDate"))
@@ -288,9 +293,12 @@ def load_kalshi():
 # ---------------- matching ----------------
 def by_deadline(real, ends, a_end):
     """In a ladder of deadlines (before 2027 / before 2028 ...) pick the one that ends with the Alpha market."""
-    if not ends or not a_end:
+    if not a_end:
         return None
-    ds = sorted((abs(ends[k] - a_end) if ends.get(k) else 9e12, k) for k in real)
+    when = {k: label_date(k) or (ends or {}).get(k) for k in real}   # the date in the name beats the expiry time
+    if not any(when.values()):
+        return None
+    ds = sorted((abs(when[k] - a_end) if when.get(k) else 9e12, k) for k in real)
     away = max(0.0, a_end - n.timestamp())
     ok = ds[0][0] <= max(2 * 86400, away * 0.05)
     clear = len(ds) < 2 or ds[1][0] - ds[0][0] >= 86400         # same end for all = a price ladder, not dates
@@ -324,7 +332,7 @@ def label_date(label, ref=None):
         y = re.fullmatch(r"\s*(before|by|in|end of)?\s*(20\d\d)\s*", t)
         if not y:
             return None
-        dt = datetime(int(y.group(2)) + (y.group(1) == "before"), 1, 1, tzinfo=timezone.utc)
+        dt = datetime(int(y.group(2)) + (0 if y.group(1) == "before" else 1), 1, 1, tzinfo=timezone.utc)
         return dt.timestamp() - 86400                # Before 2027 / In 2026 = by Dec 31, 2026
     if "before" in t:
         dt -= timedelta(days=1)                      # Before Jan 1, 2027 = by Dec 31, 2026
@@ -337,9 +345,7 @@ def by_date_label(label, outs, ends, a_end=0):
     if d is None:
         return None
     real = [k for k in outs if k.lower() != "no"]
-    when = {k: (ends or {}).get(k) or label_date(k) for k in real}
-    when = {k: v for k, v in when.items() if v}
-    return by_deadline(list(when), when, d)
+    return by_deadline(real, ends, d)
 
 
 def map_outcome(label, outs, ends=None, a_end=0):
@@ -403,7 +409,8 @@ def score(a, e):
     omap = {l: map_outcome(l, e["outcomes"], e.get("ends"), a["end"]) for l in a["outcomes"]}
     lead = lead_of(a["outcomes"])
     s = name + (20 if omap.get(lead) is not None else 0)
-    e_end = (e.get("ends") or {}).get(omap.get(lead)) or e["end"]
+    mo = omap.get(lead)
+    e_end = (label_date(mo) if mo else None) or (e.get("ends") or {}).get(mo) or e["end"]
     hours = abs(a["end"] - e_end) / 3600 if a["end"] and e_end else 9999
     away = max(0.0, (a["end"] - n.timestamp()) / 3600)          # hours until the Alpha market ends
     s += 20 if hours <= max(12, away * 0.03) else 10 if hours <= max(36, away * 0.06) else 0
@@ -445,7 +452,8 @@ def best_match(a, events, idx):
     best = (0, [], {}, None)
     away = max(0.0, a["end"] - n.timestamp())
     for e in candidates(a, events, idx):
-        ends = [x for x in [e["end"]] + list((e.get("ends") or {}).values()) if x]
+        ends = [x for x in [e["end"]] + list((e.get("ends") or {}).values()) +
+                [label_date(k) for k in list(e["outcomes"])[:40]] if x]
         if a["end"] and ends and min(abs(a["end"] - x) for x in ends) > max(4 * 86400, away * 0.15):
             continue
         s, fl, om = score(a, e)
@@ -501,7 +509,10 @@ def poly_kalshi(poly, kalshi, used):
 
 # ---------------- movers ----------------
 MOVE_MIN = 5                                        # points (cents) moved in 24h
-MOVE_VOL = {"polymarket": 10000, "kalshi": 2000, "alpha": 100}   # 24h volume: $ / contracts / $
+MOVE_VOL = {"polymarket": 25000, "kalshi": 15000, "alpha": 100}  # 24h volume: $ / contracts / $
+LADDER = re.compile(r"(?i)^\s*(above|below|over|under|between|at least|at most|more than|less than|fewer than|"
+                    r"[$<>≥≤]\s*\d|\d[\d,.]*\s*(%|[kmb]\b|\+|$))")
+MENTION = re.compile(r"(?i)\b(say|says|mention|mentions|tweet|tweets|post)\b|view count|top \d+ (song|album)")
 MOVE_TOP, MOVE_ALPHA, MOVE_MAX_CRYPTO = 10, 3, 2
 NAMES = {"alpha": "Alpha Arcade", "polymarket": "Polymarket", "kalshi": "Kalshi"}
 
@@ -531,13 +542,13 @@ def alpha_changes(alpha):
 
 def movers(alpha, sites):
     rows = []
-    soon = n.timestamp() + 2 * 86400                     # skip markets ending in 2 days (daily price ranges)
+    soon = n.timestamp() + 3 * 86400                     # skip markets ending within 3 days (daily/weekly ranges)
     achg = alpha_changes(alpha)
     for a in alpha:
         if sporty(a) or a["end"] < soon or a["volume24h"] < MOVE_VOL["alpha"]:
             continue
         for k, c in (achg.get(a["id"]) or {}).items():
-            rows.append(("alpha", a, "Yes" if k == "Yes" or len(a["outcomes"]) == 1 else k, a["outcomes"][k], c, a["volume24h"]))
+            rows.append(("alpha", a, k, a["outcomes"][k], c, a["volume24h"]))
     for site in ("polymarket", "kalshi"):
         for e in sites[site]:
             if sporty(e) or (e["end"] and e["end"] < soon):
@@ -545,11 +556,16 @@ def movers(alpha, sites):
             for k, c in (e.get("chg") or {}).items():
                 v = (e.get("v24") or {}).get(k, 0)
                 if v >= MOVE_VOL[site]:
-                    rows.append((site, e, "Yes" if len(e["outcomes"]) == 1 else k, e["outcomes"].get(k), c, v))
+                    rows.append((site, e, k, e["outcomes"].get(k), c, v))
     best = {}
     for site, e, k, p, c, v in rows:
-        if p is None or not (3 <= p <= 97) or abs(c) < MOVE_MIN:
+        if p is None or not (5 <= p <= 95) or abs(c) < MOVE_MIN:
             continue
+        if LADDER.match(k or "") or MENTION.search(e["title"]) or \
+                any("mention" in (x or "").lower() for x in e.get("categories") or []):
+            continue                                     # price brackets and word-mention markets swing for no news
+        if k == e["title"] or len(k) > 45 or k.lower() == "yes":
+            k = "Yes"                                    # one-question market: the label is the question
         key = (site, e["url"])
         if key not in best or abs(c) > abs(best[key]["change"]):
             best[key] = {"title": e["title"], "outcome": k, "site": site, "name": NAMES[site], "price": p,
@@ -557,7 +573,8 @@ def movers(alpha, sites):
                          "why": why_link(e["title"]), "category": (e.get("categories") or ["Other"])[0] or "Other",
                          "crypto": any("crypto" in (x or "").lower() or "financ" in (x or "").lower()
                                        for x in e.get("categories") or [])}
-    allr = sorted(best.values(), key=lambda r: -abs(r["change"]))
+    import math
+    allr = sorted(best.values(), key=lambda r: -abs(r["change"]) * math.log10(max(r["vol24"], 10)))
     out, crypto = [r for r in allr if r["site"] == "alpha"][:MOVE_ALPHA], 0
     for r in allr:
         if len(out) >= MOVE_TOP:
@@ -566,7 +583,7 @@ def movers(alpha, sites):
             continue
         crypto += r["crypto"]
         out.append(r)
-    out.sort(key=lambda r: -abs(r["change"]))
+    out.sort(key=lambda r: -abs(r["change"]) * math.log10(max(r["vol24"], 10)))
     json.dump({"updated": n.strftime(f), "note": "Biggest 24-hour price moves with real trading behind them. No sports. "
                "\"Why?\" opens a news search, not our analysis.", "movers": out}, open("movers.json", "w"), indent=1)
     cnt = {s_: sum(r["site"] == s_ for r in allr) for s_ in NAMES}
