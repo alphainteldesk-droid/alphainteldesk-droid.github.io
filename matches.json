@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-08T20:14:39Z",
+ "updated": "2026-11-08T20:29:10Z",
  "note": "Matches are automatic. Always check each site's rules before you trade.",
  "matches": [
   {
@@ -28,10 +28,10 @@
      "volume24h": 54,
      "matched_outcome": "Dem sweep; Gas hits $3.50",
      "outcomes": {
-      "Dem sweep; No $3.50 gas": 4.8,
-      "Dem sweep; Gas hits $3.50": 4.8,
-      "No Dem sweep; Gas hits $3.50": 4.8,
-      "No Dem sweep; No $3.50 gas": 4.8
+      "Dem sweep; No $3.50 gas": 5.3,
+      "Dem sweep; Gas hits $3.50": 5.3,
+      "No Dem sweep; Gas hits $3.50": 5.3,
+      "No Dem sweep; No $3.50 gas": 5.3
      }
     }
    },
@@ -46,10 +46,10 @@
    "outcome": "Dem sweep; Gas hits $3.50",
    "prices": {
     "alpha": 100.0,
-    "polymarket": 4.8
+    "polymarket": 5.3
    },
    "label": "SAME",
-   "gap": 95.2
+   "gap": 94.7
   },
   {
    "title": "Dem sweep & Gas hits $4.50 by end of 2026?",
@@ -110,13 +110,13 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 731740813,
-     "volume24h": 273910,
+     "volume": 731742406,
+     "volume24h": 275366,
      "matched_outcome": "Robert F. Kennedy Jr.",
      "outcomes": {
       "Donald Trump": 0.7,
       "J.D. Vance": 32.1,
-      "Marco Rubio": 19.8,
+      "Marco Rubio": 19.7,
       "Tulsi Gabbard": 0.1,
       "Glenn Youngkin": 1.7,
       "Donald Trump Jr.": 1.5,
@@ -165,8 +165,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 87200124,
-     "volume24h": 1236456,
+     "volume": 87201285,
+     "volume24h": 1226286,
      "matched_outcome": "Robert F. Kennedy Jr.",
      "outcomes": {
       "Donald Trump": 0.8,
@@ -238,6 +238,176 @@
    "gap": 48.6
   },
   {
+   "title": "NFL: Will the Lions beat the Dolphins?",
+   "close": "2026-11-08T22:30:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nfl-lions-dolphins-2026-11-08",
+     "outcomes": {
+      "Lions": 98.2
+     },
+     "volume": 2715,
+     "volume24h": 1576,
+     "fee": 70000
+    },
+    "polymarket": {
+     "url": "https://polymarket.com/event/criccsat20w-dol-lio-2026-11-08",
+     "title": "T20 Series South Africa, Women: Dolphins vs Lions",
+     "score": 90,
+     "flags": [
+      "end dates differ by 15h",
+      "check overtime / extra-time rules"
+     ],
+     "label": "SAME",
+     "volume": 27,
+     "volume24h": 0,
+     "matched_outcome": "Lions",
+     "outcomes": {
+      "Lions": 50.0
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxnflgame",
+     "title": "Detroit vs Miami",
+     "score": 100,
+     "flags": [
+      "check overtime / extra-time rules"
+     ],
+     "label": "SAME",
+     "volume": 7651430,
+     "volume24h": 6832705,
+     "matched_outcome": "Detroit",
+     "outcomes": {
+      "Lions": 96.5
+     }
+    }
+   },
+   "flags": [
+    "end dates differ by 15h",
+    "check overtime / extra-time rules"
+   ],
+   "score": 90,
+   "categories": [
+    "Sports",
+    "SPORT*NFL",
+    "sport_game",
+    "NFL"
+   ],
+   "outcome": "Lions",
+   "prices": {
+    "alpha": 98.2,
+    "polymarket": 50.0,
+    "kalshi": 96.5
+   },
+   "label": "SAME",
+   "gap": 48.2
+  },
+  {
+   "title": "ATP: Will Stefan Kozlov beat Aidan Mayo?",
+   "close": "2026-11-09T00:10:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/atp-kozlov-mayo-2026-11-08",
+     "outcomes": {
+      "Stefan Kozlov": 69.7
+     },
+     "volume": 7,
+     "volume24h": 7,
+     "fee": 70000
+    },
+    "polymarket": {
+     "url": "https://polymarket.com/event/atp-kozlov-mayo-2026-11-08",
+     "title": "Charlottesville: Stefan Kozlov vs Aidan Mayo",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 122153,
+     "volume24h": 125258,
+     "matched_outcome": "Stefan Kozlov",
+     "outcomes": {
+      "Stefan Kozlov": 50.0
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxatpchallengermatch",
+     "title": "Stefan Kozlov vs Aidan Mayo",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 2743061,
+     "volume24h": 2639533,
+     "matched_outcome": "Stefan Kozlov",
+     "outcomes": {
+      "Stefan Kozlov": 22.5
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Sports",
+    "SPORT*Tennis",
+    "sport_game",
+    "Tennis",
+    "ATP"
+   ],
+   "outcome": "Stefan Kozlov",
+   "prices": {
+    "alpha": 69.7,
+    "polymarket": 50.0,
+    "kalshi": 22.5
+   },
+   "label": "SAME",
+   "gap": 47.2
+  },
+  {
+   "title": "Will the Panthers beat the Bruins?",
+   "close": "2026-11-08T22:30:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nhl-panthers-bruins-2026-11-08",
+     "outcomes": {
+      "Panthers": 8.5
+     },
+     "volume": 554,
+     "volume24h": 554,
+     "fee": 70000
+    },
+    "polymarket": {
+     "url": "https://polymarket.com/event/cwbb-caro-queen-2026-11-09",
+     "title": "Carolina Bruins vs. Queens (NC) Royals (W)",
+     "score": 90,
+     "flags": [
+      "end dates differ by 25h"
+     ],
+     "label": "SAME",
+     "volume": 0,
+     "volume24h": 0,
+     "matched_outcome": "Carolina Bruins",
+     "outcomes": {
+      "Panthers": 50.0
+     }
+    }
+   },
+   "flags": [
+    "end dates differ by 25h"
+   ],
+   "score": 90,
+   "categories": [
+    "Sports",
+    "SPORT*NHL",
+    "sport_game",
+    "NHL"
+   ],
+   "outcome": "Panthers",
+   "prices": {
+    "alpha": 8.5,
+    "polymarket": 50.0
+   },
+   "label": "SAME",
+   "gap": 41.5
+  },
+  {
    "title": "U.S. enacts AI safety bill before 2027?",
    "close": "2027-01-01T04:59:00Z",
    "sites": {
@@ -280,116 +450,48 @@
    "gap": 40.0
   },
   {
-   "title": "Will the Panthers beat the Bruins?",
-   "close": "2026-11-08T22:30:00Z",
+   "title": "ATP: Will Calvin Hemery beat Yanis Ghazouani Durand?",
+   "close": "2026-11-08T20:50:00Z",
    "sites": {
     "alpha": {
-     "url": "https://www.alphaarcade.com/market/nhl-panthers-bruins-2026-11-08",
+     "url": "https://www.alphaarcade.com/market/atp-hemery-durand-2026-11-08",
      "outcomes": {
-      "Panthers": 12.5
+      "Calvin Hemery": 67.7
      },
-     "volume": 551,
-     "volume24h": 551,
+     "volume": 7,
+     "volume24h": 7,
      "fee": 70000
-    },
-    "polymarket": {
-     "url": "https://polymarket.com/event/cwbb-caro-queen-2026-11-09",
-     "title": "Carolina Bruins vs. Queens (NC) Royals (W)",
-     "score": 90,
-     "flags": [
-      "end dates differ by 25h"
-     ],
-     "label": "SAME",
-     "volume": 0,
-     "volume24h": 0,
-     "matched_outcome": "Carolina Bruins",
-     "outcomes": {
-      "Panthers": 50.0
-     }
-    }
-   },
-   "flags": [
-    "end dates differ by 25h"
-   ],
-   "score": 90,
-   "categories": [
-    "Sports",
-    "SPORT*NHL",
-    "sport_game",
-    "NHL"
-   ],
-   "outcome": "Panthers",
-   "prices": {
-    "alpha": 12.5,
-    "polymarket": 50.0
-   },
-   "label": "SAME",
-   "gap": 37.5
-  },
-  {
-   "title": "NFL: Will the Lions beat the Dolphins?",
-   "close": "2026-11-08T22:30:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/nfl-lions-dolphins-2026-11-08",
-     "outcomes": {
-      "Lions": 75.5
-     },
-     "volume": 2715,
-     "volume24h": 1576,
-     "fee": 70000
-    },
-    "polymarket": {
-     "url": "https://polymarket.com/event/criccsat20w-dol-lio-2026-11-08",
-     "title": "T20 Series South Africa, Women: Dolphins vs Lions",
-     "score": 90,
-     "flags": [
-      "end dates differ by 15h",
-      "check overtime / extra-time rules"
-     ],
-     "label": "SAME",
-     "volume": 27,
-     "volume24h": 0,
-     "matched_outcome": "Lions",
-     "outcomes": {
-      "Lions": 50.0
-     }
     },
     "kalshi": {
-     "url": "https://kalshi.com/markets/kxnflgame",
-     "title": "Detroit vs Miami",
+     "url": "https://kalshi.com/markets/kxatpchallengermatch",
+     "title": "Calvin Hemery vs Yanis Ghazouani Durand",
      "score": 100,
-     "flags": [
-      "check overtime / extra-time rules"
-     ],
+     "flags": [],
      "label": "SAME",
-     "volume": 6612072,
-     "volume24h": 4415757,
-     "matched_outcome": "Detroit",
+     "volume": 225006,
+     "volume24h": 207850,
+     "matched_outcome": "Calvin Hemery",
      "outcomes": {
-      "Lions": 85.5
+      "Calvin Hemery": 99.5
      }
     }
    },
-   "flags": [
-    "end dates differ by 15h",
-    "check overtime / extra-time rules"
-   ],
-   "score": 90,
+   "flags": [],
+   "score": 100,
    "categories": [
     "Sports",
-    "SPORT*NFL",
+    "SPORT*Tennis",
     "sport_game",
-    "NFL"
+    "Tennis",
+    "ATP"
    ],
-   "outcome": "Lions",
+   "outcome": "Calvin Hemery",
    "prices": {
-    "alpha": 75.5,
-    "polymarket": 50.0,
-    "kalshi": 85.5
+    "alpha": 67.7,
+    "kalshi": 99.5
    },
    "label": "SAME",
-   "gap": 35.5
+   "gap": 31.8
   },
   {
    "title": "EPL: 2027 Champion",
@@ -430,7 +532,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 25706101,
-     "volume24h": 97869,
+     "volume24h": 97822,
      "matched_outcome": "Arsenal",
      "outcomes": {
       "Arsenal": 76.5,
@@ -501,8 +603,8 @@
      "matched_outcome": "Dem sweep; China not #1",
      "outcomes": {
       "Dem sweep; China not #1": 60.9,
-      "Dem sweep; China #1 AI": 39.3,
-      "No Dem sweep; China #1 AI": 39.3,
+      "Dem sweep; China #1 AI": 39.6,
+      "No Dem sweep; China #1 AI": 39.6,
       "No Dem sweep; China not #1": 60.9
      }
     }
@@ -524,29 +626,29 @@
    "gap": 26.2
   },
   {
-   "title": "ATP: Will Stefan Kozlov beat Aidan Mayo?",
-   "close": "2026-11-09T00:10:00Z",
+   "title": "ATP: Will Nicolas Barrientos beat Alan Magadan?",
+   "close": "2026-11-08T23:20:00Z",
    "sites": {
     "alpha": {
-     "url": "https://www.alphaarcade.com/market/atp-kozlov-mayo-2026-11-08",
+     "url": "https://www.alphaarcade.com/market/atp-barrientos-magadan-2026-11-08",
      "outcomes": {
-      "Stefan Kozlov": 69.7
+      "Nicolas Barrientos": 40.6
      },
-     "volume": 7,
-     "volume24h": 7,
+     "volume": 8,
+     "volume24h": 8,
      "fee": 70000
     },
     "kalshi": {
      "url": "https://kalshi.com/markets/kxatpchallengermatch",
-     "title": "Stefan Kozlov vs Aidan Mayo",
+     "title": "Nicolas Barrientos vs Alan Magadan",
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 2488651,
-     "volume24h": 2222537,
-     "matched_outcome": "Stefan Kozlov",
+     "volume": 24634,
+     "volume24h": 23119,
+     "matched_outcome": "Nicolas Barrientos",
      "outcomes": {
-      "Stefan Kozlov": 44.5
+      "Nicolas Barrientos": 16.5
      }
     }
    },
@@ -559,78 +661,13 @@
     "Tennis",
     "ATP"
    ],
-   "outcome": "Stefan Kozlov",
+   "outcome": "Nicolas Barrientos",
    "prices": {
-    "alpha": 69.7,
-    "kalshi": 44.5
+    "alpha": 40.6,
+    "kalshi": 16.5
    },
    "label": "SAME",
-   "gap": 25.2
-  },
-  {
-   "title": "NFL: Will the Broncos beat the Panthers?",
-   "close": "2026-11-08T22:30:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/nfl-broncos-panthers-2026-11-08",
-     "outcomes": {
-      "Broncos": 73.5
-     },
-     "volume": 2267,
-     "volume24h": 1906,
-     "fee": 70000
-    },
-    "polymarket": {
-     "url": "https://polymarket.com/event/cwbb-fay-ncc-2026-11-09",
-     "title": "Fayetteville State Broncos vs. North Carolina Central Eagles (W)",
-     "score": 90,
-     "flags": [
-      "end dates differ by 24h",
-      "check overtime / extra-time rules"
-     ],
-     "label": "SAME",
-     "volume": 0,
-     "volume24h": 0,
-     "matched_outcome": "Fayetteville State Broncos",
-     "outcomes": {
-      "Broncos": 50.0
-     }
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxnflgame",
-     "title": "Denver vs Carolina",
-     "score": 100,
-     "flags": [
-      "check overtime / extra-time rules"
-     ],
-     "label": "SAME",
-     "volume": 9091612,
-     "volume24h": 6568392,
-     "matched_outcome": "Denver",
-     "outcomes": {
-      "Broncos": 53.0
-     }
-    }
-   },
-   "flags": [
-    "end dates differ by 24h",
-    "check overtime / extra-time rules"
-   ],
-   "score": 90,
-   "categories": [
-    "Sports",
-    "SPORT*NFL",
-    "sport_game",
-    "NFL"
-   ],
-   "outcome": "Broncos",
-   "prices": {
-    "alpha": 73.5,
-    "polymarket": 50.0,
-    "kalshi": 53.0
-   },
-   "label": "SAME",
-   "gap": 23.5
+   "gap": 24.1
   },
   {
    "title": "Cuban regime falls in 2026?",
@@ -674,6 +711,71 @@
    "gap": 20.9
   },
   {
+   "title": "NFL: Will the Broncos beat the Panthers?",
+   "close": "2026-11-08T22:30:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nfl-broncos-panthers-2026-11-08",
+     "outcomes": {
+      "Broncos": 70.5
+     },
+     "volume": 2300,
+     "volume24h": 1939,
+     "fee": 70000
+    },
+    "polymarket": {
+     "url": "https://polymarket.com/event/cwbb-fay-ncc-2026-11-09",
+     "title": "Fayetteville State Broncos vs. North Carolina Central Eagles (W)",
+     "score": 90,
+     "flags": [
+      "end dates differ by 24h",
+      "check overtime / extra-time rules"
+     ],
+     "label": "SAME",
+     "volume": 0,
+     "volume24h": 0,
+     "matched_outcome": "Fayetteville State Broncos",
+     "outcomes": {
+      "Broncos": 50.0
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxnflgame",
+     "title": "Denver vs Carolina",
+     "score": 100,
+     "flags": [
+      "check overtime / extra-time rules"
+     ],
+     "label": "SAME",
+     "volume": 9961854,
+     "volume24h": 8770415,
+     "matched_outcome": "Denver",
+     "outcomes": {
+      "Broncos": 70.5
+     }
+    }
+   },
+   "flags": [
+    "end dates differ by 24h",
+    "check overtime / extra-time rules"
+   ],
+   "score": 90,
+   "categories": [
+    "Sports",
+    "SPORT*NFL",
+    "sport_game",
+    "NFL"
+   ],
+   "outcome": "Broncos",
+   "prices": {
+    "alpha": 70.5,
+    "polymarket": 50.0,
+    "kalshi": 70.5
+   },
+   "label": "SAME",
+   "gap": 20.5
+  },
+  {
    "title": "US x Cuba military clash in 2026?",
    "close": "2027-01-01T04:59:00Z",
    "sites": {
@@ -710,53 +812,6 @@
    "prices": {
     "alpha": 26.0,
     "polymarket": 7.5
-   },
-   "label": "SAME",
-   "gap": 18.5
-  },
-  {
-   "title": "NFL: Will the Cowboys beat the Colts?",
-   "close": "2026-11-08T22:30:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/nfl-cowboys-colts-2026-11-08",
-     "outcomes": {
-      "Cowboys": 68.0
-     },
-     "volume": 3351,
-     "volume24h": 2156,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxnflgame",
-     "title": "Dallas vs Indianapolis",
-     "score": 100,
-     "flags": [
-      "check overtime / extra-time rules"
-     ],
-     "label": "SAME",
-     "volume": 7376787,
-     "volume24h": 6213075,
-     "matched_outcome": "Dallas",
-     "outcomes": {
-      "Cowboys": 86.5
-     }
-    }
-   },
-   "flags": [
-    "check overtime / extra-time rules"
-   ],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*NFL",
-    "sport_game",
-    "NFL"
-   ],
-   "outcome": "Cowboys",
-   "prices": {
-    "alpha": 68.0,
-    "kalshi": 86.5
    },
    "label": "SAME",
    "gap": 18.5
@@ -802,97 +857,6 @@
    },
    "label": "SAME",
    "gap": 18.0
-  },
-  {
-   "title": "ATP: Will Nicolas Barrientos beat Alan Magadan?",
-   "close": "2026-11-08T23:20:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/atp-barrientos-magadan-2026-11-08",
-     "outcomes": {
-      "Nicolas Barrientos": 40.6
-     },
-     "volume": 8,
-     "volume24h": 8,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxatpchallengermatch",
-     "title": "Nicolas Barrientos vs Alan Magadan",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 18998,
-     "volume24h": 13642,
-     "matched_outcome": "Nicolas Barrientos",
-     "outcomes": {
-      "Nicolas Barrientos": 23.5
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*Tennis",
-    "sport_game",
-    "Tennis",
-    "ATP"
-   ],
-   "outcome": "Nicolas Barrientos",
-   "prices": {
-    "alpha": 40.6,
-    "kalshi": 23.5
-   },
-   "label": "SAME",
-   "gap": 17.1
-  },
-  {
-   "title": "NFL: Will the Giants beat the Eagles?",
-   "close": "2026-11-08T22:30:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/nfl-giants-eagles-2026-11-08",
-     "outcomes": {
-      "Giants": 51.3
-     },
-     "volume": 3030,
-     "volume24h": 2286,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxnflgame",
-     "title": "New York G vs Philadelphia",
-     "score": 100,
-     "flags": [
-      "check overtime / extra-time rules"
-     ],
-     "label": "SAME",
-     "volume": 10167576,
-     "volume24h": 8002469,
-     "matched_outcome": "New York G",
-     "outcomes": {
-      "Giants": 67.5
-     }
-    }
-   },
-   "flags": [
-    "check overtime / extra-time rules"
-   ],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*NFL",
-    "sport_game",
-    "NFL"
-   ],
-   "outcome": "Giants",
-   "prices": {
-    "alpha": 51.3,
-    "kalshi": 67.5
-   },
-   "label": "SAME",
-   "gap": 16.2
   },
   {
    "title": "NATO x Russia military clash by 2027?",
@@ -947,7 +911,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 207159,
-     "volume24h": 2843,
+     "volume24h": 2733,
      "matched_outcome": "Yes",
      "outcomes": {
       "Yes": 15.5
@@ -1006,8 +970,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 2061013,
-     "volume24h": 165357,
+     "volume": 2061373,
+     "volume24h": 169027,
      "matched_outcome": "Pete Hegseth out as Secretary of Defense by December 31?",
      "outcomes": {
       "Yes": 47.5
@@ -1019,11 +983,11 @@
      "score": 92,
      "flags": [],
      "label": "SAME",
-     "volume": 1755216,
-     "volume24h": 174901,
+     "volume": 1755739,
+     "volume24h": 177334,
      "matched_outcome": "Before Jan 1, 2027",
      "outcomes": {
-      "Yes": 42.5
+      "Yes": 41.5
      }
     }
    },
@@ -1037,7 +1001,7 @@
    "prices": {
     "alpha": 32.6,
     "polymarket": 47.5,
-    "kalshi": 42.5
+    "kalshi": 41.5
    },
    "label": "SAME",
    "gap": 14.9
@@ -1076,12 +1040,12 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 6560304,
-     "volume24h": 1453,
+     "volume": 6560959,
+     "volume24h": 2109,
      "matched_outcome": "Chicago Bears",
      "outcomes": {
       "Dallas Cowboys": 3.6,
-      "New York Giants": 3.9,
+      "New York Giants": 5.5,
       "Philadelphia Eagles": 0.5,
       "Washington Commanders": 0.5,
       "Chicago Bears": 21.5,
@@ -1095,7 +1059,7 @@
       "Arizona Cardinals": 0.1,
       "Los Angeles Rams": 11.5,
       "San Francisco 49ers": 25.0,
-      "Seattle Seahawks": 9.5
+      "Seattle Seahawks": 8.5
      }
     }
    },
@@ -1117,31 +1081,31 @@
    "gap": 13.4
   },
   {
-   "title": "NFL: Will the Jets beat the Chiefs?",
+   "title": "NFL: Will the Cowboys beat the Colts?",
    "close": "2026-11-08T22:30:00Z",
    "sites": {
     "alpha": {
-     "url": "https://www.alphaarcade.com/market/nfl-jets-chiefs-2026-11-08",
+     "url": "https://www.alphaarcade.com/market/nfl-cowboys-colts-2026-11-08",
      "outcomes": {
-      "Jets": 19.5
+      "Cowboys": 88.5
      },
-     "volume": 2420,
-     "volume24h": 1281,
+     "volume": 3351,
+     "volume24h": 2156,
      "fee": 70000
     },
     "kalshi": {
      "url": "https://kalshi.com/markets/kxnflgame",
-     "title": "New York J vs Kansas City",
+     "title": "Dallas vs Indianapolis",
      "score": 100,
      "flags": [
       "check overtime / extra-time rules"
      ],
      "label": "SAME",
-     "volume": 11340069,
-     "volume24h": 10220003,
-     "matched_outcome": "New York J",
+     "volume": 8496580,
+     "volume24h": 7717354,
+     "matched_outcome": "Dallas",
      "outcomes": {
-      "Jets": 6.5
+      "Cowboys": 75.5
      }
     }
    },
@@ -1155,57 +1119,13 @@
     "sport_game",
     "NFL"
    ],
-   "outcome": "Jets",
+   "outcome": "Cowboys",
    "prices": {
-    "alpha": 19.5,
-    "kalshi": 6.5
+    "alpha": 88.5,
+    "kalshi": 75.5
    },
    "label": "SAME",
    "gap": 13.0
-  },
-  {
-   "title": "ATP: Will Calvin Hemery beat Yanis Ghazouani Durand?",
-   "close": "2026-11-08T20:50:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/atp-hemery-durand-2026-11-08",
-     "outcomes": {
-      "Calvin Hemery": 67.7
-     },
-     "volume": 7,
-     "volume24h": 7,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxatpchallengermatch",
-     "title": "Calvin Hemery vs Yanis Ghazouani Durand",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 156299,
-     "volume24h": 130931,
-     "matched_outcome": "Calvin Hemery",
-     "outcomes": {
-      "Calvin Hemery": 79.5
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*Tennis",
-    "sport_game",
-    "Tennis",
-    "ATP"
-   ],
-   "outcome": "Calvin Hemery",
-   "prices": {
-    "alpha": 67.7,
-    "kalshi": 79.5
-   },
-   "label": "SAME",
-   "gap": 11.8
   },
   {
    "title": "Who will be the next to leave the Trump Cabinet?",
@@ -1218,7 +1138,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 7617,
-     "volume24h": 2114,
+     "volume24h": 2093,
      "matched_outcome": "Pete Hegseth",
      "outcomes": {
       "None before 2029": 2.4,
@@ -1227,21 +1147,21 @@
       "Scott Bessent": 6.3,
       "Pete Hegseth": 23.5,
       "Doug Burgum": 4.3,
-      "Brooke Rollins": 9.0,
+      "Brooke Rollins": 8.0,
       "Howard Lutnick": 14.5,
-      "Robert F. Kennedy Jr.": 6.0,
+      "Robert F. Kennedy Jr.": 5.0,
       "Scott Turner": 0.6,
       "Sean Duffy": 3.5,
       "Chris Wright": 0.7,
-      "Linda McMahon": 11.0,
-      "Doug Collins": 7.3,
+      "Linda McMahon": 8.5,
+      "Doug Collins": 7.1,
       "Lee Zeldin": 8.5,
       "Russell T. Vought": 3.9,
       "John Ratcliffe": 2.1,
       "Jamieson Greer": 10.8,
       "Mike Waltz": 0.6,
-      "Kelly Loeffler": 5.7,
-      "Stephen Miller": 5.9,
+      "Kelly Loeffler": 5.8,
+      "Stephen Miller": 6.3,
       "Todd Blanche": 3.6,
       "Markwayne Mullin": 3.9,
       "Keith Sonderling": 0.6,
@@ -1258,27 +1178,27 @@
      "volume24h": 2246,
      "matched_outcome": "Pete Hegseth",
      "outcomes": {
-      "Marco Rubio": 11.0,
-      "Scott Bessent": 8.5,
+      "Marco Rubio": 11.5,
+      "Scott Bessent": 8.1,
       "Pete Hegseth": 35.0,
       "Doug Burgum": 7.4,
-      "Brooke Rollins": 6.2,
+      "Brooke Rollins": 5.8,
       "Howard Lutnick": 4.0,
       "Robert F. Kennedy Jr.": 12.0,
-      "Scott Turner": 4.0,
-      "Sean Duffy": 6.0,
-      "Chris Wright": 6.2,
+      "Scott Turner": 3.4,
+      "Sean Duffy": 3.2,
+      "Chris Wright": 3.4,
       "Linda McMahon": 3.7,
-      "Doug Collins": 6.2,
-      "Lee Zeldin": 6.0,
-      "Russell T. Vought": 6.2,
-      "John Ratcliffe": null,
+      "Doug Collins": 5.8,
+      "Lee Zeldin": 3.1,
+      "Russell T. Vought": 3.3,
+      "John Ratcliffe": 3.4,
       "Jamieson Greer": 3.3,
       "Mike Waltz": null,
-      "Kelly Loeffler": 3.3,
+      "Kelly Loeffler": 3.2,
       "Stephen Miller": 3.6,
       "Todd Blanche": 3.4,
-      "Markwayne Mullin": 4.0,
+      "Markwayne Mullin": 2.9,
       "Keith Sonderling": null,
       "Jay Clayton": 12.0
      }
@@ -1301,6 +1221,118 @@
    "label": "SAME",
    "pair": "polymarket-kalshi",
    "gap": 11.5
+  },
+  {
+   "title": "NFL: Will the Giants beat the Eagles?",
+   "close": "2026-11-08T22:30:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nfl-giants-eagles-2026-11-08",
+     "outcomes": {
+      "Giants": 68.8
+     },
+     "volume": 3030,
+     "volume24h": 2286,
+     "fee": 70000
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxnflgame",
+     "title": "New York G vs Philadelphia",
+     "score": 100,
+     "flags": [
+      "check overtime / extra-time rules"
+     ],
+     "label": "SAME",
+     "volume": 11385898,
+     "volume24h": 9205428,
+     "matched_outcome": "New York G",
+     "outcomes": {
+      "Giants": 79.5
+     }
+    }
+   },
+   "flags": [
+    "check overtime / extra-time rules"
+   ],
+   "score": 100,
+   "categories": [
+    "Sports",
+    "SPORT*NFL",
+    "sport_game",
+    "NFL"
+   ],
+   "outcome": "Giants",
+   "prices": {
+    "alpha": 68.8,
+    "kalshi": 79.5
+   },
+   "label": "SAME",
+   "gap": 10.7
+  },
+  {
+   "title": "Lead Bank in OpenAI's IPO?",
+   "close": "2028-01-01T04:59:00Z",
+   "sites": {
+    "polymarket": {
+     "url": "https://polymarket.com/event/lead-bank-in-openais-ipo",
+     "title": "Lead Bank in OpenAI's IPO?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 61417,
+     "volume24h": 0,
+     "matched_outcome": "Goldman Sachs",
+     "outcomes": {
+      "Morgan Stanley": 32.5,
+      "Goldman Sachs": 53.5,
+      "JPMorgan": 0.2,
+      "Bank of America": 1.1,
+      "Citigroup": 0.2,
+      "Barclays": 0.2,
+      "UBS": 0.2,
+      "Deutsche Bank": 0.2,
+      "Wells Fargo": 0.2
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxopenaileadleft",
+     "title": "Which bank will lead OpenAI's IPO?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 25468,
+     "volume24h": 0,
+     "matched_outcome": "Goldman Sachs",
+     "outcomes": {
+      "Morgan Stanley": 27.0,
+      "Goldman Sachs": 64.0,
+      "JPMorgan": 27.0,
+      "Bank of America": 1.0,
+      "Citigroup": 4.0,
+      "Deutsche Bank": 1.0
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "IPOs",
+    "OpenAI",
+    "Business",
+    "Big Tech",
+    "sam altman",
+    "OpenAI IPO",
+    "Rewards 20, 4.5, 50",
+    "Financials"
+   ],
+   "outcome": "Goldman Sachs",
+   "prices": {
+    "polymarket": 53.5,
+    "kalshi": 64.0
+   },
+   "label": "SAME",
+   "pair": "polymarket-kalshi",
+   "gap": 10.5
   },
   {
    "title": "Will Trump veto a bill by February 1, 2027?",
@@ -1393,159 +1425,6 @@
    "gap": 10.0
   },
   {
-   "title": "Lead Bank in OpenAI's IPO?",
-   "close": "2028-01-01T04:59:00Z",
-   "sites": {
-    "polymarket": {
-     "url": "https://polymarket.com/event/lead-bank-in-openais-ipo",
-     "title": "Lead Bank in OpenAI's IPO?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 61417,
-     "volume24h": 0,
-     "matched_outcome": "Goldman Sachs",
-     "outcomes": {
-      "Morgan Stanley": 32.5,
-      "Goldman Sachs": 54.0,
-      "JPMorgan": 0.2,
-      "Bank of America": 1.1,
-      "Citigroup": 0.2,
-      "Barclays": 0.2,
-      "UBS": 0.2,
-      "Deutsche Bank": 0.2,
-      "Wells Fargo": 0.2
-     }
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxopenaileadleft",
-     "title": "Which bank will lead OpenAI's IPO?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 25468,
-     "volume24h": 0,
-     "matched_outcome": "Goldman Sachs",
-     "outcomes": {
-      "Morgan Stanley": 27.0,
-      "Goldman Sachs": 64.0,
-      "JPMorgan": 27.0,
-      "Bank of America": 1.0,
-      "Citigroup": 4.0,
-      "Deutsche Bank": 1.0
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "IPOs",
-    "OpenAI",
-    "Business",
-    "Big Tech",
-    "sam altman",
-    "OpenAI IPO",
-    "Rewards 20, 4.5, 50",
-    "Financials"
-   ],
-   "outcome": "Goldman Sachs",
-   "prices": {
-    "polymarket": 54.0,
-    "kalshi": 64.0
-   },
-   "label": "SAME",
-   "pair": "polymarket-kalshi",
-   "gap": 10.0
-  },
-  {
-   "title": "RFK Jr. Out by December 31?",
-   "close": "2026-12-31T00:00:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/rfk-jr-out-by-december-31-524",
-     "outcomes": {
-      "Yes": 17.8
-     },
-     "volume": 7,
-     "volume24h": 0,
-     "fee": 70000
-    },
-    "polymarket": {
-     "url": "https://polymarket.com/event/rfk-jr-out-by-december-31-524",
-     "title": "RFK Jr. Out by December 31?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 25864,
-     "volume24h": 0,
-     "matched_outcome": "RFK Jr. Out by December 31?",
-     "outcomes": {
-      "Yes": 27.5
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "Politics",
-    "Politics"
-   ],
-   "outcome": "Yes",
-   "prices": {
-    "alpha": 17.8,
-    "polymarket": 27.5
-   },
-   "label": "SAME",
-   "gap": 9.7
-  },
-  {
-   "title": "NFL: Will the Browns beat the Saints?",
-   "close": "2026-11-08T22:30:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/nfl-browns-saints-2026-11-08",
-     "outcomes": {
-      "Browns": 32.0
-     },
-     "volume": 4050,
-     "volume24h": 2858,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxnflgame",
-     "title": "Cleveland vs New Orleans",
-     "score": 100,
-     "flags": [
-      "check overtime / extra-time rules"
-     ],
-     "label": "SAME",
-     "volume": 7036759,
-     "volume24h": 5679322,
-     "matched_outcome": "Cleveland",
-     "outcomes": {
-      "Browns": 41.5
-     }
-    }
-   },
-   "flags": [
-    "check overtime / extra-time rules"
-   ],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*NFL",
-    "sport_game",
-    "NFL"
-   ],
-   "outcome": "Browns",
-   "prices": {
-    "alpha": 32.0,
-    "kalshi": 41.5
-   },
-   "label": "SAME",
-   "gap": 9.5
-  },
-  {
    "title": "Iran agrees to surrender enriched uranium stockpile by...?",
    "close": "2026-12-31T23:59:00Z",
    "sites": {
@@ -1588,146 +1467,6 @@
    "gap": 9.1
   },
   {
-   "title": "NFL: Will the Rams beat the Commanders?",
-   "close": "2026-11-08T22:30:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/nfl-rams-commanders-2026-11-08",
-     "outcomes": {
-      "Rams": 61.0
-     },
-     "volume": 1635,
-     "volume24h": 1273,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxnflgame",
-     "title": "Los Angeles R vs Washington",
-     "score": 100,
-     "flags": [
-      "check overtime / extra-time rules"
-     ],
-     "label": "SAME",
-     "volume": 6944713,
-     "volume24h": 6250684,
-     "matched_outcome": "Los Angeles R",
-     "outcomes": {
-      "Rams": 69.5
-     }
-    }
-   },
-   "flags": [
-    "check overtime / extra-time rules"
-   ],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*NFL",
-    "sport_game",
-    "NFL"
-   ],
-   "outcome": "Rams",
-   "prices": {
-    "alpha": 61.0,
-    "kalshi": 69.5
-   },
-   "label": "SAME",
-   "gap": 8.5
-  },
-  {
-   "title": "Pro Football: 2026 MVP Winner",
-   "close": "2027-03-01T04:59:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/pro-football-2026-mvp-winner",
-     "outcomes": {
-      "Jaxson Dart": null,
-      "Bo Nix": null,
-      "Lamar Jackson": 3.1,
-      "Jared Goff": null,
-      "Matthew Stafford": null,
-      "Trevor Lawrence": null,
-      "Sam Darnold": null,
-      "Jordan Love": null,
-      "Brock Purdy": 20.0,
-      "Justin Jefferson": null,
-      "Christian McCaffrey": null,
-      "Jahmyr Gibbs": 0.9,
-      "Jaxson Smith-Njigba": null,
-      "Josh Allen": 33.3,
-      "Patrick Mahomes": null,
-      "Myles Garrett": null,
-      "Drake Maye": 6.0,
-      "Justin Herbert": null,
-      "Jalen Hurts": null,
-      "Caleb Williams": null,
-      "Dak Prescott": null,
-      "De'Von Achane": null,
-      "Baker Mayfield": null,
-      "Derrick Henry": null,
-      "Joe Burrow": 10.2,
-      "Saquon Barkley": null
-     },
-     "volume": 716,
-     "volume24h": 0,
-     "fee": 70000
-    },
-    "polymarket": {
-     "url": "https://polymarket.com/event/pro-football-2026-mvp-winner",
-     "title": "Pro Football: 2026 MVP Winner",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 1478688,
-     "volume24h": 29481,
-     "matched_outcome": "Josh Allen",
-     "outcomes": {
-      "Jaxson Dart": 0.5,
-      "Bo Nix": 0.2,
-      "Lamar Jackson": 0.1,
-      "Jared Goff": 1.3,
-      "Matthew Stafford": 0.2,
-      "Trevor Lawrence": 8.7,
-      "Sam Darnold": 0.1,
-      "Jordan Love": 1.8,
-      "Brock Purdy": 13.8,
-      "Justin Jefferson": 0.1,
-      "Christian McCaffrey": 0.1,
-      "Jahmyr Gibbs": 0.3,
-      "Jaxson Smith-Njigba": 2.9,
-      "Josh Allen": 25.0,
-      "Patrick Mahomes": 2.0,
-      "Myles Garrett": 0.1,
-      "Drake Maye": 3.4,
-      "Justin Herbert": 1.1,
-      "Jalen Hurts": 1.8,
-      "Caleb Williams": 5.5,
-      "Dak Prescott": 0.4,
-      "De'Von Achane": 0.1,
-      "Baker Mayfield": 0.1,
-      "Derrick Henry": 0.1,
-      "Joe Burrow": 32.1,
-      "Saquon Barkley": 0.1
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*NFL",
-    "sport_forecast",
-    "NFL"
-   ],
-   "outcome": "Josh Allen",
-   "prices": {
-    "alpha": 33.3,
-    "polymarket": 25.0
-   },
-   "label": "SAME",
-   "gap": 8.3
-  },
-  {
    "title": "Argentina Peronist Presidential Nominee",
    "close": "2027-09-01T03:59:00Z",
    "sites": {
@@ -1743,7 +1482,7 @@
      "volume24h": 242,
      "matched_outcome": "Axel Kicillof",
      "outcomes": {
-      "Axel Kicillof": 51.5,
+      "Axel Kicillof": 50.5,
       "Sergio Massa": 27.0,
       "Cristina Fern\u00e1ndez de Kirchner": 11.5
      }
@@ -1782,12 +1521,12 @@
    ],
    "outcome": "Axel Kicillof",
    "prices": {
-    "polymarket": 51.5,
+    "polymarket": 50.5,
     "kalshi": 59.5
    },
    "label": "SAME",
    "pair": "polymarket-kalshi",
-   "gap": 8.0
+   "gap": 9.0
   },
   {
    "title": "Situational Awareness announces fund wind-down by...?",
@@ -1812,7 +1551,7 @@
      "volume24h": 0,
      "matched_outcome": "December 31",
      "outcomes": {
-      "December 31": 12.8
+      "December 31": 12.7
      }
     }
    },
@@ -1826,10 +1565,10 @@
    "outcome": "December 31",
    "prices": {
     "alpha": 5.0,
-    "polymarket": 12.8
+    "polymarket": 12.7
    },
    "label": "SAME",
-   "gap": 7.8
+   "gap": 7.7
   },
   {
    "title": "Pete Hegseth out as Secretary of Defense by...?",
@@ -1843,12 +1582,12 @@
       "end dates differ by 28h"
      ],
      "label": "SAME",
-     "volume": 788099,
-     "volume24h": 166280,
+     "volume": 788109,
+     "volume24h": 168232,
      "matched_outcome": "November 30",
      "outcomes": {
       "November 30": 35.5,
-      "November 14": 26.5
+      "November 14": 24.5
      }
     },
     "kalshi": {
@@ -1859,8 +1598,8 @@
       "end dates differ by 28h"
      ],
      "label": "SAME",
-     "volume": 1755216,
-     "volume24h": 174901,
+     "volume": 1755739,
+     "volume24h": 177334,
      "matched_outcome": "Before Dec 1, 2026",
      "outcomes": {
       "November 30": 28.0,
@@ -1951,7 +1690,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 172666,
-     "volume24h": 898,
+     "volume24h": 905,
      "matched_outcome": "Alexandria Ocasio-Cortez",
      "outcomes": {
       "Gavin Newsom": 1.5,
@@ -1961,19 +1700,19 @@
       "Wes Moore": 5.9,
       "Stephen A. Smith": 0.2,
       "Kamala Harris": 1.6,
-      "Gretchen Whitmer": 9.5,
-      "Andy Beshear": 3.0,
-      "Jon Ossoff": 11.1,
+      "Gretchen Whitmer": 9.4,
+      "Andy Beshear": 3.4,
+      "Jon Ossoff": 9.5,
       "Mark Cuban": 0.2,
       "J.B. Pritzker": 0.3,
       "Raphael Warnock": 4.1,
       "Cory Booker": 0.2,
       "Tim Walz": 1.1,
       "Michelle Obama": 0.2,
-      "Mark Kelly": 5.4,
+      "Mark Kelly": 5.3,
       "Rahm Emanuel": 0.1,
       "Gina Raimondo": 0.2,
-      "Zohran Mamdani": 5.1,
+      "Zohran Mamdani": 5.2,
       "Roy Cooper": 1.8,
       "John Fetterman": 0.1,
       "Jared Polis": 0.2,
@@ -1993,13 +1732,13 @@
       "Beto O\u2019Rourke": 0.2,
       "Kim Kardashian": 0.2,
       "Chris Murphy": 0.5,
-      "Ruben Gallego": 1.7,
+      "Ruben Gallego": 1.8,
       "Ro Khanna": 1.4,
       "James Talarico": 7.2,
       "Elissa Slotkin": 6.2,
       "Marie Gluesenkamp Perez": 5.0,
       "Adam Hamilton": 3.1,
-      "Rob Sand": 18.0
+      "Rob Sand": 17.5
      }
     },
     "kalshi": {
@@ -2008,8 +1747,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 3848654,
-     "volume24h": 43065,
+     "volume": 3848730,
+     "volume24h": 32643,
      "matched_outcome": "Alexandria Ocasio-Cortez",
      "outcomes": {
       "Gavin Newsom": 3.6,
@@ -2019,7 +1758,7 @@
       "Wes Moore": 6.0,
       "Stephen A. Smith": 0.1,
       "Kamala Harris": 1.6,
-      "Gretchen Whitmer": 9.4,
+      "Gretchen Whitmer": 9.3,
       "Andy Beshear": 3.1,
       "Jon Ossoff": 4.7,
       "Mark Cuban": 0.7,
@@ -2051,7 +1790,7 @@
       "Ruben Gallego": 1.9,
       "Ro Khanna": 1.6,
       "James Talarico": 7.1,
-      "Elissa Slotkin": 4.5,
+      "Elissa Slotkin": 4.6,
       "Rob Sand": 0.4
      }
     }
@@ -2244,11 +1983,11 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 1019885,
-     "volume24h": 29854,
+     "volume": 1023800,
+     "volume24h": 33769,
      "matched_outcome": "GTA 6 launch postponed again?",
      "outcomes": {
-      "Yes": 2.8
+      "Yes": 2.0
      }
     }
    },
@@ -2261,10 +2000,144 @@
    "outcome": "Yes",
    "prices": {
     "alpha": 8.9,
-    "polymarket": 2.8
+    "polymarket": 2.0
    },
    "label": "SAME",
-   "gap": 6.1
+   "gap": 6.9
+  },
+  {
+   "title": "Pro Football: 2026 MVP Winner",
+   "close": "2027-03-01T04:59:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/pro-football-2026-mvp-winner",
+     "outcomes": {
+      "Jaxson Dart": null,
+      "Bo Nix": null,
+      "Lamar Jackson": 3.1,
+      "Jared Goff": null,
+      "Matthew Stafford": null,
+      "Trevor Lawrence": null,
+      "Sam Darnold": null,
+      "Jordan Love": null,
+      "Brock Purdy": 20.0,
+      "Justin Jefferson": null,
+      "Christian McCaffrey": null,
+      "Jahmyr Gibbs": 0.9,
+      "Jaxson Smith-Njigba": null,
+      "Josh Allen": 33.3,
+      "Patrick Mahomes": null,
+      "Myles Garrett": null,
+      "Drake Maye": 6.0,
+      "Justin Herbert": null,
+      "Jalen Hurts": null,
+      "Caleb Williams": null,
+      "Dak Prescott": null,
+      "De'Von Achane": null,
+      "Baker Mayfield": null,
+      "Derrick Henry": null,
+      "Joe Burrow": 10.2,
+      "Saquon Barkley": null
+     },
+     "volume": 716,
+     "volume24h": 0,
+     "fee": 70000
+    },
+    "polymarket": {
+     "url": "https://polymarket.com/event/pro-football-2026-mvp-winner",
+     "title": "Pro Football: 2026 MVP Winner",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 1478688,
+     "volume24h": 29481,
+     "matched_outcome": "Josh Allen",
+     "outcomes": {
+      "Jaxson Dart": 0.5,
+      "Bo Nix": 0.2,
+      "Lamar Jackson": 0.1,
+      "Jared Goff": 1.3,
+      "Matthew Stafford": 0.2,
+      "Trevor Lawrence": 8.7,
+      "Sam Darnold": 0.1,
+      "Jordan Love": 1.8,
+      "Brock Purdy": 13.8,
+      "Justin Jefferson": 0.1,
+      "Christian McCaffrey": 0.1,
+      "Jahmyr Gibbs": 0.3,
+      "Jaxson Smith-Njigba": 2.9,
+      "Josh Allen": 26.5,
+      "Patrick Mahomes": 2.0,
+      "Myles Garrett": 0.1,
+      "Drake Maye": 3.4,
+      "Justin Herbert": 1.1,
+      "Jalen Hurts": 1.8,
+      "Caleb Williams": 5.7,
+      "Dak Prescott": 0.4,
+      "De'Von Achane": 0.1,
+      "Baker Mayfield": 0.1,
+      "Derrick Henry": 0.1,
+      "Joe Burrow": 32.4,
+      "Saquon Barkley": 0.1
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Sports",
+    "SPORT*NFL",
+    "sport_forecast",
+    "NFL"
+   ],
+   "outcome": "Josh Allen",
+   "prices": {
+    "alpha": 33.3,
+    "polymarket": 26.5
+   },
+   "label": "SAME",
+   "gap": 6.8
+  },
+  {
+   "title": "RFK Jr. Out by December 31?",
+   "close": "2026-12-31T00:00:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/rfk-jr-out-by-december-31-524",
+     "outcomes": {
+      "Yes": 17.8
+     },
+     "volume": 7,
+     "volume24h": 0,
+     "fee": 70000
+    },
+    "polymarket": {
+     "url": "https://polymarket.com/event/rfk-jr-out-by-december-31-524",
+     "title": "RFK Jr. Out by December 31?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 25864,
+     "volume24h": 0,
+     "matched_outcome": "RFK Jr. Out by December 31?",
+     "outcomes": {
+      "Yes": 24.5
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Politics",
+    "Politics"
+   ],
+   "outcome": "Yes",
+   "prices": {
+    "alpha": 17.8,
+    "polymarket": 24.5
+   },
+   "label": "SAME",
+   "gap": 6.7
   },
   {
    "title": "US military action against Cuba by December 31, 2026?",
@@ -2354,8 +2227,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 70815263,
-     "volume24h": 523235,
+     "volume": 70820385,
+     "volume24h": 524186,
      "matched_outcome": "Barcelona",
      "outcomes": {
       "Paris Saint-Germain": 18.5,
@@ -2367,7 +2240,7 @@
       "Inter Milan": 1.5,
       "Napoli": 0.2,
       "Roma": 0.5,
-      "Como": 1.8,
+      "Como": 1.7,
       "Barcelona": 23.5,
       "Real Madrid": 14.5,
       "Villarreal": 0.1,
@@ -2395,8 +2268,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 6015090,
-     "volume24h": 46733,
+     "volume": 6016337,
+     "volume24h": 49717,
      "matched_outcome": "Barcelona",
      "outcomes": {
       "Aston Villa": 1.0,
@@ -2407,7 +2280,7 @@
       "Napoli": 1.0,
       "Roma": 1.0,
       "Como": 2.5,
-      "Barcelona": 21.0,
+      "Barcelona": 20.5,
       "Real Madrid": 13.5,
       "Villarreal": 1.0,
       "Atl\u00e9tico Madrid": 13.5,
@@ -2442,7 +2315,7 @@
    "prices": {
     "alpha": 18.2,
     "polymarket": 23.5,
-    "kalshi": 21.0
+    "kalshi": 20.5
    },
    "label": "SAME",
    "gap": 5.3
@@ -2560,7 +2433,7 @@
      "volume24h": 0,
      "matched_outcome": "Yes",
      "outcomes": {
-      "Yes": 3.0
+      "Yes": 3.1
      }
     },
     "kalshi": {
@@ -2591,61 +2464,61 @@
    ],
    "outcome": "Yes",
    "prices": {
-    "polymarket": 3.0,
+    "polymarket": 3.1,
     "kalshi": 7.0
    },
    "label": "SAME",
    "pair": "polymarket-kalshi",
-   "gap": 4.0
+   "gap": 3.9
   },
   {
-   "title": "US announces end of Iranian blockade by...?",
-   "close": "2027-01-01T04:59:00Z",
+   "title": "Racing Club de Lens vs. Olympique de Marseille",
+   "close": "2026-11-08T23:00:00Z",
    "sites": {
     "alpha": {
-     "url": "https://www.alphaarcade.com/market/us-announces-end-iranian-blockade-sep-2026",
+     "url": "https://www.alphaarcade.com/market/fl1-rcdl-odm-2026-11-08",
      "outcomes": {
-      "December 31, 2026": 40.1,
-      "November 30": 12.6,
-      "November 15": 3.2
+      "Racing Club de Lens": null,
+      "Draw": null,
+      "Olympique de Marseille": 30.3
      },
-     "volume": 12916,
-     "volume24h": 1677,
+     "volume": 0,
+     "volume24h": 0,
      "fee": 70000
     },
-    "polymarket": {
-     "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080",
-     "title": "US announces end of Iranian blockade by...?",
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxligue1game",
+     "title": "Lens vs Marseille",
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 49219973,
-     "volume24h": 498749,
-     "matched_outcome": "December 31",
+     "volume": 323467,
+     "volume24h": 310859,
+     "matched_outcome": "Marseille",
      "outcomes": {
-      "December 31, 2026": 36.2,
-      "November 30": 13.5,
-      "November 15": 4.4
+      "Racing Club de Lens": 38.5,
+      "Draw": 33.5,
+      "Olympique de Marseille": 26.5
      }
     }
    },
    "flags": [],
    "score": 100,
    "categories": [
-    "Politics",
-    "Geopolitics",
-    "Iran",
-    "Trump",
-    "Middle East",
-    "Geopolitics"
+    "Sports",
+    "SPORT*FL1",
+    "SPORT*Soccer",
+    "sport_game",
+    "Soccer",
+    "Ligue 1"
    ],
-   "outcome": "December 31, 2026",
+   "outcome": "Olympique de Marseille",
    "prices": {
-    "alpha": 40.1,
-    "polymarket": 36.2
+    "alpha": 30.3,
+    "kalshi": 26.5
    },
    "label": "SAME",
-   "gap": 3.9
+   "gap": 3.8
   },
   {
    "title": "France declares state of emergency by...?",
@@ -2741,6 +2614,55 @@
    "gap": 3.7
   },
   {
+   "title": "US announces end of Iranian blockade by...?",
+   "close": "2027-01-01T04:59:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/us-announces-end-iranian-blockade-sep-2026",
+     "outcomes": {
+      "December 31, 2026": 40.1,
+      "November 30": 12.6,
+      "November 15": 3.2
+     },
+     "volume": 12916,
+     "volume24h": 1677,
+     "fee": 70000
+    },
+    "polymarket": {
+     "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080",
+     "title": "US announces end of Iranian blockade by...?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 49220804,
+     "volume24h": 496510,
+     "matched_outcome": "December 31",
+     "outcomes": {
+      "December 31, 2026": 36.4,
+      "November 30": 13.5,
+      "November 15": 4.4
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Politics",
+    "Geopolitics",
+    "Iran",
+    "Trump",
+    "Middle East",
+    "Geopolitics"
+   ],
+   "outcome": "December 31, 2026",
+   "prices": {
+    "alpha": 40.1,
+    "polymarket": 36.4
+   },
+   "label": "SAME",
+   "gap": 3.7
+  },
+  {
    "title": "WTA: Will Coco Gauff beat Jessica Pegula?",
    "close": "2026-11-09T03:30:00Z",
    "sites": {
@@ -2759,8 +2681,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 29896,
-     "volume24h": 27030,
+     "volume": 31728,
+     "volume24h": 30802,
      "matched_outcome": "Coco Gauff",
      "outcomes": {
       "Coco Gauff": 56.5
@@ -2783,6 +2705,53 @@
    },
    "label": "SAME",
    "gap": 3.5
+  },
+  {
+   "title": "NFL: Will the Browns beat the Saints?",
+   "close": "2026-11-08T22:30:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nfl-browns-saints-2026-11-08",
+     "outcomes": {
+      "Browns": 31.1
+     },
+     "volume": 4093,
+     "volume24h": 2900,
+     "fee": 70000
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxnflgame",
+     "title": "Cleveland vs New Orleans",
+     "score": 100,
+     "flags": [
+      "check overtime / extra-time rules"
+     ],
+     "label": "SAME",
+     "volume": 7833709,
+     "volume24h": 6371309,
+     "matched_outcome": "Cleveland",
+     "outcomes": {
+      "Browns": 34.5
+     }
+    }
+   },
+   "flags": [
+    "check overtime / extra-time rules"
+   ],
+   "score": 100,
+   "categories": [
+    "Sports",
+    "SPORT*NFL",
+    "sport_game",
+    "NFL"
+   ],
+   "outcome": "Browns",
+   "prices": {
+    "alpha": 31.1,
+    "kalshi": 34.5
+   },
+   "label": "SAME",
+   "gap": 3.4
   },
   {
    "title": "Zelenskyy out as Ukraine president by end of 2026?",
@@ -2868,58 +2837,6 @@
    "gap": 3.2
   },
   {
-   "title": "Will Trump cut corporate taxes before 2027?",
-   "close": "2027-01-01T04:59:00Z",
-   "sites": {
-    "polymarket": {
-     "url": "https://polymarket.com/event/will-trump-cut-corporate-taxes-before-2027",
-     "title": "Will Trump cut corporate taxes before 2027?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 17553,
-     "volume24h": 0,
-     "matched_outcome": "Yes",
-     "outcomes": {
-      "Yes": 5.2
-     }
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxcorptaxcut",
-     "title": "Will Trump cut corporate taxes this year?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 67731,
-     "volume24h": 0,
-     "matched_outcome": "Yes",
-     "outcomes": {
-      "Yes": 2.1
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "Taxes",
-    "Fiscal",
-    "Politics",
-    "Business",
-    "Economy",
-    "Trump",
-    "Recurring",
-    "Politics"
-   ],
-   "outcome": "Yes",
-   "prices": {
-    "polymarket": 5.2,
-    "kalshi": 2.1
-   },
-   "label": "SAME",
-   "pair": "polymarket-kalshi",
-   "gap": 3.1
-  },
-  {
    "title": "Which companies will the US take a stake in?",
    "close": "2027-01-01T04:59:00Z",
    "sites": {
@@ -2948,7 +2865,7 @@
       "Micron": 3.0,
       "Anthropic": 5.4,
       "Eli Lilly": 8.8,
-      "Pfizer": 7.5,
+      "Pfizer": 7.6,
       "Samsung Electronics": 3.8
      }
     },
@@ -2959,7 +2876,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 1148973,
-     "volume24h": 1613,
+     "volume24h": 1529,
      "matched_outcome": "Unusual Machines",
      "outcomes": {
       "Unusual Machines": 13.0,
@@ -2993,113 +2910,6 @@
    "prices": {
     "polymarket": 16.0,
     "kalshi": 13.0
-   },
-   "label": "SAME",
-   "pair": "polymarket-kalshi",
-   "gap": 3.0
-  },
-  {
-   "title": "#1 Searched Person on Google 2026?",
-   "close": "2026-12-31T00:00:00Z",
-   "sites": {
-    "polymarket": {
-     "url": "https://polymarket.com/event/1-searched-person-on-google-this-year-20260717214320563",
-     "title": "#1 Searched Person on Google 2026?",
-     "score": 90,
-     "flags": [],
-     "label": "SAME",
-     "volume": 364554,
-     "volume24h": 582,
-     "matched_outcome": "Lindsay Clancy",
-     "outcomes": {
-      "Matt Damon": 1.1,
-      "Robert Downey Jr.": 0.9,
-      "Kanye West": 0.7,
-      "Cristiano Ronaldo": 1.7,
-      "Lamine Yamal": 0.8,
-      "Neymar": 2.1,
-      "Alysa Liu": 4.7,
-      "Lionel Messi": 2.8,
-      "Kylian Mbapp\u00e9": 1.1,
-      "Erling Haaland": 12.0,
-      "Christian Pulisic": 0.9,
-      "Jude Bellingham": 2.5,
-      "Vladimir Putin": 0.5,
-      "Volodymyr Zelenskyy": 0.1,
-      "Sydney Sweeney": 0.9,
-      "Donald Trump": 3.6,
-      "Taylor Swift": 0.9,
-      "Sabrina Carpenter": 1.1,
-      "Elon Musk": 0.8,
-      "Billie Eilish": 0.2,
-      "Pedro Pascal": 0.2,
-      "LeBron James": 1.0,
-      "Travis Kelce": 0.9,
-      "Caitlin Clark": 0.2,
-      "Bad Bunny": 6.5,
-      "Jacob Elordi": 0.8,
-      "Ariana Grande": 0.4,
-      "JD Vance": 0.1,
-      "Shohei Ohtani": 0.6,
-      "Josh Allen": 0.4,
-      "Joe Burrow": 0.2,
-      "Timoth\u00e9e Chalamet": 0.2,
-      "Patrick Mahomes": 1.8,
-      "Angel Reese": 0.1,
-      "Chappell Roan": 0.3,
-      "Scarlett Johansson": 0.7,
-      "Luka Don\u010di\u0107": 0.5,
-      "Anthony Edwards": 0.2,
-      "Stefon Diggs": 0.2,
-      "Scottie Scheffler": 0.1,
-      "Ja Morant": 0.9,
-      "Jake Paul": 0.2,
-      "Zendaya": 0.5,
-      "Nicol\u00e1s Maduro": 4.8,
-      "Benjamin Netanyahu": 1.5,
-      "Lindsay Clancy": 31.5
-     }
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxranklistgooglesearch",
-     "title": "#1 searched person on Google in 2026",
-     "score": 90,
-     "flags": [],
-     "label": "SAME",
-     "volume": 1931674,
-     "volume24h": 17936,
-     "matched_outcome": "Lindsay Clancy",
-     "outcomes": {
-      "Alysa Liu": 2.0,
-      "Lionel Messi": 2.0,
-      "Erling Haaland": 10.5,
-      "Vladimir Putin": 1.0,
-      "Volodymyr Zelenskyy": 1.0,
-      "Donald Trump": 3.5,
-      "Taylor Swift": 1.5,
-      "Elon Musk": 1.5,
-      "Billie Eilish": 1.0,
-      "Bad Bunny": 5.5,
-      "Timoth\u00e9e Chalamet": 1.0,
-      "Lindsay Clancy": 34.5
-     }
-    }
-   },
-   "flags": [],
-   "score": 90,
-   "categories": [
-    "Tech",
-    "google",
-    "Culture",
-    "Celebrities",
-    "Best of 2026",
-    "Google Search",
-    "Entertainment"
-   ],
-   "outcome": "Lindsay Clancy",
-   "prices": {
-    "polymarket": 31.5,
-    "kalshi": 34.5
    },
    "label": "SAME",
    "pair": "polymarket-kalshi",
@@ -3173,7 +2983,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 21401315,
-     "volume24h": 25668,
+     "volume24h": 25665,
      "matched_outcome": "December 31",
      "outcomes": {
       "December 31": 9.5
@@ -3185,8 +2995,8 @@
      "score": 90,
      "flags": [],
      "label": "SAME",
-     "volume": 3094123,
-     "volume24h": 26078,
+     "volume": 3104943,
+     "volume24h": 25738,
      "matched_outcome": "Before Jan 1, 2027",
      "outcomes": {
       "December 31": 6.7
@@ -3209,64 +3019,61 @@
    "gap": 2.8
   },
   {
-   "title": "Anthropic IPO Closing Market Cap",
-   "close": "2028-01-01T04:59:00Z",
+   "title": "Pablo Picasso's \u201cLe Baiser\u201d Sale Price",
+   "close": "2026-11-18T04:59:00Z",
    "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/anthropic-ipo-closing-market-cap-higher-strikes",
-     "outcomes": {
-      "<$1.25T": 14.0,
-      "$1.25\u2013$1.5T": 30.1,
-      "$1.5\u2013$1.75T": 33.5,
-      "$1.75\u2013$2.0T": 17.8,
-      "$2.0\u2013$2.25T": 6.5,
-      "$2.25\u2013$2.5T": 2.5,
-      "$2.5\u2013$2.75T": 1.2,
-      "$2.75\u2013$3.0T": null,
-      "$3.0T+": null,
-      "No IPO by December 31, 2027": 4.1
-     },
-     "volume": 0,
-     "volume24h": 4123,
-     "fee": 70000
-    },
     "polymarket": {
-     "url": "https://polymarket.com/event/anthropic-ipo-closing-market-cap-higher-strikes",
-     "title": "Anthropic IPO Closing Market Cap",
+     "url": "https://polymarket.com/event/picasso-le-baiser-sale-price",
+     "title": "Pablo Picasso's \u201cLe Baiser\u201d Sale Price",
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 4118665,
-     "volume24h": 92927,
-     "matched_outcome": "$1.5\u2013$1.75T",
+     "volume": 5127,
+     "volume24h": 4633,
+     "matched_outcome": "$50m-$60m",
      "outcomes": {
-      "<$1.25T": 14.5,
-      "$1.25\u2013$1.5T": 30.0,
-      "$1.5\u2013$1.75T": 30.9,
-      "$1.75\u2013$2.0T": 16.5,
-      "$2.0\u2013$2.25T": 6.6,
-      "$2.25\u2013$2.5T": 1.8,
-      "$2.5\u2013$2.75T": 0.7,
-      "$2.75\u2013$3.0T": 0.6,
-      "$3.0T+": 0.3,
-      "No IPO by December 31, 2027": 0.8
+      "<$40m": 8.6,
+      "$40m-$50m": 20.8,
+      "$50m-$60m": 35.5,
+      "$60m-$70m": 25.0,
+      "$70m+": 13.8
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxart",
+     "title": "Pablo Picasso: Le Baiser sale price?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 655,
+     "volume24h": 96,
+     "matched_outcome": "Above $60M",
+     "outcomes": {
+      "<$40m": 86.5,
+      "$40m-$50m": 61.0,
+      "$50m-$60m": 33.0,
+      "$60m-$70m": 13.0,
+      "$70m+": 13.0
      }
     }
    },
    "flags": [],
    "score": 100,
    "categories": [
-    "Business",
-    "Business",
-    "Technology"
+    "Art",
+    "Culture",
+    "auction",
+    "art auction",
+    "Entertainment"
    ],
-   "outcome": "$1.5\u2013$1.75T",
+   "outcome": "$50m-$60m",
    "prices": {
-    "alpha": 33.5,
-    "polymarket": 30.9
+    "polymarket": 35.5,
+    "kalshi": 33.0
    },
    "label": "SAME",
-   "gap": 2.6
+   "pair": "polymarket-kalshi",
+   "gap": 2.5
   },
   {
    "title": "Katy Perry and Justin Trudeau engaged by end of 2026?",
@@ -3311,53 +3118,6 @@
    "prices": {
     "polymarket": 10.0,
     "kalshi": 12.5
-   },
-   "label": "SAME",
-   "pair": "polymarket-kalshi",
-   "gap": 2.5
-  },
-  {
-   "title": "Will the Senate pass another reconciliation bill by...?",
-   "close": "2027-01-01T04:59:00Z",
-   "sites": {
-    "polymarket": {
-     "url": "https://polymarket.com/event/will-the-senate-pass-another-reconciliation-bill-byptptpt-20260626182134623",
-     "title": "Will the Senate pass another reconciliation bill by...?",
-     "score": 90,
-     "flags": [],
-     "label": "SAME",
-     "volume": 8471,
-     "volume24h": 18,
-     "matched_outcome": "Yes",
-     "outcomes": {
-      "Yes": 10.5
-     }
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxsenaterec",
-     "title": "When will a reconciliation bill pass the Senate?",
-     "score": 90,
-     "flags": [],
-     "label": "SAME",
-     "volume": 7881,
-     "volume24h": 18,
-     "matched_outcome": "Before Jan 1, 2027",
-     "outcomes": {
-      "Yes": 13.0
-     }
-    }
-   },
-   "flags": [],
-   "score": 90,
-   "categories": [
-    "Congress",
-    "Politics",
-    "Politics"
-   ],
-   "outcome": "Yes",
-   "prices": {
-    "polymarket": 10.5,
-    "kalshi": 13.0
    },
    "label": "SAME",
    "pair": "polymarket-kalshi",
@@ -3482,6 +3242,58 @@
    "gap": 2.5
   },
   {
+   "title": "Will Trump cut corporate taxes before 2027?",
+   "close": "2027-01-01T04:59:00Z",
+   "sites": {
+    "polymarket": {
+     "url": "https://polymarket.com/event/will-trump-cut-corporate-taxes-before-2027",
+     "title": "Will Trump cut corporate taxes before 2027?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 17553,
+     "volume24h": 0,
+     "matched_outcome": "Yes",
+     "outcomes": {
+      "Yes": 4.3
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxcorptaxcut",
+     "title": "Will Trump cut corporate taxes this year?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 67731,
+     "volume24h": 0,
+     "matched_outcome": "Yes",
+     "outcomes": {
+      "Yes": 2.1
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Taxes",
+    "Fiscal",
+    "Politics",
+    "Business",
+    "Economy",
+    "Trump",
+    "Recurring",
+    "Politics"
+   ],
+   "outcome": "Yes",
+   "prices": {
+    "polymarket": 4.3,
+    "kalshi": 2.1
+   },
+   "label": "SAME",
+   "pair": "polymarket-kalshi",
+   "gap": 2.2
+  },
+  {
    "title": "Will Bitcoin outperform Gold in 2026?",
    "close": "2027-01-01T05:00:00Z",
    "sites": {
@@ -3556,7 +3368,7 @@
       "Film/TV production expensing": 4.1,
       "Credit-card routing competition": 7.3,
       "Export-control chip security": 41.5,
-      "AI-chip export licensing": 15.0,
+      "AI-chip export licensing": 15.5,
       "Data center utility cost protection": 14.0,
       "SHOWER Act": 4.6,
       "Trump Airport": 4.0
@@ -3610,51 +3422,47 @@
    "gap": 2.0
   },
   {
-   "title": "Will Iran hold a presidential election by...?",
+   "title": "Will the Senate pass another reconciliation bill by...?",
    "close": "2027-01-01T04:59:00Z",
    "sites": {
     "polymarket": {
-     "url": "https://polymarket.com/event/will-iran-hold-a-presidential-election-by-june-30",
-     "title": "Will Iran hold a presidential election by...?",
-     "score": 100,
+     "url": "https://polymarket.com/event/will-the-senate-pass-another-reconciliation-bill-byptptpt-20260626182134623",
+     "title": "Will the Senate pass another reconciliation bill by...?",
+     "score": 90,
      "flags": [],
      "label": "SAME",
-     "volume": 767684,
-     "volume24h": 0,
+     "volume": 8471,
+     "volume24h": 18,
      "matched_outcome": "Yes",
      "outcomes": {
-      "Yes": 4.0
+      "Yes": 10.5
      }
     },
     "kalshi": {
-     "url": "https://kalshi.com/markets/kxelectiran",
-     "title": "Will Iran hold a presidential election?",
-     "score": 100,
+     "url": "https://kalshi.com/markets/kxsenaterec",
+     "title": "When will a reconciliation bill pass the Senate?",
+     "score": 90,
      "flags": [],
      "label": "SAME",
-     "volume": 49372,
-     "volume24h": 7,
+     "volume": 7881,
+     "volume24h": 18,
      "matched_outcome": "Before Jan 1, 2027",
      "outcomes": {
-      "Yes": 6.0
+      "Yes": 12.5
      }
     }
    },
    "flags": [],
-   "score": 100,
+   "score": 90,
    "categories": [
-    "Middle East",
-    "Iran",
-    "Geopolitics",
-    "World",
+    "Congress",
     "Politics",
-    "Iran Regime",
-    "Elections"
+    "Politics"
    ],
    "outcome": "Yes",
    "prices": {
-    "polymarket": 4.0,
-    "kalshi": 6.0
+    "polymarket": 10.5,
+    "kalshi": 12.5
    },
    "label": "SAME",
    "pair": "polymarket-kalshi",
@@ -3766,8 +3574,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 4954051,
-     "volume24h": 7031,
+     "volume": 4955298,
+     "volume24h": 8131,
      "matched_outcome": "June 30, 2027",
      "outcomes": {
       "June 30, 2027": 18.5,
@@ -3781,7 +3589,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 225417,
-     "volume24h": 519,
+     "volume24h": 3184,
      "matched_outcome": "Before Jul 1, 2027",
      "outcomes": {
       "June 30, 2027": 16.5,
@@ -3807,6 +3615,66 @@
    "label": "SAME",
    "pair": "polymarket-kalshi",
    "gap": 2.0
+  },
+  {
+   "title": "Anthropic IPO Closing Market Cap",
+   "close": "2028-01-01T04:59:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/anthropic-ipo-closing-market-cap-higher-strikes",
+     "outcomes": {
+      "<$1.25T": 14.4,
+      "$1.25\u2013$1.5T": 30.1,
+      "$1.5\u2013$1.75T": 33.5,
+      "$1.75\u2013$2.0T": 17.8,
+      "$2.0\u2013$2.25T": 6.5,
+      "$2.25\u2013$2.5T": 2.5,
+      "$2.5\u2013$2.75T": 1.2,
+      "$2.75\u2013$3.0T": null,
+      "$3.0T+": null,
+      "No IPO by December 31, 2027": 4.1
+     },
+     "volume": 0,
+     "volume24h": 4123,
+     "fee": 70000
+    },
+    "polymarket": {
+     "url": "https://polymarket.com/event/anthropic-ipo-closing-market-cap-higher-strikes",
+     "title": "Anthropic IPO Closing Market Cap",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 4120372,
+     "volume24h": 95056,
+     "matched_outcome": "$1.5\u2013$1.75T",
+     "outcomes": {
+      "<$1.25T": 14.8,
+      "$1.25\u2013$1.5T": 30.2,
+      "$1.5\u2013$1.75T": 31.6,
+      "$1.75\u2013$2.0T": 16.5,
+      "$2.0\u2013$2.25T": 6.5,
+      "$2.25\u2013$2.5T": 1.8,
+      "$2.5\u2013$2.75T": 0.7,
+      "$2.75\u2013$3.0T": 0.6,
+      "$3.0T+": 0.3,
+      "No IPO by December 31, 2027": 0.8
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Business",
+    "Business",
+    "Technology"
+   ],
+   "outcome": "$1.5\u2013$1.75T",
+   "prices": {
+    "alpha": 33.5,
+    "polymarket": 31.6
+   },
+   "label": "SAME",
+   "gap": 1.9
   },
   {
    "title": "Will Tesla release Optimus by...?",
@@ -3929,8 +3797,8 @@
       "end dates differ by 43h"
      ],
      "label": "SAME",
-     "volume": 16008771,
-     "volume24h": 20110,
+     "volume": 16009153,
+     "volume24h": 17991,
      "matched_outcome": "Before Jan 4, 2027",
      "outcomes": {
       "Yes": 1.4
@@ -3979,8 +3847,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 78566737,
-     "volume24h": 224564,
+     "volume": 78567237,
+     "volume24h": 224826,
      "matched_outcome": "Will the U.S. invade Iran before 2027?",
      "outcomes": {
       "Yes": 9.5
@@ -4013,8 +3881,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 1314446130,
-     "volume24h": 430081,
+     "volume": 1314466616,
+     "volume24h": 430150,
      "matched_outcome": "Jon Ossoff",
      "outcomes": {
       "Gavin Newsom": 10.5,
@@ -4081,8 +3949,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 281078025,
-     "volume24h": 1500205,
+     "volume": 281087648,
+     "volume24h": 1485198,
      "matched_outcome": "Jon Ossoff",
      "outcomes": {
       "Gavin Newsom": 12.5,
@@ -4179,7 +4047,7 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 125323878,
+     "volume": 125324016,
      "volume24h": 23529,
      "matched_outcome": "December 31",
      "outcomes": {
@@ -4224,8 +4092,8 @@
       "end dates differ by 19h"
      ],
      "label": "SAME",
-     "volume": 107334,
-     "volume24h": 107305,
+     "volume": 107352,
+     "volume24h": 107338,
      "matched_outcome": "Janice Tjen",
      "outcomes": {
       "Janice Tjen": 65.5
@@ -4266,7 +4134,7 @@
      "matched_outcome": "Viking Therapeutics",
      "outcomes": {
       "Brown-Forman": 2.2,
-      "MGM Resorts": 4.9,
+      "MGM Resorts": 4.3,
       "Snapchat": 4.3,
       "Zoom Video Communications": 2.0,
       "Nebius Group": 3.1,
@@ -4288,20 +4156,20 @@
      "flags": [],
      "label": "SAME",
      "volume": 112232,
-     "volume24h": 854,
+     "volume24h": 644,
      "matched_outcome": "Viking Therapeutics",
      "outcomes": {
       "Brown-Forman": 3.5,
       "MGM Resorts": 4.0,
-      "Snapchat": 7.0,
-      "Nebius Group": 5.5,
+      "Snapchat": 6.5,
+      "Nebius Group": 6.0,
       "BP": 4.0,
       "Viking Therapeutics": 9.0,
       "GitLab": 9.5,
       "Perplexity AI": 4.5,
       "Anthropic": 1.0,
       "OpenAI": 5.0,
-      "PayPal": 8.0
+      "PayPal": 8.5
      }
     }
    },
@@ -4378,6 +4246,113 @@
    "gap": 1.5
   },
   {
+   "title": "#1 Searched Person on Google 2026?",
+   "close": "2026-12-31T00:00:00Z",
+   "sites": {
+    "polymarket": {
+     "url": "https://polymarket.com/event/1-searched-person-on-google-this-year-20260717214320563",
+     "title": "#1 Searched Person on Google 2026?",
+     "score": 90,
+     "flags": [],
+     "label": "SAME",
+     "volume": 364554,
+     "volume24h": 582,
+     "matched_outcome": "Lindsay Clancy",
+     "outcomes": {
+      "Matt Damon": 1.1,
+      "Robert Downey Jr.": 0.9,
+      "Kanye West": 0.7,
+      "Cristiano Ronaldo": 1.7,
+      "Lamine Yamal": 0.8,
+      "Neymar": 2.1,
+      "Alysa Liu": 4.7,
+      "Lionel Messi": 2.8,
+      "Kylian Mbapp\u00e9": 1.1,
+      "Erling Haaland": 12.0,
+      "Christian Pulisic": 0.9,
+      "Jude Bellingham": 2.5,
+      "Vladimir Putin": 0.5,
+      "Volodymyr Zelenskyy": 0.1,
+      "Sydney Sweeney": 0.9,
+      "Donald Trump": 3.6,
+      "Taylor Swift": 0.9,
+      "Sabrina Carpenter": 1.1,
+      "Elon Musk": 0.8,
+      "Billie Eilish": 0.2,
+      "Pedro Pascal": 0.2,
+      "LeBron James": 1.0,
+      "Travis Kelce": 0.9,
+      "Caitlin Clark": 0.2,
+      "Bad Bunny": 6.5,
+      "Jacob Elordi": 0.7,
+      "Ariana Grande": 0.4,
+      "JD Vance": 0.1,
+      "Shohei Ohtani": 0.7,
+      "Josh Allen": 0.4,
+      "Joe Burrow": 0.2,
+      "Timoth\u00e9e Chalamet": 0.2,
+      "Patrick Mahomes": 1.8,
+      "Angel Reese": 0.1,
+      "Chappell Roan": 0.3,
+      "Scarlett Johansson": 0.7,
+      "Luka Don\u010di\u0107": 0.5,
+      "Anthony Edwards": 0.2,
+      "Stefon Diggs": 0.2,
+      "Scottie Scheffler": 0.1,
+      "Ja Morant": 0.9,
+      "Jake Paul": 0.2,
+      "Zendaya": 0.5,
+      "Nicol\u00e1s Maduro": 4.8,
+      "Benjamin Netanyahu": 1.5,
+      "Lindsay Clancy": 31.5
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxranklistgooglesearch",
+     "title": "#1 searched person on Google in 2026",
+     "score": 90,
+     "flags": [],
+     "label": "SAME",
+     "volume": 1932031,
+     "volume24h": 17871,
+     "matched_outcome": "Lindsay Clancy",
+     "outcomes": {
+      "Alysa Liu": 2.0,
+      "Lionel Messi": 2.0,
+      "Erling Haaland": 10.5,
+      "Vladimir Putin": 1.0,
+      "Volodymyr Zelenskyy": 1.0,
+      "Donald Trump": 3.5,
+      "Taylor Swift": 1.5,
+      "Elon Musk": 1.5,
+      "Billie Eilish": 1.0,
+      "Bad Bunny": 5.5,
+      "Timoth\u00e9e Chalamet": 1.0,
+      "Lindsay Clancy": 33.0
+     }
+    }
+   },
+   "flags": [],
+   "score": 90,
+   "categories": [
+    "Tech",
+    "google",
+    "Culture",
+    "Celebrities",
+    "Best of 2026",
+    "Google Search",
+    "Entertainment"
+   ],
+   "outcome": "Lindsay Clancy",
+   "prices": {
+    "polymarket": 31.5,
+    "kalshi": 33.0
+   },
+   "label": "SAME",
+   "pair": "polymarket-kalshi",
+   "gap": 1.5
+  },
+  {
    "title": "Argentina Presidential Election Winner",
    "close": "2027-10-25T03:59:00Z",
    "sites": {
@@ -4387,8 +4362,8 @@
      "score": 90,
      "flags": [],
      "label": "SAME",
-     "volume": 1405000,
-     "volume24h": 73025,
+     "volume": 1407126,
+     "volume24h": 75151,
      "matched_outcome": "Javier Milei",
      "outcomes": {
       "Javier Milei": 44.5,
@@ -4402,7 +4377,7 @@
       "Victoria Villarruel": 0.1,
       "Mauricio Macri": 0.3,
       "Dante Gebel": 0.1,
-      "Patricia Bullrich": 3.6,
+      "Patricia Bullrich": 3.7,
       "Cristina Fern\u00e1ndez de Kirchner": 2.1,
       "Karina Milei": 0.2,
       "Nicol\u00e1s del Ca\u00f1o": 0.1,
@@ -4421,7 +4396,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 56182,
-     "volume24h": 68,
+     "volume24h": 53,
      "matched_outcome": "Javier Milei",
      "outcomes": {
       "Javier Milei": 46.0,
@@ -4459,49 +4434,6 @@
    "label": "SAME",
    "pair": "polymarket-kalshi",
    "gap": 1.5
-  },
-  {
-   "title": "Will the Lakers beat the Pistons?",
-   "close": "2026-11-09T03:30:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/nba-lakers-pistons-2026-11-08",
-     "outcomes": {
-      "Lakers": 29.2
-     },
-     "volume": 75,
-     "volume24h": 75,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxnbagame",
-     "title": "Los Angeles L vs Detroit",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 987334,
-     "volume24h": 941323,
-     "matched_outcome": "Los Angeles L",
-     "outcomes": {
-      "Lakers": 30.5
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*NBA",
-    "sport_game",
-    "NBA"
-   ],
-   "outcome": "Lakers",
-   "prices": {
-    "alpha": 29.2,
-    "kalshi": 30.5
-   },
-   "label": "SAME",
-   "gap": 1.3
   },
   {
    "title": "Musk out as Tesla CEO before 2027?",
@@ -4550,6 +4482,57 @@
    "prices": {
     "polymarket": 2.7,
     "kalshi": 4.0
+   },
+   "label": "SAME",
+   "pair": "polymarket-kalshi",
+   "gap": 1.3
+  },
+  {
+   "title": "Will Iran hold a presidential election by...?",
+   "close": "2027-01-01T04:59:00Z",
+   "sites": {
+    "polymarket": {
+     "url": "https://polymarket.com/event/will-iran-hold-a-presidential-election-by-june-30",
+     "title": "Will Iran hold a presidential election by...?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 767684,
+     "volume24h": 0,
+     "matched_outcome": "Yes",
+     "outcomes": {
+      "Yes": 4.0
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxelectiran",
+     "title": "Will Iran hold a presidential election?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 49372,
+     "volume24h": 7,
+     "matched_outcome": "Before Jan 1, 2027",
+     "outcomes": {
+      "Yes": 5.3
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Middle East",
+    "Iran",
+    "Geopolitics",
+    "World",
+    "Politics",
+    "Iran Regime",
+    "Elections"
+   ],
+   "outcome": "Yes",
+   "prices": {
+    "polymarket": 4.0,
+    "kalshi": 5.3
    },
    "label": "SAME",
    "pair": "polymarket-kalshi",
@@ -4870,49 +4853,6 @@
    "gap": 1.0
   },
   {
-   "title": "Will the Penguins beat the Ducks?",
-   "close": "2026-11-09T05:30:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/nhl-penguins-ducks-2026-11-08",
-     "outcomes": {
-      "Penguins": 47.5
-     },
-     "volume": 19,
-     "volume24h": 19,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxnhlgame",
-     "title": "Pittsburgh vs Anaheim",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 64394,
-     "volume24h": 47096,
-     "matched_outcome": "Pittsburgh",
-     "outcomes": {
-      "Penguins": 48.5
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*NHL",
-    "sport_game",
-    "NHL"
-   ],
-   "outcome": "Penguins",
-   "prices": {
-    "alpha": 47.5,
-    "kalshi": 48.5
-   },
-   "label": "SAME",
-   "gap": 1.0
-  },
-  {
    "title": "Will the Heat beat the Kings?",
    "close": "2026-11-09T06:30:00Z",
    "sites": {
@@ -4931,8 +4871,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 142303,
-     "volume24h": 137597,
+     "volume": 142512,
+     "volume24h": 140264,
      "matched_outcome": "Miami",
      "outcomes": {
       "Heat": 79.5
@@ -4953,58 +4893,6 @@
     "kalshi": 79.5
    },
    "label": "SAME",
-   "gap": 1.0
-  },
-  {
-   "title": "Will Trump talk to Mojtaba Khamenei by...?",
-   "close": "2027-01-01T04:59:00Z",
-   "sites": {
-    "polymarket": {
-     "url": "https://polymarket.com/event/will-trump-talk-to-mojtaba-khamenei-by-march-31",
-     "title": "Will Trump talk to Mojtaba Khamenei by...?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 629406,
-     "volume24h": 4,
-     "matched_outcome": "Yes",
-     "outcomes": {
-      "Yes": 4.5
-     }
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxtrumpmojtaba",
-     "title": "Will Trump talk to Mojtaba Khamenei?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 15303,
-     "volume24h": 258,
-     "matched_outcome": "Before Jan 1, 2027",
-     "outcomes": {
-      "Yes": 3.5
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "supreme leader",
-    "Iran",
-    "Geopolitics",
-    "Iran Regime",
-    "Trump",
-    "speak",
-    "U.S. x Iran",
-    "Politics"
-   ],
-   "outcome": "Yes",
-   "prices": {
-    "polymarket": 4.5,
-    "kalshi": 3.5
-   },
-   "label": "SAME",
-   "pair": "polymarket-kalshi",
    "gap": 1.0
   },
   {
@@ -5072,18 +4960,18 @@
      "matched_outcome": "Lindsay Clancy",
      "outcomes": {
       "Lindsay Clancy": 79.5,
-      "Erling Haaland": 57.5,
+      "Erling Haaland": 57.0,
       "Bad Bunny": 51.5,
       "Donald Trump": 7.0,
-      "Sabrina Carpenter": 10.5,
-      "Josh Allen": 12.5,
+      "Sabrina Carpenter": 9.5,
+      "Josh Allen": 13.0,
       "Stefon Diggs": 0.1,
       "Alysa Liu": 17.0,
-      "Lionel Messi": 26.1,
+      "Lionel Messi": 25.5,
       "Matt Damon": 13.1,
       "Jude Bellingham": 14.5,
       "Neymar": 1.1,
-      "Robert Downey Jr.": 16.0,
+      "Robert Downey Jr.": 15.9,
       "Travis Kelce": 3.0,
       "Scarlett Johansson": 3.6,
       "Nicol\u00e1s Maduro": 26.5
@@ -5139,7 +5027,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 228009,
-     "volume24h": 2113,
+     "volume24h": 2111,
      "matched_outcome": "John Malkovich",
      "outcomes": {
       "John Malkovich": 94.5,
@@ -5151,12 +5039,12 @@
       "John Turturro": 47.5,
       "Jeremy Strong": 2.6,
       "Adam Driver": 2.4,
-      "Javier Bardem": 3.3,
+      "Javier Bardem": 3.2,
       "Josh O'Connor": 4.5,
       "Andrew Scott": 92.0,
       "Robert Aramayo": 2.6,
       "Brad Pitt": 4.0,
-      "Sam Rockwell": 3.5,
+      "Sam Rockwell": 3.6,
       "Jaafar Jackson": 14.5,
       "Pedro Pascal": 14.2,
       "Robert Pattinson": 31.0,
@@ -5169,20 +5057,20 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 566158,
-     "volume24h": 3001,
+     "volume": 566174,
+     "volume24h": 3032,
      "matched_outcome": "John Malkovich",
      "outcomes": {
       "John Malkovich": 93.5,
       "Sebastian Stan": 20.0,
       "Tom Cruise": 51.5,
-      "Ryan Gosling": 52.0,
+      "Ryan Gosling": 53.0,
       "Matt Damon": 93.5,
       "Timoth\u00e9e Chalamet": 13.5,
       "John Turturro": 48.5,
       "Jeremy Strong": 2.5,
-      "Adam Driver": 4.0,
-      "Javier Bardem": 3.0,
+      "Adam Driver": 3.5,
+      "Javier Bardem": 3.5,
       "Josh O'Connor": 4.0,
       "Andrew Scott": 91.0,
       "Robert Aramayo": 3.0,
@@ -5190,7 +5078,7 @@
       "Sam Rockwell": 4.0,
       "Jaafar Jackson": 15.5,
       "Pedro Pascal": 12.5,
-      "Robert Pattinson": 32.5,
+      "Robert Pattinson": 33.0,
       "Anthony Ippolito": 47.0
      }
     }
@@ -5229,7 +5117,7 @@
      "matched_outcome": "Javier Milei",
      "outcomes": {
       "Javier Milei": 56.5,
-      "Juan Grabois": 2.3,
+      "Juan Grabois": 2.2,
       "Esteban Bullrich": 0.1,
       "Axel Kicillof": 21.0,
       "Sergio Massa": 4.8,
@@ -5243,9 +5131,9 @@
       "Cristina Fern\u00e1ndez de Kirchner": 5.6,
       "Karina Milei": 4.7,
       "Nicol\u00e1s del Ca\u00f1o": 0.1,
-      "Guillermo Moreno": 6.6,
+      "Guillermo Moreno": 6.5,
       "Daniel Hadad": 5.5,
-      "Eduardo Enrique \"Wado\" de Pedro": 3.5
+      "Eduardo Enrique \"Wado\" de Pedro": 4.0
      }
     },
     "kalshi": {
@@ -5288,6 +5176,52 @@
    "prices": {
     "polymarket": 56.5,
     "kalshi": 57.5
+   },
+   "label": "SAME",
+   "pair": "polymarket-kalshi",
+   "gap": 1.0
+  },
+  {
+   "title": "Will Avengers: Secret Wars be delayed?",
+   "close": "2027-12-17T04:59:00Z",
+   "sites": {
+    "polymarket": {
+     "url": "https://polymarket.com/event/will-avengers-secret-wars-be-delayed-20260721153722642",
+     "title": "Will Avengers: Secret Wars be delayed?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 37417,
+     "volume24h": 0,
+     "matched_outcome": "Yes",
+     "outcomes": {
+      "Yes": 36.0
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxmoviedelay",
+     "title": "Will Avengers: Secret Wars be delayed?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 374,
+     "volume24h": 0,
+     "matched_outcome": "Past Dec 18, 2027",
+     "outcomes": {
+      "Yes": 37.0
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Culture",
+    "Entertainment"
+   ],
+   "outcome": "Yes",
+   "prices": {
+    "polymarket": 36.0,
+    "kalshi": 37.0
    },
    "label": "SAME",
    "pair": "polymarket-kalshi",
@@ -5338,6 +5272,49 @@
    "gap": 0.9
   },
   {
+   "title": "Will the Lakers beat the Pistons?",
+   "close": "2026-11-09T03:30:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nba-lakers-pistons-2026-11-08",
+     "outcomes": {
+      "Lakers": 31.4
+     },
+     "volume": 75,
+     "volume24h": 75,
+     "fee": 70000
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxnbagame",
+     "title": "Los Angeles L vs Detroit",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 998458,
+     "volume24h": 960239,
+     "matched_outcome": "Los Angeles L",
+     "outcomes": {
+      "Lakers": 30.5
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Sports",
+    "SPORT*NBA",
+    "sport_game",
+    "NBA"
+   ],
+   "outcome": "Lakers",
+   "prices": {
+    "alpha": 31.4,
+    "kalshi": 30.5
+   },
+   "label": "SAME",
+   "gap": 0.9
+  },
+  {
    "title": "NFL: Will the Packers beat the Patriots?",
    "close": "2026-11-09T01:55:00Z",
    "sites": {
@@ -5346,8 +5323,8 @@
      "outcomes": {
       "Packers": 37.6
      },
-     "volume": 3837,
-     "volume24h": 2696,
+     "volume": 3850,
+     "volume24h": 2709,
      "fee": 70000
     },
     "kalshi": {
@@ -5358,8 +5335,8 @@
       "check overtime / extra-time rules"
      ],
      "label": "SAME",
-     "volume": 1814267,
-     "volume24h": 1030711,
+     "volume": 1866224,
+     "volume24h": 1092723,
      "matched_outcome": "Green Bay",
      "outcomes": {
       "Packers": 38.5
@@ -5403,8 +5380,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 98668,
-     "volume24h": 94322,
+     "volume": 99018,
+     "volume24h": 96298,
      "matched_outcome": "Brooklyn",
      "outcomes": {
       "Nets": 25.5
@@ -5426,6 +5403,58 @@
    },
    "label": "SAME",
    "gap": 0.9
+  },
+  {
+   "title": "Will Trump talk to Mojtaba Khamenei by...?",
+   "close": "2027-01-01T04:59:00Z",
+   "sites": {
+    "polymarket": {
+     "url": "https://polymarket.com/event/will-trump-talk-to-mojtaba-khamenei-by-march-31",
+     "title": "Will Trump talk to Mojtaba Khamenei by...?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 629406,
+     "volume24h": 4,
+     "matched_outcome": "Yes",
+     "outcomes": {
+      "Yes": 4.3
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxtrumpmojtaba",
+     "title": "Will Trump talk to Mojtaba Khamenei?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 15303,
+     "volume24h": 258,
+     "matched_outcome": "Before Jan 1, 2027",
+     "outcomes": {
+      "Yes": 3.5
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "supreme leader",
+    "Iran",
+    "Geopolitics",
+    "Iran Regime",
+    "Trump",
+    "speak",
+    "U.S. x Iran",
+    "Politics"
+   ],
+   "outcome": "Yes",
+   "prices": {
+    "polymarket": 4.3,
+    "kalshi": 3.5
+   },
+   "label": "SAME",
+   "pair": "polymarket-kalshi",
+   "gap": 0.8
   },
   {
    "title": "Blue Origin New Glenn launch in 2026?",
@@ -5529,81 +5558,6 @@
    "gap": 0.7
   },
   {
-   "title": "Which Senators will vote for the Clarity Act?",
-   "close": "2027-01-01T04:59:00Z",
-   "sites": {
-    "polymarket": {
-     "url": "https://polymarket.com/event/which-senators-will-vote-for-the-clarity-act-20260729190926658",
-     "title": "Which Senators will vote for the Clarity Act?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 529791,
-     "volume24h": 282,
-     "matched_outcome": "Mark Warner",
-     "outcomes": {
-      "Mike Lee": 4.2,
-      "Catherine Cortez Masto": 2.8,
-      "Mark Warner": 4.8,
-      "Jerry Moran": 0.1,
-      "Kirsten Gillibrand": 4.0,
-      "Lisa Blunt Rochester": 4.0,
-      "Ruben Gallego": 1.8,
-      "Raphael Warnock": 3.8,
-      "Josh Hawley": 1.1,
-      "Andy Kim": 2.9,
-      "Rand Paul": 2.5,
-      "John Fetterman": 3.0,
-      "Thom Tillis": 0.8,
-      "Jacky Rosen": 3.0,
-      "Alex Padilla": 2.5
-     }
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxsvoteclarity",
-     "title": "Which Senators will vote for the Clarity Act?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 63791,
-     "volume24h": 50,
-     "matched_outcome": "Mark Warner",
-     "outcomes": {
-      "Mike Lee": 4.0,
-      "Catherine Cortez Masto": 4.0,
-      "Mark Warner": 5.5,
-      "Jerry Moran": 1.0,
-      "Kirsten Gillibrand": 4.5,
-      "Lisa Blunt Rochester": 8.0,
-      "Ruben Gallego": 3.5,
-      "Raphael Warnock": 4.0,
-      "Josh Hawley": 1.5,
-      "Andy Kim": 4.0,
-      "Rand Paul": 3.5
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "Crypto",
-    "Congress",
-    "Politics",
-    "US Politics",
-    "Crypto Legal",
-    "Clarity Act",
-    "Politics"
-   ],
-   "outcome": "Mark Warner",
-   "prices": {
-    "polymarket": 4.8,
-    "kalshi": 5.5
-   },
-   "label": "SAME",
-   "pair": "polymarket-kalshi",
-   "gap": 0.7
-  },
-  {
    "title": "NFL: Will the Texans beat the Chargers?",
    "close": "2026-11-09T01:35:00Z",
    "sites": {
@@ -5624,8 +5578,8 @@
       "check overtime / extra-time rules"
      ],
      "label": "SAME",
-     "volume": 778214,
-     "volume24h": 509014,
+     "volume": 816135,
+     "volume24h": 546609,
      "matched_outcome": "Houston",
      "outcomes": {
       "Texans": 67.5
@@ -5651,53 +5605,6 @@
    "gap": 0.5
   },
   {
-   "title": "NFL: Will the Cardinals beat the Seahawks?",
-   "close": "2026-11-09T01:55:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/nfl-cardinals-seahawks-2026-11-08",
-     "outcomes": {
-      "Cardinals": 22.0
-     },
-     "volume": 3391,
-     "volume24h": 2289,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxnflgame",
-     "title": "Arizona vs Seattle",
-     "score": 100,
-     "flags": [
-      "check overtime / extra-time rules"
-     ],
-     "label": "SAME",
-     "volume": 1410079,
-     "volume24h": 548907,
-     "matched_outcome": "Arizona",
-     "outcomes": {
-      "Cardinals": 21.5
-     }
-    }
-   },
-   "flags": [
-    "check overtime / extra-time rules"
-   ],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*NFL",
-    "sport_game",
-    "NFL"
-   ],
-   "outcome": "Cardinals",
-   "prices": {
-    "alpha": 22.0,
-    "kalshi": 21.5
-   },
-   "label": "SAME",
-   "gap": 0.5
-  },
-  {
    "title": "ATP: Will Shunsuke Mitsui beat Geoffrey Blancaneaux?",
    "close": "2026-11-09T00:30:00Z",
    "sites": {
@@ -5716,8 +5623,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 2482,
-     "volume24h": 2482,
+     "volume": 2584,
+     "volume24h": 2572,
      "matched_outcome": "Shunsuke Mitsui",
      "outcomes": {
       "Shunsuke Mitsui": 55.0
@@ -5737,49 +5644,6 @@
    "prices": {
     "alpha": 55.5,
     "kalshi": 55.0
-   },
-   "label": "SAME",
-   "gap": 0.5
-  },
-  {
-   "title": "Will the Pelicans beat the Clippers?",
-   "close": "2026-11-09T06:30:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/nba-pelicans-clippers-2026-11-08",
-     "outcomes": {
-      "Pelicans": 52.5
-     },
-     "volume": 75,
-     "volume24h": 75,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxnbagame",
-     "title": "New Orleans vs Los Angeles C",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 61570,
-     "volume24h": 54482,
-     "matched_outcome": "New Orleans",
-     "outcomes": {
-      "Pelicans": 53.0
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "Sports",
-    "SPORT*NBA",
-    "sport_game",
-    "NBA"
-   ],
-   "outcome": "Pelicans",
-   "prices": {
-    "alpha": 52.5,
-    "kalshi": 53.0
    },
    "label": "SAME",
    "gap": 0.5
@@ -5941,7 +5805,7 @@
       "Yes": 4.0
      },
      "volume": 9797,
-     "volume24h": 1582,
+     "volume24h": 76,
      "fee": 70000
     },
     "polymarket": {
@@ -6039,7 +5903,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 104907,
-     "volume24h": 184,
+     "volume24h": 138,
      "matched_outcome": "Before Jan 1, 2027",
      "outcomes": {
       "Yes": 1.5
@@ -6090,8 +5954,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 246723,
-     "volume24h": 565,
+     "volume": 246724,
+     "volume24h": 566,
      "matched_outcome": "Before 2027",
      "outcomes": {
       "Yes": 2.4
@@ -6115,6 +5979,81 @@
    "prices": {
     "polymarket": 2.0,
     "kalshi": 2.4
+   },
+   "label": "SAME",
+   "pair": "polymarket-kalshi",
+   "gap": 0.4
+  },
+  {
+   "title": "Which Senators will vote for the Clarity Act?",
+   "close": "2027-01-01T04:59:00Z",
+   "sites": {
+    "polymarket": {
+     "url": "https://polymarket.com/event/which-senators-will-vote-for-the-clarity-act-20260729190926658",
+     "title": "Which Senators will vote for the Clarity Act?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 529791,
+     "volume24h": 282,
+     "matched_outcome": "Mark Warner",
+     "outcomes": {
+      "Mike Lee": 4.2,
+      "Catherine Cortez Masto": 2.8,
+      "Mark Warner": 5.1,
+      "Jerry Moran": 0.1,
+      "Kirsten Gillibrand": 4.0,
+      "Lisa Blunt Rochester": 4.0,
+      "Ruben Gallego": 1.8,
+      "Raphael Warnock": 3.8,
+      "Josh Hawley": 1.1,
+      "Andy Kim": 2.9,
+      "Rand Paul": 2.5,
+      "John Fetterman": 3.0,
+      "Thom Tillis": 0.8,
+      "Jacky Rosen": 3.0,
+      "Alex Padilla": 2.5
+     }
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxsvoteclarity",
+     "title": "Which Senators will vote for the Clarity Act?",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 63791,
+     "volume24h": 50,
+     "matched_outcome": "Mark Warner",
+     "outcomes": {
+      "Mike Lee": 4.0,
+      "Catherine Cortez Masto": 3.5,
+      "Mark Warner": 5.5,
+      "Jerry Moran": 1.0,
+      "Kirsten Gillibrand": 4.5,
+      "Lisa Blunt Rochester": 6.5,
+      "Ruben Gallego": 2.5,
+      "Raphael Warnock": 4.0,
+      "Josh Hawley": 1.5,
+      "Andy Kim": 3.0,
+      "Rand Paul": 3.0
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Crypto",
+    "Congress",
+    "Politics",
+    "US Politics",
+    "Crypto Legal",
+    "Clarity Act",
+    "Politics"
+   ],
+   "outcome": "Mark Warner",
+   "prices": {
+    "polymarket": 5.1,
+    "kalshi": 5.5
    },
    "label": "SAME",
    "pair": "polymarket-kalshi",
@@ -6353,8 +6292,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 37303793,
-     "volume24h": 378755,
+     "volume": 37304266,
+     "volume24h": 378394,
      "matched_outcome": "Philadelphia 76ers",
      "outcomes": {
       "Oklahoma City Thunder": 15.5,
@@ -6477,7 +6416,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 2047513,
-     "volume24h": 740,
+     "volume24h": 240,
      "matched_outcome": "Reza Pahlavi",
      "outcomes": {
       "Yes": 1.5
@@ -6589,6 +6528,96 @@
    "gap": 0.1
   },
   {
+   "title": "NFL: Will the Jets beat the Chiefs?",
+   "close": "2026-11-08T22:30:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nfl-jets-chiefs-2026-11-08",
+     "outcomes": {
+      "Jets": 1.1
+     },
+     "volume": 2420,
+     "volume24h": 1281,
+     "fee": 70000
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxnflgame",
+     "title": "New York J vs Kansas City",
+     "score": 100,
+     "flags": [
+      "check overtime / extra-time rules"
+     ],
+     "label": "SAME",
+     "volume": 12992328,
+     "volume24h": 11994758,
+     "matched_outcome": "New York J",
+     "outcomes": {
+      "Jets": 1.0
+     }
+    }
+   },
+   "flags": [
+    "check overtime / extra-time rules"
+   ],
+   "score": 100,
+   "categories": [
+    "Sports",
+    "SPORT*NFL",
+    "sport_game",
+    "NFL"
+   ],
+   "outcome": "Jets",
+   "prices": {
+    "alpha": 1.1,
+    "kalshi": 1.0
+   },
+   "label": "SAME",
+   "gap": 0.1
+  },
+  {
+   "title": "Will the 76ers beat the Bulls?",
+   "close": "2026-11-09T01:00:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nba-76ers-bulls-2026-11-08",
+     "outcomes": {
+      "76ers": 78.6
+     },
+     "volume": 381,
+     "volume24h": 381,
+     "fee": 70000
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxnbagame",
+     "title": "Philadelphia vs Chicago",
+     "score": 100,
+     "flags": [],
+     "label": "SAME",
+     "volume": 756548,
+     "volume24h": 706661,
+     "matched_outcome": "Philadelphia",
+     "outcomes": {
+      "76ers": 78.5
+     }
+    }
+   },
+   "flags": [],
+   "score": 100,
+   "categories": [
+    "Sports",
+    "SPORT*NBA",
+    "sport_game",
+    "NBA"
+   ],
+   "outcome": "76ers",
+   "prices": {
+    "alpha": 78.6,
+    "kalshi": 78.5
+   },
+   "label": "SAME",
+   "gap": 0.1
+  },
+  {
    "title": "Will the Jazz beat the Timberwolves?",
    "close": "2026-11-09T04:30:00Z",
    "sites": {
@@ -6607,8 +6636,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 97487,
-     "volume24h": 87462,
+     "volume": 98375,
+     "volume24h": 89754,
      "matched_outcome": "Utah",
      "outcomes": {
       "Jazz": 15.5
@@ -6641,8 +6670,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 1305564,
-     "volume24h": 510,
+     "volume": 1308194,
+     "volume24h": 3141,
      "matched_outcome": "Yes",
      "outcomes": {
       "Yes": 2.1
@@ -6701,8 +6730,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 5741577,
-     "volume24h": 99005,
+     "volume": 5744590,
+     "volume24h": 99017,
      "matched_outcome": "December 31",
      "outcomes": {
       "December 31": 7.5
@@ -6868,8 +6897,8 @@
       "end dates differ by 28h"
      ],
      "label": "SAME",
-     "volume": 1175148,
-     "volume24h": 46432,
+     "volume": 1175208,
+     "volume24h": 45663,
      "matched_outcome": "November 30",
      "outcomes": {
       "Yes": 39.5
@@ -7068,8 +7097,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 7838,
-     "volume24h": 5818,
+     "volume": 8282,
+     "volume24h": 6117,
      "matched_outcome": "Barcelona",
      "outcomes": {
       "Barcelona SC": 36.5,
@@ -7116,8 +7145,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 20427,
-     "volume24h": 18860,
+     "volume": 20798,
+     "volume24h": 19875,
      "matched_outcome": "New Jersey",
      "outcomes": {
       "Devils": 59.5
@@ -7159,8 +7188,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 33103,
-     "volume24h": 32089,
+     "volume": 33781,
+     "volume24h": 33119,
      "matched_outcome": "Philadelphia",
      "outcomes": {
       "Flyers": 52.5
@@ -7228,29 +7257,29 @@
    "gap": null
   },
   {
-   "title": "Will the 76ers beat the Bulls?",
-   "close": "2026-11-09T01:00:00Z",
+   "title": "Will the Penguins beat the Ducks?",
+   "close": "2026-11-09T05:30:00Z",
    "sites": {
     "alpha": {
-     "url": "https://www.alphaarcade.com/market/nba-76ers-bulls-2026-11-08",
+     "url": "https://www.alphaarcade.com/market/nhl-penguins-ducks-2026-11-08",
      "outcomes": {
-      "76ers": 79.5
+      "Penguins": 48.5
      },
-     "volume": 83,
-     "volume24h": 83,
+     "volume": 23,
+     "volume24h": 23,
      "fee": 70000
     },
     "kalshi": {
-     "url": "https://kalshi.com/markets/kxnbagame",
-     "title": "Philadelphia vs Chicago",
+     "url": "https://kalshi.com/markets/kxnhlgame",
+     "title": "Pittsburgh vs Anaheim",
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 559679,
-     "volume24h": 502458,
-     "matched_outcome": "Philadelphia",
+     "volume": 70247,
+     "volume24h": 69393,
+     "matched_outcome": "Pittsburgh",
      "outcomes": {
-      "76ers": 79.5
+      "Penguins": 48.5
      }
     }
    },
@@ -7258,14 +7287,61 @@
    "score": 100,
    "categories": [
     "Sports",
-    "SPORT*NBA",
+    "SPORT*NHL",
     "sport_game",
-    "NBA"
+    "NHL"
    ],
-   "outcome": "76ers",
+   "outcome": "Penguins",
    "prices": {
-    "alpha": 79.5,
-    "kalshi": 79.5
+    "alpha": 48.5,
+    "kalshi": 48.5
+   },
+   "label": "SAME",
+   "gap": 0.0
+  },
+  {
+   "title": "NFL: Will the Rams beat the Commanders?",
+   "close": "2026-11-08T22:30:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nfl-rams-commanders-2026-11-08",
+     "outcomes": {
+      "Rams": 80.5
+     },
+     "volume": 1635,
+     "volume24h": 1273,
+     "fee": 70000
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxnflgame",
+     "title": "Los Angeles R vs Washington",
+     "score": 100,
+     "flags": [
+      "check overtime / extra-time rules"
+     ],
+     "label": "SAME",
+     "volume": 7898134,
+     "volume24h": 7407314,
+     "matched_outcome": "Los Angeles R",
+     "outcomes": {
+      "Rams": 80.5
+     }
+    }
+   },
+   "flags": [
+    "check overtime / extra-time rules"
+   ],
+   "score": 100,
+   "categories": [
+    "Sports",
+    "SPORT*NFL",
+    "sport_game",
+    "NFL"
+   ],
+   "outcome": "Rams",
+   "prices": {
+    "alpha": 80.5,
+    "kalshi": 80.5
    },
    "label": "SAME",
    "gap": 0.0
@@ -7291,8 +7367,8 @@
       "check overtime / extra-time rules"
      ],
      "label": "SAME",
-     "volume": 3362009,
-     "volume24h": 2055015,
+     "volume": 3574122,
+     "volume24h": 2269758,
      "matched_outcome": "Las Vegas",
      "outcomes": {
       "Raiders": 20.5
@@ -7318,6 +7394,53 @@
    "gap": 0.0
   },
   {
+   "title": "NFL: Will the Cardinals beat the Seahawks?",
+   "close": "2026-11-09T01:55:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nfl-cardinals-seahawks-2026-11-08",
+     "outcomes": {
+      "Cardinals": 21.5
+     },
+     "volume": 3391,
+     "volume24h": 2289,
+     "fee": 70000
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxnflgame",
+     "title": "Arizona vs Seattle",
+     "score": 100,
+     "flags": [
+      "check overtime / extra-time rules"
+     ],
+     "label": "SAME",
+     "volume": 1422670,
+     "volume24h": 564188,
+     "matched_outcome": "Arizona",
+     "outcomes": {
+      "Cardinals": 21.5
+     }
+    }
+   },
+   "flags": [
+    "check overtime / extra-time rules"
+   ],
+   "score": 100,
+   "categories": [
+    "Sports",
+    "SPORT*NFL",
+    "sport_game",
+    "NFL"
+   ],
+   "outcome": "Cardinals",
+   "prices": {
+    "alpha": 21.5,
+    "kalshi": 21.5
+   },
+   "label": "SAME",
+   "gap": 0.0
+  },
+  {
    "title": "Will the Celtics beat the Bucks?",
    "close": "2026-11-09T05:30:00Z",
    "sites": {
@@ -7336,8 +7459,8 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 58997,
-     "volume24h": 40896,
+     "volume": 60797,
+     "volume24h": 46397,
      "matched_outcome": "Boston",
      "outcomes": {
       "Celtics": 85.5
@@ -7381,13 +7504,13 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 952065,
-     "volume24h": 707134,
+     "volume": 1164989,
+     "volume24h": 1107075,
      "matched_outcome": "Fiorentina",
      "outcomes": {
-      "ACF Fiorentina": 50.5,
-      "Draw": 25.5,
-      "Juventus FC": 24.5
+      "ACF Fiorentina": 23.5,
+      "Draw": 31.5,
+      "Juventus FC": 44.5
      }
     }
    },
@@ -7404,7 +7527,7 @@
    "outcome": "ACF Fiorentina",
    "prices": {
     "alpha": null,
-    "kalshi": 50.5
+    "kalshi": 23.5
    },
    "label": "SAME",
    "gap": null
@@ -7425,18 +7548,18 @@
      "fee": 70000
     },
     "polymarket": {
-     "url": "https://polymarket.com/event/col1-jdc-cab-2026-11-08",
-     "title": "Jaguares de C\u00f3rdoba FC vs. CA Bucaramanga",
+     "url": "https://polymarket.com/event/col1-jdc-cab-2026-11-08-halftime-result",
+     "title": "Jaguares de C\u00f3rdoba FC vs. CA Bucaramanga - Halftime Result",
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 1016,
-     "volume24h": 255,
+     "volume": 54,
+     "volume24h": 54,
      "matched_outcome": "Jaguares de C\u00f3rdoba FC",
      "outcomes": {
-      "Jaguares de C\u00f3rdoba FC": 23.5,
-      "Draw": 25.5,
-      "CA Bucaramanga": 50.5
+      "Jaguares de C\u00f3rdoba FC": 21.0,
+      "Draw": 41.0,
+      "CA Bucaramanga": 38.0
      }
     }
    },
@@ -7453,66 +7576,52 @@
    "outcome": "Jaguares de C\u00f3rdoba FC",
    "prices": {
     "alpha": null,
-    "polymarket": 23.5
+    "polymarket": 21.0
    },
    "label": "SAME",
    "gap": null
   },
   {
-   "title": "Pablo Picasso's \u201cLe Baiser\u201d Sale Price",
-   "close": "2026-11-18T04:59:00Z",
+   "title": "Will the Pelicans beat the Clippers?",
+   "close": "2026-11-09T06:30:00Z",
    "sites": {
-    "polymarket": {
-     "url": "https://polymarket.com/event/picasso-le-baiser-sale-price",
-     "title": "Pablo Picasso's \u201cLe Baiser\u201d Sale Price",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 5121,
-     "volume24h": 4628,
-     "matched_outcome": "$50m-$60m",
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/nba-pelicans-clippers-2026-11-08",
      "outcomes": {
-      "<$40m": 8.2,
-      "$40m-$50m": 22.4,
-      "$50m-$60m": 33.0,
-      "$60m-$70m": 25.0,
-      "$70m+": 13.7
-     }
+      "Pelicans": 52.5
+     },
+     "volume": 75,
+     "volume24h": 75,
+     "fee": 70000
     },
     "kalshi": {
-     "url": "https://kalshi.com/markets/kxart",
-     "title": "Pablo Picasso: Le Baiser sale price?",
+     "url": "https://kalshi.com/markets/kxnbagame",
+     "title": "New Orleans vs Los Angeles C",
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 655,
-     "volume24h": 96,
-     "matched_outcome": "Above $60M",
+     "volume": 62839,
+     "volume24h": 57508,
+     "matched_outcome": "New Orleans",
      "outcomes": {
-      "<$40m": 86.5,
-      "$40m-$50m": 61.0,
-      "$50m-$60m": 33.0,
-      "$60m-$70m": 13.0,
-      "$70m+": 13.0
+      "Pelicans": 52.5
      }
     }
    },
    "flags": [],
    "score": 100,
    "categories": [
-    "Art",
-    "Culture",
-    "auction",
-    "art auction",
-    "Entertainment"
+    "Sports",
+    "SPORT*NBA",
+    "sport_game",
+    "NBA"
    ],
-   "outcome": "$50m-$60m",
+   "outcome": "Pelicans",
    "prices": {
-    "polymarket": 33.0,
-    "kalshi": 33.0
+    "alpha": 52.5,
+    "kalshi": 52.5
    },
    "label": "SAME",
-   "pair": "polymarket-kalshi",
    "gap": 0.0
   },
   {
@@ -7565,52 +7674,6 @@
    "gap": 0.0
   },
   {
-   "title": "Will Avengers: Secret Wars be delayed?",
-   "close": "2027-12-17T04:59:00Z",
-   "sites": {
-    "polymarket": {
-     "url": "https://polymarket.com/event/will-avengers-secret-wars-be-delayed-20260721153722642",
-     "title": "Will Avengers: Secret Wars be delayed?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 37417,
-     "volume24h": 0,
-     "matched_outcome": "Yes",
-     "outcomes": {
-      "Yes": 37.0
-     }
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxmoviedelay",
-     "title": "Will Avengers: Secret Wars be delayed?",
-     "score": 100,
-     "flags": [],
-     "label": "SAME",
-     "volume": 374,
-     "volume24h": 369,
-     "matched_outcome": "Past Dec 18, 2027",
-     "outcomes": {
-      "Yes": 37.0
-     }
-    }
-   },
-   "flags": [],
-   "score": 100,
-   "categories": [
-    "Culture",
-    "Entertainment"
-   ],
-   "outcome": "Yes",
-   "prices": {
-    "polymarket": 37.0,
-    "kalshi": 37.0
-   },
-   "label": "SAME",
-   "pair": "polymarket-kalshi",
-   "gap": 0.0
-  },
-  {
    "title": "Presidential Election Winner 2028",
    "close": "2029-01-31T05:00:00Z",
    "sites": {
@@ -7652,7 +7715,7 @@
      ],
      "label": "SIMILAR",
      "volume": 736252606,
-     "volume24h": 338666,
+     "volume24h": 336642,
      "matched_outcome": "JD Vance",
      "outcomes": {
       "JD Vance": 17.8,
@@ -7684,12 +7747,12 @@
      "score": 100,
      "flags": [],
      "label": "SAME",
-     "volume": 91162959,
-     "volume24h": 854168,
+     "volume": 91222246,
+     "volume24h": 846236,
      "matched_outcome": "J.D. Vance",
      "outcomes": {
       "JD Vance": 13.5,
-      "Gavin Newsom": 9.6,
+      "Gavin Newsom": 9.2,
       "Alexandria Ocasio-Cortez": 9.6,
       "Pete Buttigieg": 2.8,
       "Marco Rubio": 10.5,
@@ -7702,7 +7765,7 @@
       "Wes Moore": 1.8,
       "Nikki Haley": 0.5,
       "Tulsi Gabbard": 0.9,
-      "Andy Beshear": 3.5,
+      "Andy Beshear": 3.3,
       "Greg Abbott": 0.1,
       "JB Pritzker": 1.9,
       "Glenn Youngkin": 0.8,
@@ -7764,8 +7827,8 @@
       "end dates differ by 12 days"
      ],
      "label": "SIMILAR",
-     "volume": 168662462,
-     "volume24h": 836671,
+     "volume": 168695055,
+     "volume24h": 836984,
      "matched_outcome": "Jordan Bardella",
      "outcomes": {
       "Jordan Bardella": 2.2,
@@ -7777,7 +7840,7 @@
       "Fran\u00e7ois Hollande": 2.1,
       "Gabriel Attal": 0.4,
       "Bruno Retailleau": 0.8,
-      "Rapha\u00ebl Glucksmann": 2.8,
+      "Rapha\u00ebl Glucksmann": 2.5,
       "Sarah Knafo": 0.1
      }
     }
@@ -7822,8 +7885,8 @@
      "score": 80,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 55664407,
-     "volume24h": 37873,
+     "volume": 55664423,
+     "volume24h": 37865,
      "matched_outcome": null,
      "outcomes": {
       "1 (25 bps)": 1.1,
@@ -7971,10 +8034,10 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 3579743,
-     "volume24h": 2379,
+     "volume24h": 2305,
      "matched_outcome": "Before Jan 1, 2027",
      "outcomes": {
-      "Yes": 2.8
+      "Yes": 2.6
      }
     }
    },
@@ -7987,7 +8050,7 @@
    "outcome": "Yes",
    "prices": {
     "alpha": 36.0,
-    "kalshi": 2.8
+    "kalshi": 2.6
    },
    "label": "SIMILAR",
    "gap": null
@@ -8070,8 +8133,8 @@
       "end dates differ by 88 days"
      ],
      "label": "SIMILAR",
-     "volume": 10594042,
-     "volume24h": 23753,
+     "volume": 10595115,
+     "volume24h": 24689,
      "matched_outcome": "March 31, 2027",
      "outcomes": {
       "December 31": 15.5,
@@ -8142,8 +8205,8 @@
      "score": 70,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 82902437,
-     "volume24h": 134878,
+     "volume": 82909446,
+     "volume24h": 136671,
      "matched_outcome": null,
      "outcomes": {}
     },
@@ -8153,8 +8216,8 @@
      "score": 70,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 6188406,
-     "volume24h": 6250,
+     "volume": 6188408,
+     "volume24h": 6281,
      "matched_outcome": null,
      "outcomes": {}
     }
@@ -8323,13 +8386,13 @@
       "end dates differ by 15 days"
      ],
      "label": "SIMILAR",
-     "volume": 9609264,
-     "volume24h": 49438,
+     "volume": 9626076,
+     "volume24h": 66180,
      "matched_outcome": "Atl\u00e9tico Madrid",
      "outcomes": {
       "Alav\u00e9s": 0.1,
       "Athletic Bilbao": 0.1,
-      "Atl\u00e9tico Madrid": 5.5,
+      "Atl\u00e9tico Madrid": 5.8,
       "Barcelona": 58.5,
       "Betis": 0.4,
       "Celta Vigo": 0.1,
@@ -8337,7 +8400,7 @@
       "Getafe": 0.1,
       "Osasuna": 0.1,
       "Rayo Vallecano": 0.1,
-      "Real Madrid": 5.5,
+      "Real Madrid": 5.8,
       "Real Sociedad": 0.1,
       "Sevilla": 0.1,
       "Valencia": 0.1,
@@ -8365,7 +8428,7 @@
    "outcome": "Real Madrid",
    "prices": {
     "alpha": 41.4,
-    "polymarket": 5.5
+    "polymarket": 5.8
    },
    "label": "SIMILAR",
    "gap": null
@@ -8433,7 +8496,7 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 16974422,
-     "volume24h": 56886,
+     "volume24h": 56954,
      "matched_outcome": "Strait of Hormuz traffic returns to normal by December 31?",
      "outcomes": {
       "December 31, 2026": 7.5
@@ -8446,7 +8509,7 @@
      "flags": [],
      "label": "SAME",
      "volume": 8612032,
-     "volume24h": 74701,
+     "volume24h": 72069,
      "matched_outcome": "Before Jan 1, 2027",
      "outcomes": {
       "November 30, 2026": 2.5,
@@ -8505,7 +8568,7 @@
      "volume24h": 244,
      "matched_outcome": "Before 2027",
      "outcomes": {
-      "Yes": 5.5
+      "Yes": 5.6
      }
     }
    },
@@ -8519,7 +8582,7 @@
    "prices": {
     "alpha": null,
     "polymarket": 6.5,
-    "kalshi": 5.5
+    "kalshi": 5.6
    },
    "label": "SIMILAR",
    "gap": null
@@ -8581,8 +8644,8 @@
      "url": "https://www.alphaarcade.com/market/israel-x-iran-ceasefire-continues-through-november-2026",
      "outcomes": {
       "November 7": 96.9,
-      "November 15": 89.7,
-      "November 30": 72.8
+      "November 15": 90.7,
+      "November 30": 73.5
      },
      "volume": 0,
      "volume24h": 5795,
@@ -8596,12 +8659,12 @@
       "end dates differ by 341 days"
      ],
      "label": "SIMILAR",
-     "volume": 49576130,
-     "volume24h": 830276,
+     "volume": 49591884,
+     "volume24h": 834270,
      "matched_outcome": "November 7",
      "outcomes": {
       "November 7": 99.9,
-      "November 15": 91.5,
+      "November 15": 90.5,
       "November 30": 73.5
      }
     }
@@ -8660,12 +8723,12 @@
      "score": 83,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 5004024,
-     "volume24h": 131536,
+     "volume": 5004341,
+     "volume24h": 129289,
      "matched_outcome": "Before Jan 1, 2028",
      "outcomes": {
       "December 31, 2026": 1.7,
-      "December 31, 2027": 59.5,
+      "December 31, 2027": 60.5,
       "June 30, 2027": 36.5
      }
     }
@@ -8680,7 +8743,7 @@
    "prices": {
     "alpha": 55.9,
     "polymarket": 56.0,
-    "kalshi": 59.5
+    "kalshi": 60.5
    },
    "label": "SIMILAR",
    "gap": null
@@ -8694,8 +8757,8 @@
      "outcomes": {
       "Buccaneers": 29.4
      },
-     "volume": 1994,
-     "volume24h": 1994,
+     "volume": 2106,
+     "volume24h": 2106,
      "fee": 70000
     },
     "polymarket": {
@@ -8722,8 +8785,8 @@
       "check overtime / extra-time rules"
      ],
      "label": "SAME",
-     "volume": 898422,
-     "volume24h": 347961,
+     "volume": 911684,
+     "volume24h": 363607,
      "matched_outcome": "Tampa Bay",
      "outcomes": {
       "Buccaneers": 28.5
@@ -8762,12 +8825,12 @@
      "label": "SIMILAR",
      "volume": 31768,
      "volume24h": 560,
-     "matched_outcome": "87+",
+     "matched_outcome": "90+",
      "outcomes": {
-      "87+": 99.7,
+      "87+": 99.6,
       "90+": 99.7,
       "92+": 98.7,
-      "95+": 3.9
+      "95+": 3.8
      }
     },
     "kalshi": {
@@ -8777,7 +8840,7 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 981060,
-     "volume24h": 93356,
+     "volume24h": 92497,
      "matched_outcome": null,
      "outcomes": {}
     }
@@ -8790,7 +8853,7 @@
     "Rotten Tomatoes",
     "Entertainment"
    ],
-   "outcome": "87+",
+   "outcome": "90+",
    "prices": {
     "polymarket": 99.7,
     "kalshi": null
@@ -8811,8 +8874,8 @@
       "end dates differ by 13h"
      ],
      "label": "SIMILAR",
-     "volume": 13556,
-     "volume24h": 2878,
+     "volume": 13644,
+     "volume24h": 2966,
      "matched_outcome": "Nobody Wants This: Season 3",
      "outcomes": {
       "The One About Matthew Perry: Season 1": 17.0,
@@ -8883,11 +8946,11 @@
      "volume24h": 345,
      "matched_outcome": "The Day After Tomorrow",
      "outcomes": {
-      "Surviving Hurricane Otis": 0.1,
+      "Surviving Hurricane Otis": 0.5,
       "Gladiator II": 0.5,
-      "Don't Trust the Couple Upstairs": 0.1,
+      "Don't Trust the Couple Upstairs": 0.4,
       "Collision Course": 0.4,
-      "Mike Tyson: Return of the Mike": 0.1,
+      "Mike Tyson: Return of the Mike": 0.5,
       "The Day After Tomorrow": 99.0,
       "Kidnapped in Her Own Home: The Martha Carelli Story": 0.5,
       "A Dog's Perfect Christmas": 0.5,
@@ -8903,7 +8966,7 @@
      ],
      "label": "SIMILAR",
      "volume": 73472,
-     "volume24h": 5696,
+     "volume24h": 5660,
      "matched_outcome": "The Day After Tomorrow",
      "outcomes": {
       "Surviving Hurricane Otis": 1.0,
@@ -8949,7 +9012,7 @@
      ],
      "label": "SIMILAR",
      "volume": 14934,
-     "volume24h": 3241,
+     "volume24h": 3206,
      "matched_outcome": "The One About Matthew Perry: Season 1",
      "outcomes": {
       "The One About Matthew Perry: Season 1": 97.2,
@@ -9036,7 +9099,7 @@
      ],
      "label": "SIMILAR",
      "volume": 6314,
-     "volume24h": 496,
+     "volume24h": 492,
      "matched_outcome": "Cody Johnson",
      "outcomes": {
       "Luke Combs": 17.5,
@@ -9085,7 +9148,7 @@
      "volume24h": 20917,
      "matched_outcome": "Yes",
      "outcomes": {
-      "Yes": 2.6
+      "Yes": 2.4
      }
     },
     "kalshi": {
@@ -9097,7 +9160,7 @@
      ],
      "label": "SIMILAR",
      "volume": 8612032,
-     "volume24h": 74701,
+     "volume24h": 72069,
      "matched_outcome": "Before Dec 1, 2026",
      "outcomes": {
       "Yes": 2.5
@@ -9120,7 +9183,7 @@
    ],
    "outcome": "Yes",
    "prices": {
-    "polymarket": 2.6,
+    "polymarket": 2.4,
     "kalshi": 2.5
    },
    "label": "SIMILAR",
@@ -9159,7 +9222,7 @@
      "matched_outcome": null,
      "outcomes": {
       "Autism": 56.0,
-      "Golden Dome": 31.5
+      "Golden Dome": 31.0
      }
     }
    },
@@ -9198,13 +9261,13 @@
       "\u2191 3.00": 0.8,
       "\u2191 2.80": 0.9,
       "\u2191 2.60": 1.5,
-      "\u2191 2.40": 1.5,
+      "\u2191 2.40": 1.6,
       "\u2191 2.20": 1.9,
       "\u2191 2.00": 2.7,
       "\u2191 1.80": 3.6,
       "\u2191 1.60": 6.5,
       "\u2191 1.40": 19.5,
-      "\u2193 1.00": 34.0,
+      "\u2193 1.00": 34.5,
       "\u2193 0.80": 6.2,
       "\u2193 0.60": 1.5,
       "\u2193 0.40": 0.2,
@@ -9261,8 +9324,8 @@
      "outcomes": {
       "KMT sweep": 36.5,
       "KMT Taipei, DPP New Taipei": 39.0,
-      "DPP Taipei, KMT New Taipei": 2.1,
-      "DPP sweep": 25.5
+      "DPP Taipei, KMT New Taipei": 2.9,
+      "DPP sweep": 26.0
      }
     },
     "kalshi": {
@@ -9481,7 +9544,7 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 440543,
-     "volume24h": 225,
+     "volume24h": 222,
      "matched_outcome": "Before Jan 1, 2027",
      "outcomes": {
       "Yes": 1.5
@@ -9740,11 +9803,11 @@
       "\u2191 6,000": 1.4,
       "\u2191 5,500": 1.6,
       "\u2191 5,000": 1.2,
-      "\u2191 4,500": 2.1,
-      "\u2191 4,000": 3.4,
+      "\u2191 4,500": 2.0,
+      "\u2191 4,000": 3.3,
       "\u2191 3,500": 6.5,
       "\u2193 1,500": 10.5,
-      "\u2193 1,000": 3.0,
+      "\u2193 1,000": 3.1,
       "\u2193 800": 2.8
      }
     },
@@ -9754,7 +9817,7 @@
      "score": 70,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 12403410,
+     "volume": 12403454,
      "volume24h": 8010,
      "matched_outcome": null,
      "outcomes": {}
@@ -9810,7 +9873,7 @@
       "\u2191 200": 2.9,
       "\u2191 180": 3.1,
       "\u2191 160": 4.5,
-      "\u2193 60": 10.4,
+      "\u2193 60": 10.5,
       "\u2193 40": 3.6,
       "\u2193 20": 0.8
      }
@@ -9861,7 +9924,7 @@
      "volume24h": 5188,
      "matched_outcome": "\u2193 1.00",
      "outcomes": {
-      "\u2193 1.00": 49.0,
+      "\u2193 1.00": 50.0,
       "\u2191 8.00": 0.9,
       "\u2191 6.00": 1.6,
       "\u2191 5.00": 1.8,
@@ -9905,7 +9968,7 @@
    ],
    "outcome": "\u2193 1.00",
    "prices": {
-    "polymarket": 49.0,
+    "polymarket": 50.0,
     "kalshi": null
    },
    "label": "SIMILAR",
@@ -9927,8 +9990,8 @@
      "matched_outcome": "\u2193 0.06",
      "outcomes": {
       "\u2191 0.52": 1.7,
-      "\u2191 0.48": 2.3,
-      "\u2191 0.44": 2.5,
+      "\u2191 0.48": 2.2,
+      "\u2191 0.44": 2.6,
       "\u2191 0.40": 2.2,
       "\u2191 0.36": 3.2,
       "\u2191 0.32": 3.1,
@@ -9982,14 +10045,14 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 2750900,
-     "volume24h": 7078,
+     "volume24h": 9095,
      "matched_outcome": "\u2193 70",
      "outcomes": {
       "\u2193 50": 10.5,
       "\u2193 40": 4.5,
       "\u2193 30": 2.5,
-      "\u2191 200": 2.4,
-      "\u2191 150": 4.2,
+      "\u2191 200": 1.7,
+      "\u2191 150": 4.1,
       "\u2191 140": 3.6,
       "\u2193 70": 63.0,
       "\u2193 60": 15.5,
@@ -10114,10 +10177,10 @@
      "outcomes": {
       "\u219110k": 4.3,
       "\u21916k": 96.0,
-      "\u21917k": 79.0,
+      "\u21917k": 78.0,
       "\u21915.5k": 98.6,
       "\u21916.5k": 95.2,
-      "\u21917.5k": 36.5,
+      "\u21917.5k": 36.0,
       "\u219112.5k": 3.4
      }
     },
@@ -10128,7 +10191,7 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 704085,
-     "volume24h": 4560,
+     "volume24h": 4602,
      "matched_outcome": null,
      "outcomes": {}
     }
@@ -10172,19 +10235,19 @@
       "Hawaii": 11.0,
       "Idaho": 10.0,
       "Indiana": 16.5,
-      "Louisiana": 33.0,
-      "Maine": 8.0,
+      "Louisiana": 34.0,
+      "Maine": 6.5,
       "Massachusetts": 15.5,
-      "Minnesota": 9.0,
-      "Missouri": 23.5,
-      "New Hampshire": 17.0,
+      "Minnesota": 8.5,
+      "Missouri": 17.5,
+      "New Hampshire": 12.5,
       "New Mexico": 8.5,
-      "Oregon": 16.3,
-      "Rhode Island": 16.0,
+      "Oregon": 16.6,
+      "Rhode Island": 13.5,
       "Utah": 12.5,
-      "Vermont": 5.9,
+      "Vermont": 6.0,
       "Washington": 8.5,
-      "West Virginia": 24.5,
+      "West Virginia": 18.0,
       "Wyoming": 11.5
      }
     },
@@ -10207,14 +10270,14 @@
       "Massachusetts": 10.5,
       "Minnesota": 6.5,
       "Missouri": 14.0,
-      "New Hampshire": 8.0,
+      "New Hampshire": 7.0,
       "New Mexico": 5.0,
       "Oregon": 8.0,
       "Rhode Island": 7.5,
       "Utah": 12.0,
       "Vermont": 6.0,
       "Washington": 8.0,
-      "West Virginia": 8.0,
+      "West Virginia": 7.0,
       "Wyoming": 13.5
      }
     }
@@ -10228,7 +10291,7 @@
    ],
    "outcome": "Louisiana",
    "prices": {
-    "polymarket": 33.0,
+    "polymarket": 34.0,
     "kalshi": 29.5
    },
    "label": "SIMILAR",
@@ -10250,7 +10313,7 @@
      "matched_outcome": "<5",
      "outcomes": {
       "<5": 73.5,
-      "5-6": 22.0,
+      "5-6": 21.5,
       "7-8": 0.1,
       "9-10": 0.7,
       "11-12": 0.1,
@@ -10309,16 +10372,16 @@
       "Lil Uzi Vert": 28.5,
       "Peso Pluma": 17.0,
       "Playboi Carti": 17.0,
-      "Justin Bieber": 13.0,
+      "Justin Bieber": 12.5,
       "Frank Ocean": 30.5,
-      "Lana Del Rey": 13.5,
-      "Kendrick Lamar": 7.0,
-      "Rihanna": 5.0,
+      "Lana Del Rey": 12.0,
+      "Kendrick Lamar": 6.5,
+      "Rihanna": 4.5,
       "Eminem": 11.5,
       "Jay Z": 16.0,
       "Travis Scott": 15.0,
-      "Beyonc\u00e9": 3.4,
-      "Billie Eilish": 3.7,
+      "Beyonc\u00e9": 3.0,
+      "Billie Eilish": 3.4,
       "Bad Bunny": 18.0,
       "Taylor Swift": 15.5,
       "Sabrina Carpenter": 10.5
@@ -10331,14 +10394,14 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 350317,
-     "volume24h": 625,
+     "volume24h": 623,
      "matched_outcome": "The Weeknd",
      "outcomes": {
       "The Weekend": 32.0,
       "Playboi Carti": 16.0,
       "Justin Bieber": 15.5,
-      "Frank Ocean": 33.5,
-      "Lana Del Rey": 12.5,
+      "Frank Ocean": 32.0,
+      "Lana Del Rey": 9.5,
       "Kendrick Lamar": 9.0,
       "Rihanna": 8.5,
       "Eminem": 14.5,
@@ -10429,15 +10492,15 @@
      "score": 83,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 99903222,
-     "volume24h": 287656,
+     "volume": 99903257,
+     "volume24h": 287330,
      "matched_outcome": "Nicol\u00e1s Maduro",
      "outcomes": {
       "Edmundo Gonz\u00e1lez": 0.1,
       "Mar\u00eda Corina Machado": 0.1,
       "Delcy Rodr\u00edguez": 5.5,
       "Diosdado Cabello Rond\u00f3n": 0.1,
-      "Nicol\u00e1s Maduro": 94.2,
+      "Nicol\u00e1s Maduro": 94.0,
       "Dinorah Figuera": 0.1,
       "Donald Trump": 0.1,
       "Vladimir Padrino L\u00f3pez": 0.1,
@@ -10458,19 +10521,19 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 6228753,
-     "volume24h": 23707,
+     "volume24h": 23751,
      "matched_outcome": "Nicol\u00e1s Maduro",
      "outcomes": {
       "Edmundo Gonz\u00e1lez": 1.2,
       "Mar\u00eda Corina Machado": 1.0,
-      "Delcy Rodr\u00edguez": 8.5,
+      "Delcy Rodr\u00edguez": 7.5,
       "Diosdado Cabello Rond\u00f3n": 1.2,
       "Nicol\u00e1s Maduro": 93.5,
       "Dinorah Figuera": 1.0,
       "Donald Trump": 1.3,
       "Vladimir Padrino L\u00f3pez": 0.1,
       "Marco Rubio": 3.8,
-      "Jorge Rodr\u00edguez": 8.5,
+      "Jorge Rodr\u00edguez": 7.5,
       "Pete Hegseth": 0.1,
       "Evan Pettus": 0.1,
       "Frank Donovan": 0.1,
@@ -10493,7 +10556,7 @@
    ],
    "outcome": "Nicol\u00e1s Maduro",
    "prices": {
-    "polymarket": 94.2,
+    "polymarket": 94.0,
     "kalshi": 93.5
    },
    "label": "SIMILAR",
@@ -10559,8 +10622,8 @@
      "score": 88,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 25032052,
-     "volume24h": 41844,
+     "volume": 25032668,
+     "volume24h": 19025,
      "matched_outcome": "Yes",
      "outcomes": {
       "Yes": 2.5
@@ -10573,10 +10636,10 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 3579743,
-     "volume24h": 2379,
+     "volume24h": 2305,
      "matched_outcome": "Before Jan 1, 2027",
      "outcomes": {
-      "Yes": 2.8
+      "Yes": 2.6
      }
     }
    },
@@ -10594,7 +10657,7 @@
    "outcome": "Yes",
    "prices": {
     "polymarket": 2.5,
-    "kalshi": 2.8
+    "kalshi": 2.6
    },
    "label": "SIMILAR",
    "pair": "polymarket-kalshi",
@@ -10714,7 +10777,7 @@
      "volume24h": 22,
      "matched_outcome": "Yes",
      "outcomes": {
-      "Yes": 6.2
+      "Yes": 6.0
      }
     },
     "kalshi": {
@@ -10743,7 +10806,7 @@
    ],
    "outcome": "Yes",
    "prices": {
-    "polymarket": 6.2,
+    "polymarket": 6.0,
     "kalshi": 7.5
    },
    "label": "SIMILAR",
@@ -10814,7 +10877,7 @@
      "volume24h": 0,
      "matched_outcome": "Yes",
      "outcomes": {
-      "Yes": 40.0
+      "Yes": 44.0
      }
     },
     "kalshi": {
@@ -10823,7 +10886,7 @@
      "score": 80,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 67818,
+     "volume": 67820,
      "volume24h": 845,
      "matched_outcome": "Before 2027",
      "outcomes": {
@@ -10842,7 +10905,7 @@
    ],
    "outcome": "Yes",
    "prices": {
-    "polymarket": 40.0,
+    "polymarket": 44.0,
     "kalshi": 34.0
    },
    "label": "SIMILAR",
@@ -10861,13 +10924,13 @@
       "end dates differ by 88 days"
      ],
      "label": "SIMILAR",
-     "volume": 411156,
-     "volume24h": 73928,
+     "volume": 411191,
+     "volume24h": 74960,
      "matched_outcome": "March 31, 2027",
      "outcomes": {
-      "December 31, 2026": 73.6,
-      "June 30, 2027": 75.0,
-      "March 31, 2027": 75.5
+      "December 31, 2026": 74.9,
+      "June 30, 2027": 75.5,
+      "March 31, 2027": 76.5
      }
     },
     "kalshi": {
@@ -10878,13 +10941,13 @@
       "end dates differ by 88 days"
      ],
      "label": "SIMILAR",
-     "volume": 200927,
-     "volume24h": 29433,
+     "volume": 201033,
+     "volume24h": 29660,
      "matched_outcome": "Before Apr 1, 2027",
      "outcomes": {
-      "December 31, 2026": 79.5,
+      "December 31, 2026": 82.0,
       "June 30, 2027": 81.5,
-      "March 31, 2027": 81.0
+      "March 31, 2027": 80.5
      }
     }
    },
@@ -10900,8 +10963,8 @@
    ],
    "outcome": "March 31, 2027",
    "prices": {
-    "polymarket": 75.5,
-    "kalshi": 81.0
+    "polymarket": 76.5,
+    "kalshi": 80.5
    },
    "label": "SIMILAR",
    "pair": "polymarket-kalshi",
@@ -11146,7 +11209,7 @@
      "volume24h": 40,
      "matched_outcome": "Yes",
      "outcomes": {
-      "Yes": 13.5
+      "Yes": 13.0
      }
     },
     "kalshi": {
@@ -11156,7 +11219,7 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 31035,
-     "volume24h": 515,
+     "volume24h": 215,
      "matched_outcome": "Before 2027",
      "outcomes": {
       "Yes": 9.0
@@ -11178,7 +11241,7 @@
    ],
    "outcome": "Yes",
    "prices": {
-    "polymarket": 13.5,
+    "polymarket": 13.0,
     "kalshi": 9.0
    },
    "label": "SIMILAR",
@@ -11402,12 +11465,12 @@
      "outcomes": {
       "Above 50": 5.5,
       "Above 55": 11.0,
-      "Above 58": 9.7,
+      "Above 58": 10.4,
       "Above 60": 12.0,
-      "Above 62": 9.8,
+      "Above 62": 9.7,
       "Above 64": 11.2,
       "Above 66": 7.3,
-      "Above 68": 7.1
+      "Above 68": 6.8
      }
     },
     "kalshi": {
@@ -11416,8 +11479,8 @@
      "score": 70,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 193151,
-     "volume24h": 290,
+     "volume": 193317,
+     "volume24h": 457,
      "matched_outcome": null,
      "outcomes": {}
     }
@@ -11458,7 +11521,7 @@
      "outcomes": {
       "0": 73.0,
       "1": 11.2,
-      "2": 9.1,
+      "2": 9.0,
       "3": 2.5,
       "4+": 2.6
      }
@@ -11675,7 +11738,7 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 4453020,
-     "volume24h": 54481,
+     "volume24h": 54721,
      "matched_outcome": "Hike 25bps",
      "outcomes": {
       "Hike\u2013Pause\u2013Hike": 76.5,
@@ -11722,7 +11785,7 @@
      "volume24h": 1172,
      "matched_outcome": "Yes",
      "outcomes": {
-      "Yes": 32.5
+      "Yes": 34.5
      }
     },
     "kalshi": {
@@ -11757,7 +11820,7 @@
    ],
    "outcome": "Yes",
    "prices": {
-    "polymarket": 32.5,
+    "polymarket": 34.5,
     "kalshi": 8.5
    },
    "label": "SIMILAR",
@@ -11775,7 +11838,7 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 84566,
-     "volume24h": 5165,
+     "volume24h": 5195,
      "matched_outcome": "Yes",
      "outcomes": {
       "Yes": 85.0
@@ -11936,9 +11999,9 @@
      "matched_outcome": "agent",
      "outcomes": {
       "vibe": 3.0,
-      "rage": 2.6,
+      "rage": 1.4,
       "maxx": 16.5,
-      "lore": 2.9,
+      "lore": 3.5,
       "larp": 12.0,
       "rot": 13.8,
       "agent": 17.5,
@@ -11996,7 +12059,7 @@
      "matched_outcome": "December 31",
      "outcomes": {
       "December 12": 34.5,
-      "December 31": 40.5
+      "December 31": 41.0
      }
     },
     "kalshi": {
@@ -12006,7 +12069,7 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 166121,
-     "volume24h": 22599,
+     "volume24h": 22683,
      "matched_outcome": null,
      "outcomes": {
       "December 12": 39.5
@@ -12027,7 +12090,7 @@
    ],
    "outcome": "December 31",
    "prices": {
-    "polymarket": 40.5,
+    "polymarket": 41.0,
     "kalshi": null
    },
    "label": "SIMILAR",
@@ -12047,7 +12110,7 @@
      ],
      "label": "SIMILAR",
      "volume": 23331,
-     "volume24h": 571,
+     "volume24h": 339,
      "matched_outcome": "June 30, 2027",
      "outcomes": {
       "December 31, 2026": 7.0,
@@ -12066,8 +12129,8 @@
      "volume24h": 1755,
      "matched_outcome": "Before Jul 1, 2027",
      "outcomes": {
-      "December 31, 2026": 8.5,
-      "June 30, 2027": 9.5
+      "December 31, 2026": 9.0,
+      "June 30, 2027": 9.0
      }
     }
    },
@@ -12085,7 +12148,7 @@
    "outcome": "June 30, 2027",
    "prices": {
     "polymarket": 11.5,
-    "kalshi": 9.5
+    "kalshi": 9.0
    },
    "label": "SIMILAR",
    "pair": "polymarket-kalshi",
@@ -12172,8 +12235,8 @@
       "Thomas Massie": 7.0,
       "Savannah Maddox": 3.5,
       "Rick Hardin": 5.8,
-      "Charles \"Bruiser\" Martin": 4.1,
-      "Brett St. Amand": 2.9
+      "Charles \"Bruiser\" Martin": 3.5,
+      "Brett St. Amand": 3.1
      }
     },
     "kalshi": {
@@ -12309,7 +12372,7 @@
      "volume24h": 442,
      "matched_outcome": "Before Jul 1, 2027",
      "outcomes": {
-      "March 31, 2027": 7.5,
+      "March 31, 2027": 7.0,
       "June 30, 2027": 42.5
      }
     }
@@ -12354,7 +12417,7 @@
      "matched_outcome": "June 30, 2027",
      "outcomes": {
       "March 31, 2027": 22.5,
-      "June 30, 2027": 47.5
+      "June 30, 2027": 47.0
      }
     },
     "kalshi": {
@@ -12390,7 +12453,7 @@
    ],
    "outcome": "June 30, 2027",
    "prices": {
-    "polymarket": 47.5,
+    "polymarket": 47.0,
     "kalshi": 63.5
    },
    "label": "SIMILAR",
@@ -12527,18 +12590,18 @@
       "Nikki Haley": 1.5,
       "Vivek Ramaswamy": 7.5,
       "Sarah Huckabee Sanders": 1.7,
-      "Greg Abbott": 3.2,
+      "Greg Abbott": 3.3,
       "Robert F. Kennedy Jr.": 1.1,
       "Brian Kemp": 2.2,
       "Byron Donalds": 2.1,
-      "Elise Stefanik": 1.6,
+      "Elise Stefanik": 1.2,
       "Josh Hawley": 3.5,
       "Ted Cruz": 2.2,
       "Elon Musk": 2.6,
       "Matt Gaetz": 0.9,
-      "Katie Britt": 8.0,
+      "Katie Britt": 9.9,
       "John Thune": 0.7,
-      "Kristi Noem": 1.9,
+      "Kristi Noem": 2.1,
       "Mike Pence": 1.1,
       "Tucker Carlson": 24.1,
       "Ivanka Trump": 3.6,
@@ -12561,7 +12624,7 @@
      "flags": [],
      "label": "SIMILAR",
      "volume": 1894547,
-     "volume24h": 4560,
+     "volume24h": 4714,
      "matched_outcome": null,
      "outcomes": {
       "Donald Trump": 0.9,
@@ -12627,17 +12690,17 @@
      "label": "SIMILAR",
      "volume": 138888,
      "volume24h": 50,
-     "matched_outcome": "John Healey",
+     "matched_outcome": "Pat McFadden",
      "outcomes": {
       "Louise Haigh": 2.4,
       "John Healey": 10.5,
       "Ed Miliband": 2.5,
       "Shabana Mahmood": 3.4,
       "Wes Streeting": 1.7,
-      "Yvette Cooper": 4.8,
+      "Yvette Cooper": 4.7,
       "Alex Norris": 4.5,
       "Lucy Powell": 4.7,
-      "Pat McFadden": 8.7,
+      "Pat McFadden": 12.2,
       "Jonathan Reynolds": 4.7,
       "Angela Rayner": 4.2,
       "Heidi Alexander": 1.5,
@@ -12661,7 +12724,7 @@
      "label": "SIMILAR",
      "volume": 42484,
      "volume24h": 0,
-     "matched_outcome": "John Healey",
+     "matched_outcome": "Pat McFadden",
      "outcomes": {
       "Louise Haigh": 2.0,
       "John Healey": 14.0,
@@ -12699,10 +12762,10 @@
     "UK Labour Leadership",
     "Politics"
    ],
-   "outcome": "John Healey",
+   "outcome": "Pat McFadden",
    "prices": {
-    "polymarket": 10.5,
-    "kalshi": 14.0
+    "polymarket": 12.2,
+    "kalshi": 2.0
    },
    "label": "SIMILAR",
    "pair": "polymarket-kalshi",
@@ -12720,8 +12783,8 @@
       "end dates differ by 363 days"
      ],
      "label": "SIMILAR",
-     "volume": 1242521,
-     "volume24h": 14172,
+     "volume": 1242608,
+     "volume24h": 14369,
      "matched_outcome": "December 31, 2027",
      "outcomes": {
       "December 31, 2026": 8.5,
@@ -12737,7 +12800,7 @@
      ],
      "label": "SIMILAR",
      "volume": 73071,
-     "volume24h": 63,
+     "volume24h": 150,
      "matched_outcome": "Before Jan 1, 2028",
      "outcomes": {
       "December 31, 2026": 12.0,
@@ -12786,7 +12849,7 @@
       "Hodge Conjecture": 19.0,
       "P versus NP": 1.7,
       "Riemann Hypothesis": 4.2,
-      "Yang-Mills": 26.1,
+      "Yang-Mills": 26.2,
       "No solution by Dec 31, 2027": 29.5
      }
     },
@@ -12796,11 +12859,11 @@
      "score": 82,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 20181,
+     "volume": 20717,
      "volume24h": 509,
      "matched_outcome": "Before 2028",
      "outcomes": {
-      "No solution by Dec 31, 2027": 64.0
+      "No solution by Dec 31, 2027": 63.0
      }
     }
    },
@@ -12820,7 +12883,7 @@
    "outcome": "No solution by Dec 31, 2027",
    "prices": {
     "polymarket": 29.5,
-    "kalshi": 64.0
+    "kalshi": 63.0
    },
    "label": "SIMILAR",
    "pair": "polymarket-kalshi",
@@ -12907,8 +12970,8 @@
      "score": 80,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 993245,
-     "volume24h": 5181,
+     "volume": 993325,
+     "volume24h": 5025,
      "matched_outcome": "Before Jan 1, 2028",
      "outcomes": {
       "Yes": 15.5
@@ -12944,7 +13007,7 @@
      "score": 83,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 132230,
+     "volume": 132336,
      "volume24h": 406,
      "matched_outcome": "Yes",
      "outcomes": {
@@ -12957,11 +13020,11 @@
      "score": 83,
      "flags": [],
      "label": "SIMILAR",
-     "volume": 947075,
-     "volume24h": 13516,
+     "volume": 947421,
+     "volume24h": 13814,
      "matched_outcome": "Before Jan 20, 2029",
      "outcomes": {
-      "Yes": 72.5
+      "Yes": 71.5
      }
     }
    },
@@ -12978,7 +13041,7 @@
    "outcome": "Yes",
    "prices": {
     "polymarket": 68.5,
-    "kalshi": 72.5
+    "kalshi": 71.5
    },
    "label": "SIMILAR",
    "pair": "polymarket-kalshi",
