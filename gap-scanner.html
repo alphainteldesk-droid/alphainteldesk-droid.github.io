@@ -235,9 +235,7 @@
       var text = 'Price gap after est. fees: ' + g.net.toFixed(1) + '¢ on "' + g.title + '" (' + g.outcome + '): ' +
         g.low.name + ' ' + Math.round(g.low.price) + '¢ vs ' + g.high.name + ' ' + Math.round(g.high.price) +
         '¢. Check each site\'s rules. via @alphainteldesk';
-      if (navigator.share) { navigator.share({ text: text, url: url }).catch(function () {}); return; }
-      window.open('https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url),
-        '_blank', 'noopener,width=600,height=500');
+      window.aidShare(text, url, btn);
     });
   }).catch(function () {
     document.getElementById('board').innerHTML = '<p class="note">The scanner data could not be loaded. Try again in a minute.</p>';
@@ -251,6 +249,57 @@
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'visible' && Date.now() - t0 > 10 * 60000) location.reload();
   });
+})();
+</script>
+<script>
+(function () {   // Share menu: direct buttons for X, Telegram, WhatsApp, Facebook, Reddit, LinkedIn, copy link, device share
+  var css = document.createElement('style');
+  css.textContent = '.shm{position:fixed;z-index:9999;min-width:210px;background:#0b1420;border:1px solid rgba(63,219,230,.45);' +
+    'border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 14px rgba(63,219,230,.15);padding:6px;font:600 14px "Space Grotesk",sans-serif}' +
+    '.shm a,.shm button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:0;border-radius:5px;background:none;' +
+    'color:#e8eef5;font:inherit;text-align:left;cursor:pointer;text-decoration:none}' +
+    '.shm a:hover,.shm button:hover{background:rgba(63,219,230,.12);text-decoration:none}' +
+    '.shm i{font-style:normal;width:22px;text-align:center;font:800 13px "JetBrains Mono",monospace;color:#3fdbe6}' +
+    '.shm .t{font:700 10px "JetBrains Mono",monospace;letter-spacing:.14em;color:#8fa3b8;padding:4px 10px 6px}';
+  document.head.appendChild(css);
+  var menu = null;
+  function close() { if (menu) { menu.remove(); menu = null; } }
+  window.aidShare = function (text, url, anchor) {
+    close();
+    var e = encodeURIComponent, full = text + ' ' + url;
+    var items = [
+      ['𝕏', 'Post on X', 'https://x.com/intent/post?text=' + e(text) + '&url=' + e(url)],
+      ['✈', 'Telegram', 'https://t.me/share/url?url=' + e(url) + '&text=' + e(text)],
+      ['☎', 'WhatsApp', 'https://wa.me/?text=' + e(full)],
+      ['f', 'Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + e(url)],
+      ['r/', 'Reddit', 'https://www.reddit.com/submit?url=' + e(url) + '&title=' + e(text)],
+      ['in', 'LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + e(url)]
+    ];
+    menu = document.createElement('div'); menu.className = 'shm'; menu.setAttribute('role', 'menu');
+    menu.innerHTML = '<div class="t">SHARE</div>' + items.map(function (it) {
+      return '<a href="' + it[2] + '" target="_blank" rel="noopener" role="menuitem"><i>' + it[0] + '</i>' + it[1] + '</a>';
+    }).join('') + '<button type="button" data-a="copy" role="menuitem"><i>⧉</i>Copy text + link</button>' +
+      (navigator.share ? '<button type="button" data-a="more" role="menuitem"><i>…</i>More apps</button>' : '');
+    document.body.appendChild(menu);
+    var r = anchor.getBoundingClientRect(), mw = menu.offsetWidth, mh = menu.offsetHeight;
+    var left = Math.min(Math.max(8, r.right - mw), innerWidth - mw - 8);
+    var top = r.bottom + 6 + mh > innerHeight ? Math.max(8, r.top - mh - 6) : r.bottom + 6;
+    menu.style.left = left + 'px'; menu.style.top = top + 'px';
+    menu.addEventListener('click', function (ev) {
+      var b = ev.target.closest('button');
+      if (b && b.getAttribute('data-a') === 'copy') {
+        (navigator.clipboard ? navigator.clipboard.writeText(full) : Promise.reject()).then(function () {
+          b.innerHTML = '<i>✓</i>Copied'; setTimeout(close, 900);
+        }).catch(function () { prompt('Copy this:', full); close(); });
+        return;
+      }
+      if (b && b.getAttribute('data-a') === 'more') { navigator.share({ text: text, url: url }).catch(function () {}); }
+      setTimeout(close, 50);
+    });
+  };
+  document.addEventListener('click', function (ev) { if (menu && !menu.contains(ev.target) && !ev.target.closest('.gb-sh,.gp-sh')) close(); }, true);
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') close(); });
+  addEventListener('scroll', close, { passive: true });
 })();
 </script>
 </body>
