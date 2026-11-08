@@ -32,4 +32,6 @@ jobs:
           [ -f matches.json ] && git add matches.json
           [ -f gaps.json ] && git add gaps.json
           [ -f calendar.json ] && git add calendar.json
+          [ -f movers.json ] && git add movers.json
+          [ -f alpha_hist.json ] && git add alpha_hist.json
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -q && git push)
