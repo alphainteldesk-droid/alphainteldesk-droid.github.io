@@ -464,7 +464,14 @@
   .gb-more { display:flex; justify-content:space-between; align-items:center; gap:.6cqw; padding:.35cqw .5cqw; margin-top:.15cqw;
     border:1px dashed rgba(63,219,230,.4); border-radius:3px; color:var(--cyan); font:700 .82cqw "JetBrains Mono",monospace; letter-spacing:.04em; text-decoration:none; }
   .gb-more span { color:var(--amber); font-size:.72cqw; letter-spacing:.1em; }
-  .gb-more:hover { background:rgba(63,219,230,.1); text-decoration:none; }
+  .gb-more:hover { background:rgba(63,219,230,.14); text-decoration:none; animation-play-state:paused; }
+  .gb-more { animation:gbblip 2.4s ease-in-out infinite; }   /* radar-blip pulse: whole link fades brighter/darker */
+  @keyframes gbblip {
+    0%, 100% { opacity:.55; border-color:rgba(63,219,230,.25); background:rgba(63,219,230,0); box-shadow:none; }
+    50% { opacity:1; border-color:rgba(63,219,230,.9); background:rgba(63,219,230,.12);
+          box-shadow:0 0 10px rgba(63,219,230,.45), inset 0 0 8px rgba(63,219,230,.15); text-shadow:0 0 6px rgba(63,219,230,.7); }
+  }
+  @media (prefers-reduced-motion: reduce) { .gb-more { animation:none; } }
   .gb-3 { display:inline-block; margin-right:.4cqw; padding:.05cqw .3cqw; border-radius:2px; vertical-align:.12cqw;
     background:var(--amber); color:#111; font:800 .6cqw "JetBrains Mono",monospace; letter-spacing:.08em; }
   .gb-p { text-align:center; font:700 1.08cqw "JetBrains Mono",monospace; color:#e8eef5; }
