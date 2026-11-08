@@ -12,7 +12,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alpha Intel Desk | Prediction Market Intelligence</title>
-<meta name="description" content="Real-time intelligence for prediction markets. Track whales, spot price gaps, and see how odds react to the news across Polymarket, Kalshi and Alpha Arcade.">
+<meta name="description" content="Real-time intelligence for prediction markets. Spot price gaps, catch the biggest movers, and see what's coming next across Polymarket, Kalshi and Alpha Arcade.">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 <meta property="og:title" content="Alpha Intel Desk">
 <meta property="og:description" content="Real-time intelligence for prediction markets.">
@@ -58,6 +58,15 @@
     letter-spacing: .2em; color: var(--amber); text-transform: uppercase; }
 
   /* Stats strip */
+  /* Intro band: slim "what is this" strip between the live desk and the calendar */
+  .introband { max-width:1400px; margin:0 auto; padding:22px 20px 6px; display:flex; flex-wrap:wrap; align-items:center; gap:16px 32px; }
+  .ib-text { flex:1 1 420px; min-width:0; }
+  .ib-text h1 { font-size:clamp(1.35rem, 2.6vw, 1.9rem); margin:4px 0 6px; line-height:1.2; }
+  .ib-text p { color:var(--muted); margin:0; font-size:1rem; max-width:640px; }
+  .ib-stats { flex:1 1 520px; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px; }
+  .ib-stats .stat { padding:10px 12px; }
+  .ib-stats .stat b { font-size:1.35rem; }
+  .ib-stats .stat span { font-size:.8rem; line-height:1.3; display:block; }
   .stats { display: grid; gap: 12px; margin-top: 24px;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
   .stat { background: var(--panel); border: 1px solid var(--line);
@@ -151,6 +160,7 @@
     nav { gap: 14px; font-size: .9rem; }
     .bar { flex-direction: column; align-items: flex-start; }
     .stats { grid-template-columns: 1fr 1fr; }
+    .ib-stats { grid-template-columns:1fr 1fr; } .introband { padding:18px 16px 4px; }
     .ticker-tag { padding: 0 10px; font-size: .62rem; letter-spacing: .12em; }
   }
   /* ===== Live Intel Desk ===== */
@@ -589,7 +599,7 @@
     <a class="cover" href="https://trends.google.com/trending?geo=US" target="_blank" rel="noopener" aria-label="Open Google Trends"></a>
     <div class="gh">TRENDING ON GOOGLE <span style="display:flex;align-items:center"><span class="go">&#8599;</span><span class="dot"></span></span></div>
     <div id="trends"><div class="trend" style="color:#a9bccf">Loading trends&hellip;</div></div>
-    <div class="stamp" id="st-trends">UPDATED HOURLY</div>
+    <div class="stamp" id="st-trends">UPDATED EVERY 20 MIN</div>
   </div>
   <div class="glass" data-screen="gap">
     <a class="cover" href="/conflict-radar.html" aria-label="Open Conflict Radar"></a>
@@ -616,6 +626,20 @@
   <div class="wire-view"><div class="wire-track" id="wire"></div></div>
 </div>
 
+<section class="introband" aria-label="About Alpha Intel Desk">
+  <div class="ib-text">
+    <span class="tag">Polymarket · Kalshi · Alpha Arcade</span>
+    <h1>Real-time intelligence for prediction markets</h1>
+    <p>Spot price gaps, catch the biggest movers, and see what's coming next across Polymarket, Kalshi and Alpha Arcade.</p>
+  </div>
+  <div class="ib-stats">
+    <div class="stat"><b>3</b><span>Prediction markets side by side</span></div>
+    <div class="stat"><b>24/7</b><span>Live market data</span></div>
+    <div class="stat"><b>20 min</b><span>Odds and listings refreshed</span></div>
+    <div class="stat"><b class="amber">Free</b><span>No sign-up, no paywall</span></div>
+  </div>
+</section>
+
 <section class="calsec" id="calendar" aria-label="Catalyst Calendar: the next two weeks">
   <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
   <div class="cal-h"><div><h2><span class="cal-rad" aria-hidden="true"></span>CATALYST CALENDAR<span class="cur" aria-hidden="true"></span></h2>
@@ -637,22 +661,8 @@
 
 <main class="wrap">
 
-  <div class="intro">
-    <span class="tag">Polymarket · Kalshi · Alpha Arcade</span>
-    <h1>Real-time intelligence for prediction markets</h1>
-    <p>Track whales, spot price gaps, and see how odds react to the news across
-       Polymarket, Kalshi and Alpha Arcade.</p>
-
-    <div class="stats">
-      <div class="stat"><b>3</b><span>Prediction markets: Polymarket · Kalshi · Alpha Arcade</span></div>
-      <div class="stat"><b>24/7</b><span>Live market data</span></div>
-      <div class="stat"><b>Hourly</b><span>Odds and listings refreshed</span></div>
-      <div class="stat"><b class="amber">Free</b><span>No sign-up, no paywall</span></div>
-    </div>
-  </div>
-
   <section id="closing-soon">
-    <span class="tag live"><i></i>Live · updated hourly</span>
+    <span class="tag live"><i></i>Live · updated every 20 min</span>
     <h2>Upcoming expirations</h2>
     <p class="updated" id="cs-updated"></p>
     <div class="grid">
@@ -666,7 +676,7 @@
   </section>
 
   <section id="new-markets">
-    <span class="tag live"><i></i>Live · updated hourly</span>
+    <span class="tag live"><i></i>Live · updated every 20 min</span>
     <h2>New markets</h2>
     <p class="updated">Listed in the last 48 hours, most traded first</p>
     <div class="grid">
