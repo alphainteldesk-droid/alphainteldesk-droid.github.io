@@ -10,6 +10,7 @@
 # v4: also writes movers.json (biggest 24h price moves with real volume) and keeps alpha_hist.json.
 # v3: lines up 'Yes' markets with the matching deadline inside multi-deadline events.
 # v2: also pairs Polymarket with Kalshi directly (non-sports), so Kalshi shows even when Alpha has no market.
+# v7: calendar_links() finds each site's own market for Catalyst Calendar events (cal_links.json).
 # Writes matches.json. Public market data only.
 import json, re, time, unicodedata, urllib.parse, urllib.request
 from datetime import datetime, timezone, timedelta
@@ -592,6 +593,58 @@ def movers(alpha, sites):
         print("  %+5.1f | %-11s | %s | %s | now %s | 24h vol %s" % (r["change"], r["name"], r["title"][:44], r["outcome"][:16], r["price"], r["vol24"]))
 
 
+# ---------------- calendar links ----------------
+def calendar_links(alpha, sites):
+    """For each catalysts.json event with "find" word-sets, pick each site's own market for it
+    (title holds every word of any set; settles closest to the event date). Writes cal_links.json."""
+    try:
+        cats = json.load(open("catalysts.json"))["events"]
+    except Exception as err:
+        print("Calendar links: no catalysts.json -", err)
+        return
+    pools = {"alpha": alpha, "polymarket": sites.get("polymarket", []), "kalshi": sites.get("kalshi", [])}
+    rx = lambda w: re.compile(r"(?<![a-z0-9])" + re.escape(w.lower()))
+    out = {}
+    for c in cats:
+        finds = c.get("find") or []
+        try:
+            when = datetime.strptime(c["date"], f).replace(tzinfo=timezone.utc).timestamp()
+        except (KeyError, ValueError):
+            continue
+        if not finds or not (n.timestamp() - 2 * 86400 <= when <= n.timestamp() + 60 * 86400):
+            continue
+        sets = [[rx(w) for w in s] for s in finds]
+        links = {}
+        for site, evs in pools.items():
+            hits = []
+            for e in evs:
+                t = (e.get("title", "") + " " + e.get("alt", "")).lower()
+                if not any(all(r.search(t) for r in s) for s in sets):
+                    continue
+                end = e.get("end") or 0
+                if not end or end < when - 2 * 86400 or end > when + 45 * 86400:
+                    continue
+                priced = {k: v for k, v in (e.get("outcomes") or {}).items() if v is not None}
+                if not priced:
+                    continue
+                hits.append((abs(end - when) // 86400, -(e.get("volume") or 0), e, priced))
+            hits.sort(key=lambda h: (h[0], h[1]))
+            if hits:
+                _, _, e, priced = hits[0]
+                oc = min(priced, key=lambda k: (abs(priced[k] - 50), -priced[k]))   # the outcome most in play
+                links[site] = {"title": e["title"], "outcome": oc, "price": priced[oc], "url": e["url"],
+                               "end": datetime.fromtimestamp(e["end"], timezone.utc).strftime(f),
+                               "volume": round(e.get("volume") or 0)}
+            print("  CAL %-10s | %-34s | %s" % (site, c["name"][:34],
+                  "; ".join("%s [%s %s, ends %s]" % (h[2]["title"][:50], min(h[3], key=lambda k: abs(h[3][k] - 50))[:22],
+                            h[3][min(h[3], key=lambda k: abs(h[3][k] - 50))], datetime.fromtimestamp(h[2]["end"], timezone.utc).strftime("%b %d"))
+                            for h in hits[:3]) or "-"))
+        if links:
+            out[c["date"] + "|" + c["name"]] = links
+    json.dump({"updated": n.strftime(f), "links": out}, open("cal_links.json", "w"), indent=1)
+    print("Calendar links: %d events linked" % len(out))
+
+
 def main():
     alpha = load_alpha()
     sites = {}
@@ -607,6 +660,10 @@ def main():
         movers(alpha, sites)
     except Exception as err:
         print("Movers failed:", err)
+    try:
+        calendar_links(alpha, sites)
+    except Exception as err:
+        print("Calendar links failed:", err)
     idxs = {k: build_index(v) for k, v in sites.items()}
     try:
         fix = json.load(open("match_fixes.json"))      # {"block": [["alpha id", "other url"], ...]}

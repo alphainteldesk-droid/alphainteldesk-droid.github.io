@@ -383,6 +383,17 @@
   .cal-p.a { border-color:rgba(255,179,71,.6); } .cal-p.a b { color:var(--amber); }
   a.cal-p:hover { background:rgba(63,219,230,.1); text-decoration:none; }
   .cal-p.na { opacity:.5; }
+  .cal-ls { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
+  .cal-l { display:grid; grid-template-columns:110px 1fr auto 64px; gap:10px; align-items:center; padding:7px 10px;
+    border:1px solid var(--line); border-radius:4px; color:var(--text); }
+  .cal-l span { font:700 .62rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--muted); }
+  .cal-l em { font-style:normal; font-weight:700; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .cal-l i { font-style:normal; color:#a9bccf; font-size:.85rem; white-space:nowrap; }
+  .cal-l b { font:800 1.1rem "JetBrains Mono",monospace; text-align:right; }
+  .cal-l.a { border-color:rgba(255,179,71,.6); } .cal-l.a b { color:var(--amber); }
+  a.cal-l:hover { background:rgba(63,219,230,.1); text-decoration:none; }
+  .cal-l.na { opacity:.45; grid-template-columns:110px 1fr; }
+  @media (max-width: 760px) { .cal-l { grid-template-columns:1fr auto; } .cal-l em { grid-column:1 / -1; white-space:normal; } }
   .cal-foot { color:var(--muted); font-size:.78rem; margin:10px 0 0; }
   @media (max-width: 760px) {
     .calsec { margin:12px 8px 0; padding:16px 12px 10px; }
@@ -1049,6 +1060,13 @@
     return t + (x.est ? ' · expected date' : '');
   }
   function title(x) { return x.kind === 'resolves' ? x.market.title : x.name; }
+  var SN = { alpha: 'Alpha', kalshi: 'Kalshi', polymarket: 'Poly' };
+  function lead(x) {                                       // one headline market for the pill / countdown
+    var L = x.links;
+    if (L) for (var s of ['alpha', 'kalshi', 'polymarket']) if (L[s]) return { site: SN[s], v: L[s].price, label: L[s].title.replace(/\?$/, '') + ' · ' + L[s].outcome };
+    var o = odds(x.market);
+    return o ? { site: o.site, v: o.v, label: x.kind === 'resolves' ? x.market.outcome : x.market.title.replace(/\?$/, '') + ' · ' + x.market.outcome } : '';
+  }
   function odds(m) {                                       // one headline price: Alpha first (our edge), then Polymarket, then Kalshi
     if (!m) return '';
     var order = [['alpha', 'Alpha'], ['polymarket', 'Poly'], ['kalshi', 'Kalshi']];
@@ -1064,11 +1082,10 @@
     if ((x.impact || 1) >= 3) cls += ' hi';
     if (i === sel) cls += ' sel';
     var lab = x.kind === 'resolves' ? tm(x.date) : x.end ? 'THRU ' + shortD(x.end + 'T17:00:00Z').toUpperCase() : x.allday ? 'ALL DAY' : tm(x.date);
-    var o = odds(x.market), m = x.market;
+    var o = lead(x);
     return '<button class="' + cls + '" style="--c:' + C[1] + '" data-i="' + i + '">' +
       '<small><span class="t">' + esc(C[0]) + ' · ' + esc(lab) + '</span>' + bars(x.impact) + '</small>' + esc(title(x)) +
-      (o ? '<span class="cal-odds"><b>' + Math.round(o.v) + '&cent;</b> ' + o.site + ' · ' +
-        esc(x.kind === 'resolves' ? m.outcome : m.title.replace(/\?$/, '') + ' · ' + m.outcome) + '</span>' : '') + '</button>';
+      (o ? '<span class="cal-odds"><b>' + Math.round(o.v) + '&cent;</b> ' + o.site + ' · ' + esc(o.label) + '</span>' : '') + '</button>';
   }
   function render() {
     var now = Date.now(), today = key(new Date()), base = new Date(today + 'T12:00:00Z'), days = [], html = '';
@@ -1122,12 +1139,12 @@
   }
   function drawNext() {
     if (nextI < 0) { nx.hidden = true; return; }
-    var x = items[nextI], C = CATS[x.cat] || CATS.econ, o = odds(x.market), then = [], now = Date.now();
+    var x = items[nextI], C = CATS[x.cat] || CATS.econ, o = lead(x), then = [], now = Date.now();
     items.forEach(function (y, i) { if (i !== nextI && !y.allday && y.kind !== 'resolves' && (y.impact || 1) >= 2 &&
       new Date(y.date).getTime() > new Date(x.date).getTime() && then.length < 3) then.push(y); });
     nx.innerHTML = '<div class="cal-nl"><i></i>NEXT UP</div>' +
       '<div class="cal-nn" style="--c:' + C[1] + '"><b>' + esc(x.name) + '</b><span>' + esc(C[0]) + ' · ' + esc(lng(x.date)) + ' · ' + esc(tm(x.date)) +
-      (o ? ' · ' + esc(x.market.title.replace(/\?$/, '')) + ' ' + Math.round(o.v) + '¢ on ' + o.site : '') + '</span></div>' +
+      (o ? ' · ' + esc(o.label) + ' ' + Math.round(o.v) + '¢ on ' + o.site : '') + '</span></div>' +
       '<div class="cal-cd"><div><b>0</b><small>DAYS</small></div><div><b>00</b><small>HRS</small></div><div><b>00</b><small>MIN</small></div><div><b>00</b><small>SEC</small></div></div>' +
       (then.length ? '<div class="cal-then">THEN: ' + then.map(function (y) { return '<em>' + esc(shortD(y.date)) + '</em> ' + esc(y.name); }).join(' &nbsp;·&nbsp; ') + '</div>' : '');
     nx.hidden = false;
@@ -1139,6 +1156,16 @@
     if (x.note) h += '<p>' + esc(x.note) + '</p>';
     if (x.kind === 'resolves') h += '<p>This market settles soon. Outcome shown: ' + esc(m.outcome) + '.</p>';
     if (x.source) h += '<p class="cal-src">Source: ' + esc(x.source) + '</p>';
+    if (x.links) {
+      h += '<div class="cal-mk"><div class="cal-ml">MARKETS ON THIS EVENT</div><div class="cal-ls">';
+      [['alpha', 'ALPHA ARCADE'], ['kalshi', 'KALSHI'], ['polymarket', 'POLYMARKET']].forEach(function (s) {
+        var L = x.links[s[0]];
+        h += L ? '<a class="cal-l' + (s[0] === 'alpha' ? ' a' : '') + '" href="' + esc(L.url) + '" target="_blank" rel="noopener"><span>' + s[1] +
+          '</span><em>' + esc(L.title) + '</em><i>' + esc(L.outcome) + '</i><b>' + c(L.price) + '</b></a>'
+          : '<span class="cal-l na"><span>' + s[1] + '</span><em>No market found for this event</em></span>';
+      });
+      h += '</div><div class="cal-src">Each site\'s own market for this event, found automatically. Questions can differ between sites. Always check each site\'s rules before you trade.</div></div>';
+    }
     if (m) {
       var u = m.urls || {}, chip = function (s, n) {
         var inner = '<span>' + n + '</span><b>' + c(m.prices[s]) + '</b>';

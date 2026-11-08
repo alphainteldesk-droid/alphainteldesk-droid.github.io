@@ -116,6 +116,10 @@ def calendar(matches):
         print("Calendar: no catalysts.json -", err)
         cats = []
     pool = [m for m in matches if not is_sports(m.get("categories") or [])]
+    try:                                             # each site's own market per event (match_markets.py)
+        direct = json.load(open("cal_links.json"))["links"]
+    except Exception:
+        direct = {}
 
     def market_card(m):
         ps = {s: m["prices"].get(s) for s in ("polymarket", "kalshi", "alpha")}
@@ -150,7 +154,8 @@ def calendar(matches):
         items.append({"date": c["date"], "name": c["name"], "source": c.get("source", ""), "kind": "scheduled",
                       "cat": c.get("cat", "econ"), "note": c.get("note", ""), "end": c.get("end"),
                       "allday": bool(c.get("allday")), "est": bool(c.get("est")), "impact": int(c.get("impact", 1)),
-                      "market": market_card(linked[0]) if linked else None})
+                      "links": direct.get(c["date"] + "|" + c["name"]),
+                      "market": None if direct.get(c["date"] + "|" + c["name"]) else (market_card(linked[0]) if linked else None)})
     res = []
     for m in pool:                                   # markets that resolve in the next 2 weeks, on 2+ sites
         try:
@@ -196,6 +201,10 @@ def main():
             x["low"]["name"], x["low"]["price"], x["high"]["name"], x["high"]["price"]))
     print("Calendar: %d items" % len(cal))
     for i in cal:
+        if i.get("links"):
+            print("  %s | %s | LINKS %s" % (i["date"][:10], i["name"][:50], "; ".join(
+                "%s %s %s" % (s[0].upper(), v["outcome"][:16], v["price"]) for s, v in i["links"].items())))
+            continue
         mk = i["market"]
         print("  %s | %s | %s" % (i["date"][:10], i["name"][:50],
                                   ("%s P %s K %s A %s" % (mk["outcome"][:18], mk["prices"]["polymarket"],
