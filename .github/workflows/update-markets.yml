@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main               # always start from the newest main (a queued run would otherwise start from an older commit)
       - run: python3 make_markets.py
         env:
           ALPHA_API_KEY: ${{ secrets.ALPHA_API_KEY }}
@@ -40,4 +42,4 @@ jobs:
           [ -f calendar.json ] && git add calendar.json
           [ -f movers.json ] && git add movers.json
           [ -f alpha_hist.json ] && git add alpha_hist.json
-          git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -q && git push)
+          git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -X theirs -q && git push)   # if another run pushed meanwhile, keep this run's fresher files
