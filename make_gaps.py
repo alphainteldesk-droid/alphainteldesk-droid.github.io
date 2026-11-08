@@ -149,7 +149,7 @@ def calendar(matches):
         linked.sort(key=near)
         items.append({"date": c["date"], "name": c["name"], "source": c.get("source", ""), "kind": "scheduled",
                       "cat": c.get("cat", "econ"), "note": c.get("note", ""), "end": c.get("end"),
-                      "allday": bool(c.get("allday")), "est": bool(c.get("est")),
+                      "allday": bool(c.get("allday")), "est": bool(c.get("est")), "impact": int(c.get("impact", 1)),
                       "market": market_card(linked[0]) if linked else None})
     res = []
     for m in pool:                                   # markets that resolve in the next 2 weeks, on 2+ sites
@@ -166,7 +166,7 @@ def calendar(matches):
         if n <= when <= n + timedelta(days=14) and len(m["sites"]) >= 2:
             vol = sum((x.get("volume") or 0) for s, x in m["sites"].items() if s != "kalshi")
             res.append((vol, {"date": m["close"], "name": "Resolves: " + m["title"], "kind": "resolves",
-                              "cat": "resolves", "market": market_card(m)}))
+                              "cat": "resolves", "impact": 1, "market": market_card(m)}))
     res.sort(key=lambda r: -r[0])
     items += [r[1] for r in res[:20]]                # the 20 busiest settling markets
     items.sort(key=lambda i: i["date"])

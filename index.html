@@ -280,34 +280,95 @@
   .glass .neg { color:#ff5c5c; text-shadow:0 1px 2px rgba(0,0,0,.9); }
   .glass .v.flash { text-shadow:0 0 6px currentColor; }
   .chg { font-size:9px; font-weight:700; }
-  /* Catalyst Calendar: 2 weeks, under the desk */
-  .calsec { max-width:1400px; margin:0 auto; padding:24px 16px 4px; scroll-margin-top:70px; }
+  /* Catalyst Calendar: 2 weeks, under the desk (desk/terminal look) */
+  .calsec { position:relative; max-width:1400px; margin:18px auto 0; padding:22px 20px 14px; scroll-margin-top:70px;
+    border:1px solid rgba(63,219,230,.22); border-radius:8px; overflow:hidden; isolation:isolate;
+    background:
+      linear-gradient(rgba(63,219,230,.045) 1px, transparent 1px) 0 0/28px 28px,
+      linear-gradient(90deg, rgba(63,219,230,.045) 1px, transparent 1px) 0 0/28px 28px,
+      radial-gradient(ellipse at 15% 0%, rgba(255,179,71,.10), transparent 55%),
+      radial-gradient(ellipse at 90% 100%, rgba(63,219,230,.10), transparent 60%), #070f19;
+    box-shadow:0 0 40px rgba(63,219,230,.06), inset 0 0 60px rgba(0,0,0,.5); }
+  .calsec::before { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px); }
+  .calsec::after { content:""; position:absolute; left:0; right:0; top:-30%; height:30%; z-index:-1; pointer-events:none;
+    background:linear-gradient(180deg, transparent, rgba(63,219,230,.06), transparent); animation:calscan 7s linear infinite; }
+  @keyframes calscan { to { top:110%; } }
+  .cal-br { position:absolute; width:16px; height:16px; border:2px solid var(--amber); opacity:.8; }
+  .cal-br.tl { top:6px; left:6px; border-right:0; border-bottom:0; } .cal-br.tr { top:6px; right:6px; border-left:0; border-bottom:0; }
+  .cal-br.bl { bottom:6px; left:6px; border-right:0; border-top:0; } .cal-br.brr { bottom:6px; right:6px; border-left:0; border-top:0; }
   .cal-h { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:10px 24px; margin-bottom:12px; }
-  .cal-h h2 { margin:0; font:800 1.35rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--amber);
-    text-shadow:0 0 8px rgba(255,179,71,.35); }
+  .cal-h h2 { display:flex; align-items:center; gap:10px; margin:0; font:800 1.4rem "JetBrains Mono",monospace; letter-spacing:.12em;
+    color:var(--amber); text-shadow:0 0 10px rgba(255,179,71,.45); }
+  .cal-h h2 .cur { width:.6em; height:1.05em; background:var(--amber); animation:calblink 1.1s steps(1) infinite; box-shadow:0 0 8px var(--amber); }
+  @keyframes calblink { 50% { opacity:0; } }
+  .cal-rad { width:30px; height:30px; flex:none; border-radius:50%; position:relative;
+    background:radial-gradient(circle, #06222a 0 60%, transparent 61%), repeating-radial-gradient(circle, transparent 0 5px, rgba(63,219,230,.35) 5px 6px);
+    border:2px solid var(--cyan); box-shadow:0 0 8px rgba(63,219,230,.6); overflow:hidden; }
+  .cal-rad::after { content:""; position:absolute; inset:0; border-radius:50%; animation:calspin 2.6s linear infinite;
+    background:conic-gradient(from 0deg, rgba(63,219,230,.75), transparent 70deg); }
+  @keyframes calspin { to { transform:rotate(360deg); } }
   .cal-h p { margin:4px 0 0; color:var(--muted); font-size:.9rem; max-width:640px; }
   .calsec .mk { color:var(--amber); }
   .cal-f { display:flex; flex-wrap:wrap; gap:6px; }
   .cal-f button { font:700 .7rem "JetBrains Mono",monospace; letter-spacing:.08em; padding:6px 10px; border-radius:3px;
-    background:none; color:var(--c, var(--muted)); border:1px solid var(--line); cursor:pointer; }
-  .cal-f button.on { color:#111; background:var(--c, var(--amber)); border-color:var(--c, var(--amber)); }
-  .cal-g { display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); gap:6px; }
-  .cal-dh { font:700 .72rem "JetBrains Mono",monospace; color:var(--muted); letter-spacing:.16em; text-align:center; }
-  .cal-d { background:var(--panel); border:1px solid var(--line); border-radius:6px; min-height:160px; padding:7px;
-    display:flex; flex-direction:column; gap:5px; min-width:0; }
-  .cal-d.wkend { background:#0d1825; }
-  .cal-d.today { border-color:var(--cyan); box-shadow:0 0 12px rgba(63,219,230,.2); }
-  .cal-dn { display:flex; justify-content:space-between; font:700 .76rem "JetBrains Mono",monospace; color:#a9bccf; }
-  .cal-dn b { color:var(--cyan); font-size:.66rem; letter-spacing:.12em; }
+    background:rgba(5,12,20,.7); color:var(--c, var(--muted)); border:1px solid rgba(143,163,184,.25); cursor:pointer; transition:.15s; }
+  .cal-f button:hover { border-color:var(--c, var(--amber)); box-shadow:0 0 8px color-mix(in srgb, var(--c, #ffb347) 40%, transparent); }
+  .cal-f button.on { color:#111; background:var(--c, var(--amber)); border-color:var(--c, var(--amber)); box-shadow:0 0 10px color-mix(in srgb, var(--c, #ffb347) 50%, transparent); }
+  /* NEXT UP countdown */
+  .cal-next { display:flex; align-items:center; gap:14px 22px; flex-wrap:wrap; margin:4px 0 14px; padding:12px 16px; cursor:pointer;
+    border:1px solid rgba(255,179,71,.55); border-radius:6px; background:linear-gradient(90deg, rgba(255,179,71,.13), rgba(5,12,20,.85) 55%);
+    box-shadow:0 0 18px rgba(255,179,71,.14); }
+  .cal-next:hover { box-shadow:0 0 24px rgba(255,179,71,.3); }
+  .cal-nl { display:flex; align-items:center; gap:8px; font:800 .78rem "JetBrains Mono",monospace; letter-spacing:.18em; color:var(--cyan); }
+  .cal-nl i { width:9px; height:9px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:calpulse 1.4s infinite; }
+  @keyframes calpulse { 50% { opacity:.25; transform:scale(.7); } }
+  .cal-nn { flex:1 1 260px; min-width:0; }
+  .cal-nn b { display:block; font-size:1.15rem; line-height:1.25; }
+  .cal-nn span { color:var(--muted); font-size:.85rem; }
+  .cal-cd { display:flex; gap:6px; }
+  .cal-cd div { min-width:56px; text-align:center; padding:4px 6px; border:1px solid rgba(255,179,71,.45); border-radius:4px; background:rgba(0,0,0,.45); }
+  .cal-cd b { display:block; font:800 1.55rem/1.1 "JetBrains Mono",monospace; color:var(--amber); text-shadow:0 0 10px rgba(255,179,71,.6); }
+  .cal-cd small { font:700 .55rem "JetBrains Mono",monospace; letter-spacing:.18em; color:var(--muted); }
+  .cal-then { flex-basis:100%; font:600 .74rem "JetBrains Mono",monospace; color:#a9bccf; letter-spacing:.04em; }
+  .cal-then em { font-style:normal; color:var(--cyan); }
+  /* grid */
+  .cal-g { display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); gap:7px; }
+  .cal-dh { font:700 .72rem "JetBrains Mono",monospace; color:var(--cyan); opacity:.7; letter-spacing:.2em; text-align:center; }
+  .cal-d { position:relative; background:rgba(13,26,40,.72); border:1px solid rgba(63,219,230,.14); border-radius:6px; min-height:160px; padding:7px;
+    display:flex; flex-direction:column; gap:5px; min-width:0; backdrop-filter:blur(2px); }
+  .cal-d.in { animation:calin .5s ease both; animation-delay:calc(var(--n) * 35ms); }
+  @keyframes calin { from { opacity:0; transform:translateY(8px); } }
+  .cal-d.wkend { background:rgba(8,17,28,.72); }
+  .cal-d.today { border-color:var(--cyan); box-shadow:0 0 16px rgba(63,219,230,.28), inset 0 0 18px rgba(63,219,230,.07); }
+  .cal-d.today.empty::after { content:"Nothing else scheduled today"; color:#3a6a78; font-size:.78rem; }
+  .cal-dn { display:flex; justify-content:space-between; align-items:center; font:700 .76rem "JetBrains Mono",monospace; color:#a9bccf; }
+  .cal-dn b { color:#06222a; background:var(--cyan); font-size:.6rem; letter-spacing:.14em; padding:1px 5px; border-radius:2px; }
   .cal-d.today .cal-dn span { color:var(--cyan); }
-  .cal-e { display:block; width:100%; text-align:left; background:rgba(255,255,255,.035); border:0; border-left:3px solid var(--c);
-    border-radius:3px; padding:5px 7px; color:var(--text); font:500 .8rem/1.28 "Space Grotesk",sans-serif; cursor:pointer; }
-  .cal-e:hover { background:rgba(63,219,230,.1); }
+  .cal-e { position:relative; display:block; width:100%; text-align:left; background:rgba(255,255,255,.04); border:0; border-left:3px solid var(--c);
+    border-radius:3px; padding:5px 7px; color:var(--text); font:500 .8rem/1.28 "Space Grotesk",sans-serif; cursor:pointer;
+    transition:transform .15s, background .15s, box-shadow .15s; }
+  .cal-e:hover { background:rgba(63,219,230,.1); transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,.35); }
   .cal-e.sel { background:rgba(255,179,71,.16); }
-  .cal-e small { display:block; font:700 .6rem "JetBrains Mono",monospace; color:var(--c); letter-spacing:.06em; margin-bottom:1px; }
+  .cal-e.hi { background:linear-gradient(90deg, color-mix(in srgb, var(--c) 16%, transparent), rgba(255,255,255,.03)); }
+  .cal-e.past { opacity:.38; }
+  .cal-e.soon { box-shadow:0 0 0 1px var(--c), 0 0 12px color-mix(in srgb, var(--c) 55%, transparent); animation:calglow 2s ease-in-out infinite; }
+  @keyframes calglow { 50% { box-shadow:0 0 0 1px var(--c), 0 0 4px color-mix(in srgb, var(--c) 30%, transparent); } }
+  .cal-e small { display:flex; align-items:center; gap:4px; font:700 .6rem "JetBrains Mono",monospace; color:var(--c); letter-spacing:.06em; margin-bottom:1px; }
+  .cal-e small .t { flex:1; min-width:0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  .cal-imp { display:inline-flex; align-items:flex-end; gap:1.5px; height:9px; flex:none; }
+  .cal-imp i { width:3px; background:rgba(143,163,184,.3); } .cal-imp i:nth-child(1) { height:4px; } .cal-imp i:nth-child(2) { height:6.5px; } .cal-imp i:nth-child(3) { height:9px; }
+  .cal-imp i.on { background:var(--c); box-shadow:0 0 4px var(--c); }
+  .cal-odds { display:block; margin-top:3px; font:700 .66rem "JetBrains Mono",monospace; color:#a9bccf; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cal-odds b { color:var(--amber); }
+  .cal-now { position:relative; height:0; border-top:1px dashed var(--cyan); margin:6px 0 16px; box-shadow:0 0 6px var(--cyan); }
+  .cal-now span { position:absolute; left:0; top:3px; font:800 .56rem "JetBrains Mono",monospace; letter-spacing:.1em; color:#06222a;
+    background:var(--cyan); padding:1px 4px; border-radius:2px; animation:calpulse 2s infinite; }
   .cal-more { background:none; border:0; color:var(--cyan); font:700 .7rem "JetBrains Mono",monospace; cursor:pointer; text-align:left; padding:2px 0; }
   .cal-none { color:#3a4d63; font-size:.85rem; }
-  .cal-x { margin-top:10px; background:rgba(5,12,20,.92); border:1px solid rgba(255,179,71,.5); border-radius:6px; padding:14px 16px; }
+  .cal-x { margin-top:10px; background:rgba(5,12,20,.94); border:1px solid rgba(255,179,71,.5); border-radius:6px; padding:14px 16px;
+    animation:calopen .25s ease; box-shadow:0 0 20px rgba(255,179,71,.12); }
+  @keyframes calopen { from { opacity:0; transform:translateY(-6px); } }
   .cal-xt { font:700 .72rem "JetBrains Mono",monospace; letter-spacing:.08em; color:var(--c); }
   .cal-x h3 { margin:4px 0 6px; font-size:1.2rem; }
   .cal-x p { margin:0 0 6px; color:#c4d2e0; }
@@ -324,8 +385,13 @@
   .cal-p.na { opacity:.5; }
   .cal-foot { color:var(--muted); font-size:.78rem; margin:10px 0 0; }
   @media (max-width: 760px) {
+    .calsec { margin:12px 8px 0; padding:16px 12px 10px; }
     .cal-g { grid-template-columns:1fr; } .cal-dh, .cal-d.empty:not(.today) { display:none; }
     .cal-d { min-height:0; } .cal-h h2 { font-size:1.1rem; }
+    .cal-cd div { min-width:46px; } .cal-cd b { font-size:1.25rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .calsec::after, .cal-rad::after, .cal-h h2 .cur, .cal-e.soon, .cal-d.in, .cal-now span, .cal-nl i { animation:none; }
   }
   /* Gap Scanner panel in the space under MONEY NEVER SLEEPS */
   .deskwrap { position:relative; container-type:inline-size; }
@@ -532,9 +598,10 @@
 </div>
 
 <section class="calsec" id="calendar" aria-label="Catalyst Calendar: the next two weeks">
-  <div class="cal-h"><div><h2>CATALYST CALENDAR</h2>
+  <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
+  <div class="cal-h"><div><h2><span class="cal-rad" aria-hidden="true"></span>CATALYST CALENDAR<span class="cur" aria-hidden="true"></span></h2>
     <p>The next 2 weeks of dates that move markets: economic data, the Fed, earnings, politics, world events and more.
-      Times in US Eastern. A <span class="mk">&#9679;</span> means a related market is linked. <span id="cal-upd"></span></p></div>
+      Times in US Eastern. Bars show expected impact; prices show the related market's odds. <span id="cal-upd"></span></p></div>
     <div class="cal-f">
       <button class="on" data-f="all">ALL</button>
       <button data-f="econ" style="--c:#3fdbe6">ECONOMY</button><button data-f="fed" style="--c:#ffb347">FED</button>
@@ -542,6 +609,7 @@
       <button data-f="world" style="--c:#3ee88a">WORLD</button><button data-f="markets" style="--c:#5aa9ff">MARKET HOURS</button>
       <button data-f="fyi" style="--c:#ff9ad5">WORTH KNOWING</button><button data-f="resolves" style="--c:#e8eef5">SETTLING</button>
     </div></div>
+  <div class="cal-next" id="cal-next" hidden></div>
   <div class="cal-g" id="cal-g"><p class="cal-none">Loading the calendar&hellip;</p></div>
   <div class="cal-x" id="cal-x" hidden></div>
   <p class="cal-foot">Tap any event for details and related prices on Polymarket, Kalshi and Alpha Arcade. Dates come from official
@@ -960,62 +1028,114 @@
 })();
 </script>
 <script>
-(function () {   // Catalyst Calendar: next 14 days, all times shown in US Eastern
+(function () {   // Catalyst Calendar: next 14 days, US Eastern; countdown, now-line, impact bars, odds
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
   var c = function (p) { return p == null ? '&ndash;' : esc(Math.round(p)) + '&cent;'; };
   var TZ = 'America/New_York';
-  var key = function (d) { return new Date(d).toLocaleDateString('en-CA', { timeZone: TZ }); };          // 2026-11-08
+  var key = function (d) { return new Date(d).toLocaleDateString('en-CA', { timeZone: TZ }); };
   var tm = function (d) { return new Date(d).toLocaleTimeString('en-US', { timeZone: TZ, hour: 'numeric', minute: '2-digit' }) + ' ET'; };
   var lng = function (d) { return new Date(d).toLocaleDateString('en-US', { timeZone: TZ, weekday: 'short', month: 'short', day: 'numeric' }); };
+  var shortD = function (d) { return lng(d).replace(/^\w+, /, ''); };
   var CATS = { econ: ['ECONOMY', '#3fdbe6'], fed: ['FED', '#ffb347'], earnings: ['EARNINGS', '#b18cff'],
     politics: ['POLITICS', '#ff7a7a'], world: ['WORLD', '#3ee88a'], markets: ['MARKET HOURS', '#5aa9ff'],
     fyi: ['WORTH KNOWING', '#ff9ad5'], resolves: ['SETTLING', '#e8eef5'] };
-  var items = [], filt = 'all', sel = -1, open = {};
-  var grid = document.getElementById('cal-g'), det = document.getElementById('cal-x');
+  var items = [], filt = 'all', sel = -1, open = {}, nextI = -1, first = true;
+  var grid = document.getElementById('cal-g'), det = document.getElementById('cal-x'), nx = document.getElementById('cal-next');
 
   function when(x) {
     if (x.kind === 'resolves') return 'Settles ' + tm(x.date);
     var t = x.allday ? 'All day' : tm(x.date);
-    if (x.end) t = lng(x.date).replace(/^\w+, /, '') + ' to ' + lng(x.end + 'T17:00:00Z').replace(/^\w+, /, '');
+    if (x.end) t = shortD(x.date) + ' to ' + shortD(x.end + 'T17:00:00Z');
     return t + (x.est ? ' · expected date' : '');
   }
   function title(x) { return x.kind === 'resolves' ? x.market.title : x.name; }
+  function odds(m) {                                       // one headline price: Alpha first (our edge), then Polymarket, then Kalshi
+    if (!m) return '';
+    var order = [['alpha', 'Alpha'], ['polymarket', 'Poly'], ['kalshi', 'Kalshi']];
+    for (var i = 0; i < 3; i++) { var v = m.prices[order[i][0]]; if (v != null) return { site: order[i][1], v: v }; }
+    return '';
+  }
+  function bars(n) { var h = '<span class="cal-imp" title="Expected impact: ' + ['', 'low', 'medium', 'high'][n || 1] + '">';
+    for (var i = 1; i <= 3; i++) h += '<i' + (i <= (n || 1) ? ' class="on"' : '') + '></i>'; return h + '</span>'; }
+  function pill(i, now) {
+    var x = items[i], C = CATS[x.cat] || CATS.econ, t = new Date(x.date).getTime(), cls = 'cal-e';
+    var endT = x.end ? new Date(x.end + 'T23:59:59-05:00').getTime() : x.allday ? t + 10 * 3600e3 : t;
+    if (endT < now) cls += ' past'; else if (!x.allday && t - now < 24 * 3600e3) cls += ' soon';
+    if ((x.impact || 1) >= 3) cls += ' hi';
+    if (i === sel) cls += ' sel';
+    var lab = x.kind === 'resolves' ? tm(x.date) : x.end ? 'THRU ' + shortD(x.end + 'T17:00:00Z').toUpperCase() : x.allday ? 'ALL DAY' : tm(x.date);
+    var o = odds(x.market), m = x.market;
+    return '<button class="' + cls + '" style="--c:' + C[1] + '" data-i="' + i + '">' +
+      '<small><span class="t">' + esc(C[0]) + ' · ' + esc(lab) + '</span>' + bars(x.impact) + '</small>' + esc(title(x)) +
+      (o ? '<span class="cal-odds"><b>' + Math.round(o.v) + '&cent;</b> ' + o.site + ' · ' +
+        esc(x.kind === 'resolves' ? m.outcome : m.title.replace(/\?$/, '') + ' · ' + m.outcome) + '</span>' : '') + '</button>';
+  }
   function render() {
-    var today = key(new Date()), base = new Date(today + 'T12:00:00Z'), days = [], html = '';
+    var now = Date.now(), today = key(new Date()), base = new Date(today + 'T12:00:00Z'), days = [], html = '';
     for (var i = 0; i < 14; i++) days.push(key(new Date(base.getTime() + i * 864e5)));
     var by = {}; days.forEach(function (d) { by[d] = []; });
     items.forEach(function (x, i) {
       if (filt !== 'all' && x.cat !== filt) return;
       var k = key(x.date);
-      if (k < today && x.end && x.end >= today) k = today;                    // multi-day event still running
+      if (k < today && x.end && x.end >= today) k = today;
       if (by[k]) by[k].push(i);
     });
     days.slice(0, 7).forEach(function (d) {
       html += '<div class="cal-dh">' + new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }).toUpperCase() + '</div>';
     });
-    days.forEach(function (d) {
+    days.forEach(function (d, n) {
       var dt = new Date(d + 'T12:00:00Z'), wd = dt.getUTCDay(), list = by[d], cls = 'cal-d';
       if (d === today) cls += ' today'; if (wd === 0 || wd === 6) cls += ' wkend'; if (!list.length) cls += ' empty';
-      html += '<div class="' + cls + '"><div class="cal-dn"><span>' +
+      html += '<div class="' + cls + (first ? ' in' : '') + '" style="--n:' + n + '"><div class="cal-dn"><span>' +
         dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' }) + '</span>' +
         (d === today ? '<b>TODAY</b>' : '') + '</div>';
-      var cut = open[d] ? list.length : 5;
-      list.slice(0, cut).forEach(function (i) {
-        var x = items[i], C = CATS[x.cat] || CATS.econ;
-        html += '<button class="cal-e' + (i === sel ? ' sel' : '') + '" style="--c:' + C[1] + '" data-i="' + i + '">' +
-          '<small>' + esc(C[0]) + ' · ' + esc(x.kind === 'resolves' ? tm(x.date) : x.end ? 'THRU ' + lng(x.end + 'T17:00:00Z').replace(/^\w+, /, '').toUpperCase() : x.allday ? 'ALL DAY' : tm(x.date)) +
-          (x.market ? ' <span class="mk">&#9679;</span>' : '') + '</small>' + esc(title(x)) + '</button>';
+      var cut = open[d] ? list.length : 5, shown = list.slice(0, cut), nowDone = d !== today;
+      shown.forEach(function (i) {                         // the NOW line sits between past and upcoming timed events today
+        var x = items[i];
+        if (!nowDone && !x.allday && new Date(x.date).getTime() > now) { html += nowLine(); nowDone = true; }
+        html += pill(i, now);
       });
+      if (!nowDone) html += nowLine();
       if (list.length > cut) html += '<button class="cal-more" data-d="' + d + '">+' + (list.length - cut) + ' more</button>';
-      if (!list.length) html += '<span class="cal-none">&mdash;</span>';
+      if (!list.length && d !== today) html += '<span class="cal-none">&mdash;</span>';
       html += '</div>';
     });
-    grid.innerHTML = html;
+    grid.innerHTML = html; first = false;
+  }
+  function nowLine() { return '<div class="cal-now"><span>NOW ' + new Date().toLocaleTimeString('en-US', { timeZone: TZ, hour: 'numeric', minute: '2-digit' }) + '</span></div>'; }
+  function pickNext() {                                    // next timed, medium/high-impact event
+    var now = Date.now(), best = -1;
+    items.forEach(function (x, i) {
+      var t = new Date(x.date).getTime();
+      if (x.allday || x.kind === 'resolves' || (x.impact || 1) < 2 || t <= now) return;
+      if (best < 0 || t < new Date(items[best].date).getTime()) best = i;
+    });
+    return best;
+  }
+  function tick() {
+    if (nextI < 0 || new Date(items[nextI].date).getTime() <= Date.now()) { nextI = pickNext(); if (items.length) render(); drawNext(); }
+    if (nextI < 0) return;
+    var s = Math.max(0, Math.floor((new Date(items[nextI].date).getTime() - Date.now()) / 1000));
+    var v = [Math.floor(s / 86400), Math.floor(s % 86400 / 3600), Math.floor(s % 3600 / 60), s % 60];
+    var b = nx.querySelectorAll('.cal-cd b');
+    for (var i = 0; i < 4; i++) if (b[i]) b[i].textContent = (i ? ('0' + v[i]).slice(-2) : v[i]);
+  }
+  function drawNext() {
+    if (nextI < 0) { nx.hidden = true; return; }
+    var x = items[nextI], C = CATS[x.cat] || CATS.econ, o = odds(x.market), then = [], now = Date.now();
+    items.forEach(function (y, i) { if (i !== nextI && !y.allday && y.kind !== 'resolves' && (y.impact || 1) >= 2 &&
+      new Date(y.date).getTime() > new Date(x.date).getTime() && then.length < 3) then.push(y); });
+    nx.innerHTML = '<div class="cal-nl"><i></i>NEXT UP</div>' +
+      '<div class="cal-nn" style="--c:' + C[1] + '"><b>' + esc(x.name) + '</b><span>' + esc(C[0]) + ' · ' + esc(lng(x.date)) + ' · ' + esc(tm(x.date)) +
+      (o ? ' · ' + esc(x.market.title.replace(/\?$/, '')) + ' ' + Math.round(o.v) + '¢ on ' + o.site : '') + '</span></div>' +
+      '<div class="cal-cd"><div><b>0</b><small>DAYS</small></div><div><b>00</b><small>HRS</small></div><div><b>00</b><small>MIN</small></div><div><b>00</b><small>SEC</small></div></div>' +
+      (then.length ? '<div class="cal-then">THEN: ' + then.map(function (y) { return '<em>' + esc(shortD(y.date)) + '</em> ' + esc(y.name); }).join(' &nbsp;·&nbsp; ') + '</div>' : '');
+    nx.hidden = false;
   }
   function detail(i) {
     var x = items[i], C = CATS[x.cat] || CATS.econ, m = x.market, h;
-    h = '<div class="cal-xt" style="--c:' + C[1] + '">' + esc(C[0]) + ' · ' + esc(lng(x.date)) + ' · ' + esc(when(x)) + '</div>' +
-      '<h3>' + esc(title(x)) + '</h3>';
+    h = '<div class="cal-xt" style="--c:' + C[1] + '">' + esc(C[0]) + ' · ' + esc(lng(x.date)) + ' · ' + esc(when(x)) + ' · IMPACT ' +
+      ['', 'LOW', 'MEDIUM', 'HIGH'][x.impact || 1] + '</div><h3>' + esc(title(x)) + '</h3>';
     if (x.note) h += '<p>' + esc(x.note) + '</p>';
     if (x.kind === 'resolves') h += '<p>This market settles soon. Outcome shown: ' + esc(m.outcome) + '.</p>';
     if (x.source) h += '<p class="cal-src">Source: ' + esc(x.source) + '</p>';
@@ -1033,16 +1153,19 @@
     }
     det.innerHTML = h; det.hidden = false;
     var cell = grid.querySelector('.cal-e.sel'), mob = matchMedia('(max-width: 760px)').matches;
-    if (mob && cell) cell.closest('.cal-d').after(det); else grid.after(det);   // phones: open right under the tapped day
+    if (mob && cell) cell.closest('.cal-d').after(det); else grid.after(det);
   }
   fetch('calendar.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     items = d.items || [];
     document.getElementById('cal-upd').textContent = 'Updated ' + new Date(d.updated).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-    render();
+    nextI = pickNext(); render(); drawNext(); tick();
+    setInterval(tick, 1000);
+    setInterval(function () { if (sel < 0) render(); }, 60000);   // keep the NOW line and glows current
     if (location.hash === '#calendar') document.getElementById('calendar').scrollIntoView();
   }).catch(function () { grid.innerHTML = '<p class="cal-none">Calendar unavailable right now. Try again shortly.</p>'; });
   document.getElementById('calendar').addEventListener('click', function (e) {
     var ev = e.target.closest('.cal-e'), mo = e.target.closest('.cal-more'), f = e.target.closest('.cal-f button');
+    if (e.target.closest('.cal-next') && nextI >= 0) { filt = 'all'; sel = nextI; render(); detail(sel); det.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
     if (ev) { sel = +ev.getAttribute('data-i'); render(); detail(sel); }
     if (mo) { open[mo.getAttribute('data-d')] = true; render(); }
     if (f) {
