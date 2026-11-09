@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09T18:43:50Z",
+ "updated": "2026-11-09T19:32:13Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -10,7 +10,7 @@
    "prices": {
     "polymarket": 9.5,
     "kalshi": 7.0,
-    "alpha": 9.4
+    "alpha": 9.9
    },
    "low": {
     "site": "kalshi",
@@ -19,10 +19,10 @@
     "url": "https://kalshi.com/markets/kxusairanagreement"
    },
    "high": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 9.5,
-    "url": "https://polymarket.com/event/us-iran-final-nuclear-deal-by-20260621201254412"
+    "site": "alpha",
+    "name": "Alpha Arcade",
+    "price": 9.9,
+    "url": "https://www.alphaarcade.com/market/us-iran-final-nuclear-deal-by-jul26"
    },
    "urls": {
     "alpha": "https://www.alphaarcade.com/market/us-iran-final-nuclear-deal-by-jul26",
@@ -32,19 +32,21 @@
    "volumes": {
     "alpha": 2896,
     "polymarket": 21548631,
-    "kalshi": 3141649
+    "kalshi": 3141781
    },
    "volumes24": {
     "alpha": 0,
     "polymarket": 147317,
-    "kalshi": 69701
+    "kalshi": 47683
    },
-   "raw": 2.5,
-   "fees": 0.5,
-   "net": 2.0,
+   "raw": 2.9,
+   "fees": 1.1,
+   "net": 1.8,
    "all3": true,
    "category": "Geopolitics",
-   "chg": {}
+   "chg": {
+    "alpha": 0.5
+   }
   },
   {
    "title": "Pablo Picasso's \u201cLe Baiser\u201d Sale Price",
@@ -76,7 +78,7 @@
     "kalshi": 780
    },
    "volumes24": {
-    "polymarket": 4369,
+    "polymarket": 3960,
     "kalshi": 124
    },
    "raw": 28.1,
@@ -85,49 +87,6 @@
    "all3": false,
    "category": "Art",
    "chg": {}
-  },
-  {
-   "title": "Who will be the next to leave the Trump Cabinet?",
-   "outcome": "Pete Hegseth",
-   "close": "2029-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 28.5,
-    "kalshi": 50.0,
-    "alpha": null
-   },
-   "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 28.5,
-    "url": "https://polymarket.com/event/who-will-be-the-next-to-leave-the-trump-cabinet-before-2029"
-   },
-   "high": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 50.0,
-    "url": "https://kalshi.com/markets/kxcabout"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/who-will-be-the-next-to-leave-the-trump-cabinet-before-2029",
-    "kalshi": "https://kalshi.com/markets/kxcabout"
-   },
-   "volumes": {
-    "polymarket": 13280,
-    "kalshi": 7295
-   },
-   "volumes24": {
-    "polymarket": 5843,
-    "kalshi": 2000
-   },
-   "raw": 21.5,
-   "fees": 2.6,
-   "net": 18.9,
-   "all3": false,
-   "category": "Trump",
-   "chg": {
-    "polymarket": -1.5,
-    "kalshi": -0.5
-   }
   },
   {
    "title": "NATO x Russia military clash by 2027?",
@@ -160,7 +119,7 @@
    },
    "volumes24": {
     "alpha": 0,
-    "polymarket": 15410
+    "polymarket": 14868
    },
    "raw": 14.2,
    "fees": 1.4,
@@ -168,6 +127,48 @@
    "all3": false,
    "category": "Geopolitics",
    "chg": {}
+  },
+  {
+   "title": "Who will be the next to leave the Trump Cabinet?",
+   "outcome": "Pete Hegseth",
+   "close": "2029-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 34.5,
+    "kalshi": 50.0,
+    "alpha": null
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 34.5,
+    "url": "https://polymarket.com/event/who-will-be-the-next-to-leave-the-trump-cabinet-before-2029"
+   },
+   "high": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 50.0,
+    "url": "https://kalshi.com/markets/kxcabout"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/who-will-be-the-next-to-leave-the-trump-cabinet-before-2029",
+    "kalshi": "https://kalshi.com/markets/kxcabout"
+   },
+   "volumes": {
+    "polymarket": 13729,
+    "kalshi": 7295
+   },
+   "volumes24": {
+    "polymarket": 6292,
+    "kalshi": 2037
+   },
+   "raw": 15.5,
+   "fees": 2.7,
+   "net": 12.8,
+   "all3": false,
+   "category": "Trump",
+   "chg": {
+    "polymarket": 6.0
+   }
   },
   {
    "title": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?",
@@ -199,7 +200,7 @@
     "kalshi": 5819
    },
    "volumes24": {
-    "polymarket": 13,
+    "polymarket": 12,
     "kalshi": 0
    },
    "raw": 13.0,
@@ -287,23 +288,21 @@
    "net": 9.0,
    "all3": false,
    "category": "DNC",
-   "chg": {
-    "polymarket": -1.0
-   }
+   "chg": {}
   },
   {
    "title": "Kylie Jenner and Timoth\u00e9e Chalamet engaged in 2026?",
    "outcome": "Yes",
    "close": "2027-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 15.5,
+    "polymarket": 15.0,
     "kalshi": 25.5,
     "alpha": null
    },
    "low": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 15.5,
+    "price": 15.0,
     "url": "https://polymarket.com/event/kylie-jenner-and-timothe-chalamet-engaged-in-2026"
    },
    "high": {
@@ -324,12 +323,14 @@
     "polymarket": 38,
     "kalshi": 1385
    },
-   "raw": 10.0,
+   "raw": 10.5,
    "fees": 2.0,
-   "net": 8.0,
+   "net": 8.5,
    "all3": false,
    "category": "Culture",
-   "chg": {}
+   "chg": {
+    "polymarket": -0.5
+   }
   },
   {
    "title": "US military action against Cuba by December 31, 2026?",
@@ -358,11 +359,11 @@
    },
    "volumes": {
     "alpha": 213,
-    "polymarket": 7702290
+    "polymarket": 7702292
    },
    "volumes24": {
     "alpha": 0,
-    "polymarket": 1808
+    "polymarket": 1809
    },
    "raw": 8.2,
    "fees": 1.0,
@@ -372,43 +373,46 @@
    "chg": {}
   },
   {
-   "title": "Situational Awareness announces fund wind-down by...?",
-   "outcome": "December 31",
-   "close": "2026-12-31T23:59:00Z",
+   "title": "Strait of Hormuz traffic returns to normal by...?",
+   "outcome": "December 31, 2026",
+   "close": "2026-12-30T16:00:00Z",
    "prices": {
-    "polymarket": 11.0,
-    "kalshi": null,
-    "alpha": 5.0
+    "polymarket": null,
+    "kalshi": 6.5,
+    "alpha": 11.9
    },
    "low": {
-    "site": "alpha",
-    "name": "Alpha Arcade",
-    "price": 5.0,
-    "url": "https://www.alphaarcade.com/market/sit-aware-announces-fund-wind-down-by-26"
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 6.5,
+    "url": "https://kalshi.com/markets/kxhormuznorm"
    },
    "high": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 11.0,
-    "url": "https://polymarket.com/event/situational-awareness-announces-fund-wind-down-byptptpt-20260730181230095"
+    "site": "alpha",
+    "name": "Alpha Arcade",
+    "price": 11.9,
+    "url": "https://www.alphaarcade.com/market/strait-of-hormuz-traffic-normal-by-2026"
    },
    "urls": {
-    "alpha": "https://www.alphaarcade.com/market/sit-aware-announces-fund-wind-down-by-26",
-    "polymarket": "https://polymarket.com/event/situational-awareness-announces-fund-wind-down-byptptpt-20260730181230095"
+    "alpha": "https://www.alphaarcade.com/market/strait-of-hormuz-traffic-normal-by-2026",
+    "polymarket": "https://polymarket.com/event/strait-of-hormuz-traffic-returns-to-normal-by-december-31",
+    "kalshi": "https://kalshi.com/markets/kxhormuznorm"
    },
    "volumes": {
-    "alpha": 1576,
-    "polymarket": 177422
+    "alpha": 18923,
+    "polymarket": 17273356,
+    "kalshi": 8723685
    },
    "volumes24": {
-    "alpha": 0,
-    "polymarket": 5
+    "alpha": 946,
+    "polymarket": 298954,
+    "kalshi": 108331
    },
-   "raw": 6.0,
-   "fees": 0.7,
-   "net": 5.3,
+   "raw": 5.4,
+   "fees": 1.2,
+   "net": 4.2,
    "all3": false,
-   "category": "Tech",
+   "category": "Geopolitics",
    "chg": {}
   },
   {
@@ -442,7 +446,7 @@
    },
    "volumes24": {
     "alpha": 0,
-    "polymarket": 1397
+    "polymarket": 1459
    },
    "raw": 4.5,
    "fees": 0.5,
