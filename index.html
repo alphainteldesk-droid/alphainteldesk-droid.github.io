@@ -167,7 +167,7 @@
   /* ===== Live Intel Desk ===== */
   .desk { position:relative; width:100%; aspect-ratio:3/1; overflow:hidden;
     background:#0b1420 url(banner.jpg?v=4) center/cover no-repeat; }
-  .glass { position:absolute; left:0; top:0; transform-origin:0 0;
+  .glass { position:absolute; left:0; top:0; transform-origin:0 0; -webkit-font-smoothing:antialiased; text-rendering:geometricPrecision; backface-visibility:hidden;
     padding:5px 8px; border-radius:3px;
     background:rgba(5,11,20,.92); border:1px solid rgba(63,219,230,.55);
     box-shadow:0 0 14px rgba(63,219,230,.18), inset 0 0 20px rgba(63,219,230,.06);
@@ -196,9 +196,9 @@
   .glass[data-screen="crypto"], .glass[data-screen="markets"], .glass[data-screen="macro"] { display:none !important; }
   .glass[data-screen="gap"] { cursor:pointer; transition:border-color .2s; }
   .glass[data-screen="gap"]:hover { border-color:#ff7a7a; box-shadow:0 0 18px rgba(255,92,92,.35); }
-  .glass .gh.red { color:#ff7a7a; text-shadow:0 0 6px rgba(255,92,92,.6); }
+  .glass .gh.red { color:#ff9494; font-weight:800; text-shadow:0 1px 1px rgba(0,0,0,.9); }
   .glass .rg { display:inline-block; min-width:3.2em; margin-right:6px; padding:1px 3px; border-radius:2px;
-    text-align:center; background:rgba(255,92,92,.22); color:#ffb0b0; font:800 8px/1 "JetBrains Mono",monospace;
+    text-align:center; background:#e5484d; color:#fff; font:800 8.5px/1.15 "JetBrains Mono",monospace;
     letter-spacing:.06em; vertical-align:1px; text-shadow:none; }
   .glass[data-screen="trend"] { cursor:pointer; transition:border-color .2s; }
   .glass[data-screen="trend"]:hover { border-color:#7ff0f7; box-shadow:0 0 18px rgba(63,219,230,.45); }
@@ -229,9 +229,9 @@
   /* "MONEY NEVER SLEEPS" (live text, was part of the photo) */
   .tagline, .rt { position:absolute; left:21.3%; transform:translateX(-50%); margin:0; white-space:nowrap;
     font-family:"Space Grotesk",sans-serif; text-shadow:0 1px 3px rgba(0,0,0,.6); }
-  .tagline { top:26.6%; font-size:max(8px,1.62cqw); font-weight:500; color:#eef2f7; line-height:1.2; }
+  .tagline { top:28.4%; font-size:max(8px,1.62cqw); font-weight:500; color:#eef2f7; line-height:1.2; }
   .rt { top:33.9%; font-size:max(6px,1.18cqw); font-weight:400; color:#b6c1c7; line-height:1.2; }
-  .mns { position:absolute; left:21.2%; top:40.6%; transform:translateX(-50%); white-space:nowrap;
+  .mns { position:absolute; left:21.2%; top:37.6%; transform:translateX(-50%); white-space:nowrap;
     font:700 max(7px,1.22cqw) "JetBrains Mono",monospace; letter-spacing:.42em; padding-left:.42em;
     color:var(--amber); text-shadow:0 0 8px rgba(255,179,71,.45); }
   /* "THE DESK IS OPEN" neon sign */
@@ -571,7 +571,6 @@
 <div class="desk" id="desk" role="img" aria-label="Alpha Intel Desk: a trading desk at sunrise with live market screens on the windows">
   <div class="sign">THE DESK IS OPEN</div>
   <p class="tagline">The only edge you need.</p>
-  <p class="rt">Real-time intelligence for prediction markets.</p>
   <div class="mns">MONEY NEVER SLEEPS</div>
   <div class="radar" aria-hidden="true"><svg viewBox="-100 -100 200 200">
     <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
@@ -643,7 +642,6 @@
 
 <section class="introband" aria-label="About Alpha Intel Desk">
   <div class="ib-text">
-    <span class="tag">Polymarket · Kalshi · Alpha Arcade</span>
     <h1>Real-time intelligence for prediction markets</h1>
     <p>Spot price gaps, catch the biggest movers, and see what's coming next across Polymarket, Kalshi and Alpha Arcade.</p>
   </div>
