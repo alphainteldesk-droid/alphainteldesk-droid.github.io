@@ -191,6 +191,9 @@
     background:var(--amber); color:var(--navy); font-weight:800; font-size:10px; letter-spacing:.12em;
     text-shadow:none; animation:ctaglow 2.4s infinite; }
   @keyframes ctaglow { 50% { box-shadow:0 0 12px rgba(255,179,71,.75); } }
+  /* Left-wall screens (Crypto / Markets / Macro) hidden to show the windows (James, Nov 8 — trial).
+     To bring them back, delete the next line. */
+  .glass[data-screen="crypto"], .glass[data-screen="markets"], .glass[data-screen="macro"] { display:none !important; }
   .glass[data-screen="gap"] { cursor:pointer; transition:border-color .2s; }
   .glass[data-screen="gap"]:hover { border-color:#ff7a7a; box-shadow:0 0 18px rgba(255,92,92,.35); }
   .glass .gh.red { color:#ff7a7a; text-shadow:0 0 6px rgba(255,92,92,.6); }
@@ -519,6 +522,19 @@
 <meta property="og:site_name" content="Alpha Intel Desk">
 </head>
 <body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
+    <nav>
+      <a class="on" href="/">Home</a>
+      <a href="#market-of-the-week">Market of the Week</a>
+      <a href="#top-traders">Top Traders</a>
+      <a href="#guides">Guides</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
 <!-- Live tape (TradingView, free widget; CFD prices move in real time) -->
 <div class="tvtape" aria-label="Live market tape">
 <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
@@ -550,19 +566,6 @@
  {"proName":"NASDAQ:DKNG","title":"DRAFTKINGS"}],
  "showSymbolLogo":true,"isTransparent":true,"displayMode":"compact","colorTheme":"dark","locale":"en"}
 </script></div></div>
-
-<header>
-  <div class="bar">
-    <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
-    <nav>
-      <a class="on" href="/">Home</a>
-      <a href="#market-of-the-week">Market of the Week</a>
-      <a href="#top-traders">Top Traders</a>
-      <a href="#guides">Guides</a>
-      <a href="/about.html">About</a>
-    </nav>
-  </div>
-</header>
 
 <div class="deskwrap">
 <div class="desk" id="desk" role="img" aria-label="Alpha Intel Desk: a trading desk at sunrise with live market screens on the windows">
