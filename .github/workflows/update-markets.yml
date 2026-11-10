@@ -31,6 +31,8 @@ jobs:
           python3 -m pip install --quiet --break-system-packages pillow || python3 -m pip install --quiet pillow
           python3 make_card.py
         continue-on-error: true
+      - run: python3 indexnow.py   # once a day: tell Bing & co. about our pages (Nov 10)
+        continue-on-error: true
       - run: python3 post_new_markets.py
         continue-on-error: true
         env:
@@ -47,4 +49,5 @@ jobs:
           [ -f movers.json ] && git add movers.json
           [ -f card_state.json ] && git add card.jpg card-gaps.jpg card_state.json index.html gap-scanner.html
           [ -f alpha_hist.json ] && git add alpha_hist.json
+          [ -f indexnow_state.json ] && git add indexnow_state.json
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -X theirs -q && git push)   # if another run pushed meanwhile, keep this run's fresher files
