@@ -461,6 +461,12 @@
     border:1px solid rgba(63,219,230,.5); border-radius:4px; padding:.45cqw .6cqw; box-shadow:0 4px 14px rgba(0,0,0,.6);
     pointer-events:none; }
   @media (hover: none) { .gb-tab[data-tip]:hover::after { display:none; } }
+  /* Nov 10: the tab you're NOT on is bright cyan and gently pulses, so it reads as a link */
+  .gb-tab:not(.on) { color:var(--cyan); border-color:rgba(63,219,230,.6); text-shadow:0 0 6px rgba(63,219,230,.45);
+    animation:tabPulse 2.2s ease-in-out infinite; }
+  .gb-tab:not(.on):hover { color:#fff; background:rgba(63,219,230,.14); animation:none; }
+  @keyframes tabPulse { 0%,100% { box-shadow:0 0 0 rgba(63,219,230,0); } 50% { box-shadow:0 0 12px rgba(63,219,230,.55); background:rgba(63,219,230,.08); } }
+  @media (prefers-reduced-motion: reduce) { .gb-tab:not(.on) { animation:none; } }
   .gb-tab.on { color:var(--amber); border-color:rgba(255,179,71,.6); text-shadow:0 0 6px rgba(255,179,71,.6);
     background:rgba(255,179,71,.07); }
   .gb-sh { background:none; border:1px solid rgba(63,219,230,.35); color:var(--cyan); font:700 .82cqw/1 sans-serif;
@@ -657,7 +663,7 @@
 <section class="gapbox" id="gapbox" aria-label="Gap Scanner and Movers">
   <div class="gb-h"><div class="gb-tabs" role="tablist">
       <button class="gb-tab on" data-t="gaps" role="tab" data-tip="The same question priced differently across Polymarket, Kalshi and Alpha Arcade, after estimated fees. Markets on all three sites come first. More gaps on the full Gap Scanner page. Checked every 20 minutes."><i class="ldot"></i>GAP SCANNER</button>
-      <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news.">MOVERS</button>
+      <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news."><i class="ldot"></i>MOVERS</button>
 </div>
     <span class="gb-s"><span id="gb-sub">PRICE GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
   <div class="gb-cols" id="gb-cols"></div>
