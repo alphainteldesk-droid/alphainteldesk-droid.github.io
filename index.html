@@ -58,6 +58,22 @@
   .tag { font-family: "JetBrains Mono", monospace; font-size: .75rem;
     letter-spacing: .2em; color: var(--amber); text-transform: uppercase; }
 
+  /* BREAKING line under the ticker (Nov 10) */
+  .brk { display:flex; align-items:center; gap:14px; max-width:1400px; margin:0 auto; padding:7px 20px; border-bottom:1px solid var(--line);
+    background:linear-gradient(90deg, rgba(255,60,60,.10), rgba(255,60,60,0) 40%); font-size:.95rem; min-height:38px; }
+  .brk[hidden] { display:none; }
+  .brk-tag { flex:none; display:inline-flex; align-items:center; gap:7px; font:800 .74rem/1 "JetBrains Mono",monospace; letter-spacing:.14em;
+    color:#fff; background:#d8262b; padding:5px 9px; border-radius:3px; }
+  .brk-tag b { font-weight:800; opacity:.85; }
+  .brk-tag i { width:7px; height:7px; border-radius:50%; background:#fff; animation:brkDot 1.4s ease-in-out infinite; }
+  @keyframes brkDot { 50% { opacity:.25; } }
+  .brk-h { flex:1; min-width:0; color:var(--text); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .brk-h:hover { color:#fff; text-decoration:underline; }
+  .brk-h.in { animation:brkIn .6s ease-out; }
+  @keyframes brkIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+  .brk-t { flex:none; color:var(--muted); font:500 .75rem "JetBrains Mono",monospace; }
+  @media (max-width:640px) { .brk { padding:6px 12px; gap:8px; font-size:.85rem; } .brk-t { display:none; } .brk-tag { font-size:.64rem; padding:4px 7px; } }
+  @media (prefers-reduced-motion: reduce) { .brk-h.in, .brk-tag i { animation:none; } }
   /* Top intro bar (Nov 10): first thing visitors see, above the ticker */
   .introband.top { padding:16px 20px 12px; border-bottom:1px solid var(--line); }
   .introband.top .ib-text h1 { margin:0 0 8px; }
@@ -610,6 +626,37 @@
  {"proName":"NYSE:LOW","title":"LOWE'S"}],
  "showSymbolLogo":true,"isTransparent":true,"displayMode":"compact","colorTheme":"dark","locale":"en"}
 </script></div></div>
+<!-- BREAKING line (Nov 10): one BBC headline at a time, fades to the next -->
+<div class="brk" id="brk" hidden aria-live="polite">
+  <span class="brk-tag"><i></i>BREAKING <b>· BBC</b></span>
+  <a class="brk-h" id="brk-h" href="#" target="_blank" rel="noopener"></a>
+  <span class="brk-t" id="brk-t"></span>
+</div>
+<script>
+(function () {
+  var box = document.getElementById('brk'), h = document.getElementById('brk-h'), t = document.getElementById('brk-t');
+  var list = [], k = 0, timer = null, paused = false;
+  function ago(s) { var m = Math.max(1, Math.round((Date.now() - new Date(s)) / 60000)); return m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago'; }
+  function show() {
+    var x = list[k % list.length]; k++;
+    h.classList.remove('in'); void h.offsetWidth;
+    h.textContent = x.title + ' \u2197'; h.href = x.url; t.textContent = ago(x.time);
+    h.classList.add('in');
+  }
+  function start() { clearInterval(timer); timer = setInterval(function () { if (!paused && list.length > 1) show(); }, 7000); }
+  box.addEventListener('mouseenter', function () { paused = true; });
+  box.addEventListener('mouseleave', function () { paused = false; });
+  function load() {
+    fetch('desk.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+      var b = (d.breaking || []).filter(function (x) { return x.title && x.url; });
+      if (!b.length) return;
+      var first = !list.length; list = b;
+      if (first) { box.hidden = false; k = 0; show(); start(); }
+    }).catch(function () {});
+  }
+  load(); setInterval(load, 5 * 60000);
+})();
+</script>
 
 <div class="deskwrap">
 <div class="desk" id="desk" role="img" aria-label="Alpha Intel Desk: a trading desk at sunrise with live market screens on the windows">

@@ -124,13 +124,45 @@ def conflict(n=12):
     return out
 
 
+BBC_FEEDS = ["https://feeds.bbci.co.uk/news/world/rss.xml", "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml",
+             "https://feeds.bbci.co.uk/news/business/rss.xml"]
+
+
+def bbc(n=10):
+    """BBC News headlines (free to read) for the BREAKING line under the ticker (Nov 10). Newest first, last 24h."""
+    from email.utils import parsedate_to_datetime
+    items, seen = [], set()
+    for url in BBC_FEEDS:
+        try:
+            root = ET.fromstring(get(url, raw=True))
+        except Exception as err:
+            print("BBC feed failed:", url.split("/news/")[-1], err)
+            continue
+        for i in root.iter("item"):
+            title = (i.findtext("title") or "").strip()
+            link = (i.findtext("link") or "").strip()
+            try:
+                when = parsedate_to_datetime(i.findtext("pubDate") or "")
+            except Exception:
+                continue
+            key = title.lower()
+            if not title or key in seen or "/sounds/" in link or "/iplayer/" in link:
+                continue
+            if (datetime.now(timezone.utc) - when).total_seconds() > 86400:
+                continue
+            seen.add(key)
+            items.append({"title": title, "url": link.split("?")[0], "time": when.strftime("%Y-%m-%dT%H:%M:%SZ")})
+    items.sort(key=lambda x: x["time"], reverse=True)
+    return items[:n]
+
+
 out = {"updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "quotes": {}}
 for name, sym in QUOTES:
     q = quote(sym)
     if q:
         out["quotes"][name] = q
 for key, fn in (("crypto", crypto), ("trends_us", lambda: trends("US", 5)), ("trends_uk", lambda: trends("GB", 5)),
-                ("conflict", conflict)):
+                ("conflict", conflict), ("breaking", bbc)):
     try:
         out[key] = fn()
     except Exception as err:
@@ -142,10 +174,16 @@ if not out.get("conflict"):                     # keep the last good headlines i
     except Exception:
         out["conflict"] = []
 
+if not out.get("breaking"):                     # keep the last good BBC headlines if the feeds fail
+    try:
+        out["breaking"] = json.load(open("desk.json")).get("breaking", [])
+    except Exception:
+        out["breaking"] = []
+
 # Interleave US and UK trends: US, UK, US, UK...
 out["trends"] = [t for pair in zip(out.pop("trends_us"), out.pop("trends_uk")) for t in pair]
 
 with open("desk.json", "w") as fh:
     json.dump(out, fh, indent=1, ensure_ascii=False)
 print("Wrote desk.json:", len(out["quotes"]), "of", len(QUOTES), "quotes |",
-      len(out["crypto"]), "crypto |", len(out["trends"]), "trends |", len(out["conflict"]), "conflict headlines")
+      len(out["crypto"]), "crypto |", len(out["trends"]), "trends |", len(out["conflict"]), "conflict headlines |", len(out.get("breaking", [])), "BBC headlines")
