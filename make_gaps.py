@@ -71,6 +71,17 @@ def fine_grade(row, lo, hi):
     return grade, {"src": src, "srcs": srcs[:4], "void": void}
 
 
+def fair_price(row, ps):
+    """Fair price estimate (Nov 10): each site's price weighted by dollars traded there.
+    Kalshi volume is in contracts, so it's converted at that price. Deep markets count more."""
+    w = {}
+    for site, p in ps.items():
+        v = row["sites"][site].get("volume") or 0
+        w[site] = v * p / 100 if site == "kalshi" else v
+    tot = sum(w.values())
+    return round(sum(ps[x] * w[x] for x in ps) / tot, 1) if tot > 0 else None
+
+
 def gaps(matches, alpha_fresh):
     out = []
     for row in matches:
@@ -119,6 +130,7 @@ def gaps(matches, alpha_fresh):
                         "volumes24": {s: x.get("volume24h") for s, x in row["sites"].items()},
                         "raw": round(raw, 1), "fees": round(fees, 1), "net": round(net, 1), "all3": three,
                         "fee_low": round(f_lo, 2), "fee_high": round(f_hi, 2),
+                        "fair": fair_price(row, ps),
                         "grade": fine_grade(row, lo, hi)[0], "fine": fine_grade(row, lo, hi)[1],
                         "rate_low": fee_rate(lo, row), "rate_high": fee_rate(hi, row),
                         "category": (row.get("categories") or ["Other"])[0]}

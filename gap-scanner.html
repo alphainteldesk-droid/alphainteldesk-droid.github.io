@@ -112,6 +112,10 @@
   .gr-A { color:#0b1420; background:#3ee88a; } .gr-B { color:#0b1420; background:#ffb347; }
   .fr.fg { grid-template-columns:150px 1fr; align-items:center; }
   #grades { scroll-margin-top:80px; }
+  .vf { display:block; font:600 .66rem/1.3 "JetBrains Mono",monospace; font-style:normal; color:var(--muted); margin-top:2px; }
+  .gp-fair { display:block; margin-top:6px; font:700 .72rem/1 "JetBrains Mono",monospace; letter-spacing:.06em; color:var(--cyan,#3fdbe6); }
+  #fair { scroll-margin-top:80px; }
+  .bl { background:rgba(63,219,230,.07); border-left:3px solid var(--cyan,#3fdbe6); padding:10px 14px; border-radius:6px; }
 </style>
 <meta property="og:url" content="https://alphainteldesk.com/gap-scanner.html">
 <meta property="og:type" content="website">
@@ -210,6 +214,18 @@
     Not financial advice. Always check each site's rules before you trade.</p>
   <p><a class="how-link" href="#board">↑ Back to the scanner</a></p>
 
+  <h2 id="fair">Fair price estimate</h2>
+  <p class="bl"><b>In plain English:</b> the fair price is our best guess at what the market is really worth. We blend the
+    three sites' prices and trust the busiest site the most. If one site is well above or below it, that site is the
+    odd one out.</p>
+  <p>Each gap shows a <b>fair price</b>: the three sites' prices blended, with each site counted by how much money has
+    traded on that market. A busy market tells you more about the real odds than a quiet one, so it counts for more.
+    Each site's box then shows how far it sits above or below that estimate.</p>
+  <p class="fx">fair ≈ (price₁ × $traded₁ + price₂ × $traded₂ + …) ÷ total $traded</p>
+  <p class="note">Kalshi reports volume in contracts, so we convert it to dollars at its price. The fair price is an
+    estimate built only from these sites' prices. It isn't a forecast or advice, and a site far from it may simply have
+    a thin order book.</p>
+
   <h2 id="grades">Fine-print grades</h2>
   <p>Two markets with the same title can still settle differently. Before a gap is shown, we compare each site's rules:</p>
   <ul class="steps">
@@ -263,6 +279,12 @@
 <script>
 (function () {
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+  function vsFair(g, p) {         // Nov 10: how far each site is from the fair price estimate
+    if (g.fair == null || p == null) return '';
+    var d = Math.round((p - g.fair) * 10) / 10;
+    if (Math.abs(d) < 0.5) return '<em class="vf">at fair price</em>';
+    return '<em class="vf">' + (d > 0 ? '+' : '−') + esc(Math.abs(d).toFixed(1)) + '¢ ' + (d > 0 ? 'above' : 'below') + ' fair</em>';
+  }
   function finePrint(g) {        // Nov 10: fine-print grade line under each gap
     if (!g.grade || !g.fine) return '';
     var f = g.fine, ok = '<i class="ok">✓</i>', q = '<i class="q">?</i>';
@@ -312,13 +334,13 @@
         var cls = 'px' + (s[0] === 'alpha' ? ' aa' : '') + (s[0] === g.low.site ? ' lo' : s[0] === g.high.site ? ' hi' : '') +
           (p == null ? ' none' : '');
         var ch = (g.chg || {})[s[0]], arrow = ch ? ' <em class="ch ' + (ch > 0 ? 'up' : 'dn') + '">' + (ch > 0 ? '▲' : '▼') + ' ' + Math.abs(ch) + '¢</em>' : '';
-        var inner = '<b>' + s[1] + '</b><span>' + (p == null ? (u ? 'not compared' : 'not listed') : esc(p) + '¢' + arrow) + '</span>' + vol(g, s[0]);
+        var inner = '<b>' + s[1] + '</b><span>' + (p == null ? (u ? 'not compared' : 'not listed') : esc(p) + '¢' + arrow) + '</span>' + vsFair(g, p) + vol(g, s[0]);
         return u ? '<a class="' + cls + '" href="' + esc(u) + '" target="_blank" rel="noopener">' + inner + '</a>'
                  : '<div class="' + cls + '">' + inner + '</div>';
       }).join('');
       return head + '<div class="gp' + (g.all3 ? ' g3' : '') + '"><div class="gp-top"><div><div class="gp-t">' + (i + 1) + '. ' + esc(g.title) + '</div>' +
         '<div class="gp-o">' + esc(g.outcome) + ' · ' + esc(g.category) + ' · closes ' + esc(when(g.close)) + '</div></div>' +
-        '<div class="gp-net">' + esc(g.net.toFixed(1)) + '¢<small>GAP AFTER FEES</small></div></div>' +
+        '<div class="gp-net">' + esc(g.net.toFixed(1)) + '¢<small>GAP AFTER FEES</small>' + (g.fair != null ? '<a class="gp-fair" href="#fair" title="Our best guess at what this is really worth: the sites\' prices blended, trusting the busiest site the most. Click to learn more.">FAIR ≈ ' + esc(g.fair.toFixed(1)) + '¢</a>' : '') + '</div></div>' +
         '<div class="gp-px">' + px + '</div>' +
         finePrint(g) + '<div class="gp-math">' + feeMath(g) + ' · lowest on ' +
         esc(g.low.name) + ', highest on ' + esc(g.high.name) +
