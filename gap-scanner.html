@@ -65,7 +65,7 @@
   .px { border:1px solid var(--line); border-radius:8px; padding:6px 8px; text-align:center; color:var(--text); }
   .px b { display:block; font-family:"JetBrains Mono",monospace; font-size:.62rem; letter-spacing:.1em; color:var(--muted); font-weight:500; }
   .px span { font-size:1.1rem; font-weight:700; }
-  .px.aa { border-color:var(--amber); background:rgba(255,179,71,.08); } .px.aa b { color:var(--amber); }
+  /* .px.aa: Alpha Arcade box now styled like the others (James, Nov 10) */
   .px.lo span { color:#3ee88a; } .px.hi span { color:#ff7a7a; }
   .px.none span { color:var(--muted); font-weight:500; font-size:.9rem; }
   .gp-sec { display:flex; align-items:center; gap:10px; margin:22px 0 10px; font-size:1.15rem; }
@@ -93,6 +93,19 @@
   .gp-sh { margin-left:8px; background:none; border:1px solid rgba(63,219,230,.45); color:#3fdbe6;
     font:700 .78rem "JetBrains Mono",monospace; border-radius:3px; padding:3px 8px; cursor:pointer; }
   .gp-sh:hover { background:rgba(63,219,230,.15); }
+  .fx { font-family:"JetBrains Mono",monospace; font-size:1.05rem; color:var(--amber,#ffb347); background:var(--panel);
+    border:1px solid var(--line); border-radius:10px; padding:12px 16px; display:inline-block; }
+  .fee-tbl { border:1px solid var(--line); border-radius:10px; overflow:hidden; margin:12px 0; }
+  .fr { display:grid; grid-template-columns:2fr 1fr 1.3fr; gap:8px; padding:9px 14px; border-top:1px solid var(--line); font-size:.92rem; }
+  .fr:first-child { border-top:0; } .fh { background:var(--panel); color:var(--muted); font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; }
+  .sub { font-size:1.02rem; margin:22px 0 6px; }
+  .steps { padding-left:22px; } .steps li { margin:4px 0; }
+  .amber { color:#ffb347; } .gp-how { font-size:.7rem; margin-left:4px; }
+  @media (max-width:640px) { .fr { grid-template-columns:1.6fr .8fr 1fr; font-size:.82rem; padding:8px 10px; } }
+  .how-link { display:inline-block; vertical-align:middle; margin-left:12px; padding:5px 12px; border:1px solid var(--cyan,#3fdbe6);
+    border-radius:999px; font:600 .82rem/1.2 "JetBrains Mono",monospace; letter-spacing:.04em; color:var(--cyan,#3fdbe6); }
+  .how-link:hover { background:rgba(63,219,230,.12); }
+  html { scroll-behavior:smooth; } #fees, #board { scroll-margin-top:80px; }
 </style>
 <meta property="og:url" content="https://alphainteldesk.com/gap-scanner.html">
 <meta property="og:type" content="website">
@@ -115,15 +128,15 @@
 
 <main class="wrap">
   <span class="tag live"><i></i>Live · updated every 20 min</span>
-  <h1>Gap Scanner</h1>
+  <h1>Gap Scanner <a class="how-link" href="#fees">How it works ↓</a></h1>
   <p class="lead">The same question can trade at different prices on different prediction markets.
-    Gap Scanner shows the 10 biggest price gaps across Polymarket, Kalshi and Alpha Arcade, after estimated fees.
+    Gap Scanner shows the biggest price gaps across Polymarket, Kalshi and Alpha Arcade after each site's trading fee, with every gap priced on all three sites listed first.
     Politics, world events, economy, crypto and tech. No sports.</p>
   <p class="note" id="gr-updated"></p>
   <div class="board" id="board"><p class="note">Loading the scanner&hellip;</p></div>
   <p class="note">How to read it: <span style="color:#3ee88a">green</span> is the lowest price for that outcome,
     <span style="color:#ff7a7a">red</span> the highest. The gap is the difference in cents per $1 share, minus
-    each site's estimated taker fee. Prices are midpoints, so the bid/ask spread can shrink a gap further.
+    each site's trading fee, shown site by site under every gap (<a href="#fees">how we calculate it</a>). Prices are midpoints, so the bid/ask spread can shrink a gap further.
     Vol is the total traded on each site's market, 24h the last day (Polymarket and Alpha Arcade in dollars,
     Kalshi in contracts). Low volume can mean a price is hard to trade at.
     Matches are automatic. Always check each site's rules before you trade.</p>
@@ -140,12 +153,56 @@
     <p>Kalshi, Polymarket and Alpha Arcade side by side. Other gap trackers skip Alpha Arcade. We don't.</p></div>
   <div class="card"><h3>After fees, not before</h3>
     <p>A 6¢ difference can shrink to 2¢, or to nothing, once each platform takes its fee. We do that math for you,
-      using each site's published fee formula for that kind of market.</p></div>
+      using each site's published fee formula for that kind of market, and show each fee under every gap.
+      <a href="#fees">See the formula</a>.</p></div>
   <div class="card"><h3>Rules checked</h3>
-    <p>Two markets can look identical but settle differently, with a different deadline or data source.
-      Those are left out, so a rules difference isn't mistaken for a real gap.</p></div>
+    <p>Two markets can look identical but settle differently. We compare the end date and cutoff, the number in the
+      question (for example "above 4%" vs "above 5%"), US vs worldwide, and draw and overtime rules. Any difference
+      keeps a pair out of the gap math. We don't yet compare each site's data source or what happens if a market is
+      cancelled, so always read both sites' rules.</p></div>
   <div class="card"><h3>Checked every 20 minutes</h3>
     <p>Every gap shows when it was last checked. Prices move fast, and gaps can close at any time.</p></div>
+
+  <h2 id="fees">How we calculate the gap after fees</h2>
+  <p>All three sites use the same kind of fee formula. You pay it when your order fills against one already waiting
+    on the book (a "taker" order). It's biggest at 50¢ and shrinks toward 1¢ and 99¢:</p>
+  <p class="fx">fee per $1 share = rate × price × (1 − price)</p>
+  <div class="fee-tbl" role="table" aria-label="Fee rates by site">
+    <div class="fr fh" role="row"><span>Site</span><span>Rate</span><span>Max fee per share (at 50¢)</span></div>
+    <div class="fr" role="row"><span>Kalshi</span><span>7%</span><span>1.75¢</span></div>
+    <div class="fr" role="row"><span>Polymarket: world events / geopolitics</span><span>0%</span><span>free</span></div>
+    <div class="fr" role="row"><span>Polymarket: politics, finance, tech</span><span>4%</span><span>1.00¢</span></div>
+    <div class="fr" role="row"><span>Polymarket: economy, culture, other</span><span>5%</span><span>1.25¢</span></div>
+    <div class="fr" role="row"><span>Polymarket: crypto</span><span>7%</span><span>1.75¢</span></div>
+    <div class="fr" role="row"><span>Alpha Arcade</span><span>7% (set per market)</span><span>1.75¢</span></div>
+  </div>
+  <h3 class="sub">Worked example</h3>
+  <ol class="steps">
+    <li>The same question trades at <b>34.5¢</b> on Polymarket (a politics market) and <b>39.5¢</b> on Kalshi.
+      The price gap is <b>5.0¢</b>.</li>
+    <li>Polymarket fee at 34.5¢: 4% × 0.345 × 0.655 = <b>0.9¢</b>.</li>
+    <li>Kalshi fee at 39.5¢: 7% × 0.395 × 0.605 = <b>1.7¢</b>.</li>
+    <li>Gap after fees: 5.0 − 0.9 − 1.7 = <b class="amber">2.4¢ per $1 share</b>. That's the number shown on the scanner.</li>
+  </ol>
+  <p>Why both fees? Using a gap means trading on both sites: Yes where it's cheap, No where Yes is expensive.
+    Together those pay $1 whatever happens, so a gap is only worth what's left after both sites take their fee.
+    Gaps under 1¢ after fees aren't shown.</p>
+  <h3 class="sub">What the number doesn't include yet</h3>
+  <ul class="steps">
+    <li><b>The spread.</b> We use the midpoint price. The price you can actually buy at is usually a little higher,
+      and the price you can sell at a little lower.</li>
+    <li><b>How much you can trade.</b> A thin order book may only hold a few dollars at that price.</li>
+    <li><b>Rounding on small orders.</b> Kalshi rounds each order's fee up to the next cent, so 1-2 contract orders pay more.</li>
+    <li><b>Deposits and waiting.</b> Card deposit fees, network costs, and money tied up until the market settles.</li>
+    <li><b>Limit orders.</b> Orders that wait on the book usually pay no fee, so the real cost can be lower than shown.</li>
+  </ul>
+  <p class="note">Fee rates last checked against each site's official fee page:
+    <b><span id="fee-verified">Nov 10, 2026</span></b> (checked every week). Sources:
+    <a href="https://kalshi.com/fee-schedule" rel="noopener" target="_blank">Kalshi fee schedule</a> ·
+    <a href="https://docs.polymarket.com/trading/fees" rel="noopener" target="_blank">Polymarket fees</a> ·
+    <a href="https://github.com/phara23/alpha-sdk" rel="noopener" target="_blank">Alpha Arcade SDK</a>.
+    Not financial advice. Always check each site's rules before you trade.</p>
+  <p><a class="how-link" href="#board">↑ Back to the scanner</a></p>
 
   <h2>What is prediction market arbitrage?</h2>
   <p>Arbitrage means buying the same thing in two places at different prices. In prediction markets,
@@ -184,6 +241,12 @@
 <script>
 (function () {
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+  function feeMath(g) {          // "5.0¢ gap − 0.9¢ Polymarket fee − 1.7¢ Kalshi fee = 2.4¢ after fees"
+    if (g.fee_low == null) return esc(g.raw.toFixed(1)) + '¢ price gap − ' + esc(g.fees.toFixed(1)) + '¢ est. fees';
+    var f = function (v, n, r) { return r ? ' − ' + esc(v.toFixed(1)) + '¢ ' + esc(n) + ' fee' : ' − no ' + esc(n) + ' fee (world events)'; };
+    return esc(g.raw.toFixed(1)) + '¢ gap' + f(g.fee_low, g.low.name, g.rate_low) + f(g.fee_high, g.high.name, g.rate_high) +
+      ' = <b style="color:#ffb347">' + esc(g.net.toFixed(1)) + '¢ after fees</b> <a href="#fees" class="gp-how">how?</a>';
+  }
   var when = function (s) { return new Date(s).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); };
   var SITES = [['polymarket', 'POLYMARKET'], ['kalshi', 'KALSHI'], ['alpha', 'ALPHA ARCADE']];
   var big = function (v) { v = +v || 0; return v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(1) + 'K' : String(Math.round(v)); };
@@ -225,7 +288,7 @@
         '<div class="gp-o">' + esc(g.outcome) + ' · ' + esc(g.category) + ' · closes ' + esc(when(g.close)) + '</div></div>' +
         '<div class="gp-net">' + esc(g.net.toFixed(1)) + '¢<small>GAP AFTER FEES</small></div></div>' +
         '<div class="gp-px">' + px + '</div>' +
-        '<div class="gp-math">' + esc(g.raw.toFixed(1)) + '¢ price gap − ' + esc(g.fees.toFixed(1)) + '¢ est. fees · lowest on ' +
+        '<div class="gp-math">' + feeMath(g) + ' · lowest on ' +
         esc(g.low.name) + ', highest on ' + esc(g.high.name) +
         ' <button class="gp-sh" data-i="' + i + '">Share &#x2197;</button></div></div>';
     }).join('');

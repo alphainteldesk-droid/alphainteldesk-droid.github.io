@@ -89,7 +89,8 @@ def gaps(matches, alpha_fresh):
                 continue
             if ps[lo] < LONGSHOT and ps[hi] > MAX_RATIO * ps[lo]:
                 continue                               # long shot on one site, not on the other: thin book
-            fees = fee_pts(fee_rate(lo, row), ps[lo]) + fee_pts(fee_rate(hi, row), ps[hi])
+            f_lo, f_hi = fee_pts(fee_rate(lo, row), ps[lo]), fee_pts(fee_rate(hi, row), ps[hi])
+            fees = f_lo + f_hi
             net = raw - fees
             three = len(ps) == 3
             if net >= MIN_NET_GAP and (best is None or (three, net) > (best["all3"], best["net"])):
@@ -101,6 +102,8 @@ def gaps(matches, alpha_fresh):
                         "volumes": {s: x.get("volume") for s, x in row["sites"].items()},
                         "volumes24": {s: x.get("volume24h") for s, x in row["sites"].items()},
                         "raw": round(raw, 1), "fees": round(fees, 1), "net": round(net, 1), "all3": three,
+                        "fee_low": round(f_lo, 2), "fee_high": round(f_hi, 2),
+                        "rate_low": fee_rate(lo, row), "rate_high": fee_rate(hi, row),
                         "category": (row.get("categories") or ["Other"])[0]}
         if best:
             out.append(best)
