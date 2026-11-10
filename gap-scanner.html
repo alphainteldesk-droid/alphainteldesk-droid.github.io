@@ -106,6 +106,12 @@
     border-radius:999px; font:600 .82rem/1.2 "JetBrains Mono",monospace; letter-spacing:.04em; color:var(--cyan,#3fdbe6); }
   .how-link:hover { background:rgba(63,219,230,.12); }
   html { scroll-behavior:smooth; } #fees, #board { scroll-margin-top:80px; }
+  .gp-fine { margin-top:8px; font:500 .74rem/1.6 "JetBrains Mono",monospace; color:var(--muted); }
+  .gp-fine i { font-style:normal; font-weight:800; margin:0 3px 0 8px; } .gp-fine .ok { color:#3ee88a; } .gp-fine .q { color:#ffb347; }
+  .gr { display:inline-block; font:800 .7rem/1 "JetBrains Mono",monospace; letter-spacing:.08em; padding:4px 7px; border-radius:4px; text-decoration:none; }
+  .gr-A { color:#0b1420; background:#3ee88a; } .gr-B { color:#0b1420; background:#ffb347; }
+  .fr.fg { grid-template-columns:150px 1fr; align-items:center; }
+  #grades { scroll-margin-top:80px; }
 </style>
 <meta property="og:url" content="https://alphainteldesk.com/gap-scanner.html">
 <meta property="og:type" content="website">
@@ -158,8 +164,8 @@
   <div class="card"><h3>Rules checked</h3>
     <p>Two markets can look identical but settle differently. We compare the end date and cutoff, the number in the
       question (for example "above 4%" vs "above 5%"), US vs worldwide, and draw and overtime rules. Any difference
-      keeps a pair out of the gap math. We don't yet compare each site's data source or what happens if a market is
-      cancelled, so always read both sites' rules.</p></div>
+      keeps a pair out of the gap math, and so does a different resolution source. Every gap gets a
+      <a href="#grades">fine-print grade</a>. Always read both sites' rules.</p></div>
   <div class="card"><h3>Checked every 20 minutes</h3>
     <p>Every gap shows when it was last checked. Prices move fast, and gaps can close at any time.</p></div>
 
@@ -204,6 +210,22 @@
     Not financial advice. Always check each site's rules before you trade.</p>
   <p><a class="how-link" href="#board">↑ Back to the scanner</a></p>
 
+  <h2 id="grades">Fine-print grades</h2>
+  <p>Two markets with the same title can still settle differently. Before a gap is shown, we compare each site's rules:</p>
+  <ul class="steps">
+    <li><b>End date and cutoff</b>: when each market stops counting.</li>
+    <li><b>Threshold</b>: the number in the question, for example "above 4%" vs "above 5%".</li>
+    <li><b>US vs worldwide</b>, plus how draws and overtime count.</li>
+    <li><b>Resolution source</b>: who decides the answer (for example AP, the BLS, Binance). Different sources are left out.</li>
+    <li><b>Cancel rules</b>: what happens if the event is cancelled or postponed.</li>
+  </ul>
+  <div class="fee-tbl" role="table" aria-label="Fine-print grades">
+    <div class="fr fg" role="row"><span><b class="gr gr-A">FINE PRINT A</b></span><span>Every check passed, and both sites name the same resolution source.</span></div>
+    <div class="fr fg" role="row"><span><b class="gr gr-B">FINE PRINT B</b></span><span>Every check we can run passed, but one site doesn't name its source, they use different news outlets, or only one says what happens if it's cancelled. Read both rules.</span></div>
+    <div class="fr fg" role="row"><span><b>Not shown</b></span><span>Different deadline, threshold, scope or resolution source. A gap there isn't a real gap.</span></div>
+  </div>
+  <p class="note">Grades are automatic and read the rules text each site publishes. They help, but they don't replace reading the rules yourself.</p>
+
   <h2>What is prediction market arbitrage?</h2>
   <p>Arbitrage means buying the same thing in two places at different prices. In prediction markets,
     it usually means buying Yes on one platform and No on another when the two prices add up to less
@@ -241,6 +263,16 @@
 <script>
 (function () {
   var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+  function finePrint(g) {        // Nov 10: fine-print grade line under each gap
+    if (!g.grade || !g.fine) return '';
+    var f = g.fine, ok = '<i class="ok">✓</i>', q = '<i class="q">?</i>';
+    var src = f.src === 'match' ? ok + 'source: ' + esc(f.srcs.join(', ')) + ' on both'
+      : f.src === 'similar' ? q + 'sources: ' + esc(f.srcs.join(', ')) + ' (different outlets)'
+      : q + 'source not named on both sites';
+    var vd = f.void === 'check' ? q + 'cancel rules: only one site says' : ok + 'cancel rules';
+    return '<div class="gp-fine"><a href="#grades" class="gr gr-' + esc(g.grade) + '">FINE PRINT ' + esc(g.grade) + '</a>' +
+      ok + 'end date ' + ok + 'threshold ' + ok + 'US/world ' + ok + 'draw/overtime ' + src + ' ' + vd + '</div>';
+  }
   function feeMath(g) {          // "5.0¢ gap − 0.9¢ Polymarket fee − 1.7¢ Kalshi fee = 2.4¢ after fees"
     if (g.fee_low == null) return esc(g.raw.toFixed(1)) + '¢ price gap − ' + esc(g.fees.toFixed(1)) + '¢ est. fees';
     var f = function (v, n, r) { return r ? ' − ' + esc(v.toFixed(1)) + '¢ ' + esc(n) + ' fee' : ' − no ' + esc(n) + ' fee (world events)'; };
@@ -288,7 +320,7 @@
         '<div class="gp-o">' + esc(g.outcome) + ' · ' + esc(g.category) + ' · closes ' + esc(when(g.close)) + '</div></div>' +
         '<div class="gp-net">' + esc(g.net.toFixed(1)) + '¢<small>GAP AFTER FEES</small></div></div>' +
         '<div class="gp-px">' + px + '</div>' +
-        '<div class="gp-math">' + feeMath(g) + ' · lowest on ' +
+        finePrint(g) + '<div class="gp-math">' + feeMath(g) + ' · lowest on ' +
         esc(g.low.name) + ', highest on ' + esc(g.high.name) +
         ' <button class="gp-sh" data-i="' + i + '">Share &#x2197;</button></div></div>';
     }).join('');

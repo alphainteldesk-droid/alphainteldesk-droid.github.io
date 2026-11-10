@@ -375,6 +375,52 @@ def map_outcome(label, outs, ends=None, a_end=0):
     return best if bs[0] >= 0.5 else None
 
 
+# ---------- fine print: resolution sources + cancel/void rules (Nov 10) ----------
+# Each source: (name shown on the site, family, pattern). Same name on both sites = match;
+# different news outlets = similar; any other difference = differ (pair kept out of the gap math).
+import re as _re
+SOURCES = [
+    ("AP", "news", r"associated press|\bap\b"), ("Fox News", "news", r"fox news"), ("NBC", "news", r"\bnbc\b"),
+    ("CNN", "news", r"\bcnn\b"), ("ABC News", "news", r"abc news"), ("CBS", "news", r"\bcbs\b"),
+    ("Reuters", "news", r"reuters"), ("Bloomberg", "news", r"bloomberg"), ("Decision Desk", "news", r"decision desk"),
+    ("BLS", "gov", r"bureau of labor statistics|\bbls\b"), ("BEA", "gov", r"bureau of economic analysis|\bbea\b"),
+    ("Federal Reserve", "gov", r"federal reserve|\bfomc\b"), ("US Treasury", "gov", r"treasury"),
+    ("Census Bureau", "gov", r"census bureau"), ("Congress", "gov", r"congress\.gov|clerk of the house|senate\.gov"),
+    ("Federal Register", "gov", r"federal register"), ("NOAA / NWS", "gov", r"\bnoaa\b|national weather service"),
+    ("Binance", "crypto", r"binance"), ("Coinbase", "crypto", r"coinbase"), ("CoinGecko", "crypto", r"coingecko"),
+    ("CoinMarketCap", "crypto", r"coinmarketcap"), ("Kraken", "crypto", r"kraken"), ("Chainlink", "crypto", r"chainlink"),
+    ("Pyth", "crypto", r"\bpyth\b"), ("Yahoo Finance", "data", r"yahoo finance"),
+    ("Nasdaq Private Market", "data", r"nasdaq private market"), ("Challenger", "data", r"challenger, gray"),
+    ("Box Office Mojo", "data", r"box office mojo"), ("The Numbers", "data", r"the-numbers|the numbers\b"),
+    ("Billboard", "data", r"billboard"), ("Spotify", "data", r"spotify"), ("Google Trends", "data", r"google trends"),
+    ("Christie's", "data", r"christie"), ("Sotheby's", "data", r"sotheby"), ("Wikipedia", "data", r"wikipedia"),
+]
+CANCEL = r"50[-/ ]?50|fifty[- ]fifty|refund|\bvoid|cancel|postpone|annul"
+RANK = {"match": 0, "similar": 1, "unknown": 2, "differ": 3}
+
+
+def sources_in(text):
+    t = (text or "").lower()
+    return {name: fam for name, fam, pat in SOURCES if _re.search(pat, t)}
+
+
+def fine_print(ra, rb):
+    """Compare two sites' rules text: {'src': match|similar|unknown|differ, 'srcs': [...], 'void': same|check|none}."""
+    a, b = sources_in(ra), sources_in(rb)
+    both = sorted(set(a) & set(b))
+    if not a or not b:
+        src = "unknown"                                  # one site doesn't name a source in its rules text
+    elif both:
+        src = "match"
+    elif {"news"} >= set(a.values()) | set(b.values()):
+        src = "similar"                                  # different news outlets calling the same result
+    else:
+        src = "differ"
+    ca, cb = bool(_re.search(CANCEL, (ra or "").lower())), bool(_re.search(CANCEL, (rb or "").lower()))
+    void = "same" if ca and cb else "check" if ca != cb else "none"
+    return {"src": src, "srcs": both or sorted(set(a) | set(b)), "void": void}
+
+
 def score(a, e):
     """(score 0-100, flags, outcome map) for Alpha market a vs other-site event e."""
     sd = sides(a["title"])
@@ -425,6 +471,9 @@ def score(a, e):
     ra, re_ = a["rules"].lower(), e["rules"].lower()
     if ("regulation" in ra) != ("regulation" in re_) or ("overtime" in ra) != ("overtime" in re_):
         flags.append("check overtime / extra-time rules")
+    fp = fine_print(a["rules"], e["rules"])
+    if fp["src"] == "differ":
+        flags.append("resolution sources differ (%s)" % ", ".join(fp["srcs"][:4]))
     return min(100, round(s)), flags, omap
 
 
@@ -490,11 +539,12 @@ def poly_kalshi(poly, kalshi, used):
             continue
         lead = lead_of(outs)
         label = "SAME" if s >= 90 else "SIMILAR"
-        k = {"url": e["url"], "title": e["title"], "score": s, "flags": fl, "label": label,
+        fp = fine_print(p["rules"], e["rules"])
+        k = {"url": e["url"], "title": e["title"], "score": s, "flags": fl, "label": label, "fine": fp,
              "volume": round(e["volume"]), "volume24h": round(e["volume24h"]), "matched_outcome": om.get(lead),
              "outcomes": {l: e["outcomes"][x] for l, x in om.items() if x is not None}}
         row = {"title": p["title"], "close": datetime.fromtimestamp(p["end"] or e["end"], timezone.utc).strftime(f),
-               "sites": {"polymarket": {"url": p["url"], "title": p["title"], "score": s, "flags": fl, "label": label,
+               "sites": {"polymarket": {"url": p["url"], "title": p["title"], "score": s, "flags": fl, "label": label, "fine": fp,
                                         "volume": round(p["volume"]), "volume24h": round(p["volume24h"]),
                                         "matched_outcome": lead, "outcomes": outs},
                          "kalshi": k},
@@ -700,7 +750,7 @@ def main():
             if not e or s < 70 or (a["id"], e["url"]) in blocked:
                 continue
             row["sites"][name] = {"url": e["url"], "title": e["title"], "score": s, "flags": fl,
-                                  "label": "SAME" if s >= 90 else "SIMILAR",
+                                  "label": "SAME" if s >= 90 else "SIMILAR", "fine": fine_print(a["rules"], e["rules"]),
                                   "volume": round(e["volume"]), "volume24h": round(e["volume24h"])}
             row["sites"][name]["matched_outcome"] = om.get(lead)
             # this site's price for every Alpha outcome it lines up with
@@ -732,6 +782,17 @@ def main():
     json.dump({"updated": n.strftime(f), "note": NOTE, "matches": out}, open("matches.json", "w"), indent=1)
     same = sum(r["label"] == "SAME" for r in out)
     print("Matcher: %d matched (%d SAME, %d SIMILAR)" % (len(out), same, len(out) - same))
+    try:
+        import collections
+        c = collections.Counter(x.get("fine", {}).get("src") for r in out + pk for n, x in r["sites"].items() if n != "alpha")
+        print("FINE sources:", dict(c))
+        for r in (out + pk)[:400]:
+            for n, x in r["sites"].items():
+                fp = x.get("fine")
+                if fp and fp["src"] in ("differ", "similar") and x.get("label") == "SAME":
+                    print("  FINE %-7s %-10s | %s | %s" % (fp["src"], n, r["title"][:50], ", ".join(fp["srcs"][:5])))
+    except Exception as err:
+        print("FINE log failed:", err)
     for r in out[:30]:
         p = r["prices"]
         print("  %-7s %3d | %s | %s | A %s P %s K %s | gap %s | A vol $%s %s" % (

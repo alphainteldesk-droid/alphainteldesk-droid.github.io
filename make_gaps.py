@@ -55,6 +55,22 @@ def fee_pts(r, price_pct):
     return 100 * r * p * (1 - p)
 
 
+RANK = {"match": 0, "similar": 1, "unknown": 2, "differ": 3}
+
+
+def fine_grade(row, lo, hi):
+    """Fine-print checks for the two sites in a gap (Nov 10). Grade A = sources named on both and the same,
+    cancel rules consistent; B = passed every check we can run, but read the rules (source not named / differs in outlet)."""
+    fps = [row["sites"][x].get("fine") for x in (lo, hi) if x != "alpha" and row["sites"][x].get("fine")]
+    if not fps:
+        return None, None
+    src = max((f["src"] for f in fps), key=RANK.get)
+    srcs = sorted({n for f in fps for n in f["srcs"]})
+    void = "check" if any(f["void"] == "check" for f in fps) else "same" if all(f["void"] == "same" for f in fps) else "none"
+    grade = "A" if src == "match" and void != "check" else "B"
+    return grade, {"src": src, "srcs": srcs[:4], "void": void}
+
+
 def gaps(matches, alpha_fresh):
     out = []
     for row in matches:
@@ -103,6 +119,7 @@ def gaps(matches, alpha_fresh):
                         "volumes24": {s: x.get("volume24h") for s, x in row["sites"].items()},
                         "raw": round(raw, 1), "fees": round(fees, 1), "net": round(net, 1), "all3": three,
                         "fee_low": round(f_lo, 2), "fee_high": round(f_hi, 2),
+                        "grade": fine_grade(row, lo, hi)[0], "fine": fine_grade(row, lo, hi)[1],
                         "rate_low": fee_rate(lo, row), "rate_high": fee_rate(hi, row),
                         "category": (row.get("categories") or ["Other"])[0]}
         if best:
