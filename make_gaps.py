@@ -228,6 +228,11 @@ def main():
     except Exception:
         alpha_fresh = False
     g = gaps(mj["matches"], alpha_fresh)
+    try:                                               # Nov 10: fillable size from live order books (phase 1, logs first)
+        from fillable import add_fillable
+        add_fillable(g, mj["matches"])
+    except Exception as err:
+        print("Fillable step failed:", err)
     try:                                             # price change per site since the last update (shown as ▲ / ▼)
         old = {(o["title"], o["outcome"]): o["prices"] for o in json.load(open("gaps.json")).get("gaps", [])}
     except Exception:

@@ -228,14 +228,24 @@ def load_poly():
                     continue                           # nobody really bidding/asking: the price is a placeholder
                 lbl = m.get("groupItemTitle") or q
                 e["outcomes"][lbl] = round(prices[0] * 100, 1)
+                try:                                   # Yes token id: lets make_gaps.py read the order book (fillable size)
+                    e.setdefault("book", {})[lbl] = json.loads(m.get("clobTokenIds") or "[]")[0]
+                except (ValueError, TypeError, IndexError):
+                    pass
                 e.setdefault("ends", {})[lbl] = ts(m.get("endDate"))
                 e.setdefault("qs", {})[lbl] = q
                 if m.get("oneDayPriceChange") is not None:
                     e.setdefault("chg", {})[lbl] = round(float(m.get("oneDayPriceChange") or 0) * 100, 1)
                     e.setdefault("v24", {})[lbl] = float(m.get("volume24hr") or 0)
             else:
-                for nm, p in zip(names, prices):
+                try:
+                    toks = json.loads(m.get("clobTokenIds") or "[]")
+                except (ValueError, TypeError):
+                    toks = []
+                for i, (nm, p) in enumerate(zip(names, prices)):
                     e["outcomes"][nm] = round(p * 100, 1)
+                    if i < len(toks):
+                        e.setdefault("book", {})[nm] = toks[i]
         e["end"] = e["end"] or ts(ev.get("endDate"))
         if e["outcomes"]:
             out.append(e)
@@ -271,6 +281,8 @@ def load_kalshi():
             p = (bid + ask) / 2 if bid > 0 and ask > 0 else last
             label = m.get("yes_sub_title") or m.get("subtitle") or m.get("title") or ev.get("title") or "Yes"
             e["outcomes"][label] = round(p * 100, 1) if p > 0 else None
+            if m.get("ticker"):
+                e.setdefault("book", {})[label] = m["ticker"]       # for the order book (fillable size)
             e.setdefault("ends", {})[label] = ts(m.get("expected_expiration_time") or m.get("close_time"))
             e.setdefault("qs", {})[label] = m.get("title") or ""
             pb = float(m.get("previous_yes_bid_dollars") or 0)
@@ -542,11 +554,13 @@ def poly_kalshi(poly, kalshi, used):
         fp = fine_print(p["rules"], e["rules"])
         k = {"url": e["url"], "title": e["title"], "score": s, "flags": fl, "label": label, "fine": fp,
              "volume": round(e["volume"]), "volume24h": round(e["volume24h"]), "matched_outcome": om.get(lead),
-             "outcomes": {l: e["outcomes"][x] for l, x in om.items() if x is not None}}
+             "outcomes": {l: e["outcomes"][x] for l, x in om.items() if x is not None},
+             "book": {l: (e.get("book") or {}).get(x) for l, x in om.items() if x is not None}}
         row = {"title": p["title"], "close": datetime.fromtimestamp(p["end"] or e["end"], timezone.utc).strftime(f),
                "sites": {"polymarket": {"url": p["url"], "title": p["title"], "score": s, "flags": fl, "label": label, "fine": fp,
                                         "volume": round(p["volume"]), "volume24h": round(p["volume24h"]),
-                                        "matched_outcome": lead, "outcomes": outs},
+                                        "matched_outcome": lead, "outcomes": outs,
+                                        "book": {lead: (p.get("book") or {}).get(lead if len(p["outcomes"]) > 1 else next(iter(p["outcomes"])))}},
                          "kalshi": k},
                "flags": fl, "score": s, "categories": (p.get("categories") or []) + (e.get("categories") or []),
                "outcome": lead, "prices": {"polymarket": outs[lead], "kalshi": k["outcomes"].get(lead)},
@@ -755,6 +769,7 @@ def main():
             row["sites"][name]["matched_outcome"] = om.get(lead)
             # this site's price for every Alpha outcome it lines up with
             row["sites"][name]["outcomes"] = {l: e["outcomes"][k] for l, k in om.items() if k is not None}
+            row["sites"][name]["book"] = {l: (e.get("book") or {}).get(k) for l, k in om.items() if k is not None}
             row["prices"][name] = e["outcomes"][om[lead]] if om.get(lead) is not None else None
             row["score"] = min(row["score"], s)
             row["flags"] += [x for x in fl if x not in row["flags"]]
