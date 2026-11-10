@@ -58,6 +58,25 @@
   .tag { font-family: "JetBrains Mono", monospace; font-size: .75rem;
     letter-spacing: .2em; color: var(--amber); text-transform: uppercase; }
 
+  /* Top intro bar (Nov 10): first thing visitors see, above the ticker */
+  .introband.top { padding:16px 20px 12px; border-bottom:1px solid var(--line); }
+  .introband.top .ib-text h1 { margin:0 0 8px; }
+  .ib-sites { display:flex; flex-wrap:wrap; gap:8px 10px; margin:0 0 8px; }
+  .ib-sites .site { display:inline-flex; align-items:center; gap:8px; padding:6px 14px; border-radius:8px;
+    font:800 clamp(.95rem,1.5vw,1.2rem)/1 "Space Grotesk",system-ui,sans-serif; letter-spacing:.06em;
+    border:1px solid currentColor; background:rgba(255,255,255,.04); }
+  .ib-sites .site i { width:9px; height:9px; border-radius:50%; background:currentColor; box-shadow:0 0 8px currentColor; }
+  .introband.top .ib-text { flex:1 1 640px; }
+  .introband.top .ib-stats { flex:1 1 480px; }
+  @media (max-width:640px) {
+    .introband.top { padding:14px 14px 10px; gap:10px; }
+    .introband.top .ib-stats { grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; }
+    .introband.top .stat { padding:7px 6px; text-align:center; }
+    .introband.top .stat b { font-size:1rem; }
+    .introband.top .stat span { font-size:.66rem; }
+    .ib-sites .site { padding:5px 10px; font-size:.9rem; }
+  }
+  .s-poly { color:#5b8cff; } .s-kal { color:#2fe0a0; } .s-alpha { color:var(--amber); }
   /* Stats strip */
   /* Intro band: slim "what is this" strip between the live desk and the calendar */
   .introband { max-width:1400px; margin:0 auto; padding:22px 20px 6px; display:flex; flex-wrap:wrap; align-items:center; gap:16px 32px; }
@@ -535,6 +554,19 @@
     </nav>
   </div>
 </header>
+<section class="introband top" aria-label="About Alpha Intel Desk">
+  <div class="ib-text">
+    <h1>Real-time intelligence for prediction markets</h1>
+    <div class="ib-sites" aria-label="Tracking Polymarket, Kalshi and Alpha Arcade"><span class="site s-poly"><i></i>POLYMARKET</span><span class="site s-kal"><i></i>KALSHI</span><span class="site s-alpha"><i></i>ALPHA ARCADE</span></div>
+    <p>Spot price gaps, catch the biggest movers, and see what's coming next across all three.</p>
+  </div>
+  <div class="ib-stats">
+    <div class="stat"><b>3</b><span>Prediction markets side by side</span></div>
+    <div class="stat"><b>24/7</b><span>Live market data</span></div>
+    <div class="stat"><b>20 min</b><span>Odds and listings refreshed</span></div>
+    <div class="stat"><b class="amber">Free</b><span>No sign-up, no paywall</span></div>
+  </div>
+</section>
 <!-- Live tape (TradingView, free widget; CFD prices move in real time) -->
 <div class="tvtape" aria-label="Live market tape">
 <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
@@ -640,18 +672,6 @@
   <div class="wire-view"><div class="wire-track" id="wire"></div></div>
 </div>
 
-<section class="introband" aria-label="About Alpha Intel Desk">
-  <div class="ib-text">
-    <h1>Real-time intelligence for prediction markets</h1>
-    <p>Spot price gaps, catch the biggest movers, and see what's coming next across Polymarket, Kalshi and Alpha Arcade.</p>
-  </div>
-  <div class="ib-stats">
-    <div class="stat"><b>3</b><span>Prediction markets side by side</span></div>
-    <div class="stat"><b>24/7</b><span>Live market data</span></div>
-    <div class="stat"><b>20 min</b><span>Odds and listings refreshed</span></div>
-    <div class="stat"><b class="amber">Free</b><span>No sign-up, no paywall</span></div>
-  </div>
-</section>
 
 <section class="calsec" id="calendar" aria-label="Catalyst Calendar: the next two weeks">
   <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
