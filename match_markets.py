@@ -799,13 +799,13 @@ def main():
     print("Matcher: %d matched (%d SAME, %d SIMILAR)" % (len(out), same, len(out) - same))
     try:
         import collections
-        c = collections.Counter(x.get("fine", {}).get("src") for r in out + pk for n, x in r["sites"].items() if n != "alpha")
+        c = collections.Counter(x.get("fine", {}).get("src") for r in out + pk for nm, x in r["sites"].items() if nm != "alpha")
         print("FINE sources:", dict(c))
         for r in (out + pk)[:400]:
-            for n, x in r["sites"].items():
+            for nm, x in r["sites"].items():
                 fp = x.get("fine")
                 if fp and fp["src"] in ("differ", "similar") and x.get("label") == "SAME":
-                    print("  FINE %-7s %-10s | %s | %s" % (fp["src"], n, r["title"][:50], ", ".join(fp["srcs"][:5])))
+                    print("  FINE %-7s %-10s | %s | %s" % (fp["src"], nm, r["title"][:50], ", ".join(fp["srcs"][:5])))
     except Exception as err:
         print("FINE log failed:", err)
     for r in out[:30]:
