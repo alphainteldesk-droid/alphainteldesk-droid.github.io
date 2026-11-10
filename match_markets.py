@@ -23,8 +23,18 @@ f = "%Y-%m-%dT%H:%M:%SZ"
 
 
 def get(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "AlphaIntelDesk/1.0"})
-    return json.load(urllib.request.urlopen(req, timeout=30))
+    """GET JSON. If a site says "too many requests" (HTTP 429), wait and try again (up to 4 tries) - Nov 10."""
+    import time, urllib.error
+    for attempt in range(4):
+        req = urllib.request.Request(url, headers={"User-Agent": "AlphaIntelDesk/1.0"})
+        try:
+            return json.load(urllib.request.urlopen(req, timeout=30))
+        except urllib.error.HTTPError as err:
+            if err.code != 429 or attempt == 3:
+                raise
+            wait = float(err.headers.get("Retry-After") or 0) or 2 * (attempt + 1)
+            print("Matcher: HTTP 429 (too many requests), waiting %.0fs and retrying" % min(wait, 20))
+            time.sleep(min(wait, 20))
 
 
 def ts(v):
@@ -578,7 +588,7 @@ MOVE_VOL = {"polymarket": 25000, "kalshi": 15000, "alpha": 100}  # 24h volume: $
 LADDER = re.compile(r"(?i)^\s*(above|below|over|under|between|at least|at most|more than|less than|fewer than|"
                     r"[$<>≥≤]\s*\d|\d[\d,.]*\s*(%|[kmb]\b|\+|$))")
 MENTION = re.compile(r"(?i)\b(say|says|mention|mentions|tweet|tweets|post)\b|view count|top \d+ (song|album)")
-MOVE_TOP, MOVE_ALPHA, MOVE_MAX_CRYPTO = 10, 3, 2
+MOVE_TOP, MOVE_ALPHA, MOVE_MAX_CRYPTO = 30, 4, 5   # Nov 10: 30 for the full Movers page (homepage shows 3)
 NAMES = {"alpha": "Alpha Arcade", "polymarket": "Polymarket", "kalshi": "Kalshi"}
 
 

@@ -1066,7 +1066,7 @@
       '<span class="gb-p">' + c(x.price) + '</span>' +
       '<span class="gb-p ' + (up ? 'lo' : 'hi') + '">' + esc(ch) + '</span>' +
       '<a class="gb-why" href="' + esc(x.why) + '" target="_blank" rel="noopener">WHY?</a>' +
-      shareBtn(txt, SITE + '#movers') + '</div>';
+      shareBtn(txt, SITE + 'movers.html') + '</div>';
   }
   function show(t) {
     var T = TABS[t], d = data[t];
@@ -1090,8 +1090,9 @@
         '<a class="gb-more" href="/gap-scanner.html">Click here for more price gaps <span>OPEN GAP SCANNER &rarr;</span></a>';
       return;
     }
-    list = (d.movers || []).slice(0, matchMedia('(max-width: 760px)').matches ? 5 : 4);
-    box.innerHTML = list.length ? list.map(moverRow).join('') : '<div class="gb-empty">' + T.empty + '</div>';
+    list = (d.movers || []).slice(0, 3);                 // Nov 10: 3 rows + a link to the full Movers page, like the gaps tab
+    box.innerHTML = (list.length ? list.map(moverRow).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
+      '<a class="gb-more" href="/movers.html">Click here for more movers <span>OPEN MOVERS &rarr;</span></a>';
   }
   var cur = location.hash === '#movers' ? 'movers' : 'gaps';
   function load() {                                        // first load, then fresh data every 5 minutes (no page reload)

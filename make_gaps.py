@@ -216,6 +216,35 @@ def calendar(matches):
     return items
 
 
+def add_also(matches):
+    """For each mover, the matched market's price on the other two sites (same outcome), from matches.json."""
+    mv = json.load(open("movers.json"))
+    found = 0
+    for x in mv.get("movers", []):
+        x["also"] = {}
+        for row in matches:
+            me = row["sites"].get(x["site"])
+            if not me or me.get("url") != x["url"]:
+                continue
+            outs = me.get("outcomes") or {}
+            if x["site"] == "alpha":
+                key = x["outcome"] if x["outcome"] in outs else None
+            else:                                      # other sites: find the Alpha-side label with this price
+                key = next((l for l, p in outs.items() if p is not None and abs(p - x["price"]) < 0.05), None)
+            if key is None and x["outcome"] == "Yes" and len(outs) == 1:
+                key = next(iter(outs))
+            if key is None:
+                continue
+            for s, other in row["sites"].items():
+                if s != x["site"] and other.get("label", "SAME") == "SAME" and (other.get("outcomes") or {}).get(key) is not None:
+                    x["also"][s] = other["outcomes"][key]
+            if x["also"]:
+                found += 1
+                break
+    json.dump(mv, open("movers.json", "w"), indent=1)
+    print("Movers: %d of %d also priced on another site" % (found, len(mv.get("movers", []))))
+
+
 def main():
     try:
         mj = json.load(open("matches.json"))
@@ -228,6 +257,10 @@ def main():
     except Exception:
         alpha_fresh = False
     g = gaps(mj["matches"], alpha_fresh)
+    try:                                               # Nov 10: Movers page - same market's price on the other sites
+        add_also(mj["matches"])
+    except Exception as err:
+        print("Movers cross-check failed:", err)
     try:                                               # Nov 10: fillable size from live order books (phase 1, logs first)
         from fillable import add_fillable
         add_fillable(g, mj["matches"])
