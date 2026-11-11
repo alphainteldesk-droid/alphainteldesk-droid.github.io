@@ -150,11 +150,19 @@ def next_event(cal):
     return best[1] if best else None
 
 
+def featured(gl):
+    """Nov 10: rotate the featured gap every 3 hours among the top 6, so share previews change.
+    Skips gaps the order books showed aren't really there ($0 fillable)."""
+    real = [x for x in gl if not (x.get("fill") and not x["fill"].get("usd"))] or gl
+    pool = real[:6]
+    return pool[int(n.timestamp() // 10800) % len(pool)] if pool else None
+
+
 def home_card(gaps, cal, mov):
     img, d = background()
     header(d, "TODAY ON THE DESK · REAL-TIME PREDICTION MARKET INTEL")
     gl = gaps.get("gaps") or []
-    g = next((x for x in gl if x.get("all3")), gl[0] if gl else None)
+    g = featured(gl)
     y = 128
     if g:
         d.text((44, y), "PRICE GAP · " + ("ALL 3 SITES" if g.get("all3") else "ACROSS SITES"), font=font(MONO_B, 17), fill=CYAN)
@@ -182,7 +190,8 @@ def home_card(gaps, cal, mov):
         d.text((572, yb + 76), until(ev["date"]).upper(), font=font(MONO_B, 20), fill=AMBER, anchor="ra")
     else:
         d.text((62, yb + 40), "Economic data, the Fed, earnings & more", font=font(SANS_B, 24), fill=TEXT)
-    mv = (mov.get("movers") or [None])[0]
+    ml = (mov.get("movers") or [])[:3]                 # Nov 10: rotate among the top 3 movers every 3 hours
+    mv = ml[int(n.timestamp() // 10800) % len(ml)] if ml else None
     d.rounded_rectangle([610, yb, W - 44, yb + 118], 8, fill=(5, 12, 20, 215), outline=LINE, width=2)
     d.text((628, yb + 14), "BIGGEST MOVER · 24H", font=font(MONO_B, 14), fill=CYAN)
     if mv:
@@ -237,9 +246,9 @@ def point(page, img_url):
 def main():
     gaps, cal, mov = load("gaps.json"), load("calendar.json"), load("movers.json")
     gl = gaps.get("gaps") or []
-    top = next((x for x in gl if x.get("all3")), gl[0] if gl else {})
+    top = featured(gl) or {}
     ev = next_event(cal) or {}
-    key = hashlib.md5(json.dumps([top.get("title"), top.get("outcome"), ev.get("name"),
+    key = hashlib.md5(json.dumps([top.get("title"), top.get("outcome"), ev.get("name"), int(n.timestamp() // 10800),
                                   [g.get("title") for g in gl[:3]]]).encode()).hexdigest()[:10]
     st = load("card_state.json")
     age = (n.timestamp() - st.get("ts", 0)) / 3600

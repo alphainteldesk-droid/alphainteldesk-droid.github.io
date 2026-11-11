@@ -60,10 +60,12 @@
 
   /* BREAKING line under the ticker (Nov 10) */
   .brk { display:flex; align-items:center; gap:14px; max-width:1400px; margin:0 auto; padding:7px 20px; border-bottom:1px solid var(--line);
-    background:linear-gradient(90deg, rgba(255,60,60,.10), rgba(255,60,60,0) 40%); font-size:.95rem; min-height:38px; }
+    background:linear-gradient(90deg, rgba(255,179,71,.08), rgba(255,179,71,0) 40%); font-size:.95rem; min-height:38px; }
   .brk[hidden] { display:none; }
   .brk-tag { flex:none; display:inline-flex; align-items:center; gap:7px; font:800 .74rem/1 "JetBrains Mono",monospace; letter-spacing:.14em;
-    color:#fff; background:#d8262b; padding:5px 9px; border-radius:3px; }
+    color:#0b1420; background:var(--amber,#ffb347); padding:5px 9px; border-radius:3px; min-width:150px; }
+  .brk-tag.hot { color:#fff; background:#d8262b; }
+  .brk-tag:not(.hot) i { animation:none; opacity:.6; }
   .brk-tag b { font-weight:800; opacity:.85; }
   .brk-tag i { width:7px; height:7px; border-radius:50%; background:#fff; animation:brkDot 1.4s ease-in-out infinite; }
   @keyframes brkDot { 50% { opacity:.25; } }
@@ -626,32 +628,36 @@
  {"proName":"NYSE:LOW","title":"LOWE'S"}],
  "showSymbolLogo":true,"isTransparent":true,"displayMode":"compact","colorTheme":"dark","locale":"en"}
 </script></div></div>
-<!-- BREAKING line (Nov 10): one BBC headline at a time, fades to the next -->
+<!-- LATEST news line (Nov 10): BBC, CNBC, The Hill, NPR merged, market-relevant only, one headline at a time.
+     Red BREAKING tag only for stories under 30 minutes old, LATEST otherwise. -->
 <div class="brk" id="brk" hidden aria-live="polite">
-  <span class="brk-tag"><i></i>BREAKING <b>· BBC</b></span>
-  <a class="brk-h" id="brk-h" href="#" target="_blank" rel="noopener"></a>
-  <span class="brk-t" id="brk-t"></span>
+  <span class="brk-tag"><i></i><span class="brk-l">LATEST</span> <b class="brk-s"></b></span>
+  <a class="brk-h" href="#" target="_blank" rel="noopener"></a>
+  <span class="brk-t"></span>
 </div>
 <script>
 (function () {
-  var box = document.getElementById('brk'), h = document.getElementById('brk-h'), t = document.getElementById('brk-t');
-  var list = [], k = 0, timer = null, paused = false;
-  function ago(s) { var m = Math.max(1, Math.round((Date.now() - new Date(s)) / 60000)); return m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago'; }
+  var box = document.getElementById('brk'), tag = box.querySelector('.brk-tag'), lab = box.querySelector('.brk-l'),
+      srcEl = box.querySelector('.brk-s'), h = box.querySelector('.brk-h'), t = box.querySelector('.brk-t');
+  var list = [], k = 0, paused = false;
+  var mins = function (s) { return Math.max(1, Math.round((Date.now() - new Date(s)) / 60000)); };
   function show() {
     var x = list[k % list.length]; k++;
+    var m = mins(x.time);
+    var hot = m <= 30;
+    tag.classList.toggle('hot', hot); lab.textContent = hot ? 'BREAKING' : 'LATEST'; srcEl.textContent = '\u00b7 ' + x.src;
     h.classList.remove('in'); void h.offsetWidth;
-    h.textContent = x.title + ' \u2197'; h.href = x.url; t.textContent = ago(x.time);
+    h.textContent = x.title + ' \u2197'; h.href = x.url; t.textContent = m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago';
     h.classList.add('in');
   }
-  function start() { clearInterval(timer); timer = setInterval(function () { if (!paused && list.length > 1) show(); }, 7000); }
   box.addEventListener('mouseenter', function () { paused = true; });
   box.addEventListener('mouseleave', function () { paused = false; });
   function load() {
     fetch('desk.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
-      var b = (d.breaking || []).filter(function (x) { return x.title && x.url; });
+      var b = (d.news || []).filter(function (x) { return x.title && x.url; });
       if (!b.length) return;
       var first = !list.length; list = b;
-      if (first) { box.hidden = false; k = 0; show(); start(); }
+      if (first) { box.hidden = false; k = 0; show(); setInterval(function () { if (!paused && list.length > 1) show(); }, 6000); }
     }).catch(function () {});
   }
   load(); setInterval(load, 5 * 60000);
