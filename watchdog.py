@@ -30,36 +30,59 @@ def age_h(stamp):
         return 99.0
 
 
+SEED = {"Polymarket": [10400] * 6, "Kalshi": [21000] * 6, "Polymarket-Kalshi matches": [128] * 6}
+
+
+def baseline(old, name, value):
+    """Nov 12: compare a count with its own recent normal (median of the last 50 good runs).
+    Returns (ok, note). Below 40% of normal = not OK, even if it isn't zero (a half-broken feed)."""
+    hist = ((old.get("feeds") or {}).get(name) or {}).get("hist") or []
+    if len(hist) < 6:
+        hist = SEED.get(name, []) + hist                    # normal levels seen Nov 11, until our own history builds up
+    if len(hist) < 6:
+        return True, ""
+    med = sorted(hist)[len(hist) // 2]
+    if med and value < 0.4 * med:
+        return False, " (normal is about %d)" % med
+    return True, ""
+
+
 def checks():
     m, desk, gaps, mk, al = load("matches.json"), load("desk.json"), load("gaps.json"), load("markets.json"), load("alpha_live.json")
     c = m.get("counts") or {}
     nm = mk.get("new_markets") or {}
+    pk = c.get("poly_kalshi")
     return {
-        # name: (ok?, what we saw, what to do if it's down)
+        # name: (ok?, what we saw, what to do if it's down, count to track against normal or None)
+        "Polymarket-Kalshi matches": (pk is None or pk >= 10, "%s pairs" % pk,
+                                      "Far fewer Polymarket-Kalshi matches than normal: one feed is only partly working. "
+                                      "Ask Claude to check the matcher log.", pk),
         "Polymarket": (c.get("polymarket", 0) >= 200, "%s events" % c.get("polymarket", 0),
-                       "Polymarket may have changed its data feed. Open a session and ask Claude to fix the Polymarket feed."),
+                       "Polymarket may have changed its data feed. Open a session and ask Claude to fix the Polymarket feed.",
+                       c.get("polymarket")),
         "Kalshi": (c.get("kalshi", 0) >= 3000, "%s events" % c.get("kalshi", 0),
-                   "Kalshi may be limiting us or changed its data. Open a session and ask Claude to fix the Kalshi feed."),
+                   "Kalshi may be limiting us or changed its data. Open a session and ask Claude to fix the Kalshi feed.",
+                   c.get("kalshi")),
         "Alpha Arcade (Courier)": (age_h(al.get("updated", "")) <= 3 and c.get("alpha", 0) > 0,
                                    "data %.1f h old, %s markets" % (age_h(al.get("updated", "")), c.get("alpha", 0)),
-                                   "Courier on the Chromebook has stopped. Open a Linux terminal and type: courier"),
+                                   "Courier on the Chromebook has stopped. Open a Linux terminal and type: courier", None),
         "News line": (len(desk.get("news") or []) >= 3, "%d headlines" % len(desk.get("news") or []),
-                      "The news feeds stopped. Ask Claude to check make_desk.py news()."),
+                      "The news feeds stopped. Ask Claude to check make_desk.py news().", None),
         "Conflict Radar": (len(desk.get("conflict") or []) >= 3, "%d headlines" % len(desk.get("conflict") or []),
-                           "Conflict Radar headlines stopped. Ask Claude to check make_desk.py."),
+                           "Conflict Radar headlines stopped. Ask Claude to check make_desk.py.", None),
         "Google Trends": (len(desk.get("trends") or []) >= 3, "%d trends" % len(desk.get("trends") or []),
-                          "Trends stopped. Ask Claude to check make_desk.py."),
+                          "Trends stopped. Ask Claude to check make_desk.py.", None),
         "New markets": (len(nm.get("kalshi") or []) + len(nm.get("polymarket") or []) > 0,
                         "%d Polymarket, %d Kalshi" % (len(nm.get("polymarket") or []), len(nm.get("kalshi") or [])),
-                        "New markets came back empty. Ask Claude to check make_markets.py."),
+                        "New markets came back empty. Ask Claude to check make_markets.py.", None),
         "Gap Scanner": (age_h(gaps.get("updated", "")) <= 2, "updated %.1f h ago, %d gaps" % (age_h(gaps.get("updated", "")),
-                        len(gaps.get("gaps") or [])), "The Gap Scanner stopped updating. Ask Claude to check the run log."),
+                        len(gaps.get("gaps") or [])), "The Gap Scanner stopped updating. Ask Claude to check the run log.", None),
     }
 
 
 def self_fix(res):
     """If Polymarket or Kalshi failed and the scanner went empty, keep the last good gaps.json."""
-    if res["Polymarket"][0] and res["Kalshi"][0]:
+    if res["Polymarket"][0] and res["Kalshi"][0]:   # (zero-count check; baseline drops are alerted, not self-fixed)
         return None
     cur = load("gaps.json")
     if cur.get("gaps"):
@@ -92,11 +115,17 @@ def main():
     old = load("health.json", {"feeds": {}})
     fixed = self_fix(res)
     feeds, down = {}, []
-    for name, (ok, seen, todo) in res.items():
+    for name, (ok, seen, todo, count) in res.items():
         was = (old.get("feeds") or {}).get(name) or {}
+        hist = list(was.get("hist") or [])
+        if ok and count is not None:
+            ok, note = baseline(old, name, count)
+            seen += note
+        if ok and count is not None:
+            hist = (hist + [count])[-50:]                       # only normal runs build the baseline
         f = {"ok": ok, "seen": seen, "last_good": now.strftime(F) if ok else was.get("last_good"),
              "since": was.get("since") if was.get("ok") == ok and was.get("since") else now.strftime(F),
-             "issue": was.get("issue")}
+             "issue": was.get("issue"), "hist": hist}
         try:
             if not ok and not was.get("issue"):                     # just broke -> alert now
                 body = ("**%s is down** (checked %s UTC)\n\nWhat we saw: %s\nLast worked: %s\n\n**What to do:** %s\n\n"
