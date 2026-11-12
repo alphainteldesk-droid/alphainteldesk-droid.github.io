@@ -72,20 +72,32 @@ def events(params, max_events=2000, page=100):
     return events_from_markets(params, max_markets=max_events * 2)
 
 
-def events_from_markets(params, max_markets=4000, page=100):   # Polymarket returns at most 100 per page
+def _markets_page(q):
+    if _mode.get("tags", True):
+        try:
+            return get(BASE + "/markets?" + urllib.parse.urlencode(dict(q, include_tag="true")))
+        except urllib.error.HTTPError as err:
+            if err.code == 422 and q.get("offset"):
+                raise                                  # paging limit, not the tag option
+            _mode["tags"] = False
+    return get(BASE + "/markets?" + urllib.parse.urlencode(q))
+
+
+def events_from_markets(params, max_markets=6000, page=100):   # Polymarket returns at most 100 per page
     """Event-shaped dicts built from /markets: {id, slug, title, description, volume, volume24hr,
     tags, startDate, createdAt, endDate, markets: [...]}, the same fields our scripts read from /events."""
     ms, off = [], 0
+    if "order" not in params:                      # busiest first: if Polymarket's paging limit cuts the list, the quiet tail goes
+        params = dict(params, order="volume24hr", ascending="false")
     while off < max_markets:
         q = dict(params, active="true", limit=page, offset=off)
-        if _mode.get("tags", True):
-            try:
-                d = get(BASE + "/markets?" + urllib.parse.urlencode(dict(q, include_tag="true")))
-            except urllib.error.HTTPError:
-                _mode["tags"] = False
-                d = get(BASE + "/markets?" + urllib.parse.urlencode(q))
-        else:
-            d = get(BASE + "/markets?" + urllib.parse.urlencode(q))
+        try:
+            d = _markets_page(q)
+        except urllib.error.HTTPError as err:
+            if not ms:
+                raise
+            print("Polymarket: /markets stopped at %d (%s) - keeping the %d busiest" % (off, err, len(ms)))
+            break
         if not d:
             break
         ms += d

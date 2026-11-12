@@ -193,7 +193,9 @@ def load_alpha():
 def load_poly():
     """All open Polymarket events, outcomes -> price (0-100)."""
     # Polymarket won't page past ~2,000 results, so ask for one end-date window at a time
-    edges = [n + timedelta(days=d) for d in list(range(0, 15)) + [30, 60, 120, 240, 400, 800, 2000]]
+    # Nov 12: smaller windows past 2 weeks - Polymarket's /markets list stops paging at ~2,100 per window
+    edges = [n + timedelta(days=d) for d in list(range(0, 15)) +
+             [18, 22, 26, 30, 37, 45, 52, 60, 75, 90, 105, 120, 150, 180, 240, 300, 400, 550, 800, 2000]]
     seen, evs = set(), []
     for lo, hi in zip(edges, edges[1:]):
         try:                                       # Nov 12: shared helper (keyset list, old list as backup)
