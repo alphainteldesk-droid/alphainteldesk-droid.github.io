@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T12:51:58Z",
+ "updated": "2026-11-12T13:49:11Z",
  "note": "Matches are automatic. Always check each site's rules before you trade.",
  "matches": [
   {
@@ -50,8 +50,8 @@
       ],
       "void": "none"
      },
-     "volume": 98689703,
-     "volume24h": 1528241,
+     "volume": 98699865,
+     "volume24h": 1532425,
      "matched_outcome": "J.D. Vance",
      "outcomes": {
       "JD Vance": 13.5,
@@ -140,11 +140,19 @@
      "label": "SAME",
      "fine": {
       "src": "unknown",
-      "srcs": [],
+      "srcs": [
+       "AP",
+       "Bloomberg",
+       "CBS",
+       "CNN",
+       "Fox News",
+       "NBC",
+       "Reuters"
+      ],
       "void": "none"
      },
-     "volume": 3313646,
-     "volume24h": 37488,
+     "volume": 3313826,
+     "volume24h": 37448,
      "matched_outcome": "Before Jan 1, 2027",
      "outcomes": {
       "December 31": 5.2
@@ -190,7 +198,7 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "none"
+      "void": "check"
      },
      "volume": 3923471,
      "volume24h": 69190,
@@ -217,55 +225,6 @@
    },
    "label": "SAME",
    "gap": 4.6
-  },
-  {
-   "title": "Pete Hegseth out as Secretary of Defense by December 31?",
-   "close": "2027-01-01T04:59:00Z",
-   "sites": {
-    "alpha": {
-     "url": "https://www.alphaarcade.com/market/pete-hegseth-out-as-secretary-of-defense-by-december-31",
-     "outcomes": {
-      "Yes": 18.4
-     },
-     "volume": 8098,
-     "volume24h": 1180,
-     "fee": 70000
-    },
-    "kalshi": {
-     "url": "https://kalshi.com/markets/kxhegsethout",
-     "title": "Pete Hegseth out as Secretary of Defense?",
-     "score": 92,
-     "flags": [],
-     "label": "SAME",
-     "fine": {
-      "src": "unknown",
-      "srcs": [],
-      "void": "none"
-     },
-     "volume": 3084059,
-     "volume24h": 202485,
-     "matched_outcome": "Before Jan 1, 2027",
-     "outcomes": {
-      "Yes": 15.0
-     },
-     "book": {
-      "Yes": "KXHEGSETHOUT-26APR-27JAN01"
-     }
-    }
-   },
-   "flags": [],
-   "score": 92,
-   "categories": [
-    "Politics",
-    "Politics"
-   ],
-   "outcome": "Yes",
-   "prices": {
-    "alpha": 18.4,
-    "kalshi": 15.0
-   },
-   "label": "SAME",
-   "gap": 3.4
   },
   {
    "title": "UEFA Champions League: 2027 Champion",
@@ -319,8 +278,8 @@
       "srcs": [],
       "void": "none"
      },
-     "volume": 6197784,
-     "volume24h": 39549,
+     "volume": 6197831,
+     "volume24h": 39579,
      "matched_outcome": "Barcelona",
      "outcomes": {
       "Aston Villa": 1.0,
@@ -399,6 +358,61 @@
    "gap": 3.3
   },
   {
+   "title": "Pete Hegseth out as Secretary of Defense by December 31?",
+   "close": "2027-01-01T04:59:00Z",
+   "sites": {
+    "alpha": {
+     "url": "https://www.alphaarcade.com/market/pete-hegseth-out-as-secretary-of-defense-by-december-31",
+     "outcomes": {
+      "Yes": 18.4
+     },
+     "volume": 8098,
+     "volume24h": 1180,
+     "fee": 70000
+    },
+    "kalshi": {
+     "url": "https://kalshi.com/markets/kxhegsethout",
+     "title": "Pete Hegseth out as Secretary of Defense?",
+     "score": 92,
+     "flags": [],
+     "label": "SAME",
+     "fine": {
+      "src": "unknown",
+      "srcs": [
+       "AP",
+       "Bloomberg",
+       "CNN",
+       "Fox News",
+       "Reuters"
+      ],
+      "void": "none"
+     },
+     "volume": 3085916,
+     "volume24h": 195592,
+     "matched_outcome": "Before Jan 1, 2027",
+     "outcomes": {
+      "Yes": 15.5
+     },
+     "book": {
+      "Yes": "KXHEGSETHOUT-26APR-27JAN01"
+     }
+    }
+   },
+   "flags": [],
+   "score": 92,
+   "categories": [
+    "Politics",
+    "Politics"
+   ],
+   "outcome": "Yes",
+   "prices": {
+    "alpha": 18.4,
+    "kalshi": 15.5
+   },
+   "label": "SAME",
+   "gap": 2.9
+  },
+  {
    "title": "England vs. Croatia",
    "close": "2026-11-12T23:00:00Z",
    "sites": {
@@ -422,10 +436,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 350722,
-     "volume24h": 186467,
+     "volume": 359376,
+     "volume24h": 194162,
      "matched_outcome": "England",
      "outcomes": {
       "England": 76.5,
@@ -479,10 +493,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 2309662,
-     "volume24h": 653438,
+     "volume": 2319028,
+     "volume24h": 649734,
      "matched_outcome": "Josh Hokit",
      "outcomes": {
       "Josh Hokit": 37.5
@@ -530,13 +544,13 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 273694,
-     "volume24h": 96565,
+     "volume": 274491,
+     "volume24h": 95424,
      "matched_outcome": "Amanda Nunes",
      "outcomes": {
-      "Amanda Nunes": 38.5
+      "Amanda Nunes": 39.5
      },
      "book": {
       "Amanda Nunes": "KXUFCFIGHT-26NOV14HARNUN-NUN"
@@ -554,7 +568,7 @@
    "outcome": "Amanda Nunes",
    "prices": {
     "alpha": null,
-    "kalshi": 38.5
+    "kalshi": 39.5
    },
    "label": "SAME",
    "gap": null
@@ -581,10 +595,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 63883,
-     "volume24h": 27686,
+     "volume": 64154,
+     "volume24h": 27741,
      "matched_outcome": "Caio Borralho",
      "outcomes": {
       "Caio Borralho": 59.5
@@ -632,10 +646,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 67295,
-     "volume24h": 15846,
+     "volume": 67355,
+     "volume24h": 15761,
      "matched_outcome": "Luis Gurule",
      "outcomes": {
       "Luis Gurule": 12.5
@@ -683,10 +697,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 62582,
-     "volume24h": 7799,
+     "volume": 62670,
+     "volume24h": 7883,
      "matched_outcome": "Stephen Thompson",
      "outcomes": {
       "Stephen Thompson": 57.5
@@ -734,10 +748,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 60159,
-     "volume24h": 6702,
+     "volume": 60176,
+     "volume24h": 6720,
      "matched_outcome": "Cesar Almeida",
      "outcomes": {
       "Cesar Almeida": 39.5
@@ -785,10 +799,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 13028,
-     "volume24h": 3489,
+     "volume": 13053,
+     "volume24h": 3407,
      "matched_outcome": "Macy Chiasson",
      "outcomes": {
       "Macy Chiasson": 29.5
@@ -836,10 +850,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 2237,
-     "volume24h": 2237,
+     "volume": 2269,
+     "volume24h": 2269,
      "matched_outcome": "Jared Gordon",
      "outcomes": {
       "Jared Gordon": 23.5
@@ -889,10 +903,10 @@
       "srcs": [
        "Kraken"
       ],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 58960,
-     "volume24h": 50259,
+     "volume": 62460,
+     "volume24h": 55370,
      "matched_outcome": "Carolina",
      "outcomes": {
       "Hurricanes": 72.5
@@ -942,10 +956,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "none"
+      "void": "check"
      },
-     "volume": 1811694,
-     "volume24h": 877595,
+     "volume": 1877394,
+     "volume24h": 860158,
      "matched_outcome": "Washington",
      "outcomes": {
       "Commanders": 44.5
@@ -995,10 +1009,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 8664,
-     "volume24h": 6689,
+     "volume": 9761,
+     "volume24h": 7648,
      "matched_outcome": "Minnesota",
      "outcomes": {
       "Wild": 61.5
@@ -1046,10 +1060,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 12867,
-     "volume24h": 6761,
+     "volume": 14066,
+     "volume24h": 7872,
      "matched_outcome": "Colorado",
      "outcomes": {
       "Avalanche": 52.5
@@ -1097,10 +1111,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 4000,
-     "volume24h": 3267,
+     "volume": 4114,
+     "volume24h": 3328,
      "matched_outcome": "Washington",
      "outcomes": {
       "Capitals": 41.5
@@ -1148,10 +1162,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 14627,
-     "volume24h": 11843,
+     "volume": 16971,
+     "volume24h": 13291,
      "matched_outcome": "Montreal",
      "outcomes": {
       "Canadiens": 45.5
@@ -1199,10 +1213,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 5165,
-     "volume24h": 3658,
+     "volume": 22065,
+     "volume24h": 20522,
      "matched_outcome": "Buffalo",
      "outcomes": {
       "Sabres": 59.5
@@ -1250,13 +1264,13 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 118499,
-     "volume24h": 95628,
+     "volume": 128503,
+     "volume24h": 105357,
      "matched_outcome": "Dallas",
      "outcomes": {
-      "Mavericks": 34.5
+      "Mavericks": 33.5
      },
      "book": {
       "Mavericks": "KXNBAGAME-26NOV12DALMIN-DAL"
@@ -1274,7 +1288,7 @@
    "outcome": "Mavericks",
    "prices": {
     "alpha": null,
-    "kalshi": 34.5
+    "kalshi": 33.5
    },
    "label": "SAME",
    "gap": null
@@ -1301,10 +1315,10 @@
      "fine": {
       "src": "unknown",
       "srcs": [],
-      "void": "check"
+      "void": "same"
      },
-     "volume": 30808,
-     "volume24h": 28852,
+     "volume": 33442,
+     "volume24h": 32895,
      "matched_outcome": "Taylor Fritz",
      "outcomes": {
       "Taylor Fritz": 65.5
@@ -1348,7 +1362,9 @@
      "url": "https://kalshi.com/markets/kxcryptostructure",
      "title": "Will the Clarity Act become law?",
      "score": 88,
-     "flags": [],
+     "flags": [
+      "check overtime / extra-time rules"
+     ],
      "label": "SIMILAR",
      "fine": {
       "src": "unknown",
@@ -1368,7 +1384,9 @@
      }
     }
    },
-   "flags": [],
+   "flags": [
+    "check overtime / extra-time rules"
+   ],
    "score": 88,
    "categories": [
     "Crypto",
@@ -1396,8 +1414,8 @@
      "fee": 70000
     },
     "kalshi": {
-     "url": "https://kalshi.com/markets/kxratecut",
-     "title": "Fed rate cut before 2027?",
+     "url": "https://kalshi.com/markets/kxfedcut",
+     "title": "Next Fed rate cut?",
      "score": 88,
      "flags": [],
      "label": "SIMILAR",
@@ -1408,14 +1426,14 @@
       ],
       "void": "none"
      },
-     "volume": 1812741,
-     "volume24h": 11894,
-     "matched_outcome": "Cuts",
+     "volume": 6352,
+     "volume24h": 15,
+     "matched_outcome": "Before 2027",
      "outcomes": {
-      "Yes": 2.4
+      "Yes": 2.0
      },
      "book": {
-      "Yes": "KXRATECUT-26DEC31"
+      "Yes": "KXFEDCUT-31DEC28-31DEC26"
      }
     }
    },
@@ -1428,7 +1446,7 @@
    "outcome": "Yes",
    "prices": {
     "alpha": 25.0,
-    "kalshi": 2.4
+    "kalshi": 2.0
    },
    "label": "SIMILAR",
    "gap": null
@@ -1475,23 +1493,28 @@
      "url": "https://kalshi.com/markets/kxbtcy",
      "title": "Bitcoin price at the end of 2026",
      "score": 70,
-     "flags": [],
+     "flags": [
+      "resolution sources differ (Binance, Coinbase)"
+     ],
      "label": "SIMILAR",
      "fine": {
-      "src": "unknown",
+      "src": "differ",
       "srcs": [
-       "Binance"
+       "Binance",
+       "Coinbase"
       ],
       "void": "none"
      },
-     "volume": 46915699,
-     "volume24h": 196398,
+     "volume": 46927890,
+     "volume24h": 197570,
      "matched_outcome": null,
      "outcomes": {},
      "book": {}
     }
    },
-   "flags": [],
+   "flags": [
+    "resolution sources differ (Binance, Coinbase)"
+   ],
    "score": 70,
    "categories": [
     "Crypto",
@@ -1534,7 +1557,7 @@
      "volume24h": 0,
      "matched_outcome": "Before Jul 1, 2027",
      "outcomes": {
-      "December 31, 2026": 27.5,
+      "December 31, 2026": 26.5,
       "June 30, 2027": 81.5
      },
      "book": {
@@ -1586,12 +1609,12 @@
       "srcs": [],
       "void": "none"
      },
-     "volume": 9130700,
-     "volume24h": 23046,
+     "volume": 9140870,
+     "volume24h": 31666,
      "matched_outcome": "Before Dec 1, 2026",
      "outcomes": {
       "November 30, 2026": 1.5,
-      "December 31, 2026": 5.3
+      "December 31, 2026": 4.9
      },
      "book": {
       "November 30, 2026": "KXHORMUZNORM-26MAR17-B261201",
@@ -1639,11 +1662,11 @@
       "srcs": [],
       "void": "none"
      },
-     "volume": 901388,
+     "volume": 901888,
      "volume24h": 2314,
      "matched_outcome": "Before 2027",
      "outcomes": {
-      "Yes": 5.5
+      "Yes": 5.4
      },
      "book": {
       "Yes": "OAIAGI-26"
@@ -1659,7 +1682,7 @@
    "outcome": "Yes",
    "prices": {
     "alpha": null,
-    "kalshi": 5.5
+    "kalshi": 5.4
    },
    "label": "SIMILAR",
    "gap": null
@@ -1672,7 +1695,7 @@
      "url": "https://www.alphaarcade.com/market/will-trump-be-impeached-by-december-31-2026",
      "outcomes": {
       "December 31, 2026": null,
-      "December 31, 2027": 50.5,
+      "December 31, 2027": 50.6,
       "June 30, 2027": 34.5
      },
      "volume": 0,
@@ -1690,11 +1713,11 @@
       "srcs": [],
       "void": "none"
      },
-     "volume": 5274521,
-     "volume24h": 54426,
+     "volume": 5342415,
+     "volume24h": 122257,
      "matched_outcome": "Before Jan 1, 2028",
      "outcomes": {
-      "December 31, 2026": 1.4,
+      "December 31, 2026": 1.8,
       "December 31, 2027": 58.5,
       "June 30, 2027": 37.5
      },
@@ -1713,7 +1736,7 @@
    ],
    "outcome": "December 31, 2027",
    "prices": {
-    "alpha": 50.5,
+    "alpha": 50.6,
     "kalshi": 58.5
    },
    "label": "SIMILAR",
