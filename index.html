@@ -76,6 +76,9 @@
   .brk-t { flex:none; color:var(--muted); font:500 .75rem "JetBrains Mono",monospace; }
   @media (max-width:640px) { .brk { padding:6px 12px; gap:8px; font-size:.85rem; } .brk-t { display:none; } .brk-tag { font-size:.64rem; padding:4px 7px; } }
   @media (prefers-reduced-motion: reduce) { .brk-h.in, .brk-tag i { animation:none; } }
+  #gb-health { margin-left:8px; font:700 .68rem "JetBrains Mono",monospace; letter-spacing:.08em; color:#3ee88a; text-decoration:none; }
+  #gb-health.warn { color:var(--amber); } #gb-health i { display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor; margin-right:5px; vertical-align:1px; }
+  .gb-g.nofill { opacity:.5; text-decoration:line-through; }
   /* Top intro bar (Nov 10): first thing visitors see, above the ticker */
   .introband.top { padding:16px 20px 12px; border-bottom:1px solid var(--line); }
   .introband.top .ib-text h1 { margin:0 0 8px; }
@@ -729,7 +732,8 @@
     <span class="gb-s"><span id="gb-sub">PRICE GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
   <div class="gb-cols" id="gb-cols"></div>
   <div id="gb-rows"><div class="gb-empty">Scanning Polymarket, Kalshi and Alpha Arcade&hellip;</div></div>
-  <div class="gb-f"><span id="gb-note">No sports · fees estimated · check each site's rules before you trade</span>
+  <div class="gb-f"><span><span id="gb-note">No sports · fees estimated · check each site's rules before you trade</span>
+    <a id="gb-health" href="/health.json" hidden></a></span>
     <a class="gb-go" id="gb-go" href="/gap-scanner.html">OPEN GAP SCANNER &rarr;</a></div>
 </section>
 </div>
@@ -1115,7 +1119,7 @@
       '¢. Check each site\'s rules. via @alphainteldesk';
     return '<div class="gb-r"><a class="gb-m" href="/gap-scanner.html"><b>' + esc(x.title) + '</b><i>' + esc(sub) + '</i></a>' +
       cell('polymarket') + cell('kalshi') + cell('alpha') +
-      '<span class="gb-g">' + esc(x.net.toFixed(1)) + '&cent;</span>' + shareBtn(txt, SITE + 'gap-scanner.html') + '</div>';
+      '<span class="gb-g' + (x.fill && !x.fill.usd ? ' nofill' : '') + '" title="' + esc(x.fill ? (x.fill.usd ? 'Fillable ≈ $' + Math.round(x.fill.usd).toLocaleString('en-US') + ' at real buy and sell prices' : 'Not fillable right now at real buy and sell prices') : 'Gap after fees, at midpoint prices') + '">' + esc(x.net.toFixed(1)) + '&cent;</span>' + shareBtn(txt, SITE + 'gap-scanner.html') + '</div>';
   }
   function moverRow(x) {
     var up = x.change > 0, ch = (up ? '+' : '') + Math.round(x.change) + '¢';
@@ -1406,6 +1410,15 @@
   document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') close(); });
   addEventListener('scroll', close, { passive: true });
 })();
+</script>
+<script>
+/* Nov 12: feed health from watchdog.py, shown in the Gap Scanner box footer */
+fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (h) {
+  var a = document.getElementById('gb-health'); if (!a || !h.feeds) return;
+  var down = h.down || [];
+  a.innerHTML = '<i></i>' + (down.length ? down.join(', ').toUpperCase() + ' DELAYED' : 'ALL FEEDS LIVE');
+  a.className = down.length ? 'warn' : ''; a.title = 'Feed health, checked every update'; a.hidden = false;
+}).catch(function () {});
 </script>
 </body>
 </html>

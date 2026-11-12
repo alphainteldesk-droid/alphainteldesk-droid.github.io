@@ -11,6 +11,7 @@ concurrency:
   cancel-in-progress: false
 permissions:
   contents: write
+  issues: write                   # watchdog.py opens an issue (= alert to James) when a feed breaks
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -37,6 +38,10 @@ jobs:
         continue-on-error: true
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      - run: python3 watchdog.py   # Nov 12: health check, safe self-fixes, instant alert via GitHub issue
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
@@ -51,4 +56,5 @@ jobs:
           [ -f alpha_hist.json ] && git add alpha_hist.json
           [ -f indexnow_state.json ] && git add indexnow_state.json
           [ -f fine_watch.json ] && git add fine_watch.json
+          [ -f health.json ] && git add health.json
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -X theirs -q && git push)   # if another run pushed meanwhile, keep this run's fresher files

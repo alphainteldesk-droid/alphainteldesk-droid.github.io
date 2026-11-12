@@ -127,6 +127,10 @@
   @media (max-width:900px) { .quick.top { grid-template-columns:repeat(2,minmax(0,1fr)); } }
   @media (max-width:480px) { .quick.top .q1 span { font-size:.78rem; } }
   #details { scroll-margin-top:80px; }
+  .gp-fill { margin-top:8px; font:800 .74rem/1.5 "JetBrains Mono",monospace; letter-spacing:.06em; }
+  .gp-fill span { font-weight:500; letter-spacing:0; color:var(--muted); margin-left:6px; }
+  .gp-fill.ok { color:#3ee88a; } .gp-fill.no { color:#ff7a7a; } .gp-fill.na { color:var(--muted); font-weight:600; }
+  .gp.unfill { opacity:.6; }
 </style>
 <meta property="og:url" content="https://alphainteldesk.com/gap-scanner.html">
 <meta property="og:type" content="website">
@@ -257,6 +261,15 @@
     return '<div class="gp-fine"><a href="#grades" class="gr gr-' + esc(g.grade) + '" title="How well the two sites\' rules match. Click to see what A and B mean.">GRADED ' + esc(g.grade) + '</a>' +
       ok + 'end date ' + ok + 'threshold ' + ok + 'US/world ' + ok + 'draw/overtime ' + src + ' ' + vd + '</div>';
   }
+  function fillLine(g) {         // Nov 12: what the order books say right now
+    var f = g.fill;
+    if (!f) return '<div class="gp-fill na">FILLABLE <span>' + (g.low.site === 'alpha' || g.high.site === 'alpha' ?
+      'Alpha Arcade order book coming soon' : 'order book not read for this pair yet') + '</span></div>';
+    if (!f.usd) return '<div class="gp-fill no">NOT FILLABLE NOW <span>at real buy and sell prices the gap is ' +
+      esc((f.exec != null ? f.exec : 0).toFixed(1)) + '¢ after fees, so there\'s nothing to trade</span></div>';
+    return '<div class="gp-fill ok">FILLABLE ≈ $' + esc(Math.round(f.usd).toLocaleString('en-US')) +
+      ' <span>at real buy and sell prices · best real gap now ' + esc(f.exec.toFixed(1)) + '¢ after fees</span></div>';
+  }
   function feeMath(g) {          // "5.0¢ gap − 0.9¢ Polymarket fee − 1.7¢ Kalshi fee = 2.4¢ after fees"
     if (g.fee_low == null) return esc(g.raw.toFixed(1)) + '¢ price gap − ' + esc(g.fees.toFixed(1)) + '¢ est. fees';
     var f = function (v, n, r) { return r ? ' − ' + esc(v.toFixed(1)) + '¢ ' + esc(n) + ' fee' : ' − no ' + esc(n) + ' fee (world events)'; };
@@ -300,11 +313,11 @@
         return u ? '<a class="' + cls + '" href="' + esc(u) + '" target="_blank" rel="noopener">' + inner + '</a>'
                  : '<div class="' + cls + '">' + inner + '</div>';
       }).join('');
-      return head + '<div class="gp' + (g.all3 ? ' g3' : '') + '"><div class="gp-top"><div><div class="gp-t">' + (i + 1) + '. ' + esc(g.title) + '</div>' +
+      return head + '<div class="gp' + (g.all3 ? ' g3' : '') + (g.fill && !g.fill.usd ? ' unfill' : '') + '"><div class="gp-top"><div><div class="gp-t">' + (i + 1) + '. ' + esc(g.title) + '</div>' +
         '<div class="gp-o">' + esc(g.outcome) + ' · ' + esc(g.category) + ' · closes ' + esc(when(g.close)) + '</div></div>' +
         '<div class="gp-net">' + esc(g.net.toFixed(1)) + '¢<small>GAP AFTER FEES</small>' + (g.fair != null ? '<a class="gp-fair" href="#fair" title="Our best guess at what this is really worth: the sites\' prices blended, trusting the busiest site the most. Click to learn more.">FAIR ≈ ' + esc(g.fair.toFixed(1)) + '¢</a>' : '') + '</div></div>' +
         '<div class="gp-px">' + px + '</div>' +
-        finePrint(g) + '<div class="gp-math">' + feeMath(g) + ' · lowest on ' +
+        finePrint(g) + fillLine(g) + '<div class="gp-math">' + feeMath(g) + ' · lowest on ' +
         esc(g.low.name) + ', highest on ' + esc(g.high.name) +
         ' <button class="gp-sh" data-i="' + i + '">Share &#x2197;</button></div></div>';
     }).join('');

@@ -264,6 +264,8 @@ def main():
     try:                                               # Nov 10: fillable size from live order books (phase 1, logs first)
         from fillable import add_fillable
         add_fillable(g, mj["matches"])
+        # Nov 12: gaps the order books show can't be traded right now ($0 at real prices) drop to the bottom
+        g.sort(key=lambda x: (not x.get("all3"), bool(x.get("fill")) and not x["fill"].get("usd")))
     except Exception as err:
         print("Fillable step failed:", err)
     try:                                             # price change per site since the last update (shown as ▲ / ▼)
