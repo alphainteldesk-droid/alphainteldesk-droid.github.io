@@ -11,6 +11,8 @@
 # v3: lines up 'Yes' markets with the matching deadline inside multi-deadline events.
 # v2: also pairs Polymarket with Kalshi directly (non-sports), so Kalshi shows even when Alpha has no market.
 # v7: calendar_links() finds each site's own market for Catalyst Calendar events (cal_links.json).
+# v8 (Nov 12): stricter everywhere: titles naming different months/years/quarters never match (Gap Scanner,
+#     Momentum Scanner cross-check, Polymarket-Kalshi pairs, Calendar); calendar markets must settle with the event.
 # Writes matches.json. Public market data only.
 import json, re, time, unicodedata, urllib.parse, urllib.request
 from datetime import datetime, timezone, timedelta
@@ -361,6 +363,34 @@ def label_date(label, ref=None):
     return dt.timestamp()
 
 
+# ---------------- period check (Nov 12: stricter matching, used everywhere) ----------------
+# Two titles that name different months, years or quarters are different markets
+# ("Fed decision in December" is not "Fed decision in January"; "CPI in October" is not "CPI in November").
+# Month and year words are ignored by key_words(), so this check keeps them from slipping through.
+_MON = {"january": 1, "jan": 1, "february": 2, "feb": 2, "march": 3, "mar": 3, "april": 4, "apr": 4, "may": 5,
+        "june": 6, "jun": 6, "july": 7, "jul": 7, "august": 8, "aug": 8, "september": 9, "sept": 9, "sep": 9,
+        "october": 10, "oct": 10, "november": 11, "nov": 11, "december": 12, "dec": 12}
+_MON_RX = re.compile(r"(?<![a-z0-9-])(" + "|".join(sorted(_MON, key=len, reverse=True)) + r")(?![a-z-])\.?(\s*\d)?")
+
+
+def periods(title):
+    """(months, years, quarters) named in a title. 'Before Jan 1, 2027' counts as December 2026, 'Before 2027' as 2026;
+    'May' only counts as a month when a number follows it (it is also an ordinary word)."""
+    t = " " + (title or "").lower().replace(",", " ") + " "
+    t = re.sub(r"before\s+jan(?:uary)?\.?\s+1(?:st)?\s+(20\d\d)", lambda m: "dec 31 %d" % (int(m.group(1)) - 1), t)
+    t = re.sub(r"before\s+(20\d\d)", lambda m: "by %d" % (int(m.group(1)) - 1), t)
+    months = {_MON[m.group(1)] for m in _MON_RX.finditer(t) if m.group(1) != "may" or m.group(2)}
+    years = set(re.findall(r"(?<![0-9])(20\d\d)(?![0-9])", t))
+    quarters = set(re.findall(r"(?<![a-z0-9])q([1-4])(?![0-9])", t))
+    return months, years, quarters
+
+
+def period_clash(t1, t2):
+    """True when both titles name a month (or year, or quarter) and they don't share one."""
+    a, b = periods(t1), periods(t2)
+    return any(x and y and not (x & y) for x, y in zip(a, b))
+
+
 def by_date_label(label, outs, ends, a_end=0):
     """Alpha option 'December 31' -> the other site's market for the same deadline."""
     d = label_date(label, a_end or None)
@@ -466,6 +496,8 @@ def fine_print(ra, rb):
 
 def score(a, e):
     """(score 0-100, flags, outcome map) for Alpha market a vs other-site event e."""
+    if period_clash(a["title"], e["title"]):
+        return 0, [], {}                                        # Nov 12: different month / year / quarter
     sd = sides(a["title"])
     text = key_words(e["title"] + " " + e["text"])
     if sd:
@@ -724,10 +756,14 @@ def movers(alpha, sites):
 
 
 # ---------------- calendar links ----------------
+CAL_SETTLE_DAYS = 14     # Nov 12: a calendar market must settle within 14 days of the event (was 45);
+CAL_SETTLE_POLITICS = 30 # elections settle at certification, weeks after the vote
 def calendar_links(alpha, sites):
     """For each catalysts.json event with "find" word-sets, pick each site's own market for it
     (title holds every word of a set; earlier sets win, then the market settling closest to the event date).
-    Skips word-mention and combo markets. Writes cal_links.json."""
+    Skips word-mention and combo markets. Writes cal_links.json.
+    Nov 12, stricter: the market must settle within CAL_SETTLE_DAYS (politics: CAL_SETTLE_POLITICS) of the event (it has to be about this event,
+    not just the same topic), and any month/year in its title must match the event's (e.g. 'CPI (Oct)')."""
     try:
         cats = json.load(open("catalysts.json"))["events"]
     except Exception as err:
@@ -745,6 +781,16 @@ def calendar_links(alpha, sites):
             continue
         if not finds or not (n.timestamp() - 2 * 86400 <= when <= n.timestamp() + 60 * 86400):
             continue
+        days = CAL_SETTLE_POLITICS if c.get("cat") == "politics" else CAL_SETTLE_DAYS
+        stop = when + days * 86400
+        if c.get("end"):                                    # multi-day events (summits): count from the last day
+            try:
+                stop = datetime.strptime(c["end"], "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp() + days * 86400
+            except ValueError:
+                pass
+        ev_d = datetime.fromtimestamp(when, timezone.utc)
+        ev_m = {ev_d.month} | periods(" ".join(re.findall(r"\(([^)]*)\)", c["name"])))[0]   # release month + the month it covers
+        ev_y = {str(ev_d.year)} | ({str(ev_d.year - 1)} if ev_d.month == 1 else set())
         sets = [[rx(w) for w in s] for s in finds]
         nots = [rx(w) for w in c.get("not") or []]          # words that rule a market out for this event
         links = {}
@@ -758,8 +804,11 @@ def calendar_links(alpha, sites):
                 if si is None:
                     continue
                 end = e.get("end") or 0
-                if not end or end < when - 2 * 86400 or end > when + 45 * 86400:
-                    continue
+                if not end or end < when - 86400 or end > stop:
+                    continue                                # Nov 12: must settle with the event, not weeks later
+                pm, py, _ = periods(e.get("title", ""))
+                if (pm and not (pm & ev_m)) or (py and not (py & ev_y)):
+                    continue                                # Nov 12: names a different month or year
                 priced = {k: v for k, v in (e.get("outcomes") or {}).items() if v is not None}
                 if not priced:
                     continue
