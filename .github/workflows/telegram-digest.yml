@@ -1,13 +1,21 @@
 name: Telegram daily digest
 on:
   schedule:
-      - cron: "57 11 * * *"
-  workflow_dispatch:
+      - cron: "0 10 * * *"     # starts early on purpose (GitHub often runs schedules 45+ min late); the wait step below posts at 7:00 AM New York time
+  workflow_dispatch:           # manual run posts right away
 jobs:
   post:
     runs-on: ubuntu-latest
+    timeout-minutes: 240
     steps:
-      - uses: actions/checkout@v4
+      - name: Wait until 7:00 AM New York time (handles EST/EDT)
+        if: github.event_name == 'schedule'
+        run: |
+          target=$(TZ=America/New_York date -d 'today 07:00' +%s); now=$(date +%s)
+          if [ "$now" -lt "$target" ]; then echo "Waiting $(( (target-now)/60 )) min"; sleep $((target-now)); fi
+      - uses: actions/checkout@v4   # after the wait, so the digest uses the freshest data
+        with:
+          ref: main
       - run: python3 post_telegram.py
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
