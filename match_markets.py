@@ -772,6 +772,7 @@ def calendar_links(alpha, sites):
     pools = {"alpha": alpha, "polymarket": sites.get("polymarket", []), "kalshi": sites.get("kalshi", [])}
     rx = lambda w: re.compile(r"(?<![a-z0-9])" + re.escape(w.lower()))
     skip = re.compile(r"\b(say|said|mention|mentions|combo|parlay)\b")   # word-mention and combo markets aren't the event itself
+    clock = re.compile(r"\b\d{1,2}(:\d\d)?\s*(am|pm)\b")   # Nov 12: "Silver at 2:30pm ET · FOMC minutes" is a price bet, not the event
     out = {}
     for c in cats:
         finds = c.get("find") or []
@@ -798,7 +799,7 @@ def calendar_links(alpha, sites):
             hits = []
             for e in evs:
                 t = (e.get("title", "") + " " + e.get("alt", "")).lower()
-                if skip.search(t) or any(r.search(t) for r in nots):
+                if skip.search(t) or clock.search(t) or any(r.search(t) for r in nots):
                     continue
                 si = next((i for i, s in enumerate(sets) if all(r.search(t) for r in s)), None)
                 if si is None:
