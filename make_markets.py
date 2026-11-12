@@ -3,7 +3,7 @@ import json, time, urllib.request
 from datetime import datetime, timezone, timedelta
 
 def get(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "AlphaIntelDesk/1.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "AlphaIntelDesk/1.0", "Accept": "application/json"})
     return json.load(urllib.request.urlopen(req, timeout=30))
 
 def top_per_event(ms, key, vol):
@@ -59,12 +59,12 @@ for m in ks:
 since = n - timedelta(hours=48)
 
 def new_poly():
-    base = ("https://gamma-api.polymarket.com/events?active=true&closed=false&limit=200"
-            "&start_date_min=" + since.strftime(f))
+    import polyapi                                     # Nov 12: keyset list, old list as backup
     try:
-        evs = get(base + "&order=volume24hr&ascending=false")
+        evs = polyapi.events({"start_date_min": since.strftime(f), "order": "volume24hr", "ascending": "false"},
+                             max_events=200)
     except Exception:
-        evs = get(base)
+        evs = polyapi.events({"start_date_min": since.strftime(f)}, max_events=200)
     v24 = lambda e: float(e.get("volume24hr") or 0)
     evs = [e for e in evs if v24(e) >= 1000 and "Up or Down" not in e.get("title", "")
            and e.get("markets")]

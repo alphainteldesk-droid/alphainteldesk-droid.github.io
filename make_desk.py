@@ -135,6 +135,8 @@ NEWS_FEEDS = [
     ("The Hill", "https://thehill.com/news/feed/"),
     ("NPR", "https://feeds.npr.org/1001/rss.xml"),
     ("NPR", "https://feeds.npr.org/1014/rss.xml"),
+    ("Fox News", "https://moxie.foxnews.com/google-publisher/politics.xml"),   # Nov 12: balances NPR
+    ("Fox News", "https://moxie.foxnews.com/google-publisher/world.xml"),
 ]
 NEWS_SKIP = ("/pro/", "investingclub", "/select/", "/video/", "/sounds/", "/iplayer/", "/live/")
 # Only headlines about things prediction markets trade on (politics, economy, markets, crypto, conflict, big tech)

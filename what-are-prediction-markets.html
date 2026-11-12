@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8TDJGLE2W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D8TDJGLE2W');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Are Prediction Markets? How They Work (Plain-English Guide) | Alpha Intel Desk</title>
+<meta name="description" content="What prediction markets are and how they work, in plain English with a simple diagram: yes-or-no questions, prices as odds, $1 payouts, and where to trade (Polymarket, Kalshi, Alpha Arcade).">
+<link rel="canonical" href="https://alphainteldesk.com/what-are-prediction-markets.html">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta property="og:title" content="What are prediction markets? How they work in 4 steps">
+<meta property="og:description" content="Yes-or-no questions, prices as odds, $1 if you're right. A plain-English guide with a diagram.">
+<meta property="og:image" content="https://alphainteldesk.com/banner.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@alphainteldesk">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "What is a prediction market?",
+     "acceptedAnswer": {"@type": "Answer", "text": "A prediction market is a place to trade on yes-or-no questions about future events. You buy Yes or No shares priced between 1 cent and 99 cents. If you're right, each share pays $1; if you're wrong, it pays nothing. The price works like the crowd's odds: 30 cents means about a 30% chance."}},
+    {"@type": "Question", "name": "Can I sell before the market ends?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Yes. You can sell your shares at the current price any time the market is open, for a profit or a loss."}},
+    {"@type": "Question", "name": "Who decides the answer in a prediction market?",
+     "acceptedAnswer": {"@type": "Answer", "text": "Each market names its resolution source in its rules, such as an official data release or a major news outlet."}},
+    {"@type": "Question", "name": "Where can I trade prediction markets?",
+     "acceptedAnswer": {"@type": "Answer", "text": "The main sites are Polymarket (the largest), Kalshi (a CFTC-regulated US exchange) and Alpha Arcade (built on the Algorand blockchain). Check each site's rules on who can join."}}
+  ]
+}
+</script>
+<style>
+  :root { --navy:#0b1420; --panel:#111d2c; --line:#1f3044;
+    --cyan:#3fdbe6; --amber:#ffb347; --text:#e8eef5; --muted:#8fa3b8; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--navy); color:var(--text);
+    font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.65; }
+  a { color:var(--cyan); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .wrap { max-width:800px; margin:0 auto; padding:0 16px; }
+  header { border-bottom:1px solid var(--line); position:sticky; top:0;
+    background:rgba(11,20,32,.92); backdrop-filter:blur(8px); z-index:10; }
+  .bar { display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 16px; max-width:1120px; margin:0 auto; }
+  .brand { display:flex; align-items:center; gap:10px; color:var(--text);
+    font-weight:700; font-size:1.1rem; }
+  .brand img { width:36px; height:36px; }
+  nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; }
+  nav a { color:var(--muted); }
+  nav a:hover, nav a.on { color:var(--text); text-decoration:none; }
+  .tag { font-family:"JetBrains Mono",monospace; font-size:.75rem;
+    letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
+  h1 { font-size:clamp(1.6rem,4vw,2.3rem); margin:8px 0 12px; line-height:1.2; }
+  h2 { font-size:1.35rem; margin:44px 0 10px; }
+  h3 { font-size:1.05rem; margin:22px 0 6px; }
+  .lead { color:var(--muted); font-size:1.08rem; }
+  .meta { color:var(--muted); font-size:.82rem; font-family:"JetBrains Mono",monospace; }
+  main { padding:40px 0 8px; }
+  ul { padding-left:20px; } li { margin:4px 0; }
+
+  .short { background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--cyan);
+    border-radius:10px; padding:16px 20px; margin:24px 0; }
+  .short p { margin:6px 0; }
+
+  .table-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:12px; }
+  table { border-collapse:collapse; width:100%; min-width:620px; font-size:.92rem; }
+  th, td { text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  thead th { background:var(--panel); font-family:"JetBrains Mono",monospace; font-weight:500;
+    font-size:.74rem; letter-spacing:.12em; color:var(--cyan); }
+  tbody th { color:var(--muted); font-weight:500; width:22%; }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom:0; }
+
+  .venue { display:inline-block; font-family:"JetBrains Mono",monospace; font-size:.72rem;
+    letter-spacing:.12em; color:var(--cyan); border:1px solid var(--line); border-radius:6px;
+    padding:2px 8px; }
+  .pick { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin:16px 0; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
+  .card h3 { margin:10px 0 6px; }
+  .card p { margin:0; color:var(--muted); font-size:.95rem; }
+
+  .cta { background:var(--panel); border:1px solid var(--amber); border-radius:12px;
+    padding:18px 20px; margin:36px 0 0; }
+  .cta p { margin:6px 0; }
+  .note { color:var(--muted); font-size:.88rem; }
+
+  footer { margin-top:48px; border-top:1px solid var(--line);
+    padding:28px 0 40px; color:var(--muted); font-size:.88rem; }
+  .foot { display:flex; flex-wrap:wrap; gap:24px; justify-content:space-between; }
+  .social { display:flex; gap:16px; flex-wrap:wrap; }
+  @media (max-width:640px) {
+    nav { gap:14px; font-size:.9rem; }
+    .bar { flex-direction:column; align-items:flex-start; }
+  }
+  .flow { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:18px 0; counter-reset:s; }
+  .step { position:relative; background:var(--panel); border:1px solid var(--line); border-top:3px solid var(--cyan);
+    border-radius:12px; padding:14px 14px 12px; }
+  .step b { display:inline-grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--cyan);
+    color:var(--navy); font-family:"JetBrains Mono",monospace; }
+  .step h3 { margin:8px 0 4px; } .step p { margin:0 0 10px; color:var(--muted); font-size:.92rem; line-height:1.45; }
+  .step .eg { display:inline-block; font-family:"JetBrains Mono",monospace; font-size:.78rem; color:var(--amber);
+    border:1px solid rgba(255,179,71,.45); border-radius:6px; padding:3px 7px; }
+  .step:not(:last-child)::after { content:"→"; position:absolute; right:-13px; top:44%; color:var(--cyan); font-size:1.1rem; }
+  .pay { width:100%; max-width:480px; height:auto; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:8px 4px; }
+  @media (max-width:760px) {
+    .flow { grid-template-columns:1fr; gap:22px; }
+    .step:not(:last-child)::after { content:"↓"; right:auto; left:50%; top:auto; bottom:-21px; }
+  }
+</style>
+<meta property="og:url" content="https://alphainteldesk.com/what-are-prediction-markets.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Alpha Intel Desk">
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/#market-of-the-week">Market of the Week</a>
+      <a href="/#top-traders">Top Traders</a>
+      <a class="on" href="/#guides">Guides</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+
+<main class="wrap">
+  <span class="tag">Guide</span>
+  <h1>What are prediction markets? A plain-English guide</h1>
+  <p class="lead">A prediction market lets you trade on what will happen next: an election, a Fed decision,
+    a price, a world event. Here's how it works in two minutes, with a picture.</p>
+  <p class="meta">Updated November 12, 2026 · 3 min read</p>
+
+  <div class="short">
+    <p><strong>The short version</strong></p>
+    <p>Every market is a <strong>yes-or-no question</strong>. You buy <strong>Yes</strong> or
+      <strong>No</strong> shares priced between 1¢ and 99¢. If you're right, each share pays
+      <strong>$1</strong>. If you're wrong, it pays nothing.</p>
+    <p>The price is the crowd's odds: <strong>30¢ ≈ a 30% chance</strong>.</p>
+  </div>
+
+  <h2>How it works, in four steps</h2>
+  <div class="flow" role="list" aria-label="How a prediction market works">
+    <div class="step" role="listitem"><b>1</b><h3>A question</h3>
+      <p>"Will the Fed cut rates in December?"</p><span class="eg">Yes or No</span></div>
+    <div class="step" role="listitem"><b>2</b><h3>You pick a side</h3>
+      <p>Buy Yes or No. The price shows the crowd's odds.</p><span class="eg">Yes = 30¢ → ~30% chance</span></div>
+    <div class="step" role="listitem"><b>3</b><h3>The price moves</h3>
+      <p>News breaks, traders buy and sell. You can sell any time before the end.</p><span class="eg">30¢ → 55¢</span></div>
+    <div class="step" role="listitem"><b>4</b><h3>It settles</h3>
+      <p>The answer is known. The right side gets $1 a share, the wrong side $0.</p><span class="eg">Yes ✓ → $1.00</span></div>
+  </div>
+
+  <h2>What you can win or lose</h2>
+  <p>Say you buy <strong>10 Yes shares at 30¢</strong>. That costs <strong>$3</strong>.</p>
+  <svg class="pay" viewBox="0 0 420 252" role="img" aria-label="Payout example: you pay $3; you get $10 back if the answer is Yes, $0 if No">
+    <g font-family="Space Grotesk, sans-serif">
+      <text x="16" y="28" fill="#8fa3b8" font-size="15">You pay</text>
+      <rect x="16" y="38" width="78" height="26" rx="5" fill="#ffb347"/>
+      <text x="104" y="57" fill="#e8eef5" font-size="17" font-weight="700">$3.00</text>
+      <text x="16" y="110" fill="#8fa3b8" font-size="15">If the answer is <tspan fill="#3ee88a" font-weight="700">Yes</tspan></text>
+      <rect x="16" y="120" width="260" height="26" rx="5" fill="#3ee88a"/>
+      <text x="286" y="139" fill="#e8eef5" font-size="17" font-weight="700">$10.00</text>
+      <text x="16" y="166" fill="#3ee88a" font-size="14">+$7 profit</text>
+      <text x="16" y="206" fill="#8fa3b8" font-size="15">If the answer is <tspan fill="#ff7a7a" font-weight="700">No</tspan></text>
+      <rect x="16" y="216" width="4" height="26" rx="2" fill="#ff7a7a"/>
+      <text x="30" y="235" fill="#e8eef5" font-size="17" font-weight="700">$0</text>
+      <text x="64" y="235" fill="#ff7a7a" font-size="14">−$3 loss</text>
+    </g>
+  </svg>
+  <p class="note">Before fees. Each site charges a small trading fee; our
+    <a href="/gap-scanner.html#fees">Gap Scanner fee table</a> shows them side by side. You never lose more
+    than you paid for your shares.</p>
+
+  <h2>Why the price means something</h2>
+  <p>Traders have real money on the line, so they're rewarded for being right, not for being loud. When
+    news changes the odds, people buy or sell and the price moves within minutes. That's why prediction
+    markets are often watched as a fast, live forecast.</p>
+  <p>The price isn't a guarantee. Markets can be wrong, thin markets can be pushed around by a few
+    trades, and the same question can trade at different prices on different sites.</p>
+
+  <h2>Where you can trade</h2>
+  <div class="pick">
+    <div class="card"><span class="venue">POLYMARKET</span><h3>The biggest</h3>
+      <p>The world's largest prediction market. US traders use the separate, regulated Polymarket US.</p></div>
+    <div class="card"><span class="venue">KALSHI</span><h3>US-regulated</h3>
+      <p>A CFTC-regulated US exchange where you trade in dollars.</p></div>
+    <div class="card"><span class="venue">ALPHA ARCADE</span><h3>Fast and on-chain</h3>
+      <p>Runs on the Algorand blockchain: near-instant settlement, tiny fees, and markets anyone can verify.</p></div>
+  </div>
+  <p><a href="/kalshi-vs-polymarket-vs-alpha-arcade.html">Compare all three in detail →</a></p>
+
+  <h2>Four things to know before you trade</h2>
+  <ul>
+    <li><strong>Read the rules.</strong> Each market says exactly what counts as Yes, by when, and who decides
+      (for example AP or a government report). Two markets with the same title can have different rules.</li>
+    <li><strong>Fees.</strong> Most sites charge a small fee when you buy straight away. It's largest near 50¢.</li>
+    <li><strong>Availability.</strong> Each site decides who can join. Check it's available where you live.</li>
+    <li><strong>Risk.</strong> Only trade what you can afford to lose.</li>
+  </ul>
+
+  <h2>FAQ</h2>
+  <h3>Is a prediction market the same as betting?</h3>
+  <p>You're trading shares with other people, not betting against a bookmaker, and you can sell before the
+    end. Some sites are regulated as financial exchanges. Rules differ by country and state.</p>
+  <h3>Can I sell before the market ends?</h3>
+  <p>Yes. You can sell your shares at the current price any time the market is open, for a profit or a loss.</p>
+  <h3>Who decides the answer?</h3>
+  <p>Each market names its source in the rules, such as an official data release or a major news outlet.</p>
+
+  <div class="cta">
+    <p><strong>See it live</strong></p>
+    <p>Alpha Intel Desk tracks Polymarket, Kalshi and Alpha Arcade side by side:
+      <a href="/gap-scanner.html">price gaps after fees</a>, <a href="/movers.html">the biggest movers</a>
+      and what's coming up next.</p>
+    <p><a href="/">Open the live desk →</a> &nbsp;·&nbsp;
+      <a href="https://t.me/alphainteldesk" rel="noopener">Get the 7 AM brief on Telegram →</a></p>
+  </div>
+
+  <p class="note" style="margin-top:28px">Not financial advice. Prices in the examples are made up to show
+    how it works. Read our <a href="/disclosures.html">disclosures</a>.</p>
+</main>
+
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><strong style="color:var(--text)">Alpha Intel Desk</strong><br>Information is our edge.</div>
+      <div class="social">
+        <a href="https://x.com/alphainteldesk" rel="noopener">X</a>
+        <a href="https://t.me/alphainteldesk" rel="noopener">Telegram</a>
+        <a href="https://www.youtube.com/@alphainteldesk" rel="noopener">YouTube</a>
+        <a href="/about.html">About</a>
+        <a href="/disclosures.html">Disclosures</a>
+      </div>
+    </div>
+    <p>Not financial advice. Prediction markets involve risk, and you can lose money.
+      Some links on this site are referral links and may earn us a commission at no cost to you.</p>
+    <p>&copy; 2026 Alpha Intel Desk</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -50,4 +50,5 @@ jobs:
           [ -f card_state.json ] && git add card.jpg card-gaps.jpg card_state.json index.html gap-scanner.html
           [ -f alpha_hist.json ] && git add alpha_hist.json
           [ -f indexnow_state.json ] && git add indexnow_state.json
+          [ -f fine_watch.json ] && git add fine_watch.json
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -X theirs -q && git push)   # if another run pushed meanwhile, keep this run's fresher files

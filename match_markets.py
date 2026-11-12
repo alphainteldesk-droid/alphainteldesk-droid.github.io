@@ -26,7 +26,7 @@ def get(url):
     """GET JSON. If a site says "too many requests" (HTTP 429), wait and try again (up to 4 tries) - Nov 10."""
     import time, urllib.error
     for attempt in range(4):
-        req = urllib.request.Request(url, headers={"User-Agent": "AlphaIntelDesk/1.0"})
+        req = urllib.request.Request(url, headers={"User-Agent": "AlphaIntelDesk/1.0", "Accept": "application/json"})
         try:
             return json.load(urllib.request.urlopen(req, timeout=30))
         except urllib.error.HTTPError as err:
@@ -196,23 +196,16 @@ def load_poly():
     edges = [n + timedelta(days=d) for d in list(range(0, 15)) + [30, 60, 120, 240, 400, 800, 2000]]
     seen, evs = set(), []
     for lo, hi in zip(edges, edges[1:]):
-        off = 0
-        while off < 2000:
-            try:
-                d = get("https://gamma-api.polymarket.com/events?active=true&closed=false&limit=100"
-                        f"&offset={off}&end_date_min={lo.strftime(f)}&end_date_max={hi.strftime(f)}")
-            except Exception as err:
-                print("Matcher: Polymarket window", lo.strftime("%b %d"), "stopped at", off, "-", err)
-                break
-            if not d:
-                break
-            for ev in d:
-                k = ev.get("id") or ev.get("slug")
-                if k not in seen:
-                    seen.add(k); evs.append(ev)
-            off += len(d)
-            if len(d) < 100:
-                break
+        try:                                       # Nov 12: shared helper (keyset list, old list as backup)
+            import polyapi
+            d = polyapi.events({"end_date_min": lo.strftime(f), "end_date_max": hi.strftime(f)})
+        except Exception as err:
+            print("Matcher: Polymarket window", lo.strftime("%b %d"), "failed -", err)
+            continue
+        for ev in d:
+            k = ev.get("id") or ev.get("slug")
+            if k not in seen:
+                seen.add(k); evs.append(ev)
     out = []
     for ev in evs:
         if "Up or Down" in (ev.get("title") or ""):
@@ -305,7 +298,11 @@ def load_kalshi():
             e["volume24h"] += float(m.get("volume_24h_fp") or m.get("volume_24h") or 0)
             e["text"] += " " + (m.get("title") or "") + " " + label
             e["end"] = e["end"] or ts(m.get("expected_expiration_time") or m.get("close_time"))
-            e["rules"] = e["rules"] or (m.get("rules_primary") or "")
+            if not e["rules"]:                 # Nov 12: primary + secondary rules (secondary often names the source)
+                e["rules"] = ((m.get("rules_primary") or "") + " " + (m.get("rules_secondary") or "")).strip()
+        srcs = [x.get("name") or x.get("url") or "" for x in (ev.get("settlement_sources") or []) if isinstance(x, dict)]
+        if srcs:                                # Kalshi's own list of settlement sources, when the event has one
+            e["rules"] += " Resolution source: " + ", ".join(srcs) + "."
         if len(e["outcomes"]) == 1:          # one-market event: its question is often closer to other sites' titles
             e["alt"] = (ev.get("markets") or [{}])[0].get("title") or ""
         if e["outcomes"]:
@@ -426,9 +423,31 @@ def sources_in(text):
     return {name: fam for name, fam, pat in SOURCES if _re.search(pat, t)}
 
 
+import collections as _col
+FINE_WATCH = {"unknown": _col.Counter(), "seen": set()}
+_CUE = _re.compile(r"[^.]*\b(resolution source|resolve[sd]? (?:according to|based on|using|per)|according to|"
+                   r"as reported by|reported by|settle[sd]? (?:on|using|based on)|primary source|official (?:data|results?|source|website))\b[^.]*\.", _re.I)
+
+
+def _watch(text):
+    """Nov 12: remember rules sentences that point at a source we don't recognise (reviewed weekly)."""
+    h = hash(text)
+    if not text or h in FINE_WATCH["seen"]:
+        return
+    FINE_WATCH["seen"].add(h)
+    for m in _CUE.finditer(text):
+        sent = " ".join(m.group(0).split())[:160]
+        if not sources_in(sent):
+            FINE_WATCH["unknown"][sent.lower()] += 1
+
+
 def fine_print(ra, rb):
     """Compare two sites' rules text: {'src': match|similar|unknown|differ, 'srcs': [...], 'void': same|check|none}."""
     a, b = sources_in(ra), sources_in(rb)
+    if not a:
+        _watch(ra)
+    if not b:
+        _watch(rb)
     both = sorted(set(a) & set(b))
     if not a or not b:
         src = "unknown"                                  # one site doesn't name a source in its rules text
@@ -816,6 +835,14 @@ def main():
                 fp = x.get("fine")
                 if fp and fp["src"] in ("differ", "similar") and x.get("label") == "SAME":
                     print("  FINE %-7s %-10s | %s | %s" % (fp["src"], nm, r["title"][:50], ", ".join(fp["srcs"][:5])))
+        drops = [{"title": r["title"][:80], "site": nm, "srcs": x["fine"]["srcs"][:5]}
+                 for r in out + pk for nm, x in r["sites"].items()
+                 if (x.get("fine") or {}).get("src") == "differ"][:60]
+        json.dump({"updated": n.strftime(f), "counts": dict(c), "differ": drops,
+                   "unknown_wording": FINE_WATCH["unknown"].most_common(60)},
+                  open("fine_watch.json", "w"), indent=1)
+        print("FINE watch: %d unrecognised source phrases, %d 'differ' pairs -> fine_watch.json"
+              % (len(FINE_WATCH["unknown"]), len(drops)))
     except Exception as err:
         print("FINE log failed:", err)
     for r in out[:30]:

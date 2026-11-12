@@ -256,6 +256,8 @@
   .v2 { color:var(--amber); }
   .glass[data-screen="trend"] { line-height:1.5; font-size:13px; font-weight:500; color:#fff; }
   .glass[data-screen="gap"] .gap-q { font-size:14px; font-weight:700; color:#fff; white-space:normal; }
+  .glass[data-screen="gap"] .trend { white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+    line-height:1.3; margin:0 0 5px; }
   .glass[data-screen="gap"] { font-size:11.5px; line-height:1.55; } .glass[data-screen="gap"] .trend { color:#e8eef5; }
   .trend { font-family:"Space Grotesk",sans-serif; white-space:nowrap; overflow:hidden;
     text-overflow:ellipsis; }
@@ -706,17 +708,17 @@
       <div class="mq"><div class="k">WTI</div><div class="big v">&mdash;</div><div class="chg"></div></div>
     </div>
   </div>
-  <div class="glass" data-screen="trend">
-    <a class="cover" href="https://trends.google.com/trending?geo=US" target="_blank" rel="noopener" aria-label="Open Google Trends"></a>
-    <div class="gh">TRENDING ON GOOGLE <span style="display:flex;align-items:center"><span class="go">&#8599;</span><span class="dot"></span></span></div>
-    <div id="trends"><div class="trend" style="color:#a9bccf">Loading trends&hellip;</div></div>
-    <div class="stamp" id="st-trends">UPDATED EVERY 20 MIN</div>
-  </div>
   <div class="glass" data-screen="gap">
     <a class="cover" href="/conflict-radar.html" aria-label="Open Conflict Radar"></a>
     <div class="gh red">CONFLICT RADAR <span style="display:flex;align-items:center"><span class="go">&#8599;</span><span class="dot" style="background:#ff5c5c"></span></span></div>
     <div id="conflict"><div class="trend" style="color:#a9bccf">Loading headlines&hellip;</div></div>
     <div class="stamp" id="st-conflict">WORLD HEADLINES</div>
+  </div>
+  <div class="glass" data-screen="trend">
+    <a class="cover" href="https://trends.google.com/trending?geo=US" target="_blank" rel="noopener" aria-label="Open Google Trends"></a>
+    <div class="gh">TRENDING ON GOOGLE <span style="display:flex;align-items:center"><span class="go">&#8599;</span><span class="dot"></span></span></div>
+    <div id="trends"><div class="trend" style="color:#a9bccf">Loading trends&hellip;</div></div>
+    <div class="stamp" id="st-trends">UPDATED EVERY 20 MIN</div>
   </div>
 </div>
 <section class="gapbox" id="gapbox" aria-label="Gap Scanner and Movers">
@@ -813,8 +815,10 @@
     <span class="tag">Learn</span>
     <h2>Guides</h2>
     <div class="grid">
-      <div class="card"><h3>What are prediction markets?</h3>
-        <p class="soon">A plain-English starter. Coming soon.</p></div>
+      <div class="card"><h3><a href="/what-are-prediction-markets.html"
+          style="color:var(--text)">What are prediction markets?</a></h3>
+        <p class="soon">How they work in four steps, with a diagram: questions, prices as odds, $1 payouts.
+           <a href="/what-are-prediction-markets.html">Read the guide →</a></p></div>
       <div class="card"><h3><a href="/kalshi-vs-polymarket-vs-alpha-arcade.html"
           style="color:var(--text)">Kalshi vs Polymarket vs Alpha Arcade</a></h3>
         <p class="soon">What's the difference between the three, and which one fits you.
@@ -917,8 +921,8 @@
     crypto:  [[43.6,8.6],[53.0,10.4],[53.0,38.0],[43.6,37.4]],
     markets: [[54.3,10.7],[62.6,12.3],[62.6,38.6],[54.3,38.2]],
     macro:   [[63.7,12.5],[68.9,13.5],[68.9,39.0],[63.7,38.8]],
-    trend:   [[70.5,12.9],[83.7,7.3],[83.7,51.2],[70.5,51.0]],
-    gap:     [[85.0,6.6],[99.2,2.4],[99.2,52.0],[85.0,51.9]]
+    gap:     [[69.9,13.1],[83.7,7.3],[83.7,51.8],[69.9,51.7]],   /* Nov 12: Conflict Radar on the left pane */
+    trend:   [[85.0,6.6],[99.2,2.4],[99.2,52.0],[85.0,51.9]]      /* Trending on Google on the right */
   };
   var REF = 1200; /* screens are designed at a 1200 px-wide photo, then scaled */
 
@@ -1010,7 +1014,7 @@
       return '<div class="trend"><b>' + (x.geo === 'UK' ? 'UK' : 'US') + '</b>' + s.innerHTML + '</div>';
     }).join('');
     if (d.updated) document.getElementById('st-trends').textContent = 'UPDATED ' + hm(d.updated);
-    var cf = (d.conflict || []).slice(0, 6);
+    var cf = (d.conflict || []).slice(0, 4);           /* Nov 12: 4 headlines, each up to 2 lines */
     if (cf.length) {
       document.getElementById('conflict').innerHTML = cf.map(function (x) {
         var t = document.createElement('div'); t.textContent = x.title;

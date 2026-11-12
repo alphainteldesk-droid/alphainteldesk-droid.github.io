@@ -121,6 +121,12 @@
   .q1 b { display:block; color:var(--cyan); font-size:1rem; margin-bottom:2px; } .q1 span { color:var(--text); font-size:.92rem; line-height:1.45; }
   @media (max-width:640px) { .quick { grid-template-columns:1fr; } }
   #how { scroll-margin-top:80px; }
+  .quick.top { grid-template-columns:repeat(4,minmax(0,1fr)); margin:14px 0 6px; }
+  .quick.top .q1 { padding:10px 12px; } .quick.top .q1 span { display:block; } .quick.top .q1 b { font-size:.92rem; } .quick.top .q1 span { font-size:.84rem; line-height:1.35; }
+  .q1 .gr { font-style:normal; font-size:.62rem; padding:3px 5px; vertical-align:2px; }
+  @media (max-width:900px) { .quick.top { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+  @media (max-width:480px) { .quick.top .q1 span { font-size:.78rem; } }
+  #details { scroll-margin-top:80px; }
 </style>
 <meta property="og:url" content="https://alphainteldesk.com/gap-scanner.html">
 <meta property="og:type" content="website">
@@ -143,28 +149,26 @@
 
 <main class="wrap">
   <span class="tag live"><i></i>Live · updated every 20 min</span>
-  <h1>Gap Scanner <a class="how-link" href="#how">How it works ↓</a></h1>
+  <h1>Gap Scanner <a class="how-link" href="#details">Full details ↓</a></h1>
   <p class="lead">The same question can trade at different prices on different prediction markets.
     Gap Scanner shows the biggest price gaps across Polymarket, Kalshi and Alpha Arcade after each site's trading fee, with every gap priced on all three sites listed first.
     Politics, world events, economy, crypto and tech. No sports.</p>
+  <div class="quick top" id="how" aria-label="How it works">
+    <div class="q1"><b>Gap after fees</b><span>Same outcome, two sites, different price. We subtract each site's trading fee. What's left is the real gap.</span></div>
+    <div class="q1"><b>Fair price</b><span>Our best guess at what it's really worth: the sites' prices blended, trusting the busiest site most.</span></div>
+    <div class="q1"><b>Graded <i class="gr gr-A">A</i> <i class="gr gr-B">B</i></b><span>We check each site's rules: dates, thresholds, who decides the answer, cancel rules. A = all match. B = read the rules.</span></div>
+    <div class="q1"><b>Which gaps show</b><span>Real matches with real trading, 1¢+ after fees. All three sites first. Checked every 20 min. No sports.</span></div>
+  </div>
+  <p class="note">Gaps can close at any time. Not financial advice. Always check each site's rules before you trade.</p>
   <p class="note" id="gr-updated"></p>
   <div class="board" id="board"><p class="note">Loading the scanner&hellip;</p></div>
   <p class="note">How to read it: <span style="color:#3ee88a">green</span> is the lowest price for that outcome,
     <span style="color:#ff7a7a">red</span> the highest. The gap is the difference in cents per $1 share, minus
-    each site's trading fee, shown site by site under every gap (<a href="#how">how it works</a>). Prices are midpoints, so the bid/ask spread can shrink a gap further.
+    each site's trading fee, shown site by site under every gap (<a href="#fees">see the fee table</a>). Prices are midpoints, so the bid/ask spread can shrink a gap further.
     Vol is the total traded on each site's market, 24h the last day (Polymarket and Alpha Arcade in dollars,
     Kalshi in contracts). Low volume can mean a price is hard to trade at.
     Matches are automatic. Always check each site's rules before you trade.</p>
-  <h2 id="how">How it works</h2>
-  <div class="quick">
-    <div class="q1"><b>Gap after fees</b><span>The difference in price for the same outcome on two sites, minus each site's trading fee. What's left is the real gap.</span></div>
-    <div class="q1"><b>Fair price</b><span>Our best guess at what the market is really worth: the sites' prices blended, trusting the busiest site the most.</span></div>
-    <div class="q1"><b>Fine print A / B</b><span>We check dates, thresholds, US vs world, draw and overtime rules, who decides the answer, and cancel rules. A = all match. B = read the rules.</span></div>
-    <div class="q1"><b>Which gaps show</b><span>Same question on each site, real trading, prices 3¢–97¢, gaps of 1¢+ after fees. All three sites first. Checked every 20 minutes. No sports.</span></div>
-  </div>
-  <p class="note">Gaps can close at any time. Not financial advice. Always check each site's rules before you trade.</p>
-
-  <h2>The details</h2>
+  <h2 id="details">The details</h2>
 
   <h3 class="sub" id="fees">Fees</h3>
   <p>All three sites charge the same kind of fee when your order fills against one already on the book (a "taker" order).
@@ -192,10 +196,10 @@
   <p class="note">Kalshi volume (contracts) is converted to dollars at its price. It's built only from these sites' prices,
     not a forecast. A site far from it may just have a thin order book.</p>
 
-  <h3 class="sub" id="grades">Fine-print grades</h3>
+  <h3 class="sub" id="grades">Grades (A / B)</h3>
   <div class="fee-tbl" role="table" aria-label="Fine-print grades">
-    <div class="fr fg" role="row"><span><b class="gr gr-A">FINE PRINT A</b></span><span>Every check passed, and both sites name the same resolution source.</span></div>
-    <div class="fr fg" role="row"><span><b class="gr gr-B">FINE PRINT B</b></span><span>Every check we can run passed, but one site doesn't name its source, they use different news outlets, or only one says what happens if it's cancelled.</span></div>
+    <div class="fr fg" role="row"><span><b class="gr gr-A">GRADED A</b></span><span>Every check passed, and both sites name the same resolution source.</span></div>
+    <div class="fr fg" role="row"><span><b class="gr gr-B">GRADED B</b></span><span>Every check we can run passed, but one site doesn't name its source, they use different news outlets, or only one says what happens if it's cancelled.</span></div>
     <div class="fr fg" role="row"><span><b>Not shown</b></span><span>Different deadline, threshold, scope or resolution source. That isn't a real gap.</span></div>
   </div>
   <p class="note">Matching and grades are automatic, from each site's published rules. Kalshi, Polymarket and Alpha Arcade
@@ -250,7 +254,7 @@
       : f.src === 'similar' ? q + 'sources: ' + esc(f.srcs.join(', ')) + ' (different outlets)'
       : q + 'source not named on both sites';
     var vd = f.void === 'check' ? q + 'cancel rules: only one site says' : ok + 'cancel rules';
-    return '<div class="gp-fine"><a href="#grades" class="gr gr-' + esc(g.grade) + '">FINE PRINT ' + esc(g.grade) + '</a>' +
+    return '<div class="gp-fine"><a href="#grades" class="gr gr-' + esc(g.grade) + '" title="How well the two sites\' rules match. Click to see what A and B mean.">GRADED ' + esc(g.grade) + '</a>' +
       ok + 'end date ' + ok + 'threshold ' + ok + 'US/world ' + ok + 'draw/overtime ' + src + ' ' + vd + '</div>';
   }
   function feeMath(g) {          // "5.0¢ gap − 0.9¢ Polymarket fee − 1.7¢ Kalshi fee = 2.4¢ after fees"
