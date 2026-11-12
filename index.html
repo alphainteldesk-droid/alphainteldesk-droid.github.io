@@ -440,7 +440,7 @@
   a.cal-p:hover { background:rgba(63,219,230,.1); text-decoration:none; }
   .cal-p.na { opacity:.5; }
   .cal-ls { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
-  .cal-l { display:grid; grid-template-columns:110px 1fr auto 64px; gap:10px; align-items:center; padding:7px 10px;
+  .cal-l { display:grid; grid-template-columns:110px 1fr auto 64px auto; gap:10px; align-items:center; padding:7px 10px;
     border:1px solid var(--line); border-radius:4px; color:var(--text); }
   .cal-l span { font:700 .62rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--muted); }
   .cal-l em { font-style:normal; font-weight:700; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -449,7 +449,15 @@
   .cal-l.a { border-color:rgba(255,179,71,.6); } .cal-l.a b { color:var(--amber); }
   a.cal-l:hover { background:rgba(63,219,230,.1); text-decoration:none; }
   .cal-l.na { opacity:.45; grid-template-columns:110px 1fr; }
-  @media (max-width: 760px) { .cal-l { grid-template-columns:1fr auto; } .cal-l em { grid-column:1 / -1; white-space:normal; } }
+  .cal-l u { text-decoration:none; font:800 .66rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--navy);
+    background:var(--cyan); padding:5px 8px; border-radius:3px; white-space:nowrap; }
+  a.cal-l:hover u { background:#7ff0f7; }
+  .cal-trade { display:inline-block; margin-top:4px; font:800 .6rem "JetBrains Mono",monospace; letter-spacing:.1em;
+    color:var(--cyan); border:1px solid rgba(63,219,230,.55); border-radius:3px; padding:2px 6px; cursor:pointer; }
+  .cal-trade:hover { background:rgba(63,219,230,.15); }
+  .cal-go { cursor:pointer; } .cal-go:hover { text-decoration:underline; }
+  a.cal-nlk { color:var(--cyan); }
+  @media (max-width: 760px) { .cal-l { grid-template-columns:1fr auto auto; } .cal-l em { grid-column:1 / -1; white-space:normal; } }
   .cal-foot { color:var(--muted); font-size:.78rem; margin:10px 0 0; }
   @media (max-width: 760px) {
     .calsec { margin:12px 8px 0; padding:16px 12px 10px; }
@@ -1232,14 +1240,14 @@
   var SN = { alpha: 'Alpha', kalshi: 'Kalshi', polymarket: 'Poly' };
   function lead(x) {                                       // one headline market for the pill / countdown
     var L = x.links;
-    if (L) for (var s of ['alpha', 'kalshi', 'polymarket']) if (L[s]) return { site: SN[s], v: L[s].price, label: L[s].title.replace(/\?$/, '') + ' · ' + L[s].outcome };
+    if (L) for (var s of ['alpha', 'kalshi', 'polymarket']) if (L[s]) return { site: SN[s], v: L[s].price, url: L[s].url, label: L[s].title.replace(/\?$/, '') + ' · ' + L[s].outcome };
     var o = odds(x.market);
-    return o ? { site: o.site, v: o.v, label: x.kind === 'resolves' ? x.market.outcome : x.market.title.replace(/\?$/, '') + ' · ' + x.market.outcome } : '';
+    return o ? { site: o.site, v: o.v, url: ((x.market || {}).urls || {})[o.key], label: x.kind === 'resolves' ? x.market.outcome : x.market.title.replace(/\?$/, '') + ' · ' + x.market.outcome } : '';
   }
   function odds(m) {                                       // one headline price: Alpha first (our edge), then Polymarket, then Kalshi
     if (!m) return '';
     var order = [['alpha', 'Alpha'], ['polymarket', 'Poly'], ['kalshi', 'Kalshi']];
-    for (var i = 0; i < 3; i++) { var v = m.prices[order[i][0]]; if (v != null) return { site: order[i][1], v: v }; }
+    for (var i = 0; i < 3; i++) { var v = m.prices[order[i][0]]; if (v != null) return { site: order[i][1], v: v, key: order[i][0] }; }
     return '';
   }
   function bars(n) { var h = '<span class="cal-imp" title="Expected impact: ' + ['', 'low', 'medium', 'high'][n || 1] + '">';
@@ -1254,7 +1262,8 @@
     var o = lead(x);
     return '<button class="' + cls + '" style="--c:' + C[1] + '" data-i="' + i + '">' +
       '<small><span class="t">' + esc(C[0]) + ' · ' + esc(lab) + '</span>' + bars(x.impact) + '</small>' + esc(title(x)) +
-      (o ? '<span class="cal-odds"><b>' + Math.round(o.v) + '&cent;</b> ' + o.site + ' · ' + esc(o.label) + '</span>' : '') + '</button>';
+      (o ? '<span class="cal-odds' + (o.url ? ' cal-go" role="link" title="Open this market on ' + o.site + '" data-href="' + esc(o.url) : '') + '"><b>' + Math.round(o.v) + '&cent;</b> ' + o.site + ' · ' + esc(o.label) + '</span>' +
+        (o.url ? '<span class="cal-trade" data-href="' + esc(o.url) + '" role="link">TRADE &#8599;</span>' : '') : '') + '</button>';
   }
   function render() {
     var now = Date.now(), today = key(new Date()), base = new Date(today + 'T12:00:00Z'), days = [], html = '';
@@ -1313,7 +1322,7 @@
       new Date(y.date).getTime() > new Date(x.date).getTime() && then.length < 3) then.push(y); });
     nx.innerHTML = '<div class="cal-nl"><i></i>NEXT UP</div>' +
       '<div class="cal-nn" style="--c:' + C[1] + '"><b>' + esc(x.name) + '</b><span>' + esc(C[0]) + ' · ' + esc(lng(x.date)) + ' · ' + esc(tm(x.date)) +
-      (o ? ' · ' + esc(o.label) + ' ' + Math.round(o.v) + '¢ on ' + o.site : '') + '</span></div>' +
+      (o ? ' · ' + (o.url ? '<a class="cal-nlk" href="' + esc(o.url) + '" target="_blank" rel="noopener">' : '') + esc(o.label) + ' ' + Math.round(o.v) + '¢ on ' + o.site + (o.url ? ' &#8599;</a>' : '') : '') + '</span></div>' +
       '<div class="cal-cd"><div><b>0</b><small>DAYS</small></div><div><b>00</b><small>HRS</small></div><div><b>00</b><small>MIN</small></div><div><b>00</b><small>SEC</small></div></div>' +
       (then.length ? '<div class="cal-then">THEN: ' + then.map(function (y) { return '<em>' + esc(shortD(y.date)) + '</em> ' + esc(y.name); }).join(' &nbsp;·&nbsp; ') + '</div>' : '');
     nx.hidden = false;
@@ -1329,16 +1338,16 @@
       h += '<div class="cal-mk"><div class="cal-ml">MARKETS ON THIS EVENT</div><div class="cal-ls">';
       [['alpha', 'ALPHA ARCADE'], ['kalshi', 'KALSHI'], ['polymarket', 'POLYMARKET']].forEach(function (s) {
         var L = x.links[s[0]];
-        h += L ? '<a class="cal-l' + (s[0] === 'alpha' ? ' a' : '') + '" href="' + esc(L.url) + '" target="_blank" rel="noopener"><span>' + s[1] +
-          '</span><em>' + esc(L.title) + '</em><i>' + esc(L.outcome) + '</i><b>' + c(L.price) + '</b></a>'
+        h += L ? '<a class="cal-l" href="' + esc(L.url) + '" target="_blank" rel="noopener"><span>' + s[1] +
+          '</span><em>' + esc(L.title) + '</em><i>' + esc(L.outcome) + '</i><b>' + c(L.price) + '</b><u>TRADE &#8599;</u></a>'
           : '<span class="cal-l na"><span>' + s[1] + '</span><em>No market found for this event</em></span>';
       });
-      h += '</div><div class="cal-src">Each site\'s own market for this event, found automatically. Questions can differ between sites. Always check each site\'s rules before you trade.</div></div>';
+      h += '</div><div class="cal-src">Tap a market to open it on that site. Each site\'s own market for this event, found automatically. Questions can differ between sites. Always check each site\'s rules before you trade.</div></div>';
     }
     if (m) {
       var u = m.urls || {}, chip = function (s, n) {
-        var inner = '<span>' + n + '</span><b>' + c(m.prices[s]) + '</b>';
-        return u[s] ? '<a class="cal-p' + (s === 'alpha' ? ' a' : '') + '" href="' + esc(u[s]) + '" target="_blank" rel="noopener">' + inner + '</a>'
+        var inner = '<span>' + n + (u[s] ? ' &#8599;' : '') + '</span><b>' + c(m.prices[s]) + '</b>';
+        return u[s] ? '<a class="cal-p" href="' + esc(u[s]) + '" target="_blank" rel="noopener">' + inner + '</a>'
                     : '<span class="cal-p na">' + inner + '</span>';
       };
       h += '<div class="cal-mk"><div class="cal-ml">' + (x.kind === 'resolves' ? 'PRICES NOW' : 'RELATED MARKET') +
@@ -1368,6 +1377,9 @@
   }
   loadCal(true); setInterval(function () { loadCal(false); }, 5 * 60000);
   document.getElementById('calendar').addEventListener('click', function (e) {
+    var go = e.target.closest('[data-href]');
+    if (go) { e.preventDefault(); window.open(go.getAttribute('data-href'), '_blank', 'noopener'); return; }
+    if (e.target.closest('a[href]')) return;
     var ev = e.target.closest('.cal-e'), mo = e.target.closest('.cal-more'), f = e.target.closest('.cal-f button');
     if (e.target.closest('.cal-next') && nextI >= 0) { filt = 'all'; sel = nextI; render(); detail(sel); det.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
     if (ev) { sel = +ev.getAttribute('data-i'); render(); detail(sel); }
