@@ -72,7 +72,7 @@ def events(params, max_events=2000, page=100):
     return events_from_markets(params, max_markets=max_events * 2)
 
 
-def events_from_markets(params, max_markets=4000, page=500):
+def events_from_markets(params, max_markets=4000, page=100):   # Polymarket returns at most 100 per page
     """Event-shaped dicts built from /markets: {id, slug, title, description, volume, volume24hr,
     tags, startDate, createdAt, endDate, markets: [...]}, the same fields our scripts read from /events."""
     ms, off = [], 0
