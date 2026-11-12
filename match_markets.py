@@ -823,7 +823,9 @@ def main():
     out += pk
 
     out.sort(key=lambda r: (r["label"] != "SAME", -(r["gap"] or 0)))
-    json.dump({"updated": n.strftime(f), "note": NOTE, "matches": out}, open("matches.json", "w"), indent=1)
+    json.dump({"updated": n.strftime(f), "note": NOTE, "matches": out,
+               "counts": {"alpha": len(alpha), "polymarket": len(sites["polymarket"]), "kalshi": len(sites["kalshi"])}},
+              open("matches.json", "w"), indent=1)        # counts: read by watchdog.py (Nov 12)
     same = sum(r["label"] == "SAME" for r in out)
     print("Matcher: %d matched (%d SAME, %d SIMILAR)" % (len(out), same, len(out) - same))
     try:
