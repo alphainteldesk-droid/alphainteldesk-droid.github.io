@@ -636,6 +636,36 @@ def alpha_changes(alpha):
     return {i: {k: round(v - base[i][k], 1) for k, v in o.items() if k in base.get(i, {})} for i, o in snap.items()}
 
 
+def mover_cross(out, src, alpha, sites):
+    """Nov 12: for each mover, find the SAME market on the other two sites with the Gap Scanner's matcher
+    (score >= 90 only, never a weak match) and record that site's price for the same outcome in r["also"]."""
+    pools = {"alpha": [dict(a, text=a.get("text") or "") for a in alpha if not sporty(a)],
+             "polymarket": [e for e in sites.get("polymarket", []) if not sporty(e)],
+             "kalshi": [e for e in sites.get("kalshi", []) if not sporty(e)]}
+    idxs = {s: build_index(p) for s, p in pools.items()}
+    found = 0
+    for r in out:
+        e, k = src[(r["site"], r["url"])]
+        outs = e["outcomes"] if len(e["outcomes"]) > 1 else {"Yes": next(iter(e["outcomes"].values()))}
+        key = k if k in outs else ("Yes" if "Yes" in outs else None)
+        if key is None:
+            continue
+        a = {"id": e["url"], "title": e["title"], "end": e["end"], "outcomes": outs, "rules": e.get("rules") or ""}
+        r["also"] = {}
+        for other, pool in pools.items():
+            if other == r["site"] or not pool:
+                continue
+            s, fl, om, m = best_match(a, pool, idxs[other])
+            if not m or s < 90 or om.get(key) is None:
+                continue
+            p = m["outcomes"].get(om[key])
+            if p is not None:
+                r["also"][other] = p
+                r.setdefault("also_url", {})[other] = m["url"]
+        found += bool(r["also"])
+    print("Movers: %d of %d matched on another site (SAME, score 90+)" % (found, len(out)))
+
+
 def movers(alpha, sites):
     rows = []
     soon = n.timestamp() + 3 * 86400                     # skip markets ending within 3 days (daily/weekly ranges)
@@ -653,7 +683,7 @@ def movers(alpha, sites):
                 v = (e.get("v24") or {}).get(k, 0)
                 if v >= MOVE_VOL[site]:
                     rows.append((site, e, k, e["outcomes"].get(k), c, v))
-    best = {}
+    best, src = {}, {}
     for site, e, k, p, c, v in rows:
         if p is None or not (5 <= p <= 95) or abs(c) < MOVE_MIN:
             continue
@@ -664,6 +694,7 @@ def movers(alpha, sites):
             k = "Yes"                                    # one-question market: the label is the question
         key = (site, e["url"])
         if key not in best or abs(c) > abs(best[key]["change"]):
+            src[key] = (e, k)
             best[key] = {"title": e["title"], "outcome": k, "site": site, "name": NAMES[site], "price": p,
                          "change": c, "prev": round(p - c, 1), "vol24": round(v), "url": e["url"],
                          "why": why_link(e["title"]), "category": (e.get("categories") or ["Other"])[0] or "Other",
@@ -680,6 +711,10 @@ def movers(alpha, sites):
         crypto += r["crypto"]
         out.append(r)
     out.sort(key=lambda r: -abs(r["change"]) * math.log10(max(r["vol24"], 10)))
+    try:
+        mover_cross(out, src, alpha, sites)
+    except Exception as err:
+        print("Movers cross-site lookup failed:", err)
     json.dump({"updated": n.strftime(f), "note": "Biggest 24-hour price moves with real trading behind them. No sports. "
                "\"Why?\" opens a news search, not our analysis.", "movers": out}, open("movers.json", "w"), indent=1)
     cnt = {s_: sum(r["site"] == s_ for r in allr) for s_ in NAMES}

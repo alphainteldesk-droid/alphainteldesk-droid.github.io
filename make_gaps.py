@@ -221,6 +221,9 @@ def add_also(matches):
     mv = json.load(open("movers.json"))
     found = 0
     for x in mv.get("movers", []):
+        if x.get("also"):                              # Nov 12: matcher already found it (mover_cross)
+            found += 1
+            continue
         x["also"] = {}
         for row in matches:
             me = row["sites"].get(x["site"])

@@ -226,7 +226,10 @@
     var w = Math.min(100, Math.abs(x.change) * 2.5);
     var also = Object.keys(NAMES).filter(function (s) { return s !== x.site; }).map(function (s) {
       var p = (x.also || {})[s];
-      return '<span class="mv-o"><b>' + NAMES[s] + '</b> ' + (p == null ? '<small>not matched</small>' : esc(p.toFixed(1)) + '¢') + '</span>';
+      var u = (x.also_url || {})[s];
+      if (p == null) return '<span class="mv-o"><b>' + NAMES[s] + '</b> <small>no match found</small></span>';
+      return u ? '<a class="mv-o" href="' + esc(u) + '" target="_blank" rel="noopener"><b>' + NAMES[s] + '</b> ' + esc(p.toFixed(1)) + '¢ ↗</a>'
+               : '<span class="mv-o"><b>' + NAMES[s] + '</b> ' + esc(p.toFixed(1)) + '¢</span>';
     }).join('');
     return '<div class="mv"><div class="mv-top"><div><div class="mv-t">' + (i + 1) + '. ' + esc(x.title) + '</div>' +
       '<div class="mv-sub">' + esc(x.outcome) + ' · ' + esc(x.category) + ' · ' + vol(x) + ' traded in 24h</div></div>' +

@@ -1152,7 +1152,11 @@
     var list;
     if (t === 'gaps') {                                    // homepage: only gaps priced on all three sites (max 3), then a link to the rest
       var g3 = (d.gaps || []).filter(function (g) { return g.all3; }), g2 = (d.gaps || []).filter(function (g) { return !g.all3; });
+      var real = function (g) { return !(g.fill && !g.fill.usd); };   // Nov 12: never show a gap the order books say isn't there
+      g3 = g3.filter(real); g2 = g2.filter(real);
       list = g3.concat(g2).slice(0, 3);                   // all-three-site gaps first; two-site gaps fill any empty row
+      var al = g3.concat(g2).filter(function (g) { return g.prices.alpha != null; })[0];
+      if (al && list.indexOf(al) < 0 && list.length) list[list.length - 1] = al;   // keep one Alpha Arcade row when there is one
       box.innerHTML = (list.length ? list.map(gapRow).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
         '<a class="gb-more" href="/gap-scanner.html">Click here for more price gaps <span>OPEN GAP SCANNER &rarr;</span></a>';
       return;
