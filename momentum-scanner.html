@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8TDJGLE2W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D8TDJGLE2W');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Momentum Scanner: Biggest Prediction Market Odds Moves in 24 Hours | Alpha Intel Desk</title>
+<meta name="description" content="Momentum Scanner: the prediction markets whose odds moved the most in the last 24 hours on Polymarket, Kalshi and Alpha Arcade, with real trading behind every move and a link to the news. Updated every 20 minutes.">
+<link rel="canonical" href="https://alphainteldesk.com/momentum-scanner.html">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta property="og:title" content="Momentum Scanner by Alpha Intel Desk">
+<meta property="og:description" content="Real-time intelligence for prediction markets.">
+<meta property="og:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
+<meta name="twitter:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@alphainteldesk">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#0b1420; --panel:#111d2c; --line:#1f3044;
+    --cyan:#3fdbe6; --amber:#ffb347; --text:#e8eef5; --muted:#8fa3b8; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--navy); color:var(--text);
+    font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.6; }
+  a { color:var(--cyan); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .wrap { max-width:760px; margin:0 auto; padding:0 16px; }
+  header { border-bottom:1px solid var(--line); position:sticky; top:0;
+    background:rgba(11,20,32,.92); backdrop-filter:blur(8px); z-index:10; }
+  .bar { display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 16px; max-width:1120px; margin:0 auto; }
+  .brand { display:flex; align-items:center; gap:10px; color:var(--text);
+    font-weight:700; font-size:1.1rem; }
+  .brand img { width:36px; height:36px; }
+  nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; }
+  nav a { color:var(--muted); }
+  nav a:hover, nav a.on { color:var(--text); text-decoration:none; }
+  .tag { font-family:"JetBrains Mono",monospace; font-size:.75rem;
+    letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
+  h1 { font-size:clamp(1.6rem,4vw,2.3rem); margin:8px 0 12px; line-height:1.2; }
+  h2 { font-size:1.25rem; margin:36px 0 10px; }
+  .lead { color:var(--muted); font-size:1.08rem; }
+  .card { background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:18px 20px; margin:12px 0; }
+  .card h3 { margin:0 0 4px; font-size:1.02rem; }
+  .card p { margin:0; color:var(--muted); }
+  .soon { font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--amber);
+    letter-spacing:.1em; margin-left:6px; }
+  .board { margin:22px 0 8px; }
+  .gp { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:10px 0; }
+  .gp-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+  .gp-t { font-weight:700; color:var(--text); }
+  .gp-o { color:var(--muted); font-size:.92rem; }
+  .gp-net { flex:none; text-align:right; font-family:"JetBrains Mono",monospace; color:var(--amber);
+    font-size:1.35rem; font-weight:500; line-height:1.1; }
+  .gp-net small { display:block; font-size:.62rem; letter-spacing:.12em; color:var(--muted); }
+  .gp-px { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+  .px { border:1px solid var(--line); border-radius:8px; padding:6px 8px; text-align:center; color:var(--text); }
+  .px b { display:block; font-family:"JetBrains Mono",monospace; font-size:.62rem; letter-spacing:.1em; color:var(--muted); font-weight:500; }
+  .px span { font-size:1.1rem; font-weight:700; }
+  /* .px.aa: Alpha Arcade box now styled like the others (James, Nov 10) */
+  .px.lo span { color:#3ee88a; } .px.hi span { color:#ff7a7a; }
+  .px.none span { color:var(--muted); font-weight:500; font-size:.9rem; }
+  .gp-sec { display:flex; align-items:center; gap:10px; margin:22px 0 10px; font-size:1.15rem; }
+  .gp-sec span { background:var(--amber); color:#111; font:800 .7rem "JetBrains Mono",monospace; letter-spacing:.1em; padding:3px 7px; border-radius:3px; }
+  .gp.g3 { border-color:rgba(255,179,71,.55); box-shadow:0 0 16px rgba(255,179,71,.1); }
+  .px .ch { font-style:normal; font-size:.7rem; font-family:"JetBrains Mono",monospace; }
+  .px .ch.up { color:#3ee88a; } .px .ch.dn { color:#ff7a7a; }
+  .px small { display:block; margin-top:2px; font-family:"JetBrains Mono",monospace; font-size:.62rem; color:var(--muted); line-height:1.35; }
+  .px small i { font-style:normal; color:#c4d2e0; }
+  a.px:hover { text-decoration:none; border-color:var(--cyan); }
+  .gp-math { margin-top:8px; font-family:"JetBrains Mono",monospace; font-size:.72rem; color:var(--muted); }
+  .note { color:var(--muted); font-size:.86rem; }
+  .live { display:inline-flex; align-items:center; gap:7px; }
+  .live i { width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:p 1.6s infinite; }
+  @keyframes p { 50% { opacity:.3; } }
+  main { padding:40px 0 8px; }
+  footer { margin-top:48px; border-top:1px solid var(--line);
+    padding:28px 0 40px; color:var(--muted); font-size:.88rem; }
+  .foot { display:flex; flex-wrap:wrap; gap:24px; justify-content:space-between; }
+  .social { display:flex; gap:16px; flex-wrap:wrap; }
+  @media (max-width:640px) {
+    nav { gap:14px; font-size:.9rem; }
+    .bar { flex-direction:column; align-items:flex-start; }
+  }
+  .gp-sh { margin-left:8px; background:none; border:1px solid rgba(63,219,230,.45); color:#3fdbe6;
+    font:700 .78rem "JetBrains Mono",monospace; border-radius:3px; padding:3px 8px; cursor:pointer; }
+  .gp-sh:hover { background:rgba(63,219,230,.15); }
+  .fx { font-family:"JetBrains Mono",monospace; font-size:1.05rem; color:var(--amber,#ffb347); background:var(--panel);
+    border:1px solid var(--line); border-radius:10px; padding:12px 16px; display:inline-block; }
+  .fee-tbl { border:1px solid var(--line); border-radius:10px; overflow:hidden; margin:12px 0; }
+  .fr { display:grid; grid-template-columns:2fr 1fr 1.3fr; gap:8px; padding:9px 14px; border-top:1px solid var(--line); font-size:.92rem; }
+  .fr:first-child { border-top:0; } .fh { background:var(--panel); color:var(--muted); font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; }
+  .sub { font-size:1.02rem; margin:22px 0 6px; }
+  .steps { padding-left:22px; } .steps li { margin:4px 0; }
+  .amber { color:#ffb347; } .gp-how { font-size:.7rem; margin-left:4px; }
+  @media (max-width:640px) { .fr { grid-template-columns:1.6fr .8fr 1fr; font-size:.82rem; padding:8px 10px; } }
+  .how-link { display:inline-block; vertical-align:middle; margin-left:12px; padding:5px 12px; border:1px solid var(--cyan,#3fdbe6);
+    border-radius:999px; font:600 .82rem/1.2 "JetBrains Mono",monospace; letter-spacing:.04em; color:var(--cyan,#3fdbe6); }
+  .how-link:hover { background:rgba(63,219,230,.12); }
+  html { scroll-behavior:smooth; } #fees, #board { scroll-margin-top:80px; }
+  .gp-fine { margin-top:8px; font:500 .74rem/1.6 "JetBrains Mono",monospace; color:var(--muted); }
+  .gp-fine i { font-style:normal; font-weight:800; margin:0 3px 0 8px; } .gp-fine .ok { color:#3ee88a; } .gp-fine .q { color:#ffb347; }
+  .gr { display:inline-block; font:800 .7rem/1 "JetBrains Mono",monospace; letter-spacing:.08em; padding:4px 7px; border-radius:4px; text-decoration:none; }
+  .gr-A { color:#0b1420; background:#3ee88a; } .gr-B { color:#0b1420; background:#ffb347; }
+  .fr.fg { grid-template-columns:150px 1fr; align-items:center; }
+  #grades { scroll-margin-top:80px; }
+  .vf { display:block; font:600 .66rem/1.3 "JetBrains Mono",monospace; font-style:normal; color:var(--muted); margin-top:2px; }
+  .gp-fair { display:block; margin-top:6px; font:700 .72rem/1 "JetBrains Mono",monospace; letter-spacing:.06em; color:var(--cyan,#3fdbe6); }
+  #fair { scroll-margin-top:80px; }
+  .bl { background:rgba(63,219,230,.07); border-left:3px solid var(--cyan,#3fdbe6); padding:10px 14px; border-radius:6px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 4px; }
+  .chip { background:var(--panel); border:1px solid var(--line); color:var(--muted); border-radius:999px; padding:6px 14px;
+    font:600 .85rem/1.2 "Space Grotesk",sans-serif; cursor:pointer; }
+  .chip:hover { color:var(--text); } .chip.on { color:var(--navy); background:var(--cyan); border-color:var(--cyan); }
+  .mv { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:10px 0; }
+  .mv-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+  .mv-t { font-weight:700; } .mv-sub { color:var(--muted); font-size:.9rem; }
+  .mv-ch { flex:none; text-align:right; font:500 1.3rem/1.1 "JetBrains Mono",monospace; }
+  .mv-ch small { display:block; font-size:.6rem; letter-spacing:.12em; color:var(--muted); }
+  .mv-ch.up, .mv-bar .up { color:#3ee88a; } .mv-ch.dn, .mv-bar .dn { color:#ff7a7a; }
+  .mv-bar { height:4px; background:rgba(143,163,184,.12); border-radius:4px; margin:10px 0; overflow:hidden; }
+  .mv-bar i { display:block; height:100%; background:currentColor; border-radius:4px; }
+  .mv-px { display:flex; flex-wrap:wrap; gap:8px; font:500 .82rem/1.4 "JetBrains Mono",monospace; }
+  .mv-px > * { border:1px solid var(--line); border-radius:8px; padding:6px 10px; color:var(--muted); }
+  .mv-px b { color:var(--text); font-weight:700; } .mv-site { border-color:rgba(63,219,230,.5) !important; color:var(--text) !important; }
+  .mv-site strong { color:var(--cyan); } .mv-o small { font-size:.72rem; }
+  .mv-act { display:flex; gap:10px; align-items:center; margin-top:10px; }
+  .mv-why { font:700 .74rem/1 "JetBrains Mono",monospace; border:1px solid rgba(63,219,230,.5); border-radius:4px; padding:6px 9px; }
+  #how { scroll-margin-top:80px; }
+</style>
+<meta property="og:url" content="https://alphainteldesk.com/momentum-scanner.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Alpha Intel Desk">
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/#market-of-the-week">Market of the Week</a>
+      <a href="/#top-traders">Top Traders</a>
+      <a href="/#guides">Guides</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <span class="tag live"><i></i>Live · updated every 20 min</span>
+  <h1>Momentum Scanner <a class="how-link" href="#how">How it works ↓</a></h1>
+  <p class="lead">The prediction markets whose odds moved the most in the last 24 hours, with real money traded behind the move,
+    across Polymarket, Kalshi and Alpha Arcade. Each one links to the news so you can see why. No sports.</p>
+  <p class="note" id="mv-upd"></p>
+  <div class="chips" id="chips" role="group" aria-label="Filter movers">
+    <button class="chip on" data-f="all">All</button>
+    <button class="chip" data-f="polymarket">Polymarket</button>
+    <button class="chip" data-f="kalshi">Kalshi</button>
+    <button class="chip" data-f="alpha">Alpha Arcade</button>
+    <button class="chip" data-f="up">▲ Up</button>
+    <button class="chip" data-f="down">▼ Down</button>
+  </div>
+  <div class="board" id="board"><p class="note">Loading movers&hellip;</p></div>
+
+  <h2 id="how">How the Momentum Scanner works</h2>
+  <p class="bl"><b>In plain English:</b> a mover is a market where the crowd changed its mind fast: the price of an
+    outcome went up or down by at least 5¢ in a day, and enough money changed hands that it's a real move, not one small trade.</p>
+  <div class="card"><h3>What counts as a move</h3>
+    <p>At least 5¢ up or down in 24 hours on one outcome, and the price is between 5¢ and 95¢ (near-certain outcomes are noisy).
+      The market must end more than 3 days from now.</p></div>
+  <div class="card"><h3>Real trading behind it</h3>
+    <p>At least $25,000 traded in 24 hours on Polymarket, 15,000 contracts on Kalshi, or $100 on Alpha Arcade.
+      Moves are ranked by size, weighted by how much was traded.</p></div>
+  <div class="card"><h3>Left out on purpose</h3>
+    <p>Sports, price-bracket ladders (for example "Bitcoin above $X") and "will someone say a word" markets.
+      They swing all day without news.</p></div>
+  <div class="card"><h3>Compared across all three sites</h3>
+    <p>When the same market trades on another site, we show its price there too. If one site moved and the others
+      didn't, that's worth a look. Check the <a href="/gap-scanner.html">Gap Scanner</a> for gaps after fees.</p></div>
+  <div class="card"><h3>"Why?" is a news search</h3>
+    <p>The Why? button opens a Google News search for the market, so you can read what happened. It isn't our analysis.</p></div>
+  <p class="note">Not financial advice. Always check each site's rules before you trade.</p>
+  <p><a class="how-link" href="#board">↑ Back to the Momentum Scanner</a></p>
+
+  <h2>Get the desk brief</h2>
+  <p>Join the free Telegram channel for the 7 AM desk brief and new-market alerts.</p>
+  <p><a href="https://t.me/alphainteldesk" rel="noopener">Join t.me/alphainteldesk →</a> &nbsp;·&nbsp;
+    <a href="/gap-scanner.html">Gap Scanner</a> &nbsp;·&nbsp; <a href="/">Back to the live desk</a></p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><strong style="color:var(--text)">Alpha Intel Desk</strong><br>Information is our edge.</div>
+      <div class="social">
+        <a href="https://x.com/alphainteldesk" rel="noopener">X</a>
+        <a href="https://t.me/alphainteldesk" rel="noopener">Telegram</a>
+        <a href="https://www.youtube.com/@alphainteldesk" rel="noopener">YouTube</a>
+        <a href="/disclosures.html">Disclosures</a>
+      </div>
+    </div>
+    <p>Not financial advice. Prediction markets involve risk, and you can lose money.
+      Some links on this site are referral links and may earn us a commission at no cost to you.</p>
+    <p>&copy; 2026 Alpha Intel Desk</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+  var NAMES = { polymarket: 'Polymarket', kalshi: 'Kalshi', alpha: 'Alpha Arcade' };
+  var money = function (v) { return v >= 1e6 ? '$' + (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? '$' + (v / 1e3).toFixed(1) + 'K' : '$' + Math.round(v); };
+  var vol = function (x) { return x.site === 'kalshi' ? Math.round(x.vol24).toLocaleString('en-US') + ' contracts' : money(x.vol24); };
+  var all = [], filt = 'all';
+  function row(x, i) {
+    var up = x.change > 0, ch = (up ? '+' : '−') + Math.abs(x.change).toFixed(1) + '¢';
+    var w = Math.min(100, Math.abs(x.change) * 2.5);
+    var also = Object.keys(NAMES).filter(function (s) { return s !== x.site; }).map(function (s) {
+      var p = (x.also || {})[s];
+      var u = (x.also_url || {})[s];
+      if (p == null) return '<span class="mv-o"><b>' + NAMES[s] + '</b> <small>no match found</small></span>';
+      return u ? '<a class="mv-o" href="' + esc(u) + '" target="_blank" rel="noopener"><b>' + NAMES[s] + '</b> ' + esc(p.toFixed(1)) + '¢ ↗</a>'
+               : '<span class="mv-o"><b>' + NAMES[s] + '</b> ' + esc(p.toFixed(1)) + '¢</span>';
+    }).join('');
+    return '<div class="mv"><div class="mv-top"><div><div class="mv-t">' + (i + 1) + '. ' + esc(x.title) + '</div>' +
+      '<div class="mv-sub">' + esc(x.outcome) + ' · ' + esc(x.category) + ' · ' + vol(x) + ' traded in 24h</div></div>' +
+      '<div class="mv-ch ' + (up ? 'up' : 'dn') + '">' + (up ? '▲ ' : '▼ ') + esc(ch) + '<small>24H CHANGE</small></div></div>' +
+      '<div class="mv-bar"><i class="' + (up ? 'up' : 'dn') + '" style="width:' + w + '%"></i></div>' +
+      '<div class="mv-px"><a class="mv-site" href="' + esc(x.url) + '" target="_blank" rel="noopener"><b>' + esc(x.name) + '</b> ' +
+      esc(Math.round(x.prev)) + '¢ → <strong>' + esc(x.price.toFixed(1)) + '¢</strong></a>' + also + '</div>' +
+      '<div class="mv-act"><a class="mv-why" href="' + esc(x.why) + '" target="_blank" rel="noopener">WHY? news ↗</a>' +
+      '<button class="gp-sh" data-i="' + i + '">Share &#x2197;</button></div></div>';
+  }
+  function draw() {
+    var list = all.filter(function (x) {
+      return filt === 'all' || x.site === filt || (filt === 'up' && x.change > 0) || (filt === 'down' && x.change < 0);
+    });
+    var b = document.getElementById('board');
+    b.innerHTML = list.length ? list.map(row).join('') : '<p class="note">No moves of 5¢+ with real trading here in the last 24 hours. Checked every 20 minutes.</p>';
+    b.onclick = function (e) {
+      var s = e.target.closest('.gp-sh'); if (!s) return;
+      var x = list[+s.getAttribute('data-i')];
+      window.aidShare('"' + x.title + '" (' + x.outcome + ') moved ' + (x.change > 0 ? '+' : '') + Math.round(x.change) +
+        '¢ in 24h on ' + x.name + ', now ' + Math.round(x.price) + '¢. via @alphainteldesk', 'https://alphainteldesk.com/momentum-scanner.html', s);
+    };
+  }
+  document.getElementById('chips').addEventListener('click', function (e) {
+    var c = e.target.closest('.chip'); if (!c) return;
+    filt = c.getAttribute('data-f');
+    [].forEach.call(document.querySelectorAll('.chip'), function (b) { b.classList.toggle('on', b === c); });
+    draw();
+  });
+  fetch('movers.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    all = d.movers || [];
+    var t = new Date(d.updated), m = Math.max(0, Math.round((Date.now() - t) / 60000));
+    document.getElementById('mv-upd').textContent = 'Last checked ' + t.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) +
+      ' (' + m + ' min ago) · ' + all.length + ' movers';
+    draw();
+  }).catch(function () {
+    document.getElementById('board').innerHTML = '<p class="note">The movers data could not be loaded. Try again in a minute.</p>';
+  });
+})();
+</script>
+<script>
+(function () {   // fresh prices: reload every 10 minutes while open, or on return to a tab left 10+ minutes
+  var t0 = Date.now();
+  setInterval(function () { if (document.visibilityState === 'visible' && Date.now() - t0 > 10 * 60000) location.reload(); }, 60000);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && Date.now() - t0 > 10 * 60000) location.reload();
+  });
+})();
+</script>
+<script>
+(function () {   // Share menu: direct buttons for X, Telegram, WhatsApp, Facebook, Reddit, LinkedIn, copy link, device share
+  var css = document.createElement('style');
+  css.textContent = '.shm{position:fixed;z-index:9999;min-width:210px;background:#0b1420;border:1px solid rgba(63,219,230,.45);' +
+    'border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 14px rgba(63,219,230,.15);padding:6px;font:600 14px "Space Grotesk",sans-serif}' +
+    '.shm a,.shm button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:0;border-radius:5px;background:none;' +
+    'color:#e8eef5;font:inherit;text-align:left;cursor:pointer;text-decoration:none}' +
+    '.shm a:hover,.shm button:hover{background:rgba(63,219,230,.12);text-decoration:none}' +
+    '.shm i{font-style:normal;width:22px;text-align:center;font:800 13px "JetBrains Mono",monospace;color:#3fdbe6}' +
+    '.shm .t{font:700 10px "JetBrains Mono",monospace;letter-spacing:.14em;color:#8fa3b8;padding:4px 10px 6px}';
+  document.head.appendChild(css);
+  var menu = null;
+  function close() { if (menu) { menu.remove(); menu = null; } }
+  window.aidShare = function (text, url, anchor) {
+    close();
+    var e = encodeURIComponent, full = text + ' ' + url;
+    var items = [
+      ['𝕏', 'Post on X', 'https://x.com/intent/post?text=' + e(text) + '&url=' + e(url)],
+      ['✈', 'Telegram', 'https://t.me/share/url?url=' + e(url) + '&text=' + e(text)],
+      ['☎', 'WhatsApp', 'https://wa.me/?text=' + e(full)],
+      ['f', 'Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + e(url)],
+      ['r/', 'Reddit', 'https://www.reddit.com/submit?url=' + e(url) + '&title=' + e(text)],
+      ['in', 'LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + e(url)]
+    ];
+    menu = document.createElement('div'); menu.className = 'shm'; menu.setAttribute('role', 'menu');
+    menu.innerHTML = '<div class="t">SHARE</div>' + items.map(function (it) {
+      return '<a href="' + it[2] + '" target="_blank" rel="noopener" role="menuitem"><i>' + it[0] + '</i>' + it[1] + '</a>';
+    }).join('') + '<button type="button" data-a="copy" role="menuitem"><i>⧉</i>Copy text + link</button>' +
+      (navigator.share ? '<button type="button" data-a="more" role="menuitem"><i>…</i>More apps</button>' : '');
+    document.body.appendChild(menu);
+    var r = anchor.getBoundingClientRect(), mw = menu.offsetWidth, mh = menu.offsetHeight;
+    var left = Math.min(Math.max(8, r.right - mw), innerWidth - mw - 8);
+    var top = r.bottom + 6 + mh > innerHeight ? Math.max(8, r.top - mh - 6) : r.bottom + 6;
+    menu.style.left = left + 'px'; menu.style.top = top + 'px';
+    menu.addEventListener('click', function (ev) {
+      var b = ev.target.closest('button');
+      if (b && b.getAttribute('data-a') === 'copy') {
+        (navigator.clipboard ? navigator.clipboard.writeText(full) : Promise.reject()).then(function () {
+          b.innerHTML = '<i>✓</i>Copied'; setTimeout(close, 900);
+        }).catch(function () { prompt('Copy this:', full); close(); });
+        return;
+      }
+      if (b && b.getAttribute('data-a') === 'more') { navigator.share({ text: text, url: url }).catch(function () {}); }
+      setTimeout(close, 50);
+    });
+  };
+  document.addEventListener('click', function (ev) { if (menu && !menu.contains(ev.target) && !ev.target.closest('.gb-sh,.gp-sh')) close(); }, true);
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') close(); });
+  addEventListener('scroll', close, { passive: true });
+})();
+</script>
+</body>
+</html>

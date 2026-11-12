@@ -20,7 +20,7 @@
 <meta name="twitter:image" content="https://alphainteldesk.com/card.jpg?v=202611121853">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@alphainteldesk">
-<link rel="preload" as="image" href="banner.jpg?v=4">
+<link rel="preload" as="image" href="banner.jpg?v=5">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -206,7 +206,7 @@
   }
   /* ===== Live Intel Desk ===== */
   .desk { position:relative; width:100%; aspect-ratio:3/1; overflow:hidden;
-    background:#0b1420 url(banner.jpg?v=4) center/cover no-repeat; }
+    background:#0b1420 url(banner.jpg?v=5) center/cover no-repeat; }
   .glass { position:absolute; left:0; top:0; transform-origin:0 0; -webkit-font-smoothing:antialiased; text-rendering:geometricPrecision; backface-visibility:hidden;
     padding:5px 8px; border-radius:3px;
     background:rgba(5,11,20,.92); border:1px solid rgba(63,219,230,.55);
@@ -470,11 +470,11 @@
   .gb-h { display:flex; justify-content:space-between; align-items:center; margin-bottom:.35cqw; }
   .gb-t { display:flex; align-items:center; gap:.4cqw; font:800 .8cqw "JetBrains Mono",monospace;
     letter-spacing:.16em; color:var(--amber); text-shadow:0 0 6px rgba(255,179,71,.6); }
-  .gb-s { font:700 .74cqw "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--amber); text-align:right; white-space:nowrap;
+  .gb-s { font:700 .74cqw "JetBrains Mono",monospace; letter-spacing:.05em; color:var(--amber); text-align:right; white-space:nowrap;
     text-shadow:0 0 6px rgba(255,179,71,.35); }
   .gb-tabs { display:flex; gap:.3cqw; }
   .gb-tab { display:flex; align-items:center; gap:.35cqw; background:none; border:1px solid rgba(143,163,184,.25);
-    color:#8fa3b8; font:800 1.15cqw "JetBrains Mono",monospace; letter-spacing:.12em; padding:.3cqw .85cqw;
+    color:#8fa3b8; font:800 1.05cqw "JetBrains Mono",monospace; letter-spacing:.08em; padding:.3cqw .7cqw;
     border-radius:3px; cursor:pointer; white-space:nowrap; }
   .gb-tab:hover { color:#e8eef5; }
   .gb-tab { position:relative; }
@@ -563,6 +563,27 @@
   .radar .blip { animation:blip 4s infinite; opacity:0; }
   @keyframes blip { 0%{opacity:0} 4%{opacity:1} 60%{opacity:.15} 100%{opacity:0} }
   @media (prefers-reduced-motion: reduce) { .radar .sweep, .radar .blip { animation:none; opacity:1; } }
+
+  /* Hero brand block (Nov 12 mockup) */
+  .hero { text-align:center; padding:14px 16px 10px; border-bottom:1px solid var(--line);
+    background:radial-gradient(ellipse at 50% 0%, rgba(255,179,71,.08), transparent 65%); }
+  .hero .sign { position:static; transform:none; display:inline-block; font-size:.78rem; margin-bottom:8px; }
+  .hero-t { font:700 clamp(1.9rem,3.6vw,2.7rem)/1.05 "Space Grotesk",sans-serif; color:#f3f6fa; letter-spacing:-.01em; }
+  .hero-s { margin:4px 0 0; color:#c9d3dc; font-size:clamp(1rem,1.5vw,1.2rem); }
+  @media (max-width:640px) { .hero { padding:16px 12px 10px; } .hero .sign { font-size:.7rem; margin-bottom:8px; } }
+  .desk .mns { left:45.6%; top:93.8%; transform:translateY(-50%); padding-left:0;
+    font:400 max(5px,.8cqw) "JetBrains Mono",monospace; letter-spacing:.4em;
+    color:#d4dbe1; text-shadow:0 1px 3px rgba(0,0,0,.85); }
+  @media (max-width:760px) {
+    .desk { aspect-ratio:1.72/1; background-position:right center; }
+    .desk .mns { left:5.2%; font-size:max(5px,1.4cqw); }
+    .desk .radar { left:69.5%; width:10.2%; }
+  }
+  /* Conflict Radar + Trending: flat, equal boxes in the dark panel left of the office */
+  .glass[data-screen="gap"], .glass[data-screen="trend"] { border-radius:5px; padding:8px 10px; }
+  .glass[data-screen="gap"] .gh, .glass[data-screen="trend"] .gh { font-size:10px; margin-bottom:6px; }
+  .glass[data-screen="trend"] .trend { margin-bottom:3px; }
+  .glass[data-screen="gap"] { font-size:11px; line-height:1.45; }
 </style>
 <link rel="canonical" href="https://alphainteldesk.com/">
 <meta property="og:url" content="https://alphainteldesk.com/">
@@ -583,6 +604,11 @@
     </nav>
   </div>
 </header>
+<section class="hero" aria-label="Alpha Intel Desk">
+  <div class="sign">THE DESK IS OPEN</div>
+  <div class="hero-t">Alpha Intel Desk</div>
+  <p class="hero-s">The only edge you need.</p>
+</section>
 <section class="introband top" aria-label="About Alpha Intel Desk">
   <div class="ib-text">
     <h1>Real-time intelligence for prediction markets</h1>
@@ -671,8 +697,6 @@
 
 <div class="deskwrap">
 <div class="desk" id="desk" role="img" aria-label="Alpha Intel Desk: a trading desk at sunrise with live market screens on the windows">
-  <div class="sign">THE DESK IS OPEN</div>
-  <p class="tagline">The only edge you need.</p>
   <div class="mns">MONEY NEVER SLEEPS</div>
   <div class="radar" aria-hidden="true"><svg viewBox="-100 -100 200 200">
     <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
@@ -724,12 +748,12 @@
     <div class="stamp" id="st-trends">UPDATED EVERY 20 MIN</div>
   </div>
 </div>
-<section class="gapbox" id="gapbox" aria-label="Gap Scanner and Movers">
+<section class="gapbox" id="gapbox" aria-label="Gap Scanner and Momentum Scanner">
   <div class="gb-h"><div class="gb-tabs" role="tablist">
       <button class="gb-tab on" data-t="gaps" role="tab" data-tip="The same question priced differently across Polymarket, Kalshi and Alpha Arcade, after estimated fees. Markets on all three sites come first. More gaps on the full Gap Scanner page. Checked every 20 minutes."><i class="ldot"></i>GAP SCANNER</button>
-      <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news."><i class="ldot"></i>MOVERS</button>
+      <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news."><i class="ldot"></i>MOMENTUM SCANNER</button>
 </div>
-    <span class="gb-s"><span id="gb-sub">PRICE GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
+    <span class="gb-s"><span id="gb-sub">GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
   <div class="gb-cols" id="gb-cols"></div>
   <div id="gb-rows"><div class="gb-empty">Scanning Polymarket, Kalshi and Alpha Arcade&hellip;</div></div>
   <div class="gb-f"><span><span id="gb-note">No sports · fees estimated · check each site's rules before you trade</span>
@@ -925,8 +949,8 @@
     crypto:  [[43.6,8.6],[53.0,10.4],[53.0,38.0],[43.6,37.4]],
     markets: [[54.3,10.7],[62.6,12.3],[62.6,38.6],[54.3,38.2]],
     macro:   [[63.7,12.5],[68.9,13.5],[68.9,39.0],[63.7,38.8]],
-    gap:     [[69.9,13.1],[83.7,7.3],[83.7,51.8],[69.9,51.7]],   /* Nov 12: Conflict Radar on the left pane */
-    trend:   [[85.0,6.6],[99.2,2.4],[99.2,52.0],[85.0,51.9]]      /* Trending on Google on the right */
+    gap:     [[0.7,4.0],[21.1,4.0],[21.1,44.6],[0.7,44.6]],      /* Conflict Radar: flat box, left panel */
+    trend:   [[21.9,4.0],[42.3,4.0],[42.3,44.6],[21.9,44.6]]     /* Trending on Google: flat box beside it */
   };
   var REF = 1200; /* screens are designed at a 1200 px-wide photo, then scaled */
 
@@ -1074,7 +1098,7 @@
   var c = function (p) { return p == null ? '&ndash;' : esc(Math.round(p)) + '&cent;'; };
   var ago = function (s) {                                 // "UPDATED 4 MIN AGO"
     var m = Math.max(0, Math.round((Date.now() - new Date(s).getTime()) / 60000));
-    return 'UPDATED ' + (m < 1 ? 'JUST NOW' : m < 60 ? m + ' MIN AGO' : Math.floor(m / 60) + 'H ' + (m % 60) + 'M AGO');
+    return (m < 1 ? 'JUST NOW' : m < 60 ? m + ' MIN AGO' : Math.floor(m / 60) + 'H ' + (m % 60) + 'M AGO');
   };
   setInterval(function () { var d = data[cur]; if (d && d.updated) document.getElementById('gb-upd').textContent = ago(d.updated); }, 30000);
   var money = function (v) { v = +v || 0; return '$' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? (v / 1e3).toFixed(1) + 'K' : Math.round(v)); };
@@ -1084,7 +1108,7 @@
   var SITE = 'https://alphainteldesk.com/';
   var data = {}, shares = [];
   var TABS = {
-    gaps: { file: 'gaps.json', sub: 'PRICE GAPS AFTER FEES',
+    gaps: { file: 'gaps.json', sub: 'GAPS AFTER FEES',
       cols: '<span>MARKET</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>GAP</span><span></span>',
       note: "All 3 sites first · no sports · fees estimated · check each site's rules before you trade",
       go: ['/gap-scanner.html', 'OPEN GAP SCANNER &rarr;'],
@@ -1133,7 +1157,7 @@
       '<span class="gb-p">' + c(x.price) + '</span>' +
       '<span class="gb-p ' + (up ? 'lo' : 'hi') + '">' + esc(ch) + '</span>' +
       '<a class="gb-why" href="' + esc(x.why) + '" target="_blank" rel="noopener">WHY?</a>' +
-      shareBtn(txt, SITE + 'movers.html') + '</div>';
+      shareBtn(txt, SITE + 'momentum-scanner.html') + '</div>';
   }
   function show(t) {
     var T = TABS[t], d = data[t];
@@ -1161,9 +1185,9 @@
         '<a class="gb-more" href="/gap-scanner.html">Click here for more price gaps <span>OPEN GAP SCANNER &rarr;</span></a>';
       return;
     }
-    list = (d.movers || []).slice(0, 3);                 // Nov 10: 3 rows + a link to the full Movers page, like the gaps tab
+    list = (d.movers || []).slice(0, 3);                 // Nov 10: 3 rows + a link to the full Momentum Scanner page (renamed from Movers Nov 12), like the gaps tab
     box.innerHTML = (list.length ? list.map(moverRow).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
-      '<a class="gb-more" href="/movers.html">Click here for more movers <span>OPEN MOVERS &rarr;</span></a>';
+      '<a class="gb-more" href="/momentum-scanner.html">Click here for more big moves <span>OPEN MOMENTUM SCANNER &rarr;</span></a>';
   }
   var cur = location.hash === '#movers' ? 'movers' : 'gaps';
   function load() {                                        // first load, then fresh data every 5 minutes (no page reload)
