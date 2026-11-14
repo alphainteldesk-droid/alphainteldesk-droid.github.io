@@ -299,12 +299,14 @@ def alpha_first(alpha, poly):
                 how += " > link name"
             except Exception as err:
                 how += " > link name failed (%s)" % str(err)[:40]
-        best = (0, None)
+        best, seen = (0, None), []
         for ev in raw:
             try:
                 e = poly_event(ev)
             except Exception:
                 e = None
+            if e and len(seen) < 3:
+                seen.append("%s [%s%s]" % (e["title"][:38], why(a, e), " had" if e["url"] in have else ""))
             if not e or e["url"] in have:
                 continue
             sc = score(a, e)[0]
@@ -314,7 +316,7 @@ def alpha_first(alpha, poly):
                 have.add(e["url"])
                 poly.append(e)
                 added += 1
-        print("  ALPHA-FIRST %3d | %s | %s | P: %s" % (best[0], a["title"][:44], how, (best[1] or {}).get("title", "-")[:48]))
+        print("  ALPHA-FIRST %3d | %s | %s | P: %s" % (best[0], a["title"][:44], how, " || ".join(seen) or "-"))
     print("Alpha-first: %d Alpha markets had no Polymarket match in the main list, looked up %d, added %d Polymarket events (%.0fs)"
           % (len(todo), tried, added, time.time() - t0))
 
@@ -647,6 +649,16 @@ def best_match(a, events, idx):
         if s > best[0]:
             best = (s, fl, om, e)
     return best
+
+
+def why(a, e):
+    """Log helper (Nov 14): 'score / days apart / DATE-GATE' for one Alpha market against one event."""
+    ends = [x for x in [e["end"]] + list((e.get("ends") or {}).values()) +
+            [label_date(k) for k in list(e["outcomes"])[:40]] if x]
+    away = max(0.0, a["end"] - n.timestamp())
+    d = min(abs(a["end"] - x) for x in ends) if a["end"] and ends else 0
+    gate = d > max(4 * 86400, away * 0.15)
+    return "%d/%dd%s" % (score(a, e)[0], d / 86400, "/DATE-GATE" if gate else "")
 
 
 SPORTY = ("sport", "esports", "soccer", "football", "basketball", "baseball", "hockey", "nfl", "nba", "mls",
@@ -1018,7 +1030,12 @@ def main():
                 print("  KALSHI-HAS nothing | %s" % t[:50])
                 continue
             w = ws[0]
-            print("  KALSHI-HAS '%s' x%d | %s | %s" % (w, len(kw[w]), t[:44], " || ".join(x[:60] for x in kw[w][:5])))
+            a0 = next(x for x in alpha if x["title"] == t)
+            aw = set(key_words(t))
+            top = sorted([ev for ev in sites["kalshi"] if w in key_words(ev["title"] + " " + (ev.get("alt") or ""))],
+                         key=lambda ev: -len(aw & set(key_words(ev["title"]))))[:4]
+            print("  KALSHI-HAS '%s' x%d | %s | %s" % (w, len(kw[w]), t[:44],
+                                                    " || ".join("%s [%s]" % (ev["title"][:52], why(a0, ev)) for ev in top)))
     except Exception as err:
         print("Kalshi subject check failed:", err)
     used = {r["sites"]["polymarket"]["url"] for r in out if "polymarket" in r["sites"]}
