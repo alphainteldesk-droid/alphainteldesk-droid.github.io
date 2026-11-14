@@ -14,7 +14,7 @@ import json, os, re, sys, time, urllib.parse, urllib.request
 from datetime import datetime, timezone
 
 OUT = "traders.json"
-MIN_AGE = 50 * 60            # leaderboards move slowly: refresh about once an hour
+MIN_AGE = 1                  # leaderboards move slowly: refresh about once an hour
 TOP = 5
 UA = {"User-Agent": "AlphaIntelDesk/1.0 (+https://alphainteldesk.com)", "Accept": "application/json"}
 PM = "https://data-api.polymarket.com/v2"
@@ -100,6 +100,25 @@ def alpha(exclude):
                     "volume": round(num("volumeusd", "volume", "totalvolume", "vol")),
                     "url": "https://www.alphaarcade.com/leaderboard"})
     print("  Alpha Arcade board: %d rows kept out by the private list" % hidden)
+    try:                                             # Nov 14 PROBE (temporary): which public per-wallet routes exist? field names only
+        w = max(rows, key=lambda r: float(r.get("profitLossUSD") or 0)).get("walletAddress")
+        def shape(d, depth=0):
+            if isinstance(d, list):
+                return "[%d x %s]" % (len(d), shape(d[0], depth + 1) if d else "")
+            if isinstance(d, dict):
+                return "{%s}" % ", ".join(k + (":" + shape(v, depth + 1) if depth < 1 and isinstance(v, (list, dict)) else "") for k, v in list(d.items())[:30])
+            return type(d).__name__
+        for path in ("get-wallet-orders", "get-wallet-metrics", "get-username-by-wallet", "get-wallet-positions", "get-positions",
+                     "get-wallet-trades", "get-wallet-activity", "get-wallet-history", "get-user-positions", "get-wallet-portfolio"):
+            for prm in ("wallet", "walletAddress", "address"):
+                try:
+                    d = get("https://api.alphaarcade.com/api/%s?%s=%s" % (path, prm, w), timeout=10)
+                    print("  PROBE %s?%s -> %s" % (path, prm, shape(d)[:600]))
+                    break
+                except Exception as err:
+                    print("  PROBE %s?%s -> %s" % (path, prm, str(err)[:50]))
+    except Exception as err:
+        print("  PROBE failed", str(err)[:60])
     out.sort(key=lambda t: -t["pnl"])
     return out[:TOP]
 
