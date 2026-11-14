@@ -70,7 +70,10 @@ def fine_grade(row, lo, hi):
     srcs = sorted({n for f in fps for n in f["srcs"]})
     void = "check" if any(f["void"] == "check" for f in fps) else "same" if all(f["void"] == "same" for f in fps) else "none"
     grade = "A" if src == "match" and void != "check" else "B"
-    return grade, {"src": src, "srcs": srcs[:4], "void": void}
+    fine = {"src": src, "srcs": srcs[:4], "void": void}
+    if fps and all(f.get("twin") for f in fps):
+        fine["twin"] = True                             # Nov 14: same rules text on both sites
+    return grade, fine
 
 
 def fair_price(row, ps):

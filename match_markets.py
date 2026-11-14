@@ -523,6 +523,14 @@ SOURCES = [
     ("Box Office Mojo", "data", r"box office mojo"), ("The Numbers", "data", r"the-numbers|the numbers\b"),
     ("Billboard", "data", r"billboard"), ("Spotify", "data", r"spotify"), ("Google Trends", "data", r"google trends"),
     ("Christie's", "data", r"christie"), ("Sotheby's", "data", r"sotheby"), ("Wikipedia", "data", r"wikipedia"),
+    # Nov 14 (from fine_watch.json, the wording both sites actually use):
+    ("ESPN", "sports", r"\bespn\b"), ("DAZN", "sports", r"\bdazn\b"), ("Tapology", "sports", r"tapology"),
+    ("CF Benchmarks", "crypto", r"cf benchmarks|\bbrti\b"), ("Library of Congress", "gov", r"library of congress"),
+    ("Rotten Tomatoes", "data", r"rotten tomatoes"), ("Recording Academy", "data", r"recording academy"),
+    ("Academy (AMPAS)", "data", r"academy of motion picture|\bampas\b"), ("CMA Awards", "data", r"cma awards|country music association"),
+    ("IMF PortWatch", "data", r"portwatch"), ("French Constitutional Council", "gov", r"conseil constitutionnel|constitutional council"),
+    ("World Health Organization", "gov", r"world health organization"),
+    ("Credible reporting", "news", r"consensus of credible (?:reporting|sources)"),
 ]
 CANCEL = r"50[-/ ]?50|fifty[- ]fifty|refund|\bvoid|cancel|postpone|annul"
 RANK = {"match": 0, "similar": 1, "unknown": 2, "differ": 3}
@@ -569,7 +577,11 @@ def fine_print(ra, rb):
         src = "differ"
     ca, cb = bool(_re.search(CANCEL, (ra or "").lower())), bool(_re.search(CANCEL, (rb or "").lower()))
     void = "same" if ca and cb else "check" if ca != cb else "none"
-    return {"src": src, "srcs": both or sorted(set(a) | set(b)), "void": void}
+    out = {"src": src, "srcs": both or sorted(set(a) | set(b)), "void": void}
+    if rules_twin(ra, rb) >= 0.9:                        # Nov 14: the two sites publish the same rules word for word,
+        out.update(src="match", twin=True)               # so source, deadline and cancel rules are the same by definition
+        out["void"] = "none" if void == "check" else void
+    return out
 
 
 def score(a, e):

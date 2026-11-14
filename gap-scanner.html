@@ -162,8 +162,8 @@
   <div class="quick top" id="how" aria-label="How it works">
     <div class="q1"><b>Gap after fees</b><span>Same outcome, two sites, different price. We subtract each site's trading fee. What's left is the real gap.</span></div>
     <div class="q1"><b>Fair price</b><span>Our best guess at what it's really worth: the sites' prices blended, trusting the busiest site most.</span></div>
-    <div class="q1"><b>Graded <i class="gr gr-A">A</i> <i class="gr gr-B">B</i></b><span>We check each site's rules: dates, thresholds, who decides the answer, cancel rules. A = all match. B = read the rules.</span></div>
-    <div class="q1"><b>Which gaps show</b><span>Real matches with real trading, 1¢+ after fees. All three sites first. Checked every 20 min. No sports.</span></div>
+    <div class="q1"><b>Graded <i class="gr gr-A">A</i> <i class="gr gr-B">B</i></b><span>We check each site's rules: dates, thresholds, who decides the answer, cancel rules. A = all match, or the same rules word for word. B = read the rules.</span></div>
+    <div class="q1"><b>Which gaps show</b><span>Real matches with real trading and a tight bid/ask, 1¢+ after fees. All three sites first. Checked every 20 min. No sports.</span></div>
   </div>
   <p class="note">Gaps can close at any time. Not financial advice. Always check each site's rules before you trade.</p>
   <p class="note" id="gr-updated"></p>
@@ -204,9 +204,17 @@
 
   <h3 class="sub" id="grades">Grades (A / B)</h3>
   <div class="fee-tbl" role="table" aria-label="Fine-print grades">
-    <div class="fr fg" role="row"><span><b class="gr gr-A">GRADED A</b></span><span>Every check passed, and both sites name the same resolution source.</span></div>
+    <div class="fr fg" role="row"><span><b class="gr gr-A">GRADED A</b></span><span>Every check passed, and both sites name the same resolution source, or they publish the same rules word for word.</span></div>
     <div class="fr fg" role="row"><span><b class="gr gr-B">GRADED B</b></span><span>Every check we can run passed, but one site doesn't name its source, they use different news outlets, or only one says what happens if it's cancelled.</span></div>
     <div class="fr fg" role="row"><span><b>Not shown</b></span><span>Different deadline, threshold, scope or resolution source. That isn't a real gap.</span></div>
+  </div>
+  <h3 class="sub" id="filters">What we leave out</h3>
+  <div class="fee-tbl" role="table" aria-label="Prices and markets left out of the scanner">
+    <div class="fr fg" role="row"><span><b>Wide bid/ask</b></span><span>If the best bid and ask are more than 10¢ apart, the midpoint isn't a price anyone can trade, so we skip it.</span></div>
+    <div class="fr fg" role="row"><span><b>No recent trade</b></span><span>An Alpha Arcade price with no trade in 48 hours is treated as stale.</span></div>
+    <div class="fr fg" role="row"><span><b>Mismatched outcomes</b></span><span>If two sites disagree by more than 40¢ on any outcome, the outcomes don't line up and the whole pair is dropped.</span></div>
+    <div class="fr fg" role="row"><span><b>Combo markets</b></span><span>Two events in one question ("A &amp; B") rarely mean the same thing on two sites.</span></div>
+    <div class="fr fg" role="row"><span><b>Deadline ladders</b></span><span>"By…?" markets are compared deadline by deadline: December 31 against December 31, never against March 31.</span></div>
   </div>
   <p class="note">Matching and grades are automatic, from each site's published rules. Kalshi, Polymarket and Alpha Arcade
     side by side: other gap trackers skip Alpha Arcade.</p>
@@ -256,7 +264,8 @@
   function finePrint(g) {        // Nov 10: fine-print grade line under each gap
     if (!g.grade || !g.fine) return '';
     var f = g.fine, ok = '<i class="ok">✓</i>', q = '<i class="q">?</i>';
-    var src = f.src === 'match' ? ok + 'source: ' + esc(f.srcs.join(', ')) + ' on both'
+    var src = f.twin ? ok + 'same rules, word for word'
+      : f.src === 'match' ? ok + 'source: ' + esc(f.srcs.join(', ')) + ' on both'
       : f.src === 'similar' ? q + 'sources: ' + esc(f.srcs.join(', ')) + ' (different outlets)'
       : q + 'source not named on both sites';
     var vd = f.void === 'check' ? q + 'cancel rules: only one site says' : ok + 'cancel rules';
