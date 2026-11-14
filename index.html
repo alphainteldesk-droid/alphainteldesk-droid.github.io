@@ -79,6 +79,21 @@
   #gb-health { margin-left:8px; font:700 .68rem "JetBrains Mono",monospace; letter-spacing:.08em; color:#3ee88a; text-decoration:none; }
   #gb-health.warn { color:var(--amber); } #gb-health i { display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor; margin-right:5px; vertical-align:1px; }
   .gb-g.nofill { opacity:.5; text-decoration:line-through; }
+  /* Nov 13: newsroom wire + clocks under the title */
+  .hwire { display:flex; justify-content:center; align-items:center; gap:12px; margin:8px auto 0; max-width:900px;
+    font:500 clamp(.82rem,1.15vw,1rem)/1.3 "JetBrains Mono",monospace; color:#dfe8f0; min-height:1.6em; }
+  .hw-tag { flex:none; display:inline-flex; align-items:center; gap:6px; font-weight:800; font-size:.72em; letter-spacing:.16em;
+    color:var(--cyan); border:1px solid rgba(63,219,230,.55); border-radius:3px; padding:3px 7px; }
+  .hw-tag i { width:6px; height:6px; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px var(--cyan); animation:hwDot 1.4s ease-in-out infinite; }
+  @keyframes hwDot { 50% { opacity:.25; } }
+  .hw-line { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; min-width:0; }
+  .hw-cur { color:var(--amber); font-weight:400; animation:hwBlink 1s steps(1) infinite; margin-left:1px; }
+  @keyframes hwBlink { 50% { opacity:0; } }
+  .hclocks { display:flex; justify-content:center; gap:22px; margin-top:7px; font:600 .7rem "JetBrains Mono",monospace;
+    letter-spacing:.14em; color:var(--muted); }
+  .hclocks b { color:#e8eef5; font-weight:700; margin-left:5px; letter-spacing:.06em; }
+  @media (max-width:640px) { .hwire { gap:8px; } .hw-tag { display:none; } .hclocks { gap:12px; font-size:.62rem; } }
+  @media (prefers-reduced-motion: reduce) { .hw-tag i, .hw-cur { animation:none; } }
   /* Top intro bar (Nov 10): first thing visitors see, above the ticker */
   .introband.top { padding:16px 20px 12px; border-bottom:1px solid var(--line); }
   .introband.top .ib-text h1 { margin:0 0 8px; }
@@ -615,7 +630,16 @@
 <section class="hero" aria-label="Alpha Intel Desk">
   <div class="sign">THE DESK IS OPEN</div>
   <div class="hero-t">Alpha Intel Desk</div>
-  <p class="hero-s">The only edge you need.</p>
+  <!-- Nov 13: live newsroom wire (replaces the tagline): real facts from the site's own data, typed like a teletype -->
+  <div class="hwire" aria-live="off">
+    <span class="hw-tag"><i></i>ON THE WIRE</span>
+    <span class="hw-line"><span id="hw-txt"></span><b class="hw-cur">▍</b></span>
+  </div>
+  <div class="hclocks" aria-label="World market clocks">
+    <span>NEW YORK <b data-tz="America/New_York">--:--</b></span>
+    <span>LONDON <b data-tz="Europe/London">--:--</b></span>
+    <span>TOKYO <b data-tz="Asia/Tokyo">--:--</b></span>
+  </div>
 </section>
 <section class="introband top" aria-label="About Alpha Intel Desk">
   <div class="ib-text">
@@ -1459,6 +1483,41 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
   a.innerHTML = '<i></i>' + (down.length ? down.join(', ').toUpperCase() + ' DELAYED' : 'ALL FEEDS LIVE');
   a.className = down.length ? 'warn' : ''; a.title = 'Feed health, checked every update'; a.hidden = false;
 }).catch(function () {});
+</script>
+<script>
+/* Nov 13: "ON THE WIRE" - facts built only from our own live data files, typed out one at a time */
+(function () {
+  var el = document.getElementById('hw-txt'); if (!el) return;
+  var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function clocks() {
+    [].forEach.call(document.querySelectorAll('.hclocks b'), function (b) {
+      b.textContent = new Date().toLocaleTimeString('en-US', { timeZone: b.getAttribute('data-tz'), hour: 'numeric', minute: '2-digit' });
+    });
+  }
+  clocks(); setInterval(clocks, 30000);
+  var J = function (u) { return fetch(u + '?v=' + Date.now()).then(function (r) { return r.json(); }).catch(function () { return {}; }); };
+  var ago = function (s) { var m = Math.max(1, Math.round((Date.now() - new Date(s)) / 60000)); return m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago'; };
+  Promise.all([J('gaps.json'), J('movers.json'), J('calendar.json'), J('health.json')]).then(function (r) {
+    var g = (r[0].gaps || []).filter(function (x) { return !(x.fill && !x.fill.usd); }), mv = r[1].movers || [],
+        cal = (r[2].items || []).filter(function (e) { return e.kind === 'scheduled' && new Date(e.date) > Date.now(); }), h = r[3];
+    var lines = [];
+    if (h.feeds) lines.push((h.all_ok ? 'All feeds live' : (h.down || []).join(', ') + ' delayed') + ' · checked ' + ago(h.updated) + ' · Polymarket, Kalshi, Alpha Arcade');
+    if (g.length) lines.push(g.length + ' price gaps after fees · largest ' + g[0].net.toFixed(1) + '¢: ' + g[0].title.replace(/\?$/, ''));
+    if (mv.length) { var m = mv[0]; lines.push('Biggest mover ' + (m.change > 0 ? '▲ +' : '▼ ') + m.change.toFixed(1) + '¢ in 24h (' + m.name + '): ' + m.title.replace(/\?$/, '')); }
+    if (cal.length) { var c = cal[0], d = new Date(c.date);
+      lines.push('Next on the calendar · ' + d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + ': ' + c.name); }
+    if (!lines.length) lines.push('The desk is open: real-time intelligence for prediction markets');
+    var i = 0;
+    function type(t, k) {
+      if (still) { el.textContent = t; return setTimeout(next, 6000); }
+      el.textContent = t.slice(0, k);
+      if (k < t.length) return setTimeout(function () { type(t, k + 1); }, 28);
+      setTimeout(next, 4200);
+    }
+    function next() { type(lines[i % lines.length], 0); i++; }
+    next();
+  });
+})();
 </script>
 </body>
 </html>
