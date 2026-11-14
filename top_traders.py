@@ -6,9 +6,9 @@ Writes traders.json for the homepage. Public leaderboards only:
   Kalshi      public social leaderboard (last 7 days, by profit)
   Alpha Arcade  the site's own leaderboard (by profit)
 
-PRIVACY: the Alpha Arcade board is only published when the TRADERS_EXCLUDE secret is set
-(comma-separated names / wallet addresses that must never appear). No secret = no Alpha board.
-Nothing from the Alpha board is ever printed to the log.
+The Alpha Arcade board is the site's public leaderboard, shown as is. The optional TRADERS_EXCLUDE
+secret (comma-separated names / wallet addresses) keeps listed accounts off it.
+Nothing from the Alpha board is printed to the log except field names.
 """
 import json, os, re, sys, time, urllib.parse, urllib.request
 from datetime import datetime, timezone
@@ -100,9 +100,6 @@ def alpha(exclude):
                     "volume": round(num("volume", "totalvolume", "vol")),
                     "url": "https://www.alphaarcade.com/leaderboard"})
     print("  Alpha Arcade board: %d rows kept out by the private list" % hidden)
-    if not hidden:                                   # fail closed: if the private list matched nobody we cannot be sure
-        print("  Alpha Arcade board: the private list matched no row, so the board is NOT published")
-        return []
     out.sort(key=lambda t: -t["pnl"])
     return out[:TOP]
 
@@ -124,15 +121,11 @@ def main():
         except Exception as err:
             print("Top traders: %s failed: %s" % (site, str(err)[:120]))
             out[site] = old.get(site) or []          # keep the last good board rather than an empty card
-    if exclude:
-        try:
-            out["alpha"] = alpha(exclude)
-        except Exception as err:
-            print("Top traders: alpha failed: %s" % str(err)[:120])
-            out["alpha"] = old.get("alpha") or []
-    else:
-        print("Top traders: TRADERS_EXCLUDE is not set, so the Alpha Arcade board is NOT published")
-        out["alpha"] = []
+    try:                                             # Nov 14: owner's call - the public board is shown as is;
+        out["alpha"] = alpha(exclude)                # TRADERS_EXCLUDE stays as an optional private list
+    except Exception as err:
+        print("Top traders: alpha failed: %s" % str(err)[:120])
+        out["alpha"] = old.get("alpha") or []
     json.dump(out, open(OUT, "w"), ensure_ascii=False, indent=1)
     print("Top traders: Polymarket %d, Kalshi %d, Alpha Arcade %d"
           % (len(out["polymarket"]), len(out["kalshi"]), len(out["alpha"])))
