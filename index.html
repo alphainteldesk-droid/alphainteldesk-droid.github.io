@@ -9,6 +9,8 @@
   gtag('js', new Date());
   gtag('config', 'G-D8TDJGLE2W');
 </script>
+<!-- GoatCounter: public visitor counter (Nov 14) -->
+<script data-goatcounter="https://alphainteldesk.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Alpha Intel Desk | Prediction Market Intelligence</title>
@@ -1526,12 +1528,16 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
   clocks(); setInterval(clocks, 20000);
   var J = function (u) { return fetch(u + '?v=' + Date.now()).then(function (r) { return r.json(); }).catch(function () { return {}; }); };
   var ago = function (s) { var m = Math.max(1, Math.round((Date.now() - new Date(s)) / 60000)); return m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago'; };
-  Promise.all([J('gaps.json'), J('movers.json'), J('calendar.json'), J('health.json')]).then(function (r) {
+  /* Nov 14: visitors in the last 30 days, from GoatCounter's public counter; stays hidden if it isn't available */
+  var V = fetch('https://alphainteldesk.goatcounter.com/counter/TOTAL.json?start=month').then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
+  Promise.all([J('gaps.json'), J('movers.json'), J('calendar.json'), J('health.json'), V]).then(function (r) {
     var g = (r[0].gaps || []).filter(function (x) { return !(x.fill && !x.fill.usd); }), mv = r[1].movers || [],
         cal = (r[2].items || []).filter(function (e) { return e.kind === 'scheduled' && new Date(e.date) > Date.now(); }), h = r[3];
     var lines = [];
     if (h.feeds) lines.push({ t: (h.all_ok ? 'All feeds live' : (h.down || []).join(', ') + ' delayed') + ' · checked ' + ago(h.updated) + ' · Polymarket, Kalshi, Alpha Arcade',
                               u: '#gapbox', c: 'SEE THE DESK ↓' });
+    var vc = r[4] && r[4].count ? String(r[4].count) : '';
+    if (vc && parseInt(vc.replace(/\D/g, ''), 10) > 0) lines.push({ t: '\uD83D\uDC41 ' + vc + ' visitors to the desk in the last 30 days', u: '/about.html', c: 'ABOUT THE DESK \u2192' });
     if (g.length) lines.push({ t: g.length + ' price gaps after fees · largest ' + g[0].net.toFixed(1) + '¢: ' + g[0].title.replace(/\?$/, ''),
                                u: '/gap-scanner.html', c: 'OPEN GAP SCANNER →' });
     if (mv.length) { var m = mv[0]; lines.push({ t: 'Biggest mover ' + (m.change > 0 ? '▲ +' : '▼ ') + m.change.toFixed(1) + '¢ in 24h (' + m.name + '): ' + m.title.replace(/\?$/, ''),
