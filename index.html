@@ -90,8 +90,13 @@
   .hw-tag.beat i::after { animation:hwRing .9s ease-out; }
   @keyframes hwBeat { 0% { box-shadow:0 0 0 rgba(63,219,230,0); } 30% { box-shadow:0 0 16px rgba(63,219,230,.75); background:rgba(63,219,230,.16); } 100% { box-shadow:0 0 0 rgba(63,219,230,0); } }
   @keyframes hwRing { 0% { transform:scale(1); opacity:.9; } 100% { transform:scale(4.2); opacity:0; } }
-  .hw-line { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; min-width:0; }
-  .hw-line { display:block; } #hw-txt { display:inline-block; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:bottom; }
+  /* Nov 13: each fact is a link that pulses like the "Click here for more price gaps" row */
+  .hw-line { display:flex !important; align-items:center; gap:12px; min-width:0; text-align:left; text-decoration:none; color:#dfe8f0;
+    border:1px dashed rgba(63,219,230,.4); border-radius:3px; padding:4px 10px; animation:gbblip 2.4s ease-in-out infinite; }
+  .hw-line:hover { background:rgba(63,219,230,.14); text-decoration:none; animation-play-state:paused; color:#fff; }
+  .hw-cta { flex:none; color:var(--amber); font-weight:700; font-size:.78em; letter-spacing:.1em; white-space:nowrap; }
+  @media (prefers-reduced-motion: reduce) { .hw-line { animation:none; } }
+  #hw-txt { min-width:0; flex:1 1 auto;  display:inline-block; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:bottom; }
   #hw-txt.in { animation:hwIn .9s ease-out; }
   @keyframes hwIn { 0% { opacity:0; filter:blur(3px); text-shadow:0 0 14px rgba(63,219,230,.9); }
     35% { opacity:1; filter:none; text-shadow:0 0 10px rgba(63,219,230,.7); } 100% { text-shadow:none; } }
@@ -645,7 +650,7 @@
   <!-- Nov 13: DESK PULSE - real facts from the site's own data, a new one with each pulse; analog world clocks -->
   <div class="hwire" aria-live="off">
     <span class="hw-tag" id="hw-tag"><i></i>DESK PULSE</span>
-    <span class="hw-line"><span id="hw-txt"></span></span>
+    <a class="hw-line" id="hw-a" href="/gap-scanner.html"><span id="hw-txt"></span><span class="hw-cta" id="hw-cta"></span></a>
   </div>
   <div class="hclocks" aria-label="World market clocks">
     <div class="ck" data-tz="America/New_York"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>NEW YORK</span><b>--:--</b></div>
@@ -1525,15 +1530,20 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
     var g = (r[0].gaps || []).filter(function (x) { return !(x.fill && !x.fill.usd); }), mv = r[1].movers || [],
         cal = (r[2].items || []).filter(function (e) { return e.kind === 'scheduled' && new Date(e.date) > Date.now(); }), h = r[3];
     var lines = [];
-    if (h.feeds) lines.push((h.all_ok ? 'All feeds live' : (h.down || []).join(', ') + ' delayed') + ' · checked ' + ago(h.updated) + ' · Polymarket, Kalshi, Alpha Arcade');
-    if (g.length) lines.push(g.length + ' price gaps after fees · largest ' + g[0].net.toFixed(1) + '¢: ' + g[0].title.replace(/\?$/, ''));
-    if (mv.length) { var m = mv[0]; lines.push('Biggest mover ' + (m.change > 0 ? '▲ +' : '▼ ') + m.change.toFixed(1) + '¢ in 24h (' + m.name + '): ' + m.title.replace(/\?$/, '')); }
+    if (h.feeds) lines.push({ t: (h.all_ok ? 'All feeds live' : (h.down || []).join(', ') + ' delayed') + ' · checked ' + ago(h.updated) + ' · Polymarket, Kalshi, Alpha Arcade',
+                              u: '#gapbox', c: 'SEE THE DESK ↓' });
+    if (g.length) lines.push({ t: g.length + ' price gaps after fees · largest ' + g[0].net.toFixed(1) + '¢: ' + g[0].title.replace(/\?$/, ''),
+                               u: '/gap-scanner.html', c: 'OPEN GAP SCANNER →' });
+    if (mv.length) { var m = mv[0]; lines.push({ t: 'Biggest mover ' + (m.change > 0 ? '▲ +' : '▼ ') + m.change.toFixed(1) + '¢ in 24h (' + m.name + '): ' + m.title.replace(/\?$/, ''),
+                                                  u: '/momentum-scanner.html', c: 'OPEN MOMENTUM SCANNER →' }); }
     if (cal.length) { var c = cal[0], d = new Date(c.date);
-      lines.push('Next on the calendar · ' + d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + ': ' + c.name); }
-    if (!lines.length) lines.push('The desk is open: real-time intelligence for prediction markets');
+      lines.push({ t: 'Next on the calendar · ' + d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + ': ' + c.name,
+                   u: '#calendar', c: 'OPEN CALENDAR ↓' }); }
+    if (!lines.length) lines.push({ t: 'The desk is open: real-time intelligence for prediction markets', u: '/gap-scanner.html', c: 'OPEN GAP SCANNER →' });
     var i = 0, tag = document.getElementById('hw-tag');
     function next() {                                   // each pulse brings in the next fact
-      el.textContent = lines[i % lines.length]; i++;
+      var x = lines[i % lines.length]; i++;
+      el.textContent = x.t; document.getElementById('hw-a').href = x.u; document.getElementById('hw-cta').textContent = x.c;
       if (!still) {
         el.classList.remove('in'); tag.classList.remove('beat'); void el.offsetWidth;
         el.classList.add('in'); tag.classList.add('beat');
