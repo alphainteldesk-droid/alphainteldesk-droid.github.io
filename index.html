@@ -204,6 +204,16 @@
   .mk li { padding: 10px 0; border-top: 1px solid var(--line); }
   .mk li:first-child { border-top: 0; padding-top: 0; }
   .mk a { color: var(--text); font-weight: 500; }
+  /* Upcoming expirations: alarm beacons beside the heading (Nov 14) */
+  .exp-h { display:flex; align-items:center; gap:14px; }
+  .beacon { flex:none; width:16px; height:16px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #ffe2a8, var(--amber) 55%, #7a4a00);
+    box-shadow:0 0 0 0 rgba(255,176,32,.7); animation:beacon 1.6s ease-out infinite; }
+  .beacon.b2 { animation-delay:.8s; }
+  @keyframes beacon { 0% { opacity:1; box-shadow:0 0 6px 2px rgba(255,176,32,.9), 0 0 0 0 rgba(255,176,32,.6); } 55% { opacity:.35; box-shadow:0 0 2px 0 rgba(255,176,32,.2), 0 0 0 14px rgba(255,176,32,0); } 100% { opacity:1; box-shadow:0 0 6px 2px rgba(255,176,32,.9), 0 0 0 0 rgba(255,176,32,0); } }
+  .urgent .beacon { background:radial-gradient(circle at 35% 30%, #ffc9c9, #ff3b3b 55%, #7a0000); animation:beaconR .8s ease-out infinite; }
+  .urgent .beacon.b2 { animation-delay:.4s; }
+  @keyframes beaconR { 0% { opacity:1; box-shadow:0 0 8px 3px rgba(255,59,59,.95), 0 0 0 0 rgba(255,59,59,.7); } 55% { opacity:.3; box-shadow:0 0 2px 0 rgba(255,59,59,.2), 0 0 0 16px rgba(255,59,59,0); } 100% { opacity:1; box-shadow:0 0 8px 3px rgba(255,59,59,.95), 0 0 0 0 rgba(255,59,59,0); } }
+  @media (prefers-reduced-motion:reduce) { .beacon, .urgent .beacon { animation:none; } }
   /* Top Traders (Nov 14) */
   .tt { list-style:none; margin:8px 0 0; padding:0; }
   .tt li { display:flex; gap:10px; padding:8px 0; border-top:1px solid var(--line); }
@@ -216,6 +226,16 @@
   .tt-m { display:block; clear:both; color:var(--muted); font-size:.82rem; margin-top:2px; text-decoration:none; }
   a.tt-m:hover { color:var(--cyan); }
   .tt-note { color:var(--muted); font-size:.8rem; margin:10px 0 0; }
+  .tt-sub { font:600 .7rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--amber); margin:16px 0 4px; padding-top:12px; border-top:1px solid var(--line); }
+  .tt-big { list-style:none; margin:0; padding:0; }
+  .tt-big li { padding:5px 0; font-size:.85rem; }
+  .tt-big a { color:var(--muted); text-decoration:none; } .tt-big a:hover { color:var(--cyan); }
+  .tt-big b { color:#e8eef5; font-family:"JetBrains Mono",monospace; }
+  .fh { display:inline-block; margin-top:4px; padding:1px 7px; border-radius:4px; background:#ff3b3b; color:#fff; font:700 .68rem "JetBrains Mono",monospace; letter-spacing:.1em; animation:fhp 1s ease-in-out infinite; }
+  @keyframes fhp { 50% { opacity:.45; } }
+  .mk-x { display:block; } .mk-x a { display:inline-block; margin-top:4px; font-size:.8rem; color:var(--amber); text-decoration:none; }
+  .mk-x a:hover { text-decoration:underline; }
+  @media (prefers-reduced-motion:reduce) { .fh { animation:none; } }
   .mk-q { display: block; color: var(--muted); font-size: .85rem; }
   .mk-meta { display: block; font-size: .85rem; margin-top: 2px; color: var(--muted); }
   .mk-meta b { color: var(--cyan); font-family: "JetBrains Mono", monospace; font-weight: 500; }
@@ -656,8 +676,9 @@
     <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
     <nav>
       <a class="on" href="/">Home</a>
-      <a href="#market-of-the-week">Market of the Week</a>
       <a href="#top-traders">Top Traders</a>
+      <a href="#closing-soon">Expirations</a>
+      <a href="/gap-scanner.html">Gap Scanner</a>
       <a href="#guides">Guides</a>
       <a href="/about.html">About</a>
     </nav>
@@ -879,7 +900,7 @@
 
   <section id="closing-soon">
     <span class="tag live"><i></i>Live · updated every 20 min</span>
-    <h2>Upcoming expirations</h2>
+    <h2 class="exp-h"><span class="beacon" aria-hidden="true"></span>Upcoming expirations<span class="beacon b2" aria-hidden="true"></span></h2>
     <p class="updated" id="cs-updated"></p>
     <div class="grid">
       <div class="card" id="cs-polymarket"><span class="venue">POLYMARKET</span>
@@ -958,19 +979,48 @@
   fetch('markets.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     var ago = function (s) { var h = Math.max(1, Math.round((Date.now() - new Date(s)) / 3600000));
       return h < 24 ? h + 'h ago' : Math.round(h / 24) + 'd ago'; };
+    var finalHour = function (m) { var ms = new Date(m.closes) - Date.now();
+      return ms > 0 && ms < 3600000 ? '<b class="fh">FINAL HOUR</b>' : ''; };
     var fill = function (prefix, group, meta) {
       ['polymarket', 'kalshi', 'alpha'].forEach(function (site) {
         var box = document.getElementById(prefix + site);
-        var list = (d[group] || {})[site] || [];
+        var list = ((d[group] || {})[site] || []).slice();
+        if (group === 'closing_soon') list.sort(function (a, b) { return new Date(a.closes) - new Date(b.closes); });
         if (!box || !list.length) return;
         box.querySelector('.soon').outerHTML = '<ul class="mk">' + list.map(function (m) {
           return '<li><a href="' + esc(m.url) + '" target="_blank" rel="noopener">' + esc(m.event) + '</a>' +
             '<span class="mk-q">' + esc(m.market) + '</span>' +
-            '<span class="mk-meta"><b>' + esc(m.yes) + '% ' + (site === 'alpha' && m.market ? 'to win' : 'Yes') + '</b> · ' + esc(meta(m)) + '</span></li>';
+            '<span class="mk-meta"><b>' + esc(m.yes) + '% ' + (site === 'alpha' && m.market ? 'to win' : 'Yes') + '</b> · ' + esc(meta(m)) + '</span>' +
+            (group === 'closing_soon' ? finalHour(m) + '<span class="mk-x" data-url="' + esc(m.url) + '" data-closes="' + (+new Date(m.closes)) + '"></span>' : '') + '</li>';
         }).join('') + '</ul>';
       });
     };
-    fill('cs-', 'closing_soon', function (m) { return 'closes ' + when(m.closes); });
+    var left = function (s) { var ms = new Date(s) - Date.now(); if (ms <= 0) return 'closing now';
+      var h = Math.floor(ms / 3600000), mn = Math.floor(ms % 3600000 / 60000);
+      return 'in ' + (h >= 48 ? Math.floor(h / 24) + 'd ' + h % 24 + 'h' : h >= 1 ? h + 'h ' + mn + 'm' : mn + ' min'); };
+    fill('cs-', 'closing_soon', function (m) { return 'closes ' + when(m.closes) + ' · ' + left(m.closes); });
+    // Nov 14: the beacons beside the heading turn red and flash faster when something closes within 6 hours
+    var soonest = Math.min.apply(null, ['polymarket', 'kalshi', 'alpha'].map(function (k) {
+      return Math.min.apply(null, ((d.closing_soon || {})[k] || []).map(function (m) { return new Date(m.closes) - Date.now(); }).concat([Infinity])); }));
+    if (soonest < 6 * 3600000) document.getElementById('closing-soon').classList.add('urgent');
+    // Nov 14: when the same market is matched on the other sites (SAME grade, outcomes within 40¢), show all prices side by side
+    fetch('matches.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (mt) {
+      var by = {}, short = { polymarket: 'Poly', kalshi: 'Kalshi', alpha: 'Alpha' };
+      (mt.matches || []).forEach(function (row) {
+        var ps = Object.keys(row.prices || {}).filter(function (k) { return row.prices[k] != null; });
+        if (row.label !== 'SAME' || ps.length < 2) return;
+        var vals = ps.map(function (k) { return row.prices[k]; });
+        if (Math.max.apply(null, vals) - Math.min.apply(null, vals) > 40) return;
+        Object.keys(row.sites).forEach(function (k) { by[row.sites[k].url] = { row: row, ps: ps }; });
+      });
+      [].forEach.call(document.querySelectorAll('#closing-soon .mk-x'), function (el) {
+        var hit = by[el.getAttribute('data-url')]; if (!hit) return;
+        var cl = +el.getAttribute('data-closes');                 // only when the matched outcome is the one that is expiring (within 2 days)
+        if (!cl || !hit.row.close || Math.abs(new Date(hit.row.close) - cl) > 48 * 3600000) return;
+        el.innerHTML = '<a href="/gap-scanner.html">' + (hit.ps.length === 3 ? 'On all three' : 'Also on ' + (hit.ps.length - 1) + ' more') + ' · ' +
+          esc(hit.row.outcome) + ': ' + hit.ps.map(function (k) { return short[k] + ' ' + Math.round(hit.row.prices[k]) + '¢'; }).join(' · ') + ' →</a>';
+      });
+    }).catch(function () {});
     if (d.updated) document.getElementById('cs-updated').textContent = 'Last updated ' + when(d.updated);
 
     // Top Traders (Nov 14): weekly leaderboards from traders.json
@@ -981,13 +1031,17 @@
         var box = document.getElementById('tt-' + site), list = t[site] || [];
         if (!box || !list.length) return;
         box.querySelector('.soon').outerHTML = '<ol class="tt">' + list.map(function (x, i) {
-          var mv = x.move;
+          var mv = x.move || x.move2;
           return '<li><span class="tt-r">' + (i + 1) + '</span><span class="tt-b"><a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.name) + '</a>' +
             '<b class="' + (x.pnl < 0 ? 'dn' : 'up') + '">' + money(x.pnl) + '</b>' +
             (mv ? '<a class="tt-m" href="' + esc(mv.url) + '" target="_blank" rel="noopener">Biggest move: ' + (mv.side === 'SELL' ? 'sold ' : 'bought ') +
               esc(mv.outcome) + ' at ' + esc(mv.price) + '¢ · ' + usd(mv.usd) + ' · ' + esc(mv.title) + '</a>'
               : x.volume ? '<span class="tt-m">' + usd(x.volume) + ' traded</span>' : '') + '</span></li>';
-        }).join('') + '</ol>' + (site === 'alpha' ? '<p class="tt-note">All-time profit, from Alpha Arcade\'s leaderboard.</p>' : '');
+        }).join('') + '</ol>' + (site === 'alpha' ? '<p class="tt-note">All-time profit, from Alpha Arcade\'s leaderboard.</p>' : '') +
+          (site === 'kalshi' && (t.kalshi_big || []).length ? '<p class="tt-sub">BIGGEST TRADES THIS WEEK</p><ul class="tt-big">' + t.kalshi_big.map(function (b) {
+            return '<li><a href="' + esc(b.url) + '" target="_blank" rel="noopener"><b>' + usd(b.usd) + '</b> on ' + (b.side === 'NO' ? 'No' : 'Yes') + ' at ' + esc(b.price) + '¢ · ' +
+              esc(b.title) + (b.outcome && b.outcome !== 'Yes' ? ' (' + esc(b.outcome) + ')' : '') + '</a></li>'; }).join('') +
+            '</ul><p class="tt-note">Kalshi keeps traders\' positions private, so these are anonymous: the largest single trades in the busiest markets we track.</p>' : '');
       });
       if (t.updated) document.getElementById('tt-updated').textContent =
         'The most profitable traders of the last 7 days on each site, and their biggest move. Updated ' + when(t.updated) + '.';
@@ -1557,15 +1611,20 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
   var J = function (u) { return fetch(u + '?v=' + Date.now()).then(function (r) { return r.json(); }).catch(function () { return {}; }); };
   var ago = function (s) { var m = Math.max(1, Math.round((Date.now() - new Date(s)) / 60000)); return m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago'; };
   /* Nov 14: visitors in the last 30 days, from GoatCounter's public counter; stays hidden if it isn't available */
-  var V = fetch('https://alphainteldesk.goatcounter.com/counter/TOTAL.json?start=' + new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10))   /* a date, not 'month': GoatCounter answered 0 for start=month (Nov 14) */.then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
+  var V = J('markets.json');   /* Nov 14: visitor count removed from the pulse (GoatCounter still counts); soonest expiration added */
   Promise.all([J('gaps.json'), J('movers.json'), J('calendar.json'), J('health.json'), V]).then(function (r) {
     var g = (r[0].gaps || []).filter(function (x) { return !(x.fill && !x.fill.usd); }), mv = r[1].movers || [],
         cal = (r[2].items || []).filter(function (e) { return e.kind === 'scheduled' && new Date(e.date) > Date.now(); }), h = r[3];
     var lines = [];
     if (h.feeds) lines.push({ t: (h.all_ok ? 'All feeds live' : (h.down || []).join(', ') + ' delayed') + ' · checked ' + ago(h.updated) + ' · Polymarket, Kalshi, Alpha Arcade',
                               u: '#gapbox', c: 'SEE THE DESK ↓' });
-    var vc = r[4] && r[4].count ? String(r[4].count) : '';
-    if (vc && parseInt(vc.replace(/\D/g, ''), 10) > 0) lines.push({ t: '\uD83D\uDC41 ' + vc + ' visitors to the desk in the last 30 days', u: '/about.html', c: 'ABOUT THE DESK \u2192' });
+    var cs = [], nm = { polymarket: 'Polymarket', kalshi: 'Kalshi', alpha: 'Alpha Arcade' };
+    ['polymarket', 'kalshi', 'alpha'].forEach(function (k) { (((r[4] || {}).closing_soon || {})[k] || []).forEach(function (m) {
+      var ms = new Date(m.closes) - Date.now(); if (ms > 0) cs.push({ ms: ms, m: m, site: nm[k] }); }); });
+    cs.sort(function (a, b) { return a.ms - b.ms; });
+    if (cs.length) { var x = cs[0], hh = Math.floor(x.ms / 3600000), mi = Math.floor(x.ms % 3600000 / 60000);
+      lines.push({ t: 'Closing in ' + (hh >= 48 ? Math.floor(hh / 24) + 'd ' + hh % 24 + 'h' : hh >= 1 ? hh + 'h ' + mi + 'm' : mi + ' min') + ' (' + x.site + '): ' + String(x.m.event).replace(/\?$/, ''),
+        u: '#closing-soon', c: 'SEE EXPIRATIONS \u2193' }); }
     if (g.length) lines.push({ t: g.length + ' price gaps after fees · largest ' + g[0].net.toFixed(1) + '¢: ' + g[0].title.replace(/\?$/, ''),
                                u: '/gap-scanner.html', c: 'OPEN GAP SCANNER →' });
     if (mv.length) { var m = mv[0]; lines.push({ t: 'Biggest mover ' + (m.change > 0 ? '▲ +' : '▼ ') + m.change.toFixed(1) + '¢ in 24h (' + m.name + '): ' + m.title.replace(/\?$/, ''),
