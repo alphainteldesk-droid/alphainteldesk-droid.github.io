@@ -644,6 +644,9 @@ LADDER = re.compile(r"(?i)^\s*[↑↓▲▼⬆⬇]?\s*(above|below|over|under|be
 PRICE_TITLE = re.compile(r"(?i)\bwhat price will\b|\bprice (?:of|on|at)\b.*\b(?:on|at|by|end of)\b|"
                          r"\b(?:bitcoin|btc|ethereum|eth|solana|sol|xrp|doge|dogecoin|bnb|cardano|ada|algorand|algo|"
                          r"gold|silver|oil|wti|brent|s&p|nasdaq|dow|tesla|nvidia)\b.*\b(?:above|below|hit|reach|range|price)\b")
+# Nov 13: "by how much" markets (margin of victory, vote-share ranges) swing between thin ranges without news
+MARGIN_TITLE = re.compile(r"(?i)\bmargin\b|\bby how much\b|\bvote share\b|\bshare of the vote\b|\bpercentage of the vote\b")
+MARGIN_LABEL = re.compile(r"(?i)\d+(?:\.\d+)?\s*\+?\s*(?:pts?|points?)\b|\b\d+(?:\.\d+)?\s*(?:to|-|–)\s*\d+(?:\.\d+)?\s*%")
 MENTION = re.compile(r"(?i)\b(say|says|mention|mentions|tweet|tweets|post)\b|view count|top \d+ (song|album)")
 MOVE_TOP, MOVE_ALPHA, MOVE_MAX_CRYPTO = 30, 4, 5   # Nov 10: 30 for the full Movers page (homepage shows 3)
 NAMES = {"alpha": "Alpha Arcade", "polymarket": "Polymarket", "kalshi": "Kalshi"}
@@ -743,7 +746,8 @@ def movers(alpha, sites):
     for site, e, k, p, c, v in rows:
         if p is None or not (5 <= p <= 95) or abs(c) < MOVE_MIN:
             continue
-        if LADDER.match(k or "") or PRICE_TITLE.search(e["title"]) or MENTION.search(e["title"]) or \
+        if LADDER.match(k or "") or PRICE_TITLE.search(e["title"]) or MARGIN_TITLE.search(e["title"]) or \
+                MARGIN_LABEL.search(k or "") or MENTION.search(e["title"]) or \
                 any("mention" in (x or "").lower() for x in e.get("categories") or []):
             continue                                     # price brackets and word-mention markets swing for no news
         if k == e["title"] or len(k) > 45 or k.lower() == "yes":
