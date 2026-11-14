@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8TDJGLE2W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D8TDJGLE2W');
+</script>
+<!-- GoatCounter: public visitor counter (Nov 14) -->
+<script data-goatcounter="https://alphainteldesk.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Top Prediction Market Traders This Week: Polymarket, Kalshi, Alpha Arcade | Alpha Intel Desk</title>
+<meta name="description" content="The most profitable prediction market traders this week on Polymarket, Kalshi and Alpha Arcade, with each trader's biggest move, Polymarket boards by subject, and the largest Kalshi trades. Updated hourly.">
+<link rel="canonical" href="https://alphainteldesk.com/top-traders.html">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta property="og:title" content="Top Traders by Alpha Intel Desk">
+<meta property="og:description" content="Real-time intelligence for prediction markets.">
+<meta property="og:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
+<meta name="twitter:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@alphainteldesk">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#0b1420; --panel:#111d2c; --line:#1f3044;
+    --cyan:#3fdbe6; --amber:#ffb347; --text:#e8eef5; --muted:#8fa3b8; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--navy); color:var(--text);
+    font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.6; }
+  a { color:var(--cyan); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .wrap { max-width:760px; margin:0 auto; padding:0 16px; }
+  header { border-bottom:1px solid var(--line); position:sticky; top:0;
+    background:rgba(11,20,32,.92); backdrop-filter:blur(8px); z-index:10; }
+  .bar { display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 16px; max-width:1120px; margin:0 auto; }
+  .brand { display:flex; align-items:center; gap:10px; color:var(--text);
+    font-weight:700; font-size:1.1rem; }
+  .brand img { width:36px; height:36px; }
+  nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; }
+  nav a { color:var(--muted); }
+  nav a:hover, nav a.on { color:var(--text); text-decoration:none; }
+  .tag { font-family:"JetBrains Mono",monospace; font-size:.75rem;
+    letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
+  h1 { font-size:clamp(1.6rem,4vw,2.3rem); margin:8px 0 12px; line-height:1.2; }
+  h2 { font-size:1.25rem; margin:36px 0 10px; }
+  .lead { color:var(--muted); font-size:1.08rem; }
+  .card { background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:18px 20px; margin:12px 0; }
+  .card h3 { margin:0 0 4px; font-size:1.02rem; }
+  .card p { margin:0; color:var(--muted); }
+  .soon { font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--amber);
+    letter-spacing:.1em; margin-left:6px; }
+  .wrap { max-width:1120px; }
+  .lead { max-width:820px; }
+  .note { color:var(--muted); font-size:.85rem; font-family:"JetBrains Mono",monospace; }
+  .tag.live i { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--cyan); margin-right:8px; box-shadow:0 0 8px var(--cyan); animation:lv 1.6s ease-in-out infinite; }
+  .tag.live { color:var(--cyan); }
+  @keyframes lv { 50% { opacity:.35; } }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 6px; }
+  .chip { font:600 .78rem "JetBrains Mono",monospace; letter-spacing:.08em; text-transform:uppercase; padding:7px 12px; border-radius:6px;
+    border:1px solid var(--line); background:var(--panel); color:var(--muted); cursor:pointer; }
+  .chip.on { border-color:var(--cyan); color:var(--cyan); box-shadow:0 0 10px rgba(63,219,230,.25); }
+  .cols { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); align-items:start; margin-top:10px; }
+  .venue { font:500 .72rem "JetBrains Mono",monospace; letter-spacing:.16em; color:var(--cyan); border:1px solid var(--line); border-radius:5px; padding:3px 8px; }
+  .sub { color:var(--muted); font-size:.82rem; margin:8px 0 0; }
+  .tt { list-style:none; margin:8px 0 0; padding:0; }
+  .tt li { display:flex; gap:10px; padding:8px 0; border-top:1px solid var(--line); }
+  .tt li:first-child { border-top:0; }
+  .tt li[hidden] { display:none; }
+  main.wrap { padding-top:22px; }
+  .tt-r { flex:none; width:1.8em; font:700 .95rem "JetBrains Mono",monospace; color:var(--amber); }
+  .tt-b { flex:1 1 auto; min-width:0; }
+  .tt-b > a:first-child { font-weight:600; overflow-wrap:anywhere; }
+  .tt-b > b { float:right; margin-left:10px; font:600 .95rem "JetBrains Mono",monospace; }
+  .tt-b > b.up { color:#3ddc84; } .tt-b > b.dn { color:#ff6b6b; }
+  .tt-m { display:block; clear:both; color:var(--muted); font-size:.82rem; margin-top:2px; text-decoration:none; }
+  a.tt-m:hover { color:var(--cyan); text-decoration:none; }
+  .tt-sub { font:600 .7rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--amber); margin:16px 0 4px; padding-top:12px; border-top:1px solid var(--line); }
+  .tt-big { list-style:none; margin:0; padding:0; }
+  .tt-big li { padding:5px 0; font-size:.85rem; }
+  .tt-big a { color:var(--muted); } .tt-big a:hover { color:var(--cyan); text-decoration:none; }
+  .tt-big b { color:#e8eef5; font-family:"JetBrains Mono",monospace; }
+  .more { display:block; width:100%; margin-top:10px; padding:8px; border:1px dashed var(--line); border-radius:8px; background:none; color:var(--cyan);
+    font:600 .78rem "JetBrains Mono",monospace; letter-spacing:.1em; cursor:pointer; }
+  .qa { margin:10px 0; } .qa b { display:block; } .qa span { color:var(--muted); }
+  .foot { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  footer { border-top:1px solid var(--line); margin-top:48px; padding:24px 0 40px; color:var(--muted); font-size:.85rem; }
+  .social { display:flex; gap:16px; flex-wrap:wrap; }
+  @media (prefers-reduced-motion:reduce) { .tag.live i { animation:none; } }
+</style>
+<meta property="og:url" content="https://alphainteldesk.com/top-traders.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Alpha Intel Desk">
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
+    <nav>
+      <a href="/">Home</a>
+      <a class="on" href="/top-traders.html">Top Traders</a>
+      <a href="/#closing-soon">Expirations</a>
+      <a href="/gap-scanner.html">Gap Scanner</a>
+      <a href="/#guides">Guides</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <span class="tag live"><i></i>Live · updated hourly</span>
+  <h1>Top Traders</h1>
+  <p class="lead">Who made the most on Polymarket, Kalshi and Alpha Arcade this week, and the biggest move each one made.
+    Side by side, so you can see where the sharpest money is going.</p>
+  <p class="note" id="tt-upd"></p>
+
+  <div class="chips" id="chips" role="group" aria-label="Polymarket board by subject"></div>
+  <div class="cols">
+    <div class="card" id="c-polymarket"><span class="venue">POLYMARKET</span><p class="sub" id="pm-sub">Profit in the last 7 days.</p><div id="b-polymarket"><p class="sub">Loading…</p></div></div>
+    <div class="card" id="c-kalshi"><span class="venue">KALSHI</span><p class="sub">Profit in the last 7 days.</p><div id="b-kalshi"><p class="sub">Loading…</p></div></div>
+    <div class="card" id="c-alpha"><span class="venue">ALPHA ARCADE</span><p class="sub">All-time profit, from Alpha Arcade's leaderboard.</p><div id="b-alpha"><p class="sub">Loading…</p></div></div>
+  </div>
+  <p class="note">Past profit doesn't predict future results. This page shows what happened, not what to trade. Always check each site's rules before you trade.</p>
+
+  <h2 id="how">How this page works</h2>
+  <div class="qa"><b>Where do the names come from?</b><span>Each site's own public leaderboard. We don't rank anyone ourselves.</span></div>
+  <div class="qa"><b>What is a "biggest move"?</b><span>The largest single trade that trader made in the last 7 days, by dollars. It can be one leg of a bigger plan, so don't read it as a tip.</span></div>
+  <div class="qa"><b>Why no moves for Kalshi traders?</b><span>Kalshi keeps positions private unless a trader chooses to share them. Instead we show the largest single trades of the week in the busiest Kalshi markets we track. Those are anonymous.</span></div>
+  <div class="qa"><b>Why is Alpha Arcade "all-time"?</b><span>Alpha Arcade publishes one all-time board. Accounts without a username appear as a short wallet tag, the same way Alpha Arcade shows them.</span></div>
+  <div class="qa"><b>How fresh is it?</b><span>The boards are re-read about once an hour.</span></div>
+
+  <h2>Keep going</h2>
+  <p><a href="/gap-scanner.html">Gap Scanner: price gaps after fees →</a> &nbsp;·&nbsp; <a href="/momentum-scanner.html">Momentum Scanner: biggest movers →</a> &nbsp;·&nbsp;
+    <a href="https://t.me/alphainteldesk" rel="noopener">7 AM desk brief on Telegram →</a></p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><strong style="color:var(--text)">Alpha Intel Desk</strong><br>Information is our edge.</div>
+      <div class="social">
+        <a href="https://x.com/alphainteldesk" rel="noopener">X</a>
+        <a href="https://t.me/alphainteldesk" rel="noopener">Telegram</a>
+        <a href="https://www.youtube.com/@alphainteldesk" rel="noopener">YouTube</a>
+        <a href="/disclosures.html">Disclosures</a>
+      </div>
+    </div>
+    <p>Not financial advice. Prediction markets involve risk, and you can lose money.
+      Some links on this site are referral links and may earn us a commission at no cost to you.</p>
+    <p>&copy; 2026 Alpha Intel Desk</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var esc = function (s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; };
+  var money = function (v) { var a = Math.abs(v); return (v < 0 ? '-' : '+') + '$' + (a >= 1e6 ? (a / 1e6).toFixed(2) + 'M' : a >= 1e3 ? Math.round(a / 1e3) + 'K' : Math.round(a)); };
+  var usd = function (v) { return '$' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? Math.round(v / 1e3) + 'K' : Math.round(v)); };
+  var SHOW = 10;
+  var board = function (id, list) {
+    var box = document.getElementById(id);
+    if (!list || !list.length) { box.innerHTML = '<p class="sub">This board is not available right now.</p>'; return; }
+    var row = function (x, i) { var mv = x.move || x.move2;
+      return '<li' + (i >= SHOW ? ' hidden' : '') + '><span class="tt-r">' + (i + 1) + '</span><span class="tt-b"><a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.name) + '</a>' +
+        '<b class="' + (x.pnl < 0 ? 'dn' : 'up') + '">' + money(x.pnl) + '</b>' +
+        (mv ? '<a class="tt-m" href="' + esc(mv.url) + '" target="_blank" rel="noopener">Biggest move: ' + (mv.side === 'SELL' ? 'sold ' : 'bought ') + esc(mv.outcome) + ' at ' + esc(mv.price) + '¢ · ' + usd(mv.usd) + ' · ' + esc(mv.title) + '</a>'
+          : x.volume ? '<span class="tt-m">' + usd(x.volume) + ' traded</span>' : '') + '</span></li>'; };
+    box.innerHTML = '<ol class="tt">' + list.map(row).join('') + '</ol>' +
+      (list.length > SHOW ? '<button class="more" type="button">SHOW ALL ' + list.length + ' ↓</button>' : '');
+    var btn = box.querySelector('.more');
+    if (btn) btn.onclick = function () { [].forEach.call(box.querySelectorAll('li[hidden]'), function (li) { li.hidden = false; }); btn.remove(); };
+  };
+  fetch('traders_full.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (t) {
+    var names = { politics: 'Politics', crypto: 'Crypto', economy: 'Economy', finance: 'Finance', culture: 'Culture', tech: 'Tech', geopolitics: 'Geopolitics', world: 'World' };
+    var cats = t.polymarket_by || {}, chips = document.getElementById('chips'), keys = Object.keys(cats);
+    var pick = function (k) {
+      board('b-polymarket', k === 'all' ? t.polymarket : cats[k]);
+      document.getElementById('pm-sub').textContent = 'Profit in the last 7 days' + (k === 'all' ? '.' : ', ' + (names[k] || k).toLowerCase() + ' markets only.');
+      [].forEach.call(chips.children, function (c) { c.classList.toggle('on', c.getAttribute('data-k') === k); });
+    };
+    if (keys.length) {
+      chips.innerHTML = '<button class="chip" data-k="all">Polymarket: all markets</button>' + keys.map(function (k) { return '<button class="chip" data-k="' + esc(k) + '">' + esc(names[k] || k) + '</button>'; }).join('');
+      chips.onclick = function (e) { var k = e.target.getAttribute && e.target.getAttribute('data-k'); if (k) pick(k); };
+    }
+    pick('all');
+    board('b-kalshi', t.kalshi);
+    if ((t.kalshi_big || []).length) document.getElementById('b-kalshi').insertAdjacentHTML('beforeend', '<p class="tt-sub">BIGGEST TRADES THIS WEEK</p><ul class="tt-big">' + t.kalshi_big.map(function (b) {
+      return '<li><a href="' + esc(b.url) + '" target="_blank" rel="noopener"><b>' + usd(b.usd) + '</b> on ' + (b.side === 'NO' ? 'No' : 'Yes') + ' at ' + esc(b.price) + '¢ · ' + esc(b.title) + (b.outcome && b.outcome !== 'Yes' ? ' (' + esc(b.outcome) + ')' : '') + '</a></li>'; }).join('') +
+      '</ul><p class="sub">Anonymous: the largest single trades in the busiest Kalshi markets we track.</p>');
+    board('b-alpha', t.alpha);
+    if (t.updated) document.getElementById('tt-upd').textContent = 'Updated ' + new Date(t.updated).toLocaleString([], { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  }).catch(function () { ['b-polymarket', 'b-kalshi', 'b-alpha'].forEach(function (id) { document.getElementById(id).innerHTML = '<p class="sub">This board is not available right now.</p>'; }); });
+})();
+</script>
+<script>
+(function () {   // fresh prices: reload every 10 minutes while open, or on return to a tab left 10+ minutes
+  var t0 = Date.now();
+  setInterval(function () { if (document.visibilityState === 'visible' && Date.now() - t0 > 10 * 60000) location.reload(); }, 60000);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && Date.now() - t0 > 10 * 60000) location.reload();
+  });
+})();
+</script>
+</body>
+</html>

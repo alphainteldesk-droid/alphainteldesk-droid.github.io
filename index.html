@@ -226,6 +226,11 @@
   .tt-m { display:block; clear:both; color:var(--muted); font-size:.82rem; margin-top:2px; text-decoration:none; }
   a.tt-m:hover { color:var(--cyan); }
   .tt-note { color:var(--muted); font-size:.8rem; margin:10px 0 0; }
+  .tt-all { display:flex; align-items:center; justify-content:center; gap:10px; margin-top:14px; padding:10px 14px; border:1px dashed rgba(63,219,230,.5); border-radius:8px;
+    color:var(--cyan); font:600 .85rem "JetBrains Mono",monospace; letter-spacing:.04em; text-decoration:none; background:rgba(63,219,230,.05); animation:ttglow 2.4s ease-in-out infinite; }
+  .tt-all:hover { background:rgba(63,219,230,.12); text-decoration:none; }
+  @keyframes ttglow { 50% { box-shadow:0 0 16px rgba(63,219,230,.35); } }
+  @media (prefers-reduced-motion:reduce) { .tt-all { animation:none; } }
   .tt-sub { font:600 .7rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--amber); margin:16px 0 4px; padding-top:12px; border-top:1px solid var(--line); }
   .tt-big { list-style:none; margin:0; padding:0; }
   .tt-big li { padding:5px 0; font-size:.85rem; }
@@ -676,7 +681,7 @@
     <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
     <nav>
       <a class="on" href="/">Home</a>
-      <a href="#top-traders">Top Traders</a>
+      <a href="/top-traders.html">Top Traders</a>
       <a href="#closing-soon">Expirations</a>
       <a href="/gap-scanner.html">Gap Scanner</a>
       <a href="#guides">Guides</a>
@@ -895,6 +900,7 @@
       <div class="card" id="tt-alpha"><span class="venue">ALPHA ARCADE</span>
         <p class="soon">Alpha Arcade's top traders are coming soon.</p></div>
     </div>
+    <a class="tt-all" href="/top-traders.html">See the full boards: top 20 on each site, by subject · Open Top Traders →</a>
     <p class="tt-note">Past profit doesn't predict future results. This shows what happened, not what to trade.</p>
   </section>
 
