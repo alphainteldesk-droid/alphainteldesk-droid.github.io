@@ -4,6 +4,7 @@
 #    and calendar.json (next scheduled catalysts + big non-sports markets resolving soon).
 # Wording rule: "price gap after fees" - never "guaranteed" or "arbitrage", no trade instructions.
 import json
+import re
 from datetime import datetime, timezone, timedelta
 
 f = "%Y-%m-%dT%H:%M:%SZ"
@@ -82,10 +83,45 @@ def fair_price(row, ps):
     return round(sum(ps[x] * w[x] for x in ps) / tot, 1) if tot > 0 else None
 
 
+COMBO = re.compile(r"\s&\s|\bparlay\b|\bcombo\b", re.I)      # Nov 13: two events in one question
+
+
+def alpha_traded_48h():
+    """URLs of Alpha Arcade markets that traded in the last 48 h (from alpha_trades.json); None if no record yet."""
+    try:
+        st = json.load(open("alpha_trades.json"))
+    except Exception:
+        return None
+    now = n.timestamp()
+    return {u for u, x in st.items() if now - x.get("last", 0) <= 48 * 3600}
+
+
+def brackets_ok(row):
+    """Nov 13: if the two sites disagree by more than 40¢ on ANY outcome of the same market, the outcomes were
+    paired wrong (e.g. Picasso: Polymarket "<$40m" 8.6¢ vs Kalshi 87.5¢ - Kalshi uses "above $X" thresholds),
+    so the pair isn't the same contract and none of its gaps are real."""
+    sites = [x.get("outcomes") or {} for x in row["sites"].values()]
+    for i, a in enumerate(sites):
+        for b in sites[i + 1:]:
+            for o, p in a.items():
+                q = b.get(o)
+                if p is not None and q is not None and abs(p - q) > 40:
+                    return False
+    return True
+
+
 def gaps(matches, alpha_fresh):
     out = []
+    live = alpha_traded_48h()
+    skipped = {"combo": 0, "alpha_idle": 0, "brackets": 0}
     for row in matches:
         if is_sports(row.get("categories") or []):
+            continue
+        if COMBO.search(row.get("title") or ""):
+            skipped["combo"] += 1
+            continue
+        if not brackets_ok(row):
+            skipped["brackets"] += 1
             continue
         try:
             left = (datetime.strptime(row["close"], f).replace(tzinfo=timezone.utc) - n).total_seconds() / 3600
@@ -98,6 +134,9 @@ def gaps(matches, alpha_fresh):
         for site, x in row["sites"].items():
             if site == "alpha" and not alpha_fresh:
                 continue
+            if site == "alpha" and live is not None and x.get("url") not in live:
+                skipped["alpha_idle"] += 1
+                continue                               # Nov 13: no trade in 48 h, its price is stale
             if site != "alpha" and (x.get("label") != "SAME" or x.get("flags")):
                 continue                               # each site's match must be SAME with no warnings
             if (x.get("volume") or 0) < MIN_VOLUME[site]:
@@ -136,6 +175,8 @@ def gaps(matches, alpha_fresh):
                         "category": (row.get("categories") or ["Other"])[0]}
         if best:
             out.append(best)
+    print("Gaps: left out %d combo markets, %d bracket mismatches, %d idle Alpha Arcade prices (no trade in 48h)"
+          % (skipped["combo"], skipped["brackets"], skipped["alpha_idle"]))
     out.sort(key=lambda g: -g["net"])
     three = [g for g in out if g["all3"]]              # every all-three-sites gap, always shown first
     rest = [g for g in out if not g["all3"]]

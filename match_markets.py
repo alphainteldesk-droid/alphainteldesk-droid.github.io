@@ -638,8 +638,12 @@ def poly_kalshi(poly, kalshi, used):
 # ---------------- movers ----------------
 MOVE_MIN = 5                                        # points (cents) moved in 24h
 MOVE_VOL = {"polymarket": 25000, "kalshi": 15000, "alpha": 100}  # 24h volume: $ / contracts / $
-LADDER = re.compile(r"(?i)^\s*(above|below|over|under|between|at least|at most|more than|less than|fewer than|"
+LADDER = re.compile(r"(?i)^\s*[↑↓▲▼⬆⬇]?\s*(above|below|over|under|between|at least|at most|more than|less than|fewer than|"
                     r"[$<>≥≤]\s*\d|\d[\d,.]*\s*(%|[kmb]\b|\+|$))")
+# Nov 12: price-target markets ("What price will Bitcoin hit…", "Bitcoin above $X on…") swing all day without news
+PRICE_TITLE = re.compile(r"(?i)\bwhat price will\b|\bprice (?:of|on|at)\b.*\b(?:on|at|by|end of)\b|"
+                         r"\b(?:bitcoin|btc|ethereum|eth|solana|sol|xrp|doge|dogecoin|bnb|cardano|ada|algorand|algo|"
+                         r"gold|silver|oil|wti|brent|s&p|nasdaq|dow|tesla|nvidia)\b.*\b(?:above|below|hit|reach|range|price)\b")
 MENTION = re.compile(r"(?i)\b(say|says|mention|mentions|tweet|tweets|post)\b|view count|top \d+ (song|album)")
 MOVE_TOP, MOVE_ALPHA, MOVE_MAX_CRYPTO = 30, 4, 5   # Nov 10: 30 for the full Movers page (homepage shows 3)
 NAMES = {"alpha": "Alpha Arcade", "polymarket": "Polymarket", "kalshi": "Kalshi"}
@@ -648,6 +652,26 @@ NAMES = {"alpha": "Alpha Arcade", "polymarket": "Polymarket", "kalshi": "Kalshi"
 def why_link(title):
     q = " ".join(key_words(title)[:6]) or title
     return "https://news.google.com/search?" + urllib.parse.urlencode({"q": q, "hl": "en-US", "gl": "US", "ceid": "US:en"})
+
+
+def alpha_trades(alpha):
+    """Nov 13: remember when each Alpha Arcade market last traded (alpha_trades.json, keyed by URL).
+    Traded = 24h volume above 0, or total volume went up since last run. A market seen for the first time
+    with no trading today counts as last traded 24 h ago. make_gaps.py ignores Alpha prices with no trade in 48 h."""
+    try:
+        st = json.load(open("alpha_trades.json"))
+    except Exception:
+        st = {}
+    now, out = n.timestamp(), {}
+    for a in alpha:
+        u, v = a["url"], a["volume"]
+        old = st.get(u) or {}
+        traded = a["volume24h"] > 0 or (old and v > old.get("vol", 0) + 0.5)
+        last = now if traded else old.get("last", now - 24 * 3600)
+        out[u] = {"last": round(last), "vol": round(v, 2)}
+    json.dump(out, open("alpha_trades.json", "w"), separators=(",", ":"))
+    stale = sum(now - x["last"] > 48 * 3600 for x in out.values())
+    print("Alpha trades: %d markets, %d with no trade in 48h (their prices are left out of the Gap Scanner)" % (len(out), stale))
 
 
 def alpha_changes(alpha):
@@ -719,7 +743,7 @@ def movers(alpha, sites):
     for site, e, k, p, c, v in rows:
         if p is None or not (5 <= p <= 95) or abs(c) < MOVE_MIN:
             continue
-        if LADDER.match(k or "") or MENTION.search(e["title"]) or \
+        if LADDER.match(k or "") or PRICE_TITLE.search(e["title"]) or MENTION.search(e["title"]) or \
                 any("mention" in (x or "").lower() for x in e.get("categories") or []):
             continue                                     # price brackets and word-mention markets swing for no news
         if k == e["title"] or len(k) > 45 or k.lower() == "yes":
@@ -846,6 +870,10 @@ def main():
     print("Matcher: %d Alpha Arcade markets | %d Polymarket events | %d Kalshi events"
           % (len(alpha), len(sites["polymarket"]), len(sites["kalshi"])))
     try:
+        try:
+            alpha_trades(alpha)
+        except Exception as err:
+            print("Alpha trade tracker failed:", err)
         movers(alpha, sites)
     except Exception as err:
         print("Movers failed:", err)
