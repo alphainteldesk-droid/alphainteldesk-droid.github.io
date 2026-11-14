@@ -204,6 +204,18 @@
   .mk li { padding: 10px 0; border-top: 1px solid var(--line); }
   .mk li:first-child { border-top: 0; padding-top: 0; }
   .mk a { color: var(--text); font-weight: 500; }
+  /* Top Traders (Nov 14) */
+  .tt { list-style:none; margin:8px 0 0; padding:0; }
+  .tt li { display:flex; gap:10px; padding:8px 0; border-top:1px solid var(--line); }
+  .tt li:first-child { border-top:0; }
+  .tt-r { flex:none; width:1.5em; font:700 .95rem "JetBrains Mono",monospace; color:var(--amber); }
+  .tt-b { flex:1 1 auto; min-width:0; }
+  .tt-b > a:first-child { font-weight:600; overflow-wrap:anywhere; }
+  .tt-b > b { float:right; margin-left:10px; font:600 .95rem "JetBrains Mono",monospace; }
+  .tt-b > b.up { color:#3ddc84; } .tt-b > b.dn { color:#ff6b6b; }
+  .tt-m { display:block; clear:both; color:var(--muted); font-size:.82rem; margin-top:2px; text-decoration:none; }
+  a.tt-m:hover { color:var(--cyan); }
+  .tt-note { color:var(--muted); font-size:.8rem; margin:10px 0 0; }
   .mk-q { display: block; color: var(--muted); font-size: .85rem; }
   .mk-meta { display: block; font-size: .85rem; margin-top: 2px; color: var(--muted); }
   .mk-meta b { color: var(--cyan); font-family: "JetBrains Mono", monospace; font-weight: 500; }
@@ -850,6 +862,21 @@
 
 <main class="wrap">
 
+  <section id="top-traders">
+    <span class="tag live"><i></i>Live · updated hourly</span>
+    <h2>What are the top traders doing this week?</h2>
+    <p class="updated" id="tt-updated">The most profitable traders of the last 7 days on each site, and their biggest move.</p>
+    <div class="grid">
+      <div class="card" id="tt-polymarket"><span class="venue">POLYMARKET</span>
+        <p class="soon">This week's top traders will appear here.</p></div>
+      <div class="card" id="tt-kalshi"><span class="venue">KALSHI</span>
+        <p class="soon">This week's top traders will appear here.</p></div>
+      <div class="card" id="tt-alpha"><span class="venue">ALPHA ARCADE</span>
+        <p class="soon">Alpha Arcade's top traders are coming soon.</p></div>
+    </div>
+    <p class="tt-note">Past profit doesn't predict future results. This shows what happened, not what to trade.</p>
+  </section>
+
   <section id="closing-soon">
     <span class="tag live"><i></i>Live · updated every 20 min</span>
     <h2>Upcoming expirations</h2>
@@ -864,39 +891,12 @@
     </div>
   </section>
 
-  <section id="new-markets">
-    <span class="tag live"><i></i>Live · updated every 20 min</span>
-    <h2>New markets</h2>
-    <p class="updated">Listed in the last 48 hours, most traded first</p>
-    <div class="grid">
-      <div class="card" id="nm-polymarket"><span class="venue">POLYMARKET</span>
-        <p class="soon">The newest markets will appear here.</p></div>
-      <div class="card" id="nm-kalshi"><span class="venue">KALSHI</span>
-        <p class="soon">The newest markets will appear here.</p></div>
-      <div class="card" id="nm-alpha"><span class="venue">ALPHA ARCADE</span>
-        <p class="soon">The newest markets will appear here.</p></div>
-    </div>
-  </section>
-
   <section id="market-of-the-week">
     <div class="card motw">
       <span class="tag">Market of the Week</span>
       <h3>Coming soon</h3>
       <p class="soon">Each week the desk picks one market worth watching, with the odds
          and what to look for.</p>
-    </div>
-  </section>
-
-  <section id="top-traders">
-    <span class="tag">Top traders of the week</span>
-    <h2>What are the top traders doing this week?</h2>
-    <div class="grid">
-      <div class="card"><span class="venue">POLYMARKET</span>
-        <p class="soon">Big moves from the top traders will appear here.</p></div>
-      <div class="card"><span class="venue">KALSHI</span>
-        <p class="soon">The largest trades of the week will appear here.</p></div>
-      <div class="card"><span class="venue">ALPHA ARCADE</span>
-        <p class="soon">Big moves from the top traders will appear here.</p></div>
     </div>
   </section>
 
@@ -971,8 +971,27 @@
       });
     };
     fill('cs-', 'closing_soon', function (m) { return 'closes ' + when(m.closes); });
-    fill('nm-', 'new_markets', function (m) { return 'listed ' + ago(m.opened); });
     if (d.updated) document.getElementById('cs-updated').textContent = 'Last updated ' + when(d.updated);
+
+    // Top Traders (Nov 14): weekly leaderboards from traders.json
+    fetch('traders.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (t) {
+      var money = function (v) { var a = Math.abs(v); return (v < 0 ? '-' : '+') + '$' + (a >= 1e6 ? (a / 1e6).toFixed(2) + 'M' : a >= 1e3 ? Math.round(a / 1e3) + 'K' : Math.round(a)); };
+      var usd = function (v) { return '$' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? Math.round(v / 1e3) + 'K' : Math.round(v)); };
+      ['polymarket', 'kalshi', 'alpha'].forEach(function (site) {
+        var box = document.getElementById('tt-' + site), list = t[site] || [];
+        if (!box || !list.length) return;
+        box.querySelector('.soon').outerHTML = '<ol class="tt">' + list.map(function (x, i) {
+          var mv = x.move;
+          return '<li><span class="tt-r">' + (i + 1) + '</span><span class="tt-b"><a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.name) + '</a>' +
+            '<b class="' + (x.pnl < 0 ? 'dn' : 'up') + '">' + money(x.pnl) + '</b>' +
+            (mv ? '<a class="tt-m" href="' + esc(mv.url) + '" target="_blank" rel="noopener">Biggest move: ' + (mv.side === 'SELL' ? 'sold ' : 'bought ') +
+              esc(mv.outcome) + ' at ' + esc(mv.price) + '¢ · ' + usd(mv.usd) + ' · ' + esc(mv.title) + '</a>'
+              : x.volume ? '<span class="tt-m">' + usd(x.volume) + ' traded</span>' : '') + '</span></li>';
+        }).join('') + '</ol>' + (site === 'alpha' ? '<p class="tt-note">All-time profit, from Alpha Arcade\'s leaderboard.</p>' : '');
+      });
+      if (t.updated) document.getElementById('tt-updated').textContent =
+        'The most profitable traders of the last 7 days on each site, and their biggest move. Updated ' + when(t.updated) + '.';
+    }).catch(function () {});
 
     // Desk Wire: closing-soon and new markets from every venue, mixed together
     var odds = function (site, m) {   // multi-outcome Alpha Arcade markets: show the leader
