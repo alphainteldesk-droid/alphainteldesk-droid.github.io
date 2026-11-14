@@ -292,7 +292,7 @@ def alpha_first(alpha, poly):
     have = {e["url"] for e in poly}
     pos = {e["url"]: i for i, e in enumerate(poly)}
     fuller = 0
-    todo = sorted([a for a in alpha if best_match(a, poly, idx)[0] < 70], key=lambda a: -a["volume"])
+    todo = sorted([a for a in alpha if best_match(a, poly, idx, loose=True)[0] < 70], key=lambda a: -a["volume"])
     t0, added, tried, fails = time.time(), 0, 0, 0
     for a in todo[:ALPHA_FIRST_MAX]:
         if time.time() - t0 > ALPHA_FIRST_SECS or fails >= 6:
@@ -663,15 +663,19 @@ def rules_twin(r1, r2):
     return round(SequenceMatcher(None, c(r1), c(r2)).ratio(), 2) if r1 and r2 else 0.0
 
 
-def best_match(a, events, idx):
+LOOSE_DAYS = 135         # identical question: listed end dates may differ by up to this many days and still be scored
+
+
+def best_match(a, events, idx, loose=False):
     best = (0, [], {}, None)
     away = max(0.0, a["end"] - n.timestamp())
     for e in candidates(a, events, idx):
         ends = [x for x in [e["end"]] + list((e.get("ends") or {}).values()) +
                 [label_date(k) for k in list(e["outcomes"])[:40]] if x]
-        if a["end"] and ends and min(abs(a["end"] - x) for x in ends) > max(4 * 86400, away * 0.15) \
-                and not same_question(a["title"], e["title"]):
-            continue                                   # Nov 14: word-for-word the same question still gets scored
+        gap_s = min(abs(a["end"] - x) for x in ends) if a["end"] and ends else 0
+        if gap_s > max(4 * 86400, away * 0.15) and not (
+                loose and gap_s <= LOOSE_DAYS * 86400 and same_question(a["title"], e["title"])):
+            continue                                   # Nov 14: for Alpha rows, word-for-word the same question still gets scored
         s, fl, om = score(a, e)
         if s > best[0]:
             best = (s, fl, om, e)
@@ -709,7 +713,9 @@ def poly_kalshi(poly, kalshi, used):
         outs = p["outcomes"]
         if len(outs) == 1:
             outs = {"Yes": next(iter(outs.values()))}  # one-question event: compare it as Yes
-        a = {"id": p["url"], "title": p["title"], "end": p["end"], "outcomes": outs, "rules": p["rules"]}
+        pe = p.get("ends") or {}
+        own = pe.get(lead_of(outs)) if len(p["outcomes"]) > 1 else next(iter(pe.values()), None)
+        a = {"id": p["url"], "title": p["title"], "end": own or p["end"], "outcomes": outs, "rules": p["rules"]}
         s, fl, om, e = best_match(a, ks, idx)
         if not e or s < 70:
             continue
@@ -721,7 +727,7 @@ def poly_kalshi(poly, kalshi, used):
              "outcomes": {l: e["outcomes"][x] for l, x in om.items() if x is not None},
              "book": {l: (e.get("book") or {}).get(x) for l, x in om.items() if x is not None},
              "spread": {l: (e.get("spr") or {}).get(x) for l, x in om.items() if x is not None}}
-        row = {"title": p["title"], "close": datetime.fromtimestamp(p["end"] or e["end"], timezone.utc).strftime(f),
+        row = {"title": p["title"], "close": datetime.fromtimestamp(a["end"] or e["end"], timezone.utc).strftime(f),
                "sites": {"polymarket": {"url": p["url"], "title": p["title"], "score": s, "flags": fl, "label": label, "fine": fp,
                                         "volume": round(p["volume"]), "volume24h": round(p["volume24h"]),
                                         "matched_outcome": lead, "outcomes": outs,
@@ -1001,7 +1007,7 @@ def main():
         fix = {}
     blocked = {tuple(x) for x in fix.get("block", [])}
 
-    out, near = [], []
+    out, near, twins = [], [], []
     for a in alpha:
         row = {"title": a["title"], "close": datetime.fromtimestamp(a["end"], timezone.utc).strftime(f),
                "sites": {"alpha": {"url": a["url"], "outcomes": a["outcomes"], "volume": round(a["volume"]),
@@ -1011,7 +1017,15 @@ def main():
         row["outcome"] = lead
         row["prices"] = {"alpha": a["outcomes"][lead]}
         for name, evs in sites.items():
-            s, fl, om, e = best_match(a, evs, idxs[name])
+            s, fl, om, e = best_match(a, evs, idxs[name], loose=True)
+            if name == "polymarket" and e and s >= 70 and any("end dates differ" in x for x in fl) \
+                    and same_question(a["title"], e["title"]) and rules_twin(a["rules"], e["rules"]) >= 0.9:
+                mo = om.get(lead)                      # Nov 14: same question AND the same rules text = the same contract;
+                e_end = (label_date(mo) if mo else None) or (e.get("ends") or {}).get(mo) or e["end"]
+                if e_end:                              # only the listed end date differs, so line this row up on Polymarket's date
+                    a = dict(a, end=e_end)
+                    s, fl, om = score(a, e)
+                    twins.append("%s (twin %.2f -> %d)" % (a["title"][:40], rules_twin(a["rules"], e["rules"]), s))
             if name == "kalshi" and (not e or s < 70) and a["volume"] >= 1000 and not sporty(a):
                 if not e:                              # nothing scored: show the Kalshi title sharing the most words
                     aw = set(key_words(a["title"]))
@@ -1040,6 +1054,8 @@ def main():
         row["gap"] = round(max(ps) - min(ps), 1) if len(ps) > 1 and row["label"] == "SAME" else None
         out.append(row)
 
+    print("Matcher: %d Alpha markets share Polymarket's rules word for word (end date taken from Polymarket): %s"
+          % (len(twins), " | ".join(twins)))
     print("Matcher: %d busy non-sports Alpha markets with no Kalshi match (best try shown):" % len(near))
     for t, sc, kt, mo in near[:20]:
         print("  NEAR %3d | %s | K: %s -> %s" % (sc, t[:44], kt[:48], mo))
@@ -1065,7 +1081,8 @@ def main():
                                                     " || ".join("%s [%s]" % (ev["title"][:52], why(a0, ev)) for ev in top)))
     except Exception as err:
         print("Kalshi subject check failed:", err)
-    used = {r["sites"]["polymarket"]["url"] for r in out if "polymarket" in r["sites"]}
+    used = {r["sites"]["polymarket"]["url"] for r in out if "polymarket" in r["sites"]
+            and r["sites"]["polymarket"]["label"] == "SAME"}   # Nov 14: a SIMILAR Alpha row must not hide a SAME Polymarket-Kalshi pair
     pk = poly_kalshi(sites["polymarket"], sites["kalshi"], used)
     print("Matcher: %d Polymarket-Kalshi pairs (%d SAME)" % (len(pk), sum(r["label"] == "SAME" for r in pk)))
     for r in sorted(pk, key=lambda r: -r["score"])[:25]:
