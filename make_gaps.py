@@ -114,10 +114,31 @@ def brackets_ok(row):
     return True
 
 
+LEAN_MIN, LEAN_SHARE, LEAN_CENTS = 4, 0.75, 5
+
+
+def lean_ok(row):
+    """Nov 14: two sites that list the same names but one is higher on nearly all of them (4+ shared outcomes,
+    75%+ leaning the same way, typical difference 5 cents or more) are not pricing the same contract: the rules or
+    the deadline differ across the whole event, or one market is too new to have real prices. None of its gaps count.
+    (e.g. "Who will leave Trump Administration before 2028?": Kalshi higher on 9 of 10 names, by 10 cents typically)"""
+    sites = [x.get("outcomes") or {} for x in row["sites"].values()]
+    for i, a in enumerate(sites):
+        for b in sites[i + 1:]:
+            d = sorted(b[o] - p for o, p in a.items() if p is not None and b.get(o) is not None)
+            if len(d) < LEAN_MIN:
+                continue
+            one_way = max(sum(x >= 2 for x in d), sum(x <= -2 for x in d)) / len(d)
+            mid = (d[len(d) // 2] + d[(len(d) - 1) // 2]) / 2
+            if one_way >= LEAN_SHARE and abs(mid) >= LEAN_CENTS:
+                return False
+    return True
+
+
 def gaps(matches, alpha_fresh):
     out = []
     live = alpha_traded_48h()
-    skipped = {"combo": 0, "alpha_idle": 0, "brackets": 0, "wide": 0}
+    skipped = {"combo": 0, "alpha_idle": 0, "brackets": 0, "wide": 0, "lean": 0}
     for row in matches:
         if is_sports(row.get("categories") or []):
             continue
@@ -126,6 +147,9 @@ def gaps(matches, alpha_fresh):
             continue
         if not brackets_ok(row):
             skipped["brackets"] += 1
+            continue
+        if not lean_ok(row):
+            skipped["lean"] += 1
             continue
         try:
             left = (datetime.strptime(row["close"], f).replace(tzinfo=timezone.utc) - n).total_seconds() / 3600
@@ -184,8 +208,8 @@ def gaps(matches, alpha_fresh):
         if best:
             out.append(best)
     print("Gaps: left out %d combo markets, %d bracket mismatches, %d idle Alpha Arcade prices (no trade in 48h), "
-          "%d prices with a bid/ask wider than %d cents"
-          % (skipped["combo"], skipped["brackets"], skipped["alpha_idle"], skipped["wide"], MAX_SPREAD))
+          "%d prices with a bid/ask wider than %d cents, %d events where one site is higher on nearly every outcome"
+          % (skipped["combo"], skipped["brackets"], skipped["alpha_idle"], skipped["wide"], MAX_SPREAD, skipped["lean"]))
     out.sort(key=lambda g: -g["net"])
     three = [g for g in out if g["all3"]]              # every all-three-sites gap, always shown first
     rest = [g for g in out if not g["all3"]]

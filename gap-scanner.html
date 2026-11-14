@@ -214,6 +214,7 @@
     <div class="fr fg" role="row"><span><b>Wide bid/ask</b></span><span>If the best bid and ask are more than 10¢ apart, the midpoint isn't a price anyone can trade, so we skip it.</span></div>
     <div class="fr fg" role="row"><span><b>No recent trade</b></span><span>An Alpha Arcade price with no trade in 48 hours is treated as stale.</span></div>
     <div class="fr fg" role="row"><span><b>Mismatched outcomes</b></span><span>If two sites disagree by more than 40¢ on any outcome, the outcomes don't line up and the whole pair is dropped.</span></div>
+    <div class="fr fg" role="row"><span><b>One-sided events</b></span><span>If one site is higher on nearly every name in the same event, the rules or the deadline differ across the whole event, so none of its gaps count.</span></div>
     <div class="fr fg" role="row"><span><b>Combo markets</b></span><span>Two events in one question ("A &amp; B") rarely mean the same thing on two sites.</span></div>
     <div class="fr fg" role="row"><span><b>Deadline ladders</b></span><span>"By…?" markets are compared deadline by deadline: December 31 against December 31, never against March 31.</span></div>
   </div>
