@@ -108,7 +108,8 @@ def main():
     old = {}
     try:
         old = json.load(open(OUT))
-        if time.time() - datetime.fromisoformat(old["updated"]).timestamp() < MIN_AGE and "--force" not in sys.argv:
+        if time.time() - datetime.fromisoformat(old["updated"]).timestamp() < MIN_AGE and "--force" not in sys.argv \
+                and all(old.get(k) for k in ("polymarket", "kalshi", "alpha")):       # an empty board is retried on the next run
             print("Top traders: fresh enough, skipped")
             return
     except Exception:
