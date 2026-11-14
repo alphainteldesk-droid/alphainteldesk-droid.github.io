@@ -96,8 +96,8 @@ def alpha(exclude):
             w = wallet or name
             name = w[:4] + "…" + w[-2:] if w else "Trader"
         num = lambda *n: float(pick(r, *n) or 0)
-        out.append({"name": name[:28], "pnl": round(num("pnl", "pl", "profit", "totalpnl", "realizedpnl")),
-                    "volume": round(num("volume", "totalvolume", "vol")),
+        out.append({"name": name[:28], "pnl": round(num("profitlossusd", "pnl", "pl", "profit", "totalpnl", "realizedpnl")),
+                    "volume": round(num("volumeusd", "volume", "totalvolume", "vol")),
                     "url": "https://www.alphaarcade.com/leaderboard"})
     print("  Alpha Arcade board: %d rows kept out by the private list" % hidden)
     out.sort(key=lambda t: -t["pnl"])
