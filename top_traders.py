@@ -72,6 +72,53 @@ def kalshi():
     return out
 
 
+KT = "https://api.elections.kalshi.com/trade-api/v2/markets/trades"
+BIG_MARKETS = 12
+
+
+def kalshi_big():
+    """Nov 14: Kalshi hides who trades, and its top traders hide their positions. What IS public is every trade.
+    So: the biggest single trades of the last 7 days in the busiest Kalshi markets the desk already matches
+    across sites (tickers come from matches.json). Anonymous by nature: what was bought, at what price, how much."""
+    rows = json.load(open("matches.json")).get("matches") or []
+    seen, picks = set(), []
+    for r in sorted(rows, key=lambda r: -float(((r.get("sites") or {}).get("kalshi") or {}).get("volume24h") or 0)):
+        k = (r.get("sites") or {}).get("kalshi") or {}
+        lab = k.get("matched_outcome")
+        tick = (k.get("book") or {}).get(r.get("outcome")) or next(iter((k.get("book") or {}).values()), None)
+        if not tick or tick in seen:
+            continue
+        seen.add(tick)
+        picks.append((tick, k.get("title") or r.get("title") or "", lab or "", k.get("url") or ""))
+        if len(picks) >= BIG_MARKETS:
+            break
+    since, out = int(time.time()) - 7 * 86400, []
+    for tick, title, lab, url in picks:
+        try:
+            d = get(q(KT, ticker=tick, limit=1000, min_ts=since)) or {}
+        except Exception as err:
+            print("  Kalshi trades for one market failed:", str(err)[:60])
+            continue
+        for t in d.get("trades") or []:
+            side = (t.get("taker_side") or "yes").lower()
+            px = float(t.get(side + "_price_dollars") or 0)
+            usd = float(t.get("count_fp") or t.get("count") or 0) * px
+            if usd >= 1000:
+                out.append({"usd": round(usd), "side": side.upper(), "price": round(px * 100, 1), "title": title,
+                            "outcome": lab, "when": t.get("created_time") or "", "url": url})
+        time.sleep(0.25)
+    out.sort(key=lambda x: -x["usd"])
+    top, per = [], {}
+    for x in out:                                    # at most 2 per market so one market can't fill the list
+        if per.get(x["url"], 0) < 2:
+            per[x["url"]] = per.get(x["url"], 0) + 1
+            top.append(x)
+        if len(top) >= 5:
+            break
+    print("  Kalshi big trades: %d markets read, %d trades of $1,000+, kept %d" % (len(picks), len(out), len(top)))
+    return top
+
+
 def norm(s):
     return re.sub(r"[^a-z0-9]", "", str(s or "").lower())
 
@@ -148,7 +195,7 @@ def main():
     try:
         old = json.load(open(OUT))
         if time.time() - datetime.fromisoformat(old["updated"]).timestamp() < MIN_AGE and "--force" not in sys.argv \
-                and all(old.get(k) for k in ("polymarket", "kalshi", "alpha")):       # an empty board is retried on the next run
+                and all(old.get(k) for k in ("polymarket", "kalshi", "alpha")) and "kalshi_big" in old:       # an empty board is retried on the next run
             print("Top traders: fresh enough, skipped")
             return
     except Exception:
@@ -161,6 +208,11 @@ def main():
         except Exception as err:
             print("Top traders: %s failed: %s" % (site, str(err)[:120]))
             out[site] = old.get(site) or []          # keep the last good board rather than an empty card
+    try:
+        out["kalshi_big"] = kalshi_big()
+    except Exception as err:
+        print("Top traders: kalshi big trades failed: %s" % str(err)[:120])
+        out["kalshi_big"] = old.get("kalshi_big") or []
     try:                                             # Nov 14: owner's call - the public board is shown as is;
         out["alpha"] = alpha(exclude)                # TRADERS_EXCLUDE stays as an optional private list
     except Exception as err:
