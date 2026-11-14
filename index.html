@@ -79,21 +79,33 @@
   #gb-health { margin-left:8px; font:700 .68rem "JetBrains Mono",monospace; letter-spacing:.08em; color:#3ee88a; text-decoration:none; }
   #gb-health.warn { color:var(--amber); } #gb-health i { display:inline-block; width:6px; height:6px; border-radius:50%; background:currentColor; margin-right:5px; vertical-align:1px; }
   .gb-g.nofill { opacity:.5; text-decoration:line-through; }
-  /* Nov 13: newsroom wire + clocks under the title */
-  .hwire { display:flex; justify-content:center; align-items:center; gap:12px; margin:8px auto 0; max-width:900px;
-    font:500 clamp(.82rem,1.15vw,1rem)/1.3 "JetBrains Mono",monospace; color:#dfe8f0; min-height:1.6em; }
-  .hw-tag { flex:none; display:inline-flex; align-items:center; gap:6px; font-weight:800; font-size:.72em; letter-spacing:.16em;
-    color:var(--cyan); border:1px solid rgba(63,219,230,.55); border-radius:3px; padding:3px 7px; }
-  .hw-tag i { width:6px; height:6px; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px var(--cyan); animation:hwDot 1.4s ease-in-out infinite; }
-  @keyframes hwDot { 50% { opacity:.25; } }
+  /* Nov 13: DESK PULSE + analog world clocks under the title */
+  .hwire { display:flex; justify-content:center; align-items:center; gap:12px; margin:8px auto 0; max-width:920px;
+    font:500 clamp(.82rem,1.15vw,1rem)/1.3 "JetBrains Mono",monospace; color:#dfe8f0; min-height:1.7em; }
+  .hw-tag { position:relative; flex:none; display:inline-flex; align-items:center; gap:7px; font-weight:800; font-size:.72em; letter-spacing:.16em;
+    color:var(--cyan); border:1px solid rgba(63,219,230,.55); border-radius:3px; padding:3px 8px; }
+  .hw-tag i { position:relative; width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px var(--cyan); }
+  .hw-tag i::after { content:""; position:absolute; inset:-1px; border-radius:50%; border:2px solid var(--cyan); opacity:0; }
+  .hw-tag.beat { animation:hwBeat .9s ease-out; }
+  .hw-tag.beat i::after { animation:hwRing .9s ease-out; }
+  @keyframes hwBeat { 0% { box-shadow:0 0 0 rgba(63,219,230,0); } 30% { box-shadow:0 0 16px rgba(63,219,230,.75); background:rgba(63,219,230,.16); } 100% { box-shadow:0 0 0 rgba(63,219,230,0); } }
+  @keyframes hwRing { 0% { transform:scale(1); opacity:.9; } 100% { transform:scale(4.2); opacity:0; } }
   .hw-line { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:left; min-width:0; }
-  .hw-cur { color:var(--amber); font-weight:400; animation:hwBlink 1s steps(1) infinite; margin-left:1px; }
-  @keyframes hwBlink { 50% { opacity:0; } }
-  .hclocks { display:flex; justify-content:center; gap:22px; margin-top:7px; font:600 .7rem "JetBrains Mono",monospace;
-    letter-spacing:.14em; color:var(--muted); }
-  .hclocks b { color:#e8eef5; font-weight:700; margin-left:5px; letter-spacing:.06em; }
-  @media (max-width:640px) { .hwire { gap:8px; } .hw-tag { display:none; } .hclocks { gap:12px; font-size:.62rem; } }
-  @media (prefers-reduced-motion: reduce) { .hw-tag i, .hw-cur { animation:none; } }
+  .hw-line { display:block; } #hw-txt { display:inline-block; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:bottom; }
+  #hw-txt.in { animation:hwIn .9s ease-out; }
+  @keyframes hwIn { 0% { opacity:0; filter:blur(3px); text-shadow:0 0 14px rgba(63,219,230,.9); }
+    35% { opacity:1; filter:none; text-shadow:0 0 10px rgba(63,219,230,.7); } 100% { text-shadow:none; } }
+  .hclocks { display:flex; justify-content:center; gap:26px; margin-top:10px; }
+  .ck { display:flex; flex-direction:column; align-items:center; gap:2px; font:600 .64rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--muted); }
+  .ck svg { width:38px; height:38px; }
+  .ck svg > circle:first-child { fill:rgba(11,20,32,.7); stroke:rgba(63,219,230,.55); stroke-width:1.5; }
+  .ck .tk line { stroke:rgba(232,238,245,.45); stroke-width:1.2; }
+  .ck .hh { stroke:#e8eef5; stroke-width:2.4; stroke-linecap:round; }
+  .ck .mh { stroke:var(--cyan); stroke-width:1.6; stroke-linecap:round; }
+  .ck .pin { fill:var(--amber); }
+  .ck b { color:#e8eef5; font-weight:700; letter-spacing:.04em; font-size:.72rem; white-space:nowrap; }
+  @media (max-width:640px) { .hwire { gap:8px; } .hw-tag { display:none; } .hclocks { gap:16px; } .ck svg { width:32px; height:32px; } .ck { font-size:.56rem; } }
+  @media (prefers-reduced-motion: reduce) { .hw-tag.beat, .hw-tag.beat i::after, #hw-txt.in { animation:none; } }
   /* Top intro bar (Nov 10): first thing visitors see, above the ticker */
   .introband.top { padding:16px 20px 12px; border-bottom:1px solid var(--line); }
   .introband.top .ib-text h1 { margin:0 0 8px; }
@@ -630,15 +642,16 @@
 <section class="hero" aria-label="Alpha Intel Desk">
   <div class="sign">THE DESK IS OPEN</div>
   <div class="hero-t">Alpha Intel Desk</div>
-  <!-- Nov 13: live newsroom wire (replaces the tagline): real facts from the site's own data, typed like a teletype -->
+  <!-- Nov 13: DESK PULSE - real facts from the site's own data, a new one with each pulse; analog world clocks -->
   <div class="hwire" aria-live="off">
-    <span class="hw-tag"><i></i>ON THE WIRE</span>
-    <span class="hw-line"><span id="hw-txt"></span><b class="hw-cur">▍</b></span>
+    <span class="hw-tag" id="hw-tag"><i></i>DESK PULSE</span>
+    <span class="hw-line"><span id="hw-txt"></span></span>
   </div>
   <div class="hclocks" aria-label="World market clocks">
-    <span>NEW YORK <b data-tz="America/New_York">--:--</b></span>
-    <span>LONDON <b data-tz="Europe/London">--:--</b></span>
-    <span>TOKYO <b data-tz="Asia/Tokyo">--:--</b></span>
+    <div class="ck" data-tz="America/New_York"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>NEW YORK</span><b>--:--</b></div>
+    <div class="ck" data-tz="Europe/London"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>LONDON</span><b>--:--</b></div>
+    <div class="ck" data-tz="Europe/Rome"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>ROME</span><b>--:--</b></div>
+    <div class="ck" data-tz="Asia/Tokyo"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>TOKYO</span><b>--:--</b></div>
   </div>
 </section>
 <section class="introband top" aria-label="About Alpha Intel Desk">
@@ -1489,12 +1502,23 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
 (function () {
   var el = document.getElementById('hw-txt'); if (!el) return;
   var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  [].forEach.call(document.querySelectorAll('.ck .tk'), function (g) {      // 12 tick marks per clock face
+    var h = ''; for (var t = 0; t < 12; t++) { var a = t * Math.PI / 6, r1 = t % 3 ? 15.5 : 14, r2 = 17;
+      h += '<line x1="' + (20 + r1 * Math.sin(a)).toFixed(2) + '" y1="' + (20 - r1 * Math.cos(a)).toFixed(2) +
+           '" x2="' + (20 + r2 * Math.sin(a)).toFixed(2) + '" y2="' + (20 - r2 * Math.cos(a)).toFixed(2) + '"/>'; }
+    g.innerHTML = h;
+  });
   function clocks() {
-    [].forEach.call(document.querySelectorAll('.hclocks b'), function (b) {
-      b.textContent = new Date().toLocaleTimeString('en-US', { timeZone: b.getAttribute('data-tz'), hour: 'numeric', minute: '2-digit' });
+    [].forEach.call(document.querySelectorAll('.ck'), function (c) {
+      var tz = c.getAttribute('data-tz'), now = new Date();
+      var hm = now.toLocaleTimeString('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false }).split(':');
+      var h = +hm[0] % 12, m = +hm[1];
+      c.querySelector('.hh').setAttribute('transform', 'rotate(' + (h * 30 + m * 0.5) + ' 20 20)');
+      c.querySelector('.mh').setAttribute('transform', 'rotate(' + (m * 6) + ' 20 20)');
+      c.querySelector('b').textContent = now.toLocaleTimeString('en-US', { timeZone: tz, hour: 'numeric', minute: '2-digit' });
     });
   }
-  clocks(); setInterval(clocks, 30000);
+  clocks(); setInterval(clocks, 20000);
   var J = function (u) { return fetch(u + '?v=' + Date.now()).then(function (r) { return r.json(); }).catch(function () { return {}; }); };
   var ago = function (s) { var m = Math.max(1, Math.round((Date.now() - new Date(s)) / 60000)); return m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago'; };
   Promise.all([J('gaps.json'), J('movers.json'), J('calendar.json'), J('health.json')]).then(function (r) {
@@ -1507,14 +1531,15 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
     if (cal.length) { var c = cal[0], d = new Date(c.date);
       lines.push('Next on the calendar · ' + d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + ': ' + c.name); }
     if (!lines.length) lines.push('The desk is open: real-time intelligence for prediction markets');
-    var i = 0;
-    function type(t, k) {
-      if (still) { el.textContent = t; return setTimeout(next, 6000); }
-      el.textContent = t.slice(0, k);
-      if (k < t.length) return setTimeout(function () { type(t, k + 1); }, 28);
-      setTimeout(next, 4200);
+    var i = 0, tag = document.getElementById('hw-tag');
+    function next() {                                   // each pulse brings in the next fact
+      el.textContent = lines[i % lines.length]; i++;
+      if (!still) {
+        el.classList.remove('in'); tag.classList.remove('beat'); void el.offsetWidth;
+        el.classList.add('in'); tag.classList.add('beat');
+      }
+      setTimeout(next, 8000);
     }
-    function next() { type(lines[i % lines.length], 0); i++; }
     next();
   });
 })();
