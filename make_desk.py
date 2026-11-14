@@ -137,6 +137,10 @@ NEWS_FEEDS = [
     ("NPR", "https://feeds.npr.org/1014/rss.xml"),
     ("Fox News", "https://moxie.foxnews.com/google-publisher/politics.xml"),   # Nov 12: balances NPR
     ("Fox News", "https://moxie.foxnews.com/google-publisher/world.xml"),
+    ("Al Jazeera", "https://www.aljazeera.com/xml/rss/all.xml"),               # Nov 13: overnight / weekend coverage
+    ("The Guardian", "https://www.theguardian.com/world/rss"),
+    ("The Guardian", "https://www.theguardian.com/business/rss"),
+    ("DW", "https://rss.dw.com/xml/rss-en-world"),
 ]
 NEWS_SKIP = ("/pro/", "investingclub", "/select/", "/video/", "/sounds/", "/iplayer/", "/live/")
 # Only headlines about things prediction markets trade on (politics, economy, markets, crypto, conflict, big tech)
