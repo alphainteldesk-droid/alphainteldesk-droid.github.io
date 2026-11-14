@@ -13,7 +13,10 @@ Nothing from the Alpha board is printed to the log except field names.
 import json, os, re, sys, time, urllib.parse, urllib.request
 from datetime import datetime, timezone
 
-OUT = "traders.json"
+OUT = "traders.json"             # homepage: top 5 per site
+FULL = "traders_full.json"       # /top-traders.html: longer boards + Polymarket boards by subject
+LONG = 20
+CATEGORIES = ("politics", "crypto", "economy", "finance", "culture", "tech", "geopolitics", "world")
 MIN_AGE = 50 * 60            # leaderboards move slowly: refresh about once an hour
 TOP = 5
 UA = {"User-Agent": "AlphaIntelDesk/1.0 (+https://alphainteldesk.com)", "Accept": "application/json"}
@@ -32,11 +35,14 @@ def q(base, **params):
     return base + "?" + urllib.parse.urlencode(params)
 
 
-def polymarket():
-    rows = (get(q(PM + "/leaderboard", time_period="week", sort_by="PNL", limit=TOP)) or {}).get("data") or []
+def polymarket(n=TOP, category=None):
+    prm = {"time_period": "week", "sort_by": "PNL", "limit": n}
+    if category:
+        prm["category"] = category
+    rows = (get(q(PM + "/leaderboard", **prm)) or {}).get("data") or []
     since = int(time.time()) - 7 * 86400
     out = []
-    for r in rows[:TOP]:
+    for r in rows[:n]:
         wallet = r.get("user_id") or ""
         t = {"name": (r.get("user_name") or "").strip() or wallet[:6] + "…" + wallet[-4:],
              "pnl": round(float(r.get("pnl") or 0)), "volume": round(float(r.get("volume") or 0)),
@@ -60,10 +66,10 @@ def polymarket():
     return out
 
 
-def kalshi():
-    d = get(q(KA, metric_name="projected_pnl", limit=TOP, since_day_before=7)) or {}
+def kalshi(n=TOP):
+    d = get(q(KA, metric_name="projected_pnl", limit=n, since_day_before=7)) or {}
     out = []
-    for r in (d.get("rank_list") or [])[:TOP]:
+    for r in (d.get("rank_list") or [])[:n]:
         if r.get("is_anonymous") or not r.get("nickname"):
             name = "Anonymous trader"
         else:
@@ -76,7 +82,7 @@ KT = "https://api.elections.kalshi.com/trade-api/v2/markets/trades"
 BIG_MARKETS = 12
 
 
-def kalshi_big():
+def kalshi_big(n=5, per_market=2):
     """Nov 14: Kalshi hides who trades, and its top traders hide their positions. What IS public is every trade.
     So: the biggest single trades of the last 7 days in the busiest Kalshi markets the desk already matches
     across sites (tickers come from matches.json). Anonymous by nature: what was bought, at what price, how much."""
@@ -110,10 +116,10 @@ def kalshi_big():
     out.sort(key=lambda x: -x["usd"])
     top, per = [], {}
     for x in out:                                    # at most 2 per market so one market can't fill the list
-        if per.get(x["url"], 0) < 2:
+        if per.get(x["url"], 0) < per_market:
             per[x["url"]] = per.get(x["url"], 0) + 1
             top.append(x)
-        if len(top) >= 5:
+        if len(top) >= n:
             break
     print("  Kalshi big trades: %d markets read, %d trades of $1,000+, kept %d" % (len(picks), len(out), len(top)))
     return top
@@ -123,7 +129,7 @@ def norm(s):
     return re.sub(r"[^a-z0-9]", "", str(s or "").lower())
 
 
-def alpha(exclude):
+def alpha(exclude, n=TOP, moves=TOP):
     d = get(AA)
     rows = d if isinstance(d, list) else next((v for v in (d or {}).values() if isinstance(v, list)), [])
     if not rows or not isinstance(rows[0], dict):
@@ -149,11 +155,11 @@ def alpha(exclude):
                     "url": "https://www.alphaarcade.com/leaderboard", "_w": wallet})
     print("  Alpha Arcade board: %d rows kept out by the private list" % hidden)
     out.sort(key=lambda t: -t["pnl"])
-    out = out[:TOP]
+    out = out[:n]
     since = time.time() - 7 * 86400
-    for t in out:                                    # Nov 14: public username + biggest trade of the last 7 days
+    for i, t in enumerate(out):                      # Nov 14: public username + biggest trade of the last 7 days
         w = t.pop("_w", "")
-        if not w:
+        if not w or i >= moves:
             continue
         try:
             u = (get(q(AAPI + "/get-username-by-wallet", walletAddress=w), timeout=10) or {}).get("username")
@@ -195,29 +201,44 @@ def main():
     try:
         old = json.load(open(OUT))
         if time.time() - datetime.fromisoformat(old["updated"]).timestamp() < MIN_AGE and "--force" not in sys.argv \
-                and all(old.get(k) for k in ("polymarket", "kalshi", "alpha")) and "kalshi_big" in old:       # an empty board is retried on the next run
+                and all(old.get(k) for k in ("polymarket", "kalshi", "alpha")) and "kalshi_big" in old and os.path.exists(FULL):       # an empty board is retried on the next run
             print("Top traders: fresh enough, skipped")
             return
     except Exception:
         pass
     exclude = [norm(x) for x in (os.environ.get("TRADERS_EXCLUDE") or "").split(",") if len(norm(x)) >= 4]
-    out = {"updated": datetime.now(timezone.utc).isoformat(timespec="seconds"), "window": "7 days"}
-    for site, fn in (("polymarket", polymarket), ("kalshi", kalshi)):
-        try:
-            out[site] = fn()
-        except Exception as err:
-            print("Top traders: %s failed: %s" % (site, str(err)[:120]))
-            out[site] = old.get(site) or []          # keep the last good board rather than an empty card
+    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     try:
-        out["kalshi_big"] = kalshi_big()
-    except Exception as err:
-        print("Top traders: kalshi big trades failed: %s" % str(err)[:120])
-        out["kalshi_big"] = old.get("kalshi_big") or []
-    try:                                             # Nov 14: owner's call - the public board is shown as is;
-        out["alpha"] = alpha(exclude)                # TRADERS_EXCLUDE stays as an optional private list
-    except Exception as err:
-        print("Top traders: alpha failed: %s" % str(err)[:120])
-        out["alpha"] = old.get("alpha") or []
+        oldf = json.load(open(FULL))
+    except Exception:
+        oldf = {}
+    full = {"updated": now, "window": "7 days"}
+
+    def board(key, fn):                              # keep the last good board rather than an empty one
+        try:
+            full[key] = fn()
+        except Exception as err:
+            print("Top traders: %s failed: %s" % (key, str(err)[:120]))
+            full[key] = oldf.get(key) or []
+
+    board("polymarket", lambda: polymarket(LONG))
+    cats = {}
+    for cat in CATEGORIES:                           # Nov 14: boards by subject, so it isn't all sports
+        try:
+            rows = polymarket(10, cat)
+            if len(rows) >= 3 and [r["url"] for r in rows[:3]] != [r["url"] for r in (full["polymarket"] or [])[:3]]:
+                cats[cat] = rows
+            else:
+                print("  Polymarket category '%s': no separate board" % cat)
+        except Exception as err:
+            print("  Polymarket category '%s' failed: %s" % (cat, str(err)[:60]))
+    full["polymarket_by"] = cats or oldf.get("polymarket_by") or {}
+    board("kalshi", lambda: kalshi(LONG))
+    board("kalshi_big", lambda: kalshi_big(10, 3))
+    board("alpha", lambda: alpha(exclude, LONG, 10))   # owner's call: the public board is shown as is; TRADERS_EXCLUDE is optional
+    json.dump(full, open(FULL, "w"), ensure_ascii=False, indent=1)
+    out = {"updated": now, "window": "7 days", "polymarket": full["polymarket"][:TOP], "kalshi": full["kalshi"][:TOP],
+           "kalshi_big": full["kalshi_big"][:5], "alpha": full["alpha"][:TOP]}
     json.dump(out, open(OUT, "w"), ensure_ascii=False, indent=1)
     print("Top traders: Polymarket %d, Kalshi %d, Alpha Arcade %d"
           % (len(out["polymarket"]), len(out["kalshi"]), len(out["alpha"])))
