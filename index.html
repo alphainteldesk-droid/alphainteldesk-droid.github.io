@@ -103,8 +103,10 @@
   @keyframes hwIn { 0% { opacity:0; filter:blur(3px); text-shadow:0 0 14px rgba(63,219,230,.9); }
     35% { opacity:1; filter:none; text-shadow:0 0 10px rgba(63,219,230,.7); } 100% { text-shadow:none; } }
   .hclocks { display:flex; justify-content:center; gap:26px; margin-top:0; }
-  .livestrip { padding:12px 16px 10px; border-bottom:1px solid var(--line); background:rgba(8,14,24,.55); }
-  .livestrip .hwire { margin-top:10px; }
+  .livestrip { display:flex; align-items:center; justify-content:center; gap:22px; padding:6px 16px; border-bottom:1px solid var(--line); background:rgba(8,14,24,.55); }
+  .livestrip .hwire { margin:0; flex:1 1 auto; min-width:0; max-width:920px; }
+  .livestrip .hclocks { flex:none; gap:18px; }
+  @media (max-width:820px) { .livestrip { flex-wrap:wrap; gap:8px 28px; padding:8px 12px; } .livestrip .hwire { order:3; flex:1 1 100%; } }
   .ck { display:flex; flex-direction:column; align-items:center; gap:2px; font:600 .64rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--muted); }
   .ck svg { width:38px; height:38px; }
   .ck svg > circle:first-child { fill:rgba(11,20,32,.7); stroke:rgba(63,219,230,.55); stroke-width:1.5; }
@@ -667,15 +669,17 @@
 </section>
 <!-- Nov 14: live strip moved here from the hero: clocks, then DESK PULSE, then the ticker, so all three are in view together -->
 <section class="livestrip" aria-label="World clocks and desk pulse">
-  <div class="hclocks" aria-label="World market clocks">
+  <div class="hclocks hc-l" aria-label="World market clocks">
     <div class="ck" data-tz="America/New_York"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>NEW YORK</span><b>--:--</b></div>
     <div class="ck" data-tz="Europe/London"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>LONDON</span><b>--:--</b></div>
-    <div class="ck" data-tz="Europe/Rome"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>ROME</span><b>--:--</b></div>
-    <div class="ck" data-tz="Asia/Tokyo"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>TOKYO</span><b>--:--</b></div>
   </div>
   <div class="hwire" aria-live="off">
     <span class="hw-tag" id="hw-tag"><i></i>DESK PULSE</span>
     <a class="hw-line" id="hw-a" href="/gap-scanner.html"><span id="hw-txt"></span><span class="hw-cta" id="hw-cta"></span></a>
+  </div>
+  <div class="hclocks hc-r" aria-label="World market clocks">
+    <div class="ck" data-tz="Europe/Rome"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>ROME</span><b>--:--</b></div>
+    <div class="ck" data-tz="Asia/Tokyo"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>TOKYO</span><b>--:--</b></div>
   </div>
 </section>
 <!-- Live tape (TradingView, free widget; CFD prices move in real time) -->
