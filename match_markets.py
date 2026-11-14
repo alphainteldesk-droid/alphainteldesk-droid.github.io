@@ -212,8 +212,18 @@ def load_poly():
                 seen.add(k); evs.append(ev)
     out = []
     for ev in evs:
+        e = poly_event(ev)
+        if e:
+            out.append(e)
+    return out
+
+
+def poly_event(ev):
+    """One Polymarket event -> our shape (None if it has no live prices). Used for the full list AND for
+    the Alpha-first lookups (Nov 14), so every rule here applies to both."""
+    if True:
         if "Up or Down" in (ev.get("title") or ""):
-            continue
+            return None
         e = {"title": ev.get("title") or "", "outcomes": {}, "text": "", "end": 0,
              "volume": float(ev.get("volume") or 0), "volume24h": float(ev.get("volume24hr") or 0),
              "rules": ev.get("description") or "", "url": "https://polymarket.com/event/" + (ev.get("slug") or ""),
@@ -235,6 +245,8 @@ def load_poly():
                     continue                           # nobody really bidding/asking: the price is a placeholder
                 lbl = m.get("groupItemTitle") or q
                 e["outcomes"][lbl] = round(prices[0] * 100, 1)
+                if bb is not None and ba is not None:  # Nov 14: bid/ask width in cents (wide = the midpoint isn't a real price)
+                    e.setdefault("spr", {})[lbl] = round((float(ba) - float(bb)) * 100, 1)
                 try:                                   # Yes token id: lets make_gaps.py read the order book (fillable size)
                     e.setdefault("book", {})[lbl] = json.loads(m.get("clobTokenIds") or "[]")[0]
                 except (ValueError, TypeError, IndexError):
@@ -254,9 +266,57 @@ def load_poly():
                     if i < len(toks):
                         e.setdefault("book", {})[nm] = toks[i]
         e["end"] = e["end"] or ts(ev.get("endDate"))
-        if e["outcomes"]:
-            out.append(e)
-    return out
+        return e if e["outcomes"] else None
+
+
+ALPHA_FIRST_MAX = 90      # lookups per run (busiest Alpha markets first)
+ALPHA_FIRST_SECS = 240    # and never more than 4 minutes of a run
+
+
+def alpha_first(alpha, poly):
+    """Nov 14: Alpha Arcade is our edge, so no Alpha market should miss its Polymarket twin just because
+    Polymarket's big list is cut short. For every Alpha market with no good match in the list we loaded,
+    ask Polymarket for that one market (search by title, then by link name). Anything found is ADDED TO THE
+    SAME POOL the matcher uses, so it is scored, graded and filtered exactly like every other event."""
+    import polyapi
+    idx = build_index(poly)
+    have = {e["url"] for e in poly}
+    todo = sorted([a for a in alpha if best_match(a, poly, idx)[0] < 70], key=lambda a: -a["volume"])
+    t0, added, tried, fails = time.time(), 0, 0, 0
+    for a in todo[:ALPHA_FIRST_MAX]:
+        if time.time() - t0 > ALPHA_FIRST_SECS or fails >= 6:
+            break
+        tried += 1
+        raw, how = [], "search"
+        try:
+            raw = polyapi.search(re.sub(r"[^\w$%&' -]+", " ", a["title"]).strip())
+        except Exception as err:
+            fails += 1
+            how = "search failed (%s)" % str(err)[:40]
+        if not any(ev.get("markets") for ev in raw):
+            try:
+                raw = polyapi.by_slug(a["url"].rsplit("/", 1)[-1])
+                how += " > link name"
+            except Exception as err:
+                how += " > link name failed (%s)" % str(err)[:40]
+        best = (0, None)
+        for ev in raw:
+            try:
+                e = poly_event(ev)
+            except Exception:
+                e = None
+            if not e or e["url"] in have:
+                continue
+            sc = score(a, e)[0]
+            if sc > best[0] or best[1] is None:
+                best = (sc, e)
+            if sc >= 70:
+                have.add(e["url"])
+                poly.append(e)
+                added += 1
+        print("  ALPHA-FIRST %3d | %s | %s | P: %s" % (best[0], a["title"][:44], how, (best[1] or {}).get("title", "-")[:48]))
+    print("Alpha-first: %d Alpha markets had no Polymarket match in the main list, looked up %d, added %d Polymarket events (%.0fs)"
+          % (len(todo), tried, added, time.time() - t0))
 
 
 def load_kalshi():
@@ -288,6 +348,8 @@ def load_kalshi():
             p = (bid + ask) / 2 if bid > 0 and ask > 0 else last
             label = m.get("yes_sub_title") or m.get("subtitle") or m.get("title") or ev.get("title") or "Yes"
             e["outcomes"][label] = round(p * 100, 1) if p > 0 else None
+            if bid > 0 and ask > 0:
+                e.setdefault("spr", {})[label] = round((ask - bid) * 100, 1)
             if m.get("ticker"):
                 e.setdefault("book", {})[label] = m["ticker"]       # for the order book (fillable size)
             e.setdefault("ends", {})[label] = ts(m.get("expected_expiration_time") or m.get("close_time"))
@@ -618,11 +680,14 @@ def poly_kalshi(poly, kalshi, used):
         k = {"url": e["url"], "title": e["title"], "score": s, "flags": fl, "label": label, "fine": fp,
              "volume": round(e["volume"]), "volume24h": round(e["volume24h"]), "matched_outcome": om.get(lead),
              "outcomes": {l: e["outcomes"][x] for l, x in om.items() if x is not None},
-             "book": {l: (e.get("book") or {}).get(x) for l, x in om.items() if x is not None}}
+             "book": {l: (e.get("book") or {}).get(x) for l, x in om.items() if x is not None},
+             "spread": {l: (e.get("spr") or {}).get(x) for l, x in om.items() if x is not None}}
         row = {"title": p["title"], "close": datetime.fromtimestamp(p["end"] or e["end"], timezone.utc).strftime(f),
                "sites": {"polymarket": {"url": p["url"], "title": p["title"], "score": s, "flags": fl, "label": label, "fine": fp,
                                         "volume": round(p["volume"]), "volume24h": round(p["volume24h"]),
                                         "matched_outcome": lead, "outcomes": outs,
+                                        "spread": (p.get("spr") or {}) if len(p["outcomes"]) > 1 else
+                                                  {"Yes": next(iter((p.get("spr") or {}).values()), None)},
                                         "book": {lead: (p.get("book") or {}).get(lead if len(p["outcomes"]) > 1 else next(iter(p["outcomes"])))}},
                          "kalshi": k},
                "flags": fl, "score": s, "categories": (p.get("categories") or []) + (e.get("categories") or []),
@@ -871,6 +936,11 @@ def main():
         except Exception as err:
             print("Matcher:", name, "failed:", err)
             sites[name] = []
+    try:
+        if sites["polymarket"]:
+            alpha_first(alpha, sites["polymarket"])
+    except Exception as err:
+        print("Alpha-first lookup failed:", err)
     print("Matcher: %d Alpha Arcade markets | %d Polymarket events | %d Kalshi events"
           % (len(alpha), len(sites["polymarket"]), len(sites["kalshi"])))
     try:
@@ -920,6 +990,7 @@ def main():
             # this site's price for every Alpha outcome it lines up with
             row["sites"][name]["outcomes"] = {l: e["outcomes"][k] for l, k in om.items() if k is not None}
             row["sites"][name]["book"] = {l: (e.get("book") or {}).get(k) for l, k in om.items() if k is not None}
+            row["sites"][name]["spread"] = {l: (e.get("spr") or {}).get(k) for l, k in om.items() if k is not None}
             row["prices"][name] = e["outcomes"][om[lead]] if om.get(lead) is not None else None
             row["score"] = min(row["score"], s)
             row["flags"] += [x for x in fl if x not in row["flags"]]
@@ -933,6 +1004,23 @@ def main():
     print("Matcher: %d busy non-sports Alpha markets with no Kalshi match (best try shown):" % len(near))
     for t, sc, kt, mo in near[:20]:
         print("  NEAR %3d | %s | K: %s -> %s" % (sc, t[:44], kt[:48], mo))
+    try:                                           # Nov 14: for the busiest Alpha markets with no Kalshi match,
+        kw = {}                                        # list what Kalshi DOES have on the rarest word in the title
+        for ev in sites["kalshi"]:
+            for w in set(key_words(ev["title"] + " " + (ev.get("alt") or ""))):
+                kw.setdefault(w, []).append(ev["title"])
+        miss = sorted([r for r in out if "kalshi" not in r["sites"]], key=lambda r: -r["sites"]["alpha"]["volume"])
+        solo = sorted([a for a in alpha if a["url"] not in {r["sites"]["alpha"]["url"] for r in out} and not sporty(a)],
+                      key=lambda a: -a["volume"])
+        for t in [r["title"] for r in miss[:30]] + [a["title"] for a in solo[:15]]:
+            ws = sorted([w for w in set(key_words(t)) if w in kw and w not in SCOPE], key=lambda w: len(kw[w]))
+            if not ws:
+                print("  KALSHI-HAS nothing | %s" % t[:50])
+                continue
+            w = ws[0]
+            print("  KALSHI-HAS '%s' x%d | %s | %s" % (w, len(kw[w]), t[:44], " || ".join(x[:60] for x in kw[w][:5])))
+    except Exception as err:
+        print("Kalshi subject check failed:", err)
     used = {r["sites"]["polymarket"]["url"] for r in out if "polymarket" in r["sites"]}
     pk = poly_kalshi(sites["polymarket"], sites["kalshi"], used)
     print("Matcher: %d Polymarket-Kalshi pairs (%d SAME)" % (len(pk), sum(r["label"] == "SAME" for r in pk)))

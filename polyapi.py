@@ -130,3 +130,30 @@ def events_from_markets(params, max_markets=6000, page=100):   # Polymarket retu
     out.sort(key=lambda e: float(e.get("volume24hr") or 0), reverse=True)
     print("Polymarket: %d markets -> %d events (from /markets)" % (len(ms), len(out)))
     return out
+
+
+def search(text, limit=6):
+    """Nov 14: Polymarket's site search, for one market at a time (Alpha-first lookups).
+    Returns event objects (with their markets) or [] ."""
+    q = {"q": text, "limit_per_type": limit, "events_status": "active"}
+    d = get(BASE + "/public-search?" + urllib.parse.urlencode(q))
+    evs = (d.get("events") or []) if isinstance(d, dict) else (d or [])
+    return [e for e in evs if isinstance(e, dict) and not e.get("closed")]
+
+
+def by_slug(slug):
+    """One market by its link name, shaped as an event (works when /events refuses us)."""
+    d = get(BASE + "/markets?" + urllib.parse.urlencode({"slug": slug, "closed": "false", "limit": 20}))
+    if not d:
+        return []
+    evs = {}
+    for m in d:
+        ev = (m.get("events") or [{}])[0] or {}
+        key = ev.get("slug") or m.get("slug")
+        e = evs.setdefault(key, {"id": ev.get("id") or key, "slug": key, "title": ev.get("title") or m.get("question") or "",
+                                 "description": ev.get("description") or m.get("description") or "",
+                                 "volume": ev.get("volume") or m.get("volumeNum") or m.get("volume"),
+                                 "volume24hr": ev.get("volume24hr") or m.get("volume24hr"),
+                                 "tags": ev.get("tags") or [], "endDate": ev.get("endDate") or m.get("endDate"), "markets": []})
+        e["markets"].append(m)
+    return list(evs.values())

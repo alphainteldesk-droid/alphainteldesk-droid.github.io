@@ -19,6 +19,7 @@ LONGSHOT = 10                         # if the lower price is under 10 cents...
 MAX_RATIO = 3                         # ...the higher one can't be more than 3x it (thin/stale book)
 MIN_NET_GAP = 1.0                     # points left after estimated fees
 MIN_VOLUME = {"alpha": 50, "polymarket": 5000, "kalshi": 500}   # $ / $ / contracts traded
+MAX_SPREAD = 10                       # Nov 14: cents between best bid and ask; wider = the midpoint is not a price anyone can trade
 MIN_HOURS_LEFT = 2                    # markets about to close move too fast to compare
 TOP = 10
 MIN_ALPHA_ROWS = 4                    # Alpha Arcade is our edge: keep at least this many Alpha rows in the top 10
@@ -113,7 +114,7 @@ def brackets_ok(row):
 def gaps(matches, alpha_fresh):
     out = []
     live = alpha_traded_48h()
-    skipped = {"combo": 0, "alpha_idle": 0, "brackets": 0}
+    skipped = {"combo": 0, "alpha_idle": 0, "brackets": 0, "wide": 0}
     for row in matches:
         if is_sports(row.get("categories") or []):
             continue
@@ -142,6 +143,10 @@ def gaps(matches, alpha_fresh):
             if (x.get("volume") or 0) < MIN_VOLUME[site]:
                 continue
             for o, p in (x.get("outcomes") or {}).items():
+                sp = (x.get("spread") or {}).get(o)
+                if sp is not None and sp > MAX_SPREAD:
+                    skipped["wide"] += 1
+                    continue                           # Nov 14: bid and ask too far apart to trust the midpoint
                 if p is not None and MIN_PRICE <= p <= MAX_PRICE:
                     table.setdefault(o, {})[site] = p
         best = None
@@ -175,8 +180,9 @@ def gaps(matches, alpha_fresh):
                         "category": (row.get("categories") or ["Other"])[0]}
         if best:
             out.append(best)
-    print("Gaps: left out %d combo markets, %d bracket mismatches, %d idle Alpha Arcade prices (no trade in 48h)"
-          % (skipped["combo"], skipped["brackets"], skipped["alpha_idle"]))
+    print("Gaps: left out %d combo markets, %d bracket mismatches, %d idle Alpha Arcade prices (no trade in 48h), "
+          "%d prices with a bid/ask wider than %d cents"
+          % (skipped["combo"], skipped["brackets"], skipped["alpha_idle"], skipped["wide"], MAX_SPREAD))
     out.sort(key=lambda g: -g["net"])
     three = [g for g in out if g["all3"]]              # every all-three-sites gap, always shown first
     rest = [g for g in out if not g["all3"]]
