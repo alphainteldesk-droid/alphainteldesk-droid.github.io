@@ -14,12 +14,13 @@ import json, os, re, sys, time, urllib.parse, urllib.request
 from datetime import datetime, timezone
 
 OUT = "traders.json"
-MIN_AGE = 1                  # leaderboards move slowly: refresh about once an hour
+MIN_AGE = 50 * 60            # leaderboards move slowly: refresh about once an hour
 TOP = 5
 UA = {"User-Agent": "AlphaIntelDesk/1.0 (+https://alphainteldesk.com)", "Accept": "application/json"}
 PM = "https://data-api.polymarket.com/v2"
 KA = "https://api.elections.kalshi.com/v1/social/leaderboard"
-AA = "https://api.alphaarcade.com/api/leaderboard-new"
+AAPI = "https://api.alphaarcade.com/api"
+AA = AAPI + "/leaderboard-new"
 
 
 def get(url, timeout=20):
@@ -98,29 +99,48 @@ def alpha(exclude):
         num = lambda *n: float(pick(r, *n) or 0)
         out.append({"name": name[:28], "pnl": round(num("profitlossusd", "pnl", "pl", "profit", "totalpnl", "realizedpnl")),
                     "volume": round(num("volumeusd", "volume", "totalvolume", "vol")),
-                    "url": "https://www.alphaarcade.com/leaderboard"})
+                    "url": "https://www.alphaarcade.com/leaderboard", "_w": wallet})
     print("  Alpha Arcade board: %d rows kept out by the private list" % hidden)
-    try:                                             # Nov 14 PROBE (temporary): which public per-wallet routes exist? field names only
-        w = max(rows, key=lambda r: float(r.get("profitLossUSD") or 0)).get("walletAddress")
-        def shape(d, depth=0):
-            if isinstance(d, list):
-                return "[%d x %s]" % (len(d), shape(d[0], depth + 1) if d else "")
-            if isinstance(d, dict):
-                return "{%s}" % ", ".join(k + (":" + shape(v, depth + 1) if depth < 1 and isinstance(v, (list, dict)) else "") for k, v in list(d.items())[:30])
-            return type(d).__name__
-        for path in ("get-wallet-orders", "get-wallet-metrics", "get-username-by-wallet", "get-wallet-positions", "get-positions",
-                     "get-wallet-trades", "get-wallet-activity", "get-wallet-history", "get-user-positions", "get-wallet-portfolio"):
-            for prm in ("wallet", "walletAddress", "address"):
-                try:
-                    d = get("https://api.alphaarcade.com/api/%s?%s=%s" % (path, prm, w), timeout=10)
-                    print("  PROBE %s?%s -> %s" % (path, prm, shape(d)[:600]))
-                    break
-                except Exception as err:
-                    print("  PROBE %s?%s -> %s" % (path, prm, str(err)[:50]))
-    except Exception as err:
-        print("  PROBE failed", str(err)[:60])
     out.sort(key=lambda t: -t["pnl"])
-    return out[:TOP]
+    out = out[:TOP]
+    since = time.time() - 7 * 86400
+    for t in out:                                    # Nov 14: public username + biggest trade of the last 7 days
+        w = t.pop("_w", "")
+        if not w:
+            continue
+        try:
+            u = (get(q(AAPI + "/get-username-by-wallet", walletAddress=w), timeout=10) or {}).get("username")
+            if u and not any(x and x in norm(u) for x in exclude):
+                t["name"] = str(u)[:28]
+        except Exception:
+            pass
+        try:
+            trades = (get(q(AAPI + "/get-wallet-trades", wallet=w), timeout=15) or {}).get("trades") or []
+            def stamp(x):
+                c = x.get("createdAt")
+                if isinstance(c, (int, float)):
+                    return c / 1000 if c > 1e11 else c
+                try:
+                    return datetime.fromisoformat(str(c).replace("Z", "+00:00")).timestamp()
+                except Exception:
+                    return 0
+            def money(x):                            # amounts may come in millionths of a dollar
+                amt, px = float(x.get("totalAmount") or 0), float(x.get("pricePerShare") or 0)
+                micro = px > 1.5
+                return (amt / 1e6 if micro else amt), (px / 1e6 if micro else px)
+            week = [x for x in trades if stamp(x) >= since]
+            best = max(week, key=lambda x: money(x)[0], default=None)
+            if best and money(best)[0] >= 1:
+                usd, px = money(best)
+                t["move2"] = {"side": "SELL" if "sell" in str(best.get("type") or "").lower() else "BUY",
+                              "outcome": str(best.get("position") or ""), "title": str(best.get("marketTitle") or ""),
+                              "price": round(px * 100, 1), "usd": round(usd),
+                              "when": datetime.fromtimestamp(stamp(best), timezone.utc).isoformat(),
+                              "url": "https://www.alphaarcade.com/market/" + str(best.get("slug") or "")}
+        except Exception as err:
+            print("  Alpha Arcade trades for one trader failed:", str(err)[:60])
+        time.sleep(0.3)
+    return out
 
 
 def main():
