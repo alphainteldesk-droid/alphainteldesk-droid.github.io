@@ -1529,7 +1529,7 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
   var J = function (u) { return fetch(u + '?v=' + Date.now()).then(function (r) { return r.json(); }).catch(function () { return {}; }); };
   var ago = function (s) { var m = Math.max(1, Math.round((Date.now() - new Date(s)) / 60000)); return m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago'; };
   /* Nov 14: visitors in the last 30 days, from GoatCounter's public counter; stays hidden if it isn't available */
-  var V = fetch('https://alphainteldesk.goatcounter.com/counter/TOTAL.json?start=month').then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
+  var V = fetch('https://alphainteldesk.goatcounter.com/counter/TOTAL.json?start=' + new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10))   /* a date, not 'month': GoatCounter answered 0 for start=month (Nov 14) */.then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
   Promise.all([J('gaps.json'), J('movers.json'), J('calendar.json'), J('health.json'), V]).then(function (r) {
     var g = (r[0].gaps || []).filter(function (x) { return !(x.fill && !x.fill.usd); }), mv = r[1].movers || [],
         cal = (r[2].items || []).filter(function (e) { return e.kind === 'scheduled' && new Date(e.date) > Date.now(); }), h = r[3];
