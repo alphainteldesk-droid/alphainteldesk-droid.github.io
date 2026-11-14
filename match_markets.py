@@ -719,8 +719,9 @@ def poly_kalshi(poly, kalshi, used):
         s, fl, om, e = best_match(a, ks, idx)
         if (not e or s < 90) and len(p["outcomes"]) > 1:
             # Nov 14: deadline ladder where Kalshi lists fewer deadlines: try each deadline by itself, soonest first
-            for lbl in sorted([l for l in outs if outs[l] is not None and pe.get(l) and label_date(l)], key=lambda l: pe[l])[:3]:
-                a1 = dict(a, end=pe[lbl], outcomes={lbl: outs[lbl]})
+            full = outs
+            for lbl in sorted([l for l in full if full[l] is not None and pe.get(l) and label_date(l)], key=lambda l: pe[l])[:3]:
+                a1 = dict(a, end=pe[lbl], outcomes={lbl: full[lbl]})
                 s1, fl1, om1, e1 = best_match(a1, ks, idx)
                 if e1 and s1 > s and om1.get(lbl) is not None:
                     s, fl, om, e, a, outs = s1, fl1, om1, e1, a1, a1["outcomes"]
