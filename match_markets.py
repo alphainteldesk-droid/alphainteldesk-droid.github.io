@@ -571,8 +571,9 @@ def fine_print(ra, rb):
         src = "unknown"                                  # one site doesn't name a source in its rules text
     elif both:
         src = "match"
-    elif {"news"} >= set(a.values()) | set(b.values()):
-        src = "similar"                                  # different news outlets calling the same result
+    elif {"news"} >= set(a.values()) | set(b.values()) or "Credible reporting" in a or "Credible reporting" in b:
+        src = "similar"                                  # different news outlets calling the same result; "a consensus of
+                                                         # credible reporting" (Polymarket's stock wording) never counts as a different source
     else:
         src = "differ"
     ca, cb = bool(_re.search(CANCEL, (ra or "").lower())), bool(_re.search(CANCEL, (rb or "").lower()))
