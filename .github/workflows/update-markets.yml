@@ -38,6 +38,10 @@ jobs:
         continue-on-error: true
         env:
           TRADERS_EXCLUDE: ${{ secrets.TRADERS_EXCLUDE }}
+      - run: python3 fresh_wallets.py   # Nov 14: new wallets making large trades on markets closing soon
+        continue-on-error: true
+        env:
+          FRESH_PARAMS: ${{ secrets.FRESH_PARAMS }}
       - run: python3 post_new_markets.py
         continue-on-error: true
         env:
@@ -64,4 +68,5 @@ jobs:
           [ -f alpha_trades.json ] && git add alpha_trades.json
           [ -f traders.json ] && git add traders.json
           [ -f traders_full.json ] && git add traders_full.json
+          [ -f fresh.json ] && git add fresh.json fresh_state.json
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -X theirs -q && git push)   # if another run pushed meanwhile, keep this run's fresher files
