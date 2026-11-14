@@ -22,7 +22,7 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
-P = {"usd": 5000, "close_days": 7, "wallet_days": 7, "wait_min": 10, "max_price": 0.95}
+P = {"usd": 2500, "close_days": 7, "wallet_days": 30, "wait_min": 10, "max_price": 0.95}
 try:
     P.update(json.loads(os.environ.get("FRESH_PARAMS") or "{}"))
 except Exception:
