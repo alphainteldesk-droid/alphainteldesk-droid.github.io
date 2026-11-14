@@ -34,6 +34,10 @@ jobs:
         continue-on-error: true
       - run: python3 indexnow.py   # once a day: tell Bing & co. about our pages (Nov 10)
         continue-on-error: true
+      - run: python3 top_traders.py   # Nov 14: weekly leaderboards for the Top Traders section (about once an hour)
+        continue-on-error: true
+        env:
+          TRADERS_EXCLUDE: ${{ secrets.TRADERS_EXCLUDE }}
       - run: python3 post_new_markets.py
         continue-on-error: true
         env:
@@ -58,4 +62,5 @@ jobs:
           [ -f fine_watch.json ] && git add fine_watch.json
           [ -f health.json ] && git add health.json
           [ -f alpha_trades.json ] && git add alpha_trades.json
+          [ -f traders.json ] && git add traders.json
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -X theirs -q && git push)   # if another run pushed meanwhile, keep this run's fresher files
