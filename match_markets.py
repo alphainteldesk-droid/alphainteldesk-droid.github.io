@@ -103,6 +103,7 @@ def key_words(s):
 
 
 def numbers(s):
+    s = re.sub(r"(?i)\((?:h\.?\s?r\.?|s\.?|h\.?\s?j\.?\s?res\.?)\s?\d+\)", " ", s or "")   # Nov 14: "(H.R.3633)" is a bill number
     return set(re.findall(r"(?<![a-z0-9])\d+(?:\.\d+)?(?![a-z0-9])", (s or "").lower().replace(",", "")))
 
 
@@ -198,7 +199,7 @@ def load_poly():
     # Nov 12: smaller windows past 2 weeks - Polymarket's /markets list stops paging at ~2,100 per window
     edges = [n + timedelta(days=d) for d in list(range(0, 15)) +
              [18, 22, 26, 30, 37, 45, 52, 60, 75, 90, 105, 120, 150, 180, 240, 300, 400, 550, 800, 2000]]
-    seen, evs = set(), []
+    seen, evs, byk, merged = set(), [], {}, 0
     for lo, hi in zip(edges, edges[1:]):
         try:                                       # Nov 12: shared helper (keyset list, old list as backup)
             import polyapi
@@ -209,7 +210,15 @@ def load_poly():
         for ev in d:
             k = ev.get("id") or ev.get("slug")
             if k not in seen:
-                seen.add(k); evs.append(ev)
+                seen.add(k); evs.append(ev); byk[k] = ev
+            else:                                  # Nov 14: same event again in a later window = its later deadlines.
+                old = byk[k]                       # Before, only the first window's markets were kept, so "by...?" events lost most outcomes
+                got = {m.get("id") or m.get("slug") or m.get("question") for m in old.get("markets") or []}
+                add = [m for m in ev.get("markets") or [] if (m.get("id") or m.get("slug") or m.get("question")) not in got]
+                if add:
+                    old["markets"] = (old.get("markets") or []) + add
+                    merged += len(add)
+    print("Matcher: Polymarket deadline ladders: %d later-deadline markets joined to their events" % merged)
     out = []
     for ev in evs:
         e = poly_event(ev)
@@ -281,6 +290,8 @@ def alpha_first(alpha, poly):
     import polyapi
     idx = build_index(poly)
     have = {e["url"] for e in poly}
+    pos = {e["url"]: i for i, e in enumerate(poly)}
+    fuller = 0
     todo = sorted([a for a in alpha if best_match(a, poly, idx)[0] < 70], key=lambda a: -a["volume"])
     t0, added, tried, fails = time.time(), 0, 0, 0
     for a in todo[:ALPHA_FIRST_MAX]:
@@ -307,6 +318,9 @@ def alpha_first(alpha, poly):
                 e = None
             if e and len(seen) < 3:
                 seen.append("%s [%s%s]" % (e["title"][:38], why(a, e), " had" if e["url"] in have else ""))
+            if e and e["url"] in pos and len(e["outcomes"]) > len(poly[pos[e["url"]]]["outcomes"]):
+                poly[pos[e["url"]]] = e                # the pool's copy was cut short by Polymarket's list limit
+                fuller += 1
             if not e or e["url"] in have:
                 continue
             sc = score(a, e)[0]
@@ -317,8 +331,8 @@ def alpha_first(alpha, poly):
                 poly.append(e)
                 added += 1
         print("  ALPHA-FIRST %3d | %s | %s | P: %s" % (best[0], a["title"][:44], how, " || ".join(seen) or "-"))
-    print("Alpha-first: %d Alpha markets had no Polymarket match in the main list, looked up %d, added %d Polymarket events (%.0fs)"
-          % (len(todo), tried, added, time.time() - t0))
+    print("Alpha-first: %d Alpha markets had no Polymarket match in the main list, looked up %d, added %d Polymarket events, completed %d cut-short ones (%.0fs)"
+          % (len(todo), tried, added, fuller, time.time() - t0))
 
 
 def load_kalshi():
@@ -637,14 +651,27 @@ def candidates(a, events, idx):
     return [events[i] for i, c in hits.items() if c >= need]
 
 
+def same_question(t1, t2):
+    """True when two titles ask the same thing word for word (ignoring filler words) with the same numbers."""
+    k1, k2 = set(key_words(t1)), set(key_words(t2))
+    return len(k1) >= 2 and k1 == k2 and numbers(t1) == numbers(t2)
+
+
+def rules_twin(r1, r2):
+    """0-1: how alike the opening of two rule texts is (Alpha Arcade often copies Polymarket's rules)."""
+    c = lambda t: " ".join(words(t))[:260]
+    return round(SequenceMatcher(None, c(r1), c(r2)).ratio(), 2) if r1 and r2 else 0.0
+
+
 def best_match(a, events, idx):
     best = (0, [], {}, None)
     away = max(0.0, a["end"] - n.timestamp())
     for e in candidates(a, events, idx):
         ends = [x for x in [e["end"]] + list((e.get("ends") or {}).values()) +
                 [label_date(k) for k in list(e["outcomes"])[:40]] if x]
-        if a["end"] and ends and min(abs(a["end"] - x) for x in ends) > max(4 * 86400, away * 0.15):
-            continue
+        if a["end"] and ends and min(abs(a["end"] - x) for x in ends) > max(4 * 86400, away * 0.15) \
+                and not same_question(a["title"], e["title"]):
+            continue                                   # Nov 14: word-for-word the same question still gets scored
         s, fl, om = score(a, e)
         if s > best[0]:
             best = (s, fl, om, e)
@@ -658,7 +685,7 @@ def why(a, e):
     away = max(0.0, a["end"] - n.timestamp())
     d = min(abs(a["end"] - x) for x in ends) if a["end"] and ends else 0
     gate = d > max(4 * 86400, away * 0.15)
-    return "%d/%dd%s" % (score(a, e)[0], d / 86400, "/DATE-GATE" if gate else "")
+    return "%d/%dd%s/twin %.2f" % (score(a, e)[0], d / 86400, "/DATE-GATE" if gate else "", rules_twin(a.get("rules"), e.get("rules")))
 
 
 SPORTY = ("sport", "esports", "soccer", "football", "basketball", "baseball", "hockey", "nfl", "nba", "mls",
