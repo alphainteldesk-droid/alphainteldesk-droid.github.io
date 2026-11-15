@@ -1135,7 +1135,8 @@ def expiry_returns(alpha, sites):
                 "days": round(days, 2), "volume": round(e.get("volume") or 0), "url": e["url"], "est": est,
                 "cat": next((c for c in e.get("categories") or [] if c), ""),
                 "fs": "site" if own or site == "alpha" else "est", "fr": round(r, 4),
-                "id": (e.get("book") or {}).get(label) if site != "alpha" else (e.get("apps") or {}).get(label)}   # Nov 15: Kalshi ticker / Polymarket Yes token, for the track record   # where the fee came from (watchdog counts the estimates)
+                "id": (e.get("book") or {}).get(label) if site != "alpha" else (e.get("apps") or {}).get(label),
+                "q": (e.get("qs") or {}).get(label) or ""}   # Nov 15 (James): the site's full question for this contract, shown in plain words   # Nov 15: Kalshi ticker / Polymarket Yes token, for the track record   # where the fee came from (watchdog counts the estimates)
 
     for site in ("polymarket", "kalshi"):
         for e in sites.get(site) or []:

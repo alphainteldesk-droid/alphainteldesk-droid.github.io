@@ -26,6 +26,8 @@ jobs:
         continue-on-error: true
       - run: python3 match_markets.py
         continue-on-error: true
+      - run: python3 exit_grade.py   # Nov 15: Danger Zone Exit grade (live order-book depth, 2-min cap)
+        continue-on-error: true
       - run: python3 make_gaps.py
         continue-on-error: true
       - run: python3 track_record.py   # Nov 15: Danger Zone track record (did listed contracts pay out?)

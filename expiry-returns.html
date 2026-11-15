@@ -116,7 +116,10 @@
   .xt td { padding:10px; border-bottom:1px solid var(--line); text-align:right; vertical-align:top; font-family:"JetBrains Mono",monospace; white-space:nowrap; }
   .xt td:first-child { font-family:inherit; white-space:normal; }
   .xt td a { color:var(--text); font-weight:600; } .xt td a:hover { color:var(--cyan); text-decoration:none; }
-  .xt .o { display:block; color:var(--muted); font-size:.82rem; } .xt .o b { color:var(--amber); }
+  .xt .o { display:block; color:var(--muted); font-size:.82rem; } .xt .o b { color:var(--amber); } .xt .o b.not { color:#ff8a8a; } .xt .o b.yes { color:#3ddc84; } .xt .o i { color:var(--text); font-style:normal; opacity:.85; }
+  .gkey { display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; margin:14px 0 4px; padding:10px 14px; border:1px solid var(--line); border-radius:10px; background:var(--panel); font-size:.86rem; color:var(--muted); }   /* Nov 15: grade key */
+  .gkey > b { font:700 .7rem "JetBrains Mono",monospace; letter-spacing:.12em; color:var(--text); }
+  .gkey span { white-space:nowrap; } .gkey .xg { margin-right:6px; cursor:default; } .gkey a { color:var(--cyan); margin-left:auto; }
   .xt .v { font:500 .66rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--cyan); margin-right:8px; }
   .xt .ret { color:#3ddc84; font-weight:700; } .xt .est { color:var(--muted); font-size:.7rem; }
   .xt .hot { color:#ff6b6b; }
@@ -138,6 +141,15 @@
   .edge-g b { display:block; color:var(--cyan); font:700 .78rem "JetBrains Mono",monospace; letter-spacing:.1em; }
   .edge-g span { color:var(--muted); font-size:.86rem; }
   .tw { overflow-x:auto; }
+  .xg { display:inline-block; min-width:22px; text-align:center; padding:1px 6px; border-radius:4px; font:700 .8rem "JetBrains Mono",monospace; border:1px solid; cursor:help; }   /* Nov 15: Exit grade */
+  .xg.a { color:#3ddc84; border-color:rgba(61,220,132,.6); background:rgba(61,220,132,.13); }
+  .xg.b { color:var(--cyan); border-color:rgba(63,219,230,.55); background:rgba(63,219,230,.1); }
+  .xg.c { color:var(--amber); border-color:rgba(255,179,71,.55); background:rgba(255,179,71,.1); }
+  .xg.d { color:#ff8a8a; border-color:rgba(255,107,107,.55); background:rgba(255,107,107,.12); }
+  .xg.s { color:var(--muted); border-color:var(--line); font-weight:500; font-size:.68rem; }
+  .xt .xe small { display:block; color:var(--muted); font-size:.72rem; margin-top:3px; }
+  @media (max-width:640px) { .xt .xe .xp { display:none; } .xt .xe small { font-size:.66rem; } .xg { padding:1px 4px; } .sd { min-width:0; padding:2px 5px; font-size:.7rem; } .xt td, .xt th { padding:8px 4px; } }
+  @media (max-width:380px) { .xt .xe small { display:none; } .xt td { font-size:.8rem; } .xt td:first-child { overflow-wrap:anywhere; } }   /* small phones: just the grade letter */
   @media (max-width:640px) { .xt .hide { display:none; } .xt td, .xt th { padding:8px 5px; }
     .xt th:last-child, .xt td.cl { display:none; } .xt th { font-size:.6rem; letter-spacing:.06em; white-space:normal; } .xt td { font-size:.85rem; } }
   .xt .mcl { display:none; } @media (max-width:640px) { .xt .mcl { display:block; } }
@@ -188,8 +200,14 @@
     <span class="lbl">SORT</span><div class="chips" id="f-sort"></div>
     <span class="lbl">DAILY PRICE MARKETS</span><div class="chips" id="f-px"></div>
   </div>
-  <div class="tw" id="x-tw"><table class="xt"><thead><tr><th>MARKET</th><th>SIDE</th><th>PRICE NOW</th><th title="After fees, if it resolves this way">RETURN IF RIGHT <span class="th-sub">after fees</span></th><th>CLOSES</th></tr></thead>
-    <tbody id="x-rows"><tr><td colspan="5">Loading…</td></tr></tbody></table></div>
+  <div class="gkey"><b>EASY TO SELL?</b>
+    <span><span class="xg a">A</span>very easy · $10K+ of buyers</span>
+    <span><span class="xg b">B</span>easy · $2K–$10K</span>
+    <span><span class="xg c">C</span>some buyers · $300–$2K</span>
+    <span><span class="xg d">D</span>hard · under $300</span>
+    <a href="#exit-qa">What's this?</a></div>
+  <div class="tw" id="x-tw"><table class="xt"><thead><tr><th>MARKET</th><th>SIDE</th><th>PRICE NOW</th><th title="After fees, if it resolves this way">RETURN IF RIGHT <span class="th-sub">after fees</span></th><th title="How much you could sell back right now, within 2¢ of the best bid">EASY TO SELL? <span class="th-sub">before it closes</span></th><th>CLOSES</th></tr></thead>
+    <tbody id="x-rows"><tr><td colspan="6">Loading…</td></tr></tbody></table></div>
   <p class="confirm"><b>Prices change by the minute.</b> Always confirm the price, the fee and the rules on the site itself before you buy.</p>
   <p class="note">The return only happens if the market resolves the way the row says. If it doesn't, the contract pays nothing and you lose what you paid. A high price means the market thinks it is likely, not that it is certain. Not financial advice. Always check each site's rules before you trade.</p>
 
@@ -216,8 +234,10 @@
   </section>
 
   <h2 id="how">How this page works</h2>
+  <div class="qa"><b>How do I read a row?</b><span>The bold line is the market. The line under it is the exact question for that contract, and whether you need the answer to be YES or NO. If it is, you get $1 per contract; if not, you lose what you paid.</span></div>
   <div class="qa"><b>What is "Price now"?</b><span>The price you can actually buy at right now: the best ask for Yes, or 100¢ minus the best bid for No. Never the midpoint. We skip any contract whose bid and ask are more than 4¢ apart.</span></div>
   <div class="qa"><b>How is the return worked out?</b><span>(100¢ − price − fee) ÷ (price + fee). The fee is the trading fee each site publishes for that exact market, read fresh every update. If a site doesn't publish one, we estimate it and mark it "est". Holding to settlement has no second fee. Kalshi rounds each order's fee up to the next cent, so a very small order (a few contracts) pays a little more than shown.</span></div>
+  <div class="qa" id="exit-qa"><b>What does "Easy to sell?" mean?</b><span>If you change your mind before the market closes, can you sell? We look at the buyers waiting on each site right now and add up how much they'd take off your hands at close to the best offer (within 2¢). "Sell $4.2K now" means about $4,200 worth. A = $10,000 or more, B = $2,000+, C = $300+, D = under $300 or no buyers. This changes minute to minute, and selling usually gets you a little less than you paid. Alpha Arcade: coming soon.</span></div>
   <div class="qa"><b>How does the track record work?</b><span>Every contract (Polymarket, Kalshi and Alpha Arcade) is logged the first time it appears on this page, at the price we first listed it. When it settles we record whether it paid out. Each contract counts once, and nothing is removed afterwards. "If you'd bought $1 of each" is the average return after fees: a contract that pays out adds its return, one that doesn't loses the whole $1. Daily crypto and price markets are counted separately because they settle within days and would swamp the rest. Contracts a site cancels or settles 50-50 aren't counted. Past results don't predict future ones.</span></div>
   <div class="qa"><b>How do you keep the numbers right?</b><span>Every update recomputes every row from scratch and throws out anything that doesn't add up. A watchdog checks the page after every update and alerts us if prices go stale, if a site stops publishing its fees, or if a fee rate changes. If prices are more than 2 hours old, this page tells you so.</span></div>
   <div class="qa"><b>What can go wrong?</b><span>The outcome goes the other way and you lose the full price. Settlement can also be late or disputed, which ties your money up longer than the close date says. A very high return usually means the market sees real risk.</span></div>
@@ -258,6 +278,21 @@
   function yr(x) { return x.days >= 3 ? x.apr : -1; }   /* a per-year figure for a position held under 3 days is noise */
   function left(iso) { var h = (Date.parse(iso) - Date.now()) / 3600000;
     return h <= 0 ? 'now' : h < 48 ? Math.max(1, Math.round(h)) + ' h' : Math.round(h / 24) + ' d'; }
+  function usd(v) { return v >= 1000 ? '$' + (v >= 9950 ? Math.round(v / 1000) : (v / 1000).toFixed(1)) + 'K' : '$' + v; }
+  function exit(x) {   /* Nov 15: Exit grade from the live order book (exit_grade.py) */
+    if (x.site === 'alpha') return '<span class="xg s" title="Alpha Arcade order book coming soon">soon</span>';
+    var e = x.ex; if (!e) return '<span class="est">—</span>';
+    if (!e.usd) return '<span class="xg d" title="No one is bidding for this side right now">D</span><small>no buyers</small>';
+    return '<span class="xg ' + e.g.toLowerCase() + '" title="Right now buyers would take about ' + usd(e.usd) + ' of this off your hands at ' + e.px + '¢ or more (the best offer is ' + e.bid + '¢). A = $10K+, B = $2K+, C = $300+, D = under $300.">' + e.g + '</span>' +
+      '<small><span class="xp">sell </span>' + usd(e.usd) + '<span class="xp"> now</span></small>'; }
+  function pays(x) {   /* Nov 15 (James): one plain sentence saying what has to happen for you to get $1 */
+    var yn = x.side === 'No' ? '<b class="not">NO</b>' : '<b class="yes">YES</b>';
+    if (x.q && /^will\b/i.test(x.q) && x.q !== x.title)
+      return '<span class="o">You get $1 if the answer is ' + yn + ': <i>' + esc(x.q) + '</i></span>';
+    var o = x.outcome && x.outcome.toLowerCase() !== 'yes' && x.outcome !== x.title ? x.outcome : '';
+    if (!o) return '<span class="o">You get $1 if the answer is ' + yn + '</span>';
+    o = o.replace(/^(Above|Below|Before|After|Between|Under|Over|At least|At most|More than|Less than|Fewer than|Exactly)\b/, function (w) { return w.toLowerCase(); });
+    return '<span class="o">You get $1 if the answer is ' + (x.side === 'No' ? '<b class="not">NOT</b> ' : '') + '<b>' + esc(o) + '</b></span>'; }
   function chips(id, key, opts) {
     var el = document.getElementById(id);
     el.innerHTML = opts.map(function (o) { return '<button class="chip' + (st[key] === o[0] ? ' on' : '') + '" data-v="' + o[0] + '">' + o[1] + '</button>'; }).join('');
@@ -270,15 +305,16 @@
     document.getElementById('x-rows').innerHTML = r.length ? r.slice(0, 120).map(function (x) {
       var cd = new Date(x.close), yr2 = cd.getFullYear() !== new Date().getFullYear();
       var day = cd.toLocaleDateString('en-US', yr2 ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' });
-      var what = (x.outcome && x.outcome.toLowerCase() !== 'yes' && x.outcome !== x.title ? '<span class="o">Outcome: <b>' + esc(x.outcome) + '</b></span>' : '') +
+      var what = pays(x) +
         '<span class="o mcl">Closes ' + day + ' · in ' + left(x.close) + '</span>';   /* phones: the close date moves under the market */
       return '<tr><td><span class="v">' + NAMES[x.site] + '</span><a href="' + esc(x.url) + '" rel="noopener">' + esc(x.title) + '</a>' + what + '</td>' +
         '<td><span class="sd ' + (x.side === 'Yes' ? 'y' : 'n') + '">' + x.side.toUpperCase() + '</span></td>' +
         '<td>' + x.ask.toFixed(1) + '¢' + (x.est ? ' <span class="est" title="Alpha Arcade: last trade price">est</span>' : '') + '</td>' +
         '<td class="ret" title="After a ' + x.fee.toFixed(2) + '¢ fee' + (x.fs === 'est' ? ' (our estimate)' : '') + '">+' + x.ret.toFixed(1) + '%</td>' +
+        '<td class="xe">' + exit(x) + '</td>' +
         '<td class="cl">' + day +
         '<small>in ' + left(x.close) + '</small></td></tr>'; }).join('')
-      : '<tr><td colspan="5">Nothing fits these filters right now.</td></tr>';
+      : '<tr><td colspan="6">Nothing fits these filters right now.</td></tr>';
   }
   chips('f-site', 'site', [['all', 'All'], ['polymarket', 'Polymarket'], ['kalshi', 'Kalshi'], ['alpha', 'Alpha Arcade']]);
   chips('f-days', 'days', [[7, '7 days'], [30, '30 days'], [90, '3 months'], [180, '6 months']]);
@@ -321,7 +357,7 @@
       document.getElementById('x-tw').classList.add('old');
     }
     draw();
-  }).catch(function () { document.getElementById('x-rows').innerHTML = '<tr><td colspan="5">Loading late. Try again in a few minutes.</td></tr>'; });
+  }).catch(function () { document.getElementById('x-rows').innerHTML = '<tr><td colspan="6">Loading late. Try again in a few minutes.</td></tr>'; });
 })();
 </script>
 <script>
