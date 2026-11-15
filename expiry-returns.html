@@ -87,6 +87,13 @@
   .tt-big b { color:#e8eef5; font-family:"JetBrains Mono",monospace; }
   .more { display:block; width:100%; margin-top:10px; padding:8px; border:1px dashed var(--line); border-radius:8px; background:none; color:var(--cyan);
     font:600 .78rem "JetBrains Mono",monospace; letter-spacing:.1em; cursor:pointer; }
+  .trk { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin:28px 0; }
+  .trk h2 { margin:0 0 6px; }
+  .trk-big { display:flex; flex-wrap:wrap; gap:14px 34px; margin:12px 0 4px; }
+  .trk-big div { min-width:130px; } .trk-big b { display:block; font:700 1.7rem "JetBrains Mono",monospace; color:var(--cyan); }
+  .trk-big b.neg { color:#ff6b6b; } .trk-big span { color:var(--muted); font-size:.8rem; }
+  .trk ul { list-style:none; padding:0; margin:8px 0 0; } .trk li { padding:7px 0; border-top:1px solid var(--line); font-size:.9rem; }
+  .trk li small { color:var(--muted); font-family:"JetBrains Mono",monospace; }
   .qa { margin:10px 0; } .qa b { display:block; } .qa span { color:var(--muted); }
   .rec { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:16px 0 4px; }
   .rec div { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
@@ -161,13 +168,13 @@
 <main class="wrap">
   <span class="tag live"><i></i>Live · checked every 20 minutes</span>
   <h1>The Danger Zone</h1>
-  <p class="tagline">80¢+ contracts settling in 1&ndash;6 months. Up to 25% return, and one wrong call could cost it all.</p>
+  <p class="tagline">80¢+ contracts settling in 1&ndash;6 months. Up to 25% return, but one wrong call could cost it all.</p>
   <p class="lead">Contracts priced at 80¢ or more that settle within the next 6 months. Call it right and each contract pays $1
     when the market settles. Call it wrong and it pays nothing. Each row shows the side to buy, the price right now,
     your return after fees if you're right, and the date it closes. Polymarket, Kalshi and Alpha Arcade, side by side.</p>
   <p class="note" id="x-upd"></p>
   <p class="stale" id="x-stale" hidden></p>
-  <p class="note"><a href="#edge">Gain an edge on your call: use the desk's free research tools before you buy &darr;</a></p>
+  <p class="note"><a href="#edge">Gain an edge on your call: use the desk's free research tools before you buy &darr;</a> &middot; <a href="#track">Our track record &darr;</a></p>
 
   <div class="ctl">
     <span class="lbl">SITE</span><div class="chips" id="f-site"></div>
@@ -180,6 +187,14 @@
   <p class="confirm"><b>Prices change by the minute.</b> Always confirm the price, the fee and the rules on the site itself before you buy.</p>
   <p class="note">The return only happens if the market resolves the way the row says. If it doesn't, the contract pays nothing and you lose what you paid. A high price means the market thinks it is likely, not that it is certain. Not financial advice. Always check each site's rules before you trade.</p>
 
+
+  <section class="trk" id="track">
+    <h2>Track record</h2>
+    <p class="sub" id="trk-sub">Loading…</p>
+    <div class="trk-big" id="trk-big"></div>
+    <p class="note" id="trk-grp"></p>
+    <div id="trk-miss"></div>
+  </section>
 
   <section class="edge" id="edge">
     <h2>Gain an edge on your call</h2>
@@ -197,6 +212,7 @@
   <h2 id="how">How this page works</h2>
   <div class="qa"><b>What is "Price now"?</b><span>The price you can actually buy at right now: the best ask for Yes, or 100¢ minus the best bid for No. Never the midpoint. We skip any contract whose bid and ask are more than 4¢ apart.</span></div>
   <div class="qa"><b>How is the return worked out?</b><span>(100¢ − price − fee) ÷ (price + fee). The fee is the trading fee each site publishes for that exact market, read fresh every update. If a site doesn't publish one, we estimate it and mark it "est". Holding to settlement has no second fee. Kalshi rounds each order's fee up to the next cent, so a very small order (a few contracts) pays a little more than shown.</span></div>
+  <div class="qa"><b>How does the track record work?</b><span>Every Polymarket and Kalshi contract is logged the first time it appears on this page, at the price we first listed it. When it settles we record whether it paid out. Each contract counts once, and nothing is removed afterwards. "If you'd bought $1 of each" is the average return after fees: a contract that pays out adds its return, one that doesn't loses the whole $1. Daily crypto and price markets are counted separately because they settle within days and would swamp the rest. Contracts a site cancels or settles 50-50 aren't counted. Alpha Arcade isn't tracked yet. Past results don't predict future ones.</span></div>
   <div class="qa"><b>How do you keep the numbers right?</b><span>Every update recomputes every row from scratch and throws out anything that doesn't add up. A watchdog checks the page after every update and alerts us if prices go stale, if a site stops publishing its fees, or if a fee rate changes. If prices are more than an hour old, this page tells you so.</span></div>
   <div class="qa"><b>What can go wrong?</b><span>The outcome goes the other way and you lose the full price. Settlement can also be late or disputed, which ties your money up longer than the close date says. A very high return usually means the market sees real risk.</span></div>
   <div class="qa"><b>Why "est" on Alpha Arcade rows?</b><span>Alpha Arcade's live bid and ask aren't in our feed yet, so those rows use the last price and only appear if the market traded in the last 5 days. Check the order book before you trade.</span></div>
@@ -262,6 +278,33 @@
   chips('f-days', 'days', [[7, '7 days'], [30, '30 days'], [90, '3 months'], [180, '6 months']]);
   chips('f-sort', 'sort', [['soon', 'Closing soonest'], ['ret', 'Highest return']]);
   chips('f-px', 'px', [['hide', 'Hide'], ['show', 'Show']]);
+  fetch('track.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    var m = d.summary || {}, a = m.all || {}, g = m.groups || {}, MIN = 10;
+    var st = new Date(m.started + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    var sub = document.getElementById('trk-sub');
+    if (!a.n || a.n < MIN) {
+      sub.textContent = 'Tracking since ' + st + '. We log every contract we list and record whether it paid out. ' + (a.n || 0) +
+        ' settled so far, ' + (m.waiting || 0) + ' waiting to settle. The first figures appear here after ' + MIN + ' have settled.';
+    } else {
+      sub.textContent = 'Every contract we listed since ' + st + ', at the price we first listed it. ' + (m.waiting || 0) + ' more are waiting to settle.';
+      var pct = function (v) { return (v > 0 ? '+' : '') + v.toFixed(1) + '%'; };
+      document.getElementById('trk-big').innerHTML =
+        '<div><b>' + a.pct.toFixed(1) + '%</b><span>paid out (' + a.won + ' of ' + a.n + ')</span></div>' +
+        '<div><b class="' + (a.ret < 0 ? 'neg' : '') + '">' + pct(a.ret) + '</b><span>if you\'d bought $1 of each</span></div>';
+      var parts = [];
+      ['under 1 month', '1-6 months', 'daily price'].forEach(function (k) {
+        var x = g[k]; if (x && x.n) parts.push((k === 'daily price' ? 'Daily price markets (counted separately)' : k.charAt(0).toUpperCase() + k.slice(1)) +
+          ': ' + x.won + ' of ' + x.n + ' paid out, ' + pct(x.ret));
+      });
+      document.getElementById('trk-grp').textContent = parts.join(' · ');
+    }
+    var miss = (d.misses || []).filter(function (x) { return !x.px; }).slice(0, 8);
+    if (miss.length) document.getElementById('trk-miss').innerHTML = '<p class="tt-sub">MOST RECENT THAT DIDN\'T PAY OUT</p><ul>' + miss.map(function (x) {
+      return '<li><a href="' + esc(x.u) + '" rel="nofollow noopener" target="_blank">' + esc(x.t) + '</a>' +
+        (x.o && x.o !== x.t && x.o !== 'Yes' ? ' — ' + esc(x.o) : '') + '<br><small>' + esc(x.s).toUpperCase() + ' at ' + x.a + '¢ · settled ' + new Date(x.c + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + '</small></li>';
+    }).join('') + '</ul>';
+  }).catch(function () { document.getElementById('trk-sub').textContent = 'Track record unavailable right now.'; });
+
   fetch('expiry.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     rows = d.rows || [];
     var m = Math.max(0, Math.round((Date.now() - Date.parse(d.updated)) / 60000));
