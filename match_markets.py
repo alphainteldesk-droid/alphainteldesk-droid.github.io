@@ -996,7 +996,7 @@ def calendar_links(alpha, sites):
     print("Calendar links: %d events linked" % len(out))
 
 
-EXP_LO, EXP_HI, EXP_SPREAD, EXP_DAYS, EXP_PER_EVENT = 85, 98.5, 4, 30, 2
+EXP_LO, EXP_HI, EXP_SPREAD, EXP_DAYS, EXP_PER_EVENT = 85, 98.5, 4, 180, 2   # Nov 15: 30 -> 180 days (James: Expiry Hub, 1-6 months)
 EXP_MIN_VOL = {"polymarket": 20000, "kalshi": 5000, "alpha": 50}
 EXP_SKIP = ("weather", "climate")      # daily temperature and rain brackets: hundreds of rows, little interest
 
@@ -1016,7 +1016,7 @@ def exp_fee_rate(site, e):
 
 
 def expiry_returns(alpha, sites):
-    """Nov 14: Expiry Returns (expiry.json). Contracts you can buy today at 85-98.5 cents that settle within 30 days:
+    """Nov 14: Expiry Returns (expiry.json). Contracts you can buy today at 85-98.5 cents that settle within 180 days (30 until Nov 15):
     what you make after the fee IF it resolves that way (it pays $1), and the same figure per year (simple, not
     compounded). Uses the real ASK for Yes and 100 minus the real BID for No, never the midpoint; bid and ask must
     be within 4 cents. Alpha Arcade has no bid/ask in our feed, so its rows use the last price, are marked "est",
@@ -1075,8 +1075,8 @@ def expiry_returns(alpha, sites):
                     got.append(row)
         rows += sorted(got, key=lambda x: -x["ret"])[:EXP_PER_EVENT]
     total, keep = len(rows), []
-    for lo, hi in ((0, 3), (3, 7), (7, EXP_DAYS + 1)):      # the busiest 170 in each window, so every filter on the page has rows
-        keep += sorted([x for x in rows if lo <= x["days"] < hi], key=lambda x: (x["site"] != "alpha", -x["volume"]))[:170]
+    for lo, hi in ((0, 3), (3, 7), (7, 31), (31, 91), (91, EXP_DAYS + 1)):   # the busiest 150 in each window, so every filter on the page has rows
+        keep += sorted([x for x in rows if lo <= x["days"] < hi], key=lambda x: (x["site"] != "alpha", -x["volume"]))[:150]
     rows = sorted(keep, key=lambda x: x["days"])
     json.dump({"updated": iso(now), "total": total, "rows": rows}, open("expiry.json", "w"), separators=(",", ":"))
     from collections import Counter

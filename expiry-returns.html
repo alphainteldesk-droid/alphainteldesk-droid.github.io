@@ -13,11 +13,11 @@
 <script data-goatcounter="https://alphainteldesk.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Prediction Market Returns to Expiry: Contracts at 85¢+ Closing Soon on Polymarket, Kalshi, Alpha Arcade | Alpha Intel Desk</title>
-<meta name="description" content="High-probability prediction market contracts that settle within days: the buy price, the fee, the return if it resolves that way and the yearly rate, side by side for Polymarket, Kalshi and Alpha Arcade. Free, updated every 20 minutes.">
+<title>Expiry Hub: Prediction Market Contracts at 85¢+ Settling Within 6 Months, Return After Fees | Alpha Intel Desk</title>
+<meta name="description" content="High-probability prediction market contracts that settle in days to 6 months: the buy price, the fee, the return if it pays out, the yearly rate and how often you need to be right, side by side for Polymarket, Kalshi and Alpha Arcade. Free, updated every 20 minutes.">
 <link rel="canonical" href="https://alphainteldesk.com/expiry-returns.html">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
-<meta property="og:title" content="Expiry Returns by Alpha Intel Desk">
+<meta property="og:title" content="Expiry Hub by Alpha Intel Desk">
 <meta property="og:description" content="Real-time intelligence for prediction markets.">
 <meta property="og:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
 <meta name="twitter:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
@@ -113,6 +113,7 @@
   .xt .v { font:500 .66rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--cyan); margin-right:8px; }
   .xt .ret { color:#3ddc84; font-weight:700; } .xt .est { color:var(--muted); font-size:.7rem; }
   .xt .hot { color:#ff6b6b; }
+  .xt .be { color:var(--amber); font-weight:700; }
   .tw { overflow-x:auto; }
   @media (max-width:640px) { .xt .hide { display:none; } .xt td, .xt th { padding:8px 6px; } }
   .foot { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
@@ -132,7 +133,7 @@
     <nav>
       <a href="/">Home</a>
       <a href="/top-traders.html">Top Traders</a>
-      <a href="/#closing-soon">Expirations</a>
+      <a class="on" href="/expiry-returns.html">Expiry Hub</a>
       <a href="/gap-scanner.html">Gap Scanner</a>
       <a href="/#guides">Guides</a>
       <a href="/about.html">About</a>
@@ -142,9 +143,11 @@
 
 <main class="wrap">
   <span class="tag live"><i></i>Live · checked every 20 minutes</span>
-  <h1>Expiry Returns</h1>
-  <p class="lead">Contracts priced at 85¢ or more that settle within days. Each one pays $1 if it resolves that way, so the question is:
-    how much is left after the fee, and how long is your money tied up? Polymarket, Kalshi and Alpha Arcade, side by side.</p>
+  <h1>Expiry Hub</h1>
+  <p class="lead">Contracts priced at 85¢ or more that settle in the next few days to 6 months. Like a CD, you know the payout ($1) and roughly
+    when it comes. Unlike a CD, nothing is insured: if the outcome goes the other way, you lose what you paid. So each row shows the return after
+    the fee, the same return per year, and the one number that matters most: <b>how often you need to be right</b> to come out ahead.
+    Polymarket, Kalshi and Alpha Arcade, side by side.</p>
   <p class="note" id="x-upd"></p>
 
   <div class="ctl">
@@ -153,20 +156,25 @@
     <span class="lbl">SORT</span><div class="chips" id="f-sort"></div>
     <span class="lbl">DAILY PRICE MARKETS</span><div class="chips" id="f-px"></div>
   </div>
-  <div class="tw"><table class="xt"><thead><tr><th>MARKET</th><th>BUY AT</th><th class="hide">FEE</th><th>RETURN</th><th class="hide">PER YEAR</th><th>SETTLES IN</th></tr></thead>
-    <tbody id="x-rows"><tr><td colspan="6">Loading…</td></tr></tbody></table></div>
+  <div class="tw"><table class="xt"><thead><tr><th>MARKET</th><th>BUY AT</th><th class="hide">FEE</th><th>RETURN</th><th class="hide">PER YEAR</th><th title="The chance it has to happen for this to be worth it, after the fee">NEED TO BE RIGHT</th><th>SETTLES IN</th></tr></thead>
+    <tbody id="x-rows"><tr><td colspan="7">Loading…</td></tr></tbody></table></div>
   <p class="note">The return only happens if the market resolves the way the row says. If it doesn't, the contract pays nothing and you lose what you paid. A high price means the market thinks it is likely, not that it is certain. Not financial advice. Always check each site's rules before you trade.</p>
 
   <h2 id="how">How this page works</h2>
   <div class="qa"><b>What is "Buy at"?</b><span>The price you can actually buy at right now: the best ask for Yes, or 100¢ minus the best bid for No. Never the midpoint. We skip any contract whose bid and ask are more than 4¢ apart.</span></div>
   <div class="qa"><b>How is the return worked out?</b><span>(100¢ − price − fee) ÷ (price + fee). The fee is each site's own trading fee for a market order. Holding to settlement has no second fee.</span></div>
+  <div class="qa"><b>What is "Need to be right"?</b><span>The price plus the fee, read as a chance. Buying at 93¢ with a 0.4¢ fee means you risk 93.4¢ to make 6.6¢,
+    so you only come out ahead over time if this outcome happens more than 93.4% of the time. The market's price is its own guess at that chance.
+    The trade is worth it when you know something, or have read the rules more closely, and think the real chance is higher. If you don't, the price is probably about right.</span></div>
+  <div class="qa"><b>Is this like a CD or a bond?</b><span>Only in shape: a fixed payout on a known date. A CD is insured and pays you back even if things go badly.
+    These contracts pay $1 or nothing. Treat every row as a bet that you understand the question better than the price does.</span></div>
   <div class="qa"><b>What is "Per year"?</b><span>The same return scaled to a year, so a 2% return in 5 days can be compared with a 6% return in 6 months. It is a comparison tool, not a promise: you can't always find another trade like it the next day.</span></div>
   <div class="qa"><b>What can go wrong?</b><span>The outcome goes the other way and you lose the full price. Settlement can also be late or disputed, which ties your money up longer than "Settles in" says. A very high yearly figure usually means the market sees real risk.</span></div>
   <div class="qa"><b>Why "est" on Alpha Arcade rows?</b><span>Alpha Arcade's live bid and ask aren't in our feed yet, so those rows use the last price and only appear if the market traded in the last 5 days. Check the order book before you trade.</span></div>
-  <div class="qa"><b>What's left out?</b><span>Sports, thin markets, anything settling in under 6 hours or over 30 days, and returns under 0.3% after fees.</span></div>
+  <div class="qa"><b>What's left out?</b><span>Sports, thin markets, anything settling in under 6 hours or over 6 months, and returns under 0.3% after fees.</span></div>
 
   <h2>Keep going</h2>
-  <p><a href="/#closing-soon">Upcoming expirations →</a> &nbsp;·&nbsp; <a href="/gap-scanner.html">Gap Scanner: price gaps after fees →</a> &nbsp;·&nbsp; <a href="/top-traders.html">Top Traders →</a></p>
+  <p><a href="/#calendar">Catalyst Calendar →</a> &nbsp;·&nbsp; <a href="/gap-scanner.html">Gap Scanner: price gaps after fees →</a> &nbsp;·&nbsp; <a href="/top-traders.html">Top Traders →</a></p>
 </main>
 
 <footer>
@@ -190,7 +198,7 @@
 (function () {
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   var NAMES = { polymarket: 'POLYMARKET', kalshi: 'KALSHI', alpha: 'ALPHA ARCADE' };
-  var st = { site: 'all', days: 30, sort: 'soon', px: 'hide' }, rows = [];
+  var st = { site: 'all', days: 180, sort: 'soon', px: 'hide' }, rows = [];
   /* Nov 14: "Bitcoin above X today", "gas prices tomorrow": a level that can flip within hours is not a steady return, so these are off by default */
   var PX = /bitcoin|ethereum|solana|dogecoin|\b(btc|eth|xrp|sol|doge|bnb)\b|\bprices?\b|\b(s&p|nasdaq|dow|nikkei|ftse|wti|brent|gold|silver|treasury|yield)\b|\bclose (above|below|at)\b/i;
   function daily(x) { return x.days < 3 && PX.test(x.title + ' ' + (x.cat || '')); }
@@ -209,13 +217,14 @@
     document.getElementById('x-rows').innerHTML = r.length ? r.slice(0, 120).map(function (x) {
       var what = x.outcome && x.outcome.toLowerCase() !== 'yes' ? esc(x.outcome) + ': ' : '';
       return '<tr><td><span class="v">' + NAMES[x.site] + '</span><a href="' + esc(x.url) + '" rel="noopener">' + esc(x.title) + '</a>' +
-        '<span class="o">Pays if ' + what + '<b>' + x.side + '</b></span></td>' +
+        '<span class="o">Pays if ' + what + '<b>' + x.side + '</b> · risk ' + (x.ask + x.fee).toFixed(1) + '¢ to make ' + (100 - x.ask - x.fee).toFixed(1) + '¢</span></td>' +
         '<td>' + x.ask.toFixed(1) + '¢' + (x.est ? ' <span class="est">est</span>' : '') + '</td><td class="hide">' + x.fee.toFixed(2) + '¢</td>' +
-        '<td class="ret">+' + x.ret.toFixed(1) + '%</td><td class="hide">' + (x.days >= 3 ? x.apr.toLocaleString('en-US') + '%' : '<span title="Under 3 days: too short for a yearly figure">–</span>') + '</td><td>' + left(x.close) + '</td></tr>'; }).join('')
-      : '<tr><td colspan="6">Nothing fits these filters right now.</td></tr>';
+        '<td class="ret">+' + x.ret.toFixed(1) + '%</td><td class="hide">' + (x.days >= 3 ? x.apr.toLocaleString('en-US') + '%' : '<span title="Under 3 days: too short for a yearly figure">–</span>') + '</td>' +
+        '<td class="be" title="Lose ' + (x.ask + x.fee).toFixed(1) + '¢ if wrong, make ' + (100 - x.ask - x.fee).toFixed(1) + '¢ if right">' + (x.ask + x.fee).toFixed(1) + '%+</td><td>' + left(x.close) + '</td></tr>'; }).join('')
+      : '<tr><td colspan="7">Nothing fits these filters right now.</td></tr>';
   }
   chips('f-site', 'site', [['all', 'All'], ['polymarket', 'Polymarket'], ['kalshi', 'Kalshi'], ['alpha', 'Alpha Arcade']]);
-  chips('f-days', 'days', [[3, '3 days'], [7, '7 days'], [30, '30 days']]);
+  chips('f-days', 'days', [[7, '7 days'], [30, '30 days'], [90, '3 months'], [180, '6 months']]);
   chips('f-sort', 'sort', [['soon', 'Soonest'], ['ret', 'Return'], ['apr', 'Per year']]);
   chips('f-px', 'px', [['hide', 'Hide'], ['show', 'Show']]);
   fetch('expiry.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
@@ -223,7 +232,7 @@
     var m = Math.max(0, Math.round((Date.now() - Date.parse(d.updated)) / 60000));
     document.getElementById('x-upd').textContent = rows.length + ' contracts · last checked ' + (m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago');
     draw();
-  }).catch(function () { document.getElementById('x-rows').innerHTML = '<tr><td colspan="6">Loading late. Try again in a few minutes.</td></tr>'; });
+  }).catch(function () { document.getElementById('x-rows').innerHTML = '<tr><td colspan="7">Loading late. Try again in a few minutes.</td></tr>'; });
 })();
 </script>
 <script>

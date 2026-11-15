@@ -535,6 +535,43 @@
   a.cal-nlk { color:var(--cyan); }
   @media (max-width: 760px) { .cal-l { grid-template-columns:1fr auto auto; } .cal-l em { grid-column:1 / -1; white-space:normal; } }
   .cal-foot { color:var(--muted); font-size:.78rem; margin:10px 0 0; }
+  /* Nov 15: Calendar and Expiry Hub side by side; the calendar becomes a day-by-day list at half width */
+  .split { max-width:1400px; margin:18px auto 0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:18px; align-items:stretch; }
+  .split > .calsec { margin:0; max-width:none; display:flex; flex-direction:column; }
+  .split .cal-g { grid-template-columns:1fr; max-height:640px; overflow-y:auto; padding-right:6px; flex:none; align-content:start;
+    scrollbar-width:thin; scrollbar-color:rgba(63,219,230,.4) transparent; }
+  .split .cal-dh, .split .cal-d.empty:not(.today) { display:none; }
+  .split .cal-d { min-height:auto; flex:none; }
+  .split .cal-d > * { flex:none; }
+  .split .cal-h h2 { font-size:1.2rem; }
+  .hub .cal-h h2 { gap:12px; }
+  .hub-cols, .hub-r { display:grid; grid-template-columns:minmax(0,1fr) 62px 66px 66px 78px; gap:10px; align-items:center; }
+  .hub.soonv .hub-cols, .hub.soonv .hub-r { grid-template-columns:minmax(0,1fr) 62px 56px 92px; }
+  .hub-cols { font:700 .62rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--muted); padding:0 8px 6px; border-bottom:1px solid rgba(63,219,230,.2); }
+  .hub-cols span:not(:first-child) { text-align:right; }
+  .hub-rows { flex:1 1 auto; display:flex; flex-direction:column; }
+  .hub-r { padding:8px; border-bottom:1px solid rgba(255,255,255,.05); color:var(--text); text-decoration:none; }
+  .hub-r:hover { background:rgba(63,219,230,.07); text-decoration:none; }
+  .hub-r > span:not(.hub-m) { text-align:right; font:700 .88rem "JetBrains Mono",monospace; white-space:nowrap; }
+  .hub-m { min-width:0; } .hub-m b { display:block; font-weight:600; font-size:.92rem; line-height:1.25; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .hub-m i { display:block; font-style:normal; font-size:.76rem; color:#a9bccf; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .hub-m i em { font-style:normal; color:var(--amber); }
+  .hub-r .g { color:#3ee88a; } .hub-r .y { color:#a9bccf; font-weight:500; } .hub-r .n { color:var(--amber); }
+  .hub-r .st { font:700 .62rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--cyan); } .hub-r .st.a { color:var(--amber); }
+  .hub-r .cd.hot { color:#ff7a7a; }
+  .hub .mk-x a { font-size:.74rem; color:var(--cyan); }
+  .hub .tt-all { margin-top:12px; }
+  .hub.urgent .cal-f button[data-h="soon"] { animation:calglow 1.2s ease-in-out infinite; box-shadow:0 0 0 1px #ff7a7a; }
+  @media (max-width: 1000px) {
+    .split { grid-template-columns:1fr; margin:12px 8px 0; }
+    .split .cal-g { max-height:none; overflow:visible; }
+  }
+  @media (max-width: 560px) {
+    .hub-cols, .hub-r { grid-template-columns:minmax(0,1fr) 54px 62px; gap:8px; }
+    .hub-cols span:nth-child(2), .hub-cols span:nth-child(4), .hub-r > span:nth-child(2), .hub-r > span:nth-child(4) { display:none; }
+    .hub.soonv .hub-cols, .hub.soonv .hub-r { grid-template-columns:minmax(0,1fr) 50px 44px 70px; }
+    .hub.soonv .hub-cols span, .hub.soonv .hub-r > span { display:block; }
+  }
   @media (max-width: 760px) {
     .calsec { margin:12px 8px 0; padding:16px 12px 10px; }
     .cal-g { grid-template-columns:1fr; } .cal-dh, .cal-d.empty:not(.today) { display:none; }
@@ -588,6 +625,8 @@
     display:inline-block; animation:blink 1.4s infinite; }
   .gb-cols, .gb-r { display:grid; grid-template-columns:1fr 4.1cqw 4.1cqw 4.1cqw 4.5cqw 1.8cqw; gap:.4cqw; align-items:center; }
   #gapbox.mv .gb-cols, #gapbox.mv .gb-r { grid-template-columns:1fr 4.1cqw 3.8cqw 5.8cqw 4.2cqw 1.8cqw; }
+  #gapbox.tr .gb-cols, #gapbox.tr .gb-r { grid-template-columns:1fr 4.1cqw 6.4cqw 1.8cqw; }
+  .gb-tabs .gb-tab { font-size:.92cqw; padding:.3cqw .55cqw; }   /* Nov 15: three tabs need a little less room */
   .gb-cols { font:600 .68cqw "JetBrains Mono",monospace; letter-spacing:.08em; color:#8fa3b8;
     padding-bottom:.2cqw; border-bottom:1px solid rgba(63,219,230,.2); }
   .gb-cols span:not(:first-child) { text-align:center; } .gb-cols .a { color:var(--amber); }
@@ -636,6 +675,8 @@
     .gb-f { font-size:9.5px; flex-direction:column; align-items:flex-start; } .gb-go { font-size:10px; padding:5px 8px; }
     .ldot { width:7px; height:7px; } .gb-r { padding:6px 0; }
     #gapbox.mv .gb-cols, #gapbox.mv .gb-r { grid-template-columns:1fr 40px 34px 50px 40px 24px; }
+    #gapbox.tr .gb-cols, #gapbox.tr .gb-r { grid-template-columns:1fr 40px 62px 24px; }
+    .gb-tabs { flex-wrap:wrap; } .gb-tabs .gb-tab { font-size:11.5px; padding:5px 7px; }
   }
   .glass a.cover { position:absolute; inset:0; z-index:1; }
 
@@ -682,7 +723,7 @@
     <nav>
       <a class="on" href="/">Home</a>
       <a href="/top-traders.html">Top Traders</a>
-      <a href="#closing-soon">Expirations</a>
+      <a href="/expiry-returns.html">Expiry Hub</a>
       <a href="/gap-scanner.html">Gap Scanner</a>
       <a href="#guides">Guides</a>
       <a href="/about.html">About</a>
@@ -847,10 +888,11 @@
     <div class="stamp" id="st-trends">UPDATED EVERY 20 MIN</div>
   </div>
 </div>
-<section class="gapbox" id="gapbox" aria-label="Gap Scanner and Momentum Scanner">
+<section class="gapbox" id="gapbox" aria-label="Gap Scanner, Momentum Scanner and Top Traders">
   <div class="gb-h"><div class="gb-tabs" role="tablist">
       <button class="gb-tab on" data-t="gaps" role="tab" data-tip="The same question priced differently across Polymarket, Kalshi and Alpha Arcade, after estimated fees. Markets on all three sites come first. More gaps on the full Gap Scanner page. Checked every 20 minutes."><i class="ldot"></i>GAP SCANNER</button>
       <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news."><i class="ldot"></i>MOMENTUM SCANNER</button>
+      <button class="gb-tab" data-t="traders" role="tab" data-tip="The most profitable traders of the last 7 days on Polymarket, Kalshi and Alpha Arcade, and their biggest move. Full boards on the Top Traders page."><i class="ldot"></i>TOP TRADERS</button>
 </div>
     <span class="gb-s"><span id="gb-sub">GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
   <div class="gb-cols" id="gb-cols"></div>
@@ -867,6 +909,7 @@
 </div>
 
 
+<div class="split">   <!-- Nov 15: Calendar (left half) + Expiry Hub (right half), James -->
 <section class="calsec" id="calendar" aria-label="Catalyst Calendar: the next two weeks">
   <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
   <div class="cal-h"><div><h2><span class="cal-rad" aria-hidden="true"></span>CATALYST CALENDAR<span class="cur" aria-hidden="true"></span></h2>
@@ -885,39 +928,21 @@
   <p class="cal-foot">Tap any event for details and related prices on Polymarket, Kalshi and Alpha Arcade. Dates come from official
     schedules (BLS, BEA, Census, the Fed, company investor pages); an "expected date" is not yet confirmed. Not financial advice.</p>
 </section>
+<section class="calsec hub" id="closing-soon" aria-label="Expiry Hub: contracts settling within 6 months">
+  <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
+  <span id="expiry-hub"></span>
+  <div class="cal-h"><div><h2><span class="beacon" aria-hidden="true"></span>EXPIRY HUB<span class="beacon b2" aria-hidden="true"></span></h2>
+    <p>Contracts priced 85¢ or more that pay $1 if they resolve that way: the return after fees, the same return per year,
+      and how often you need to be right for it to be worth it. Plus the markets settling next on all three sites. <span id="hub-upd"></span></p></div>
+    <div class="cal-f" id="hub-f"><button class="on" data-h="long">1&ndash;6 MONTHS</button><button data-h="near">UNDER 1 MONTH</button><button data-h="soon" style="--c:#ff7a7a">SETTLING NEXT</button></div></div>
+  <div class="hub-cols" id="hub-cols"></div>
+  <div class="hub-rows" id="hub-rows"><p class="cal-none">Loading&hellip;</p></div>
+  <a class="tt-all" href="/expiry-returns.html">Every contract, every filter, all three sites &middot; Open Expiry Hub &rarr;</a>
+  <p class="cal-foot">If it resolves the other way, the contract pays nothing and you lose what you paid. A high price means likely, not certain. Not financial advice.</p>
+</section>
+</div>
 
 <main class="wrap">
-
-  <section id="top-traders">
-    <span class="tag live"><i></i>Live · updated hourly</span>
-    <h2>What are the top traders doing this week?</h2>
-    <p class="updated" id="tt-updated">The most profitable traders of the last 7 days on each site, and their biggest move.</p>
-    <div class="grid">
-      <div class="card" id="tt-polymarket"><span class="venue">POLYMARKET</span>
-        <p class="soon">This week's top traders will appear here.</p></div>
-      <div class="card" id="tt-kalshi"><span class="venue">KALSHI</span>
-        <p class="soon">This week's top traders will appear here.</p></div>
-      <div class="card" id="tt-alpha"><span class="venue">ALPHA ARCADE</span>
-        <p class="soon">Alpha Arcade's top traders are coming soon.</p></div>
-    </div>
-    <a class="tt-all" href="/top-traders.html">See the full boards: top 20 on each site, by subject · Open Top Traders →</a>
-    <p class="tt-note">Past profit doesn't predict future results. This shows what happened, not what to trade.</p>
-  </section>
-
-  <section id="closing-soon">
-    <span class="tag live"><i></i>Live · updated every 20 min</span>
-    <h2 class="exp-h"><span class="beacon" aria-hidden="true"></span>Upcoming expirations<span class="beacon b2" aria-hidden="true"></span></h2>
-    <p class="updated" id="cs-updated"></p>
-    <div class="grid">
-      <div class="card" id="cs-polymarket"><span class="venue">POLYMARKET</span>
-        <p class="soon">Soonest-closing markets will appear here.</p></div>
-      <div class="card" id="cs-kalshi"><span class="venue">KALSHI</span>
-        <p class="soon">Soonest-closing markets will appear here.</p></div>
-      <div class="card" id="cs-alpha"><span class="venue">ALPHA ARCADE</span>
-        <p class="soon">Soonest-closing markets will appear here.</p></div>
-    </div>
-    <a class="tt-all" href="/expiry-returns.html">Priced 85¢+ and settling soon: the return after fees on all three sites · Open Expiry Returns →</a>
-  </section>
 
   <section id="market-of-the-week">
     <div class="card motw">
@@ -1005,53 +1030,70 @@
     var left = function (s) { var ms = new Date(s) - Date.now(); if (ms <= 0) return 'closing now';
       var h = Math.floor(ms / 3600000), mn = Math.floor(ms % 3600000 / 60000);
       return 'in ' + (h >= 48 ? Math.floor(h / 24) + 'd ' + h % 24 + 'h' : h >= 1 ? h + 'h ' + mn + 'm' : mn + ' min'); };
-    fill('cs-', 'closing_soon', function (m) { return 'closes ' + when(m.closes) + ' · ' + left(m.closes); });
-    // Nov 14: the beacons beside the heading turn red and flash faster when something closes within 6 hours
-    var soonest = Math.min.apply(null, ['polymarket', 'kalshi', 'alpha'].map(function (k) {
-      return Math.min.apply(null, ((d.closing_soon || {})[k] || []).map(function (m) { return new Date(m.closes) - Date.now(); }).concat([Infinity])); }));
-    if (soonest < 6 * 3600000) document.getElementById('closing-soon').classList.add('urgent');
-    // Nov 14: when the same market is matched on the other sites (SAME grade, outcomes within 40¢), show all prices side by side
+    // Nov 15: EXPIRY HUB (right half beside the calendar). Tabs: 1-6 months / under 1 month (expiry.json), settling next (markets.json)
+    var hub = document.getElementById('closing-soon'), hubRows = document.getElementById('hub-rows'), hubCols = document.getElementById('hub-cols');
+    var SH = { polymarket: 'POLY', kalshi: 'KALSHI', alpha: 'ALPHA' }, exp = null, hubTab = 'long', matchBy = {};
+    var PX = /bitcoin|ethereum|solana|dogecoin|\b(btc|eth|xrp|sol|doge|bnb)\b|\bprices?\b|\bclose (above|below|at)\b/i;   // same rule as the Expiry Hub page
+    var dleft = function (s) { var h = (new Date(s) - Date.now()) / 3600000; return h <= 0 ? 'now' : h < 48 ? Math.max(1, Math.round(h)) + ' h' : Math.round(h / 24) + ' d'; };
+    var soonList = ['polymarket', 'kalshi', 'alpha'].reduce(function (all, site) {
+      return all.concat(((d.closing_soon || {})[site] || []).map(function (m) { m.site = site; return m; })); }, [])
+      .filter(function (m) { return new Date(m.closes) > Date.now(); })
+      .sort(function (a, b) { return new Date(a.closes) - new Date(b.closes); });
+    if (soonList.length && new Date(soonList[0].closes) - Date.now() < 6 * 3600000) hub.classList.add('urgent');
+    function expRow(x) {
+      var what = x.outcome && x.outcome.toLowerCase() !== 'yes' ? x.outcome + ': ' : '', cost = x.ask + x.fee;
+      return '<a class="hub-r" href="' + esc(x.url) + '" target="_blank" rel="noopener" title="Risk ' + cost.toFixed(1) + '¢ to make ' + (100 - cost).toFixed(1) + '¢ after the fee">' +
+        '<span class="hub-m"><b>' + esc(x.title) + '</b><i><span class="st' + (x.site === 'alpha' ? ' a' : '') + '">' + SH[x.site] + '</span> · pays if ' + esc(what) + '<em>' + x.side + '</em> · settles in ' + dleft(x.close) + '</i></span>' +
+        '<span>' + x.ask.toFixed(1) + '¢' + (x.est ? '*' : '') + '</span><span class="g">+' + x.ret.toFixed(1) + '%</span>' +
+        '<span class="y">' + (x.days >= 3 ? Math.round(x.apr) + '%' : '–') + '</span><span class="n">' + cost.toFixed(1) + '%+</span></a>';
+    }
+    function soonRow(m) {
+      var ms = new Date(m.closes) - Date.now(), hit = matchBy[m.url], also = '';
+      if (hit && hit.row.close && Math.abs(new Date(hit.row.close) - new Date(m.closes)) <= 48 * 3600000)
+        also = '<span class="mk-x"><a href="/gap-scanner.html">' + (hit.ps.length === 3 ? 'On all three' : 'Also on ' + (hit.ps.length - 1) + ' more') + ' · ' +
+          esc(hit.row.outcome) + ': ' + hit.ps.map(function (k) { return SH[k] + ' ' + Math.round(hit.row.prices[k]) + '¢'; }).join(' · ') + ' →</a></span>';
+      return '<div class="hub-r"><span class="hub-m"><b><a href="' + esc(m.url) + '" target="_blank" rel="noopener" style="color:inherit">' + esc(m.event) + '</a></b>' +
+        '<i>' + esc(m.market || '') + (m.market ? ' · ' : '') + 'closes ' + esc(when(m.closes)) + '</i>' + also + '</span>' +
+        '<span class="st' + (m.site === 'alpha' ? ' a' : '') + '">' + SH[m.site] + '</span><span>' + esc(m.yes) + '%</span>' +
+        '<span class="cd' + (ms < 6 * 3600000 ? ' hot' : '') + '">' + (ms < 3600000 ? 'FINAL HOUR' : 'in ' + dleft(m.closes)) + '</span></div>';
+    }
+    function drawHub() {
+      [].forEach.call(document.querySelectorAll('#hub-f button'), function (b) { b.classList.toggle('on', b.getAttribute('data-h') === hubTab); });
+      hub.classList.toggle('soonv', hubTab === 'soon');
+      if (hubTab === 'soon') {
+        hubCols.innerHTML = '<span>MARKET</span><span>SITE</span><span>YES</span><span>CLOSES</span>';
+        hubRows.innerHTML = soonList.length ? soonList.slice(0, 12).map(soonRow).join('') : '<p class="cal-none">No markets closing in the next few days.</p>';
+        return;
+      }
+      hubCols.innerHTML = '<span>CONTRACT</span><span>BUY AT</span><span>RETURN</span><span>PER YEAR</span><span title="How often it has to happen to be worth it">NEED RIGHT</span>';
+      if (!exp) { hubRows.innerHTML = '<p class="cal-none">Loading&hellip;</p>'; return; }
+      var long = hubTab === 'long';
+      var list = exp.filter(function (x) { var dd = (new Date(x.close) - Date.now()) / 86400000;
+        return (long ? dd >= 30 && dd <= 183 : dd > 0.25 && dd < 30) && !(dd < 3 && PX.test(x.title + ' ' + (x.cat || ''))); });
+      // 1-6 months: steadiest first (most traded), then the return; under 1 month: soonest first
+      list.sort(long ? function (a, b) { return b.volume - a.volume; } : function (a, b) { return new Date(a.close) - new Date(b.close); });
+      var seen = {};
+      list = list.filter(function (x) { if (seen[x.title]) return false; seen[x.title] = 1; return true; }).slice(0, 12);
+      hubRows.innerHTML = list.length ? list.map(expRow).join('') : '<p class="cal-none">Nothing fits right now. Checked every 20 minutes.</p>';
+    }
+    document.getElementById('hub-f').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return; hubTab = b.getAttribute('data-h'); drawHub(); });
+    drawHub();
+    fetch('expiry.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (x) {
+      exp = x.rows || [];
+      if (x.updated) document.getElementById('hub-upd').textContent = 'Updated ' + when(x.updated) + '.';
+      drawHub();
+    }).catch(function () { exp = []; drawHub(); });
+    // when the same market is matched on the other sites (SAME grade, outcomes within 40¢), show all prices side by side
     fetch('matches.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (mt) {
-      var by = {}, short = { polymarket: 'Poly', kalshi: 'Kalshi', alpha: 'Alpha' };
       (mt.matches || []).forEach(function (row) {
         var ps = Object.keys(row.prices || {}).filter(function (k) { return row.prices[k] != null; });
         if (row.label !== 'SAME' || ps.length < 2) return;
         var vals = ps.map(function (k) { return row.prices[k]; });
         if (Math.max.apply(null, vals) - Math.min.apply(null, vals) > 40) return;
-        Object.keys(row.sites).forEach(function (k) { by[row.sites[k].url] = { row: row, ps: ps }; });
+        Object.keys(row.sites).forEach(function (k) { matchBy[row.sites[k].url] = { row: row, ps: ps }; });
       });
-      [].forEach.call(document.querySelectorAll('#closing-soon .mk-x'), function (el) {
-        var hit = by[el.getAttribute('data-url')]; if (!hit) return;
-        var cl = +el.getAttribute('data-closes');                 // only when the matched outcome is the one that is expiring (within 2 days)
-        if (!cl || !hit.row.close || Math.abs(new Date(hit.row.close) - cl) > 48 * 3600000) return;
-        el.innerHTML = '<a href="/gap-scanner.html">' + (hit.ps.length === 3 ? 'On all three' : 'Also on ' + (hit.ps.length - 1) + ' more') + ' · ' +
-          esc(hit.row.outcome) + ': ' + hit.ps.map(function (k) { return short[k] + ' ' + Math.round(hit.row.prices[k]) + '¢'; }).join(' · ') + ' →</a>';
-      });
-    }).catch(function () {});
-    if (d.updated) document.getElementById('cs-updated').textContent = 'Last updated ' + when(d.updated);
-
-    // Top Traders (Nov 14): weekly leaderboards from traders.json
-    fetch('traders.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (t) {
-      var money = function (v) { var a = Math.abs(v); return (v < 0 ? '-' : '+') + '$' + (a >= 1e6 ? (a / 1e6).toFixed(2) + 'M' : a >= 1e3 ? Math.round(a / 1e3) + 'K' : Math.round(a)); };
-      var usd = function (v) { return '$' + (v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? Math.round(v / 1e3) + 'K' : Math.round(v)); };
-      ['polymarket', 'kalshi', 'alpha'].forEach(function (site) {
-        var box = document.getElementById('tt-' + site), list = t[site] || [];
-        if (!box || !list.length) return;
-        box.querySelector('.soon').outerHTML = '<ol class="tt">' + list.map(function (x, i) {
-          var mv = x.move || x.move2;
-          return '<li><span class="tt-r">' + (i + 1) + '</span><span class="tt-b"><a href="' + esc(x.url) + '" target="_blank" rel="noopener">' + esc(x.name) + '</a>' +
-            '<b class="' + (x.pnl < 0 ? 'dn' : 'up') + '">' + money(x.pnl) + '</b>' +
-            (mv ? '<a class="tt-m" href="' + esc(mv.url) + '" target="_blank" rel="noopener">Biggest move: ' + (mv.side === 'SELL' ? 'sold ' : 'bought ') +
-              esc(mv.outcome) + ' at ' + esc(mv.price) + '¢ · ' + usd(mv.usd) + ' · ' + esc(mv.title) + '</a>'
-              : x.volume ? '<span class="tt-m">' + usd(x.volume) + ' traded</span>' : '') + '</span></li>';
-        }).join('') + '</ol>' + (site === 'alpha' ? '<p class="tt-note">All-time profit, from Alpha Arcade\'s leaderboard.</p>' : '') +
-          (site === 'kalshi' && (t.kalshi_big || []).length ? '<p class="tt-sub">BIGGEST TRADES THIS WEEK</p><ul class="tt-big">' + t.kalshi_big.map(function (b) {
-            return '<li><a href="' + esc(b.url) + '" target="_blank" rel="noopener"><b>' + usd(b.usd) + '</b> on ' + (b.side === 'NO' ? 'No' : 'Yes') + ' at ' + esc(b.price) + '¢ · ' +
-              esc(b.title) + (b.outcome && b.outcome !== 'Yes' ? ' (' + esc(b.outcome) + ')' : '') + '</a></li>'; }).join('') +
-            '</ul><p class="tt-note">Kalshi keeps traders\' positions private, so these are anonymous: the largest single trades in the busiest markets we track.</p>' : '');
-      });
-      if (t.updated) document.getElementById('tt-updated').textContent =
-        'The most profitable traders of the last 7 days on each site, and their biggest move. Updated ' + when(t.updated) + '.';
+      if (hubTab === 'soon') drawHub();
     }).catch(function () {});
 
     // Desk Wire: closing-soon and new markets from every venue, mixed together
@@ -1246,6 +1288,7 @@
   var settles = function (s) { var d = new Date(s), y = d.getFullYear() !== new Date().getFullYear();
     return isNaN(d) ? '' : 'settles ' + d.toLocaleDateString('en-US', y ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' }); };
   var SHORT = { polymarket: 'POLY', kalshi: 'KALSHI', alpha: 'ALPHA' };
+  var NAME = { polymarket: 'Polymarket', kalshi: 'Kalshi', alpha: 'Alpha Arcade' };
   var SITE = 'https://alphainteldesk.com/';
   var data = {}, shares = [];
   var TABS = {
@@ -1258,7 +1301,12 @@
       cols: '<span>MARKET</span><span>SITE</span><span>NOW</span><span>24H CHANGE</span><span>WHY?</span><span></span>',
       note: 'No sports · moves of 5¢+ with real trading · "Why?" opens a news search',
       go: ['#calendar', '2-WEEK CALENDAR &darr;'],
-      empty: 'No big moves with real volume in the last 24 hours. Checked every 20 minutes.' }
+      empty: 'No big moves with real volume in the last 24 hours. Checked every 20 minutes.' },
+    traders: { file: 'traders.json', sub: 'LAST 7 DAYS',   /* Nov 15: Top Traders moved into the panel (James) */
+      cols: '<span>TRADER · BIGGEST MOVE</span><span>SITE</span><span>PROFIT</span><span></span>',
+      note: 'Past profit doesn\'t predict future results · Alpha Arcade is all-time profit',
+      go: ['/top-traders.html', 'OPEN TOP TRADERS &rarr;'],
+      empty: 'This week\'s top traders will appear here. Updated about once an hour.' }
   };
   function share(i, btn) {
     var s = shares[i]; if (!s) return;
@@ -1300,10 +1348,23 @@
       '<a class="gb-why" href="' + esc(x.why) + '" target="_blank" rel="noopener">WHY?</a>' +
       shareBtn(txt, SITE + 'momentum-scanner.html') + '</div>';
   }
+  function traderRow(site, x) {                          // the #1 trader on each site
+    var mv = x.move || x.move2, a = Math.abs(x.pnl || 0);
+    var pnl = (x.pnl < 0 ? '-' : '+') + '$' + (a >= 1e6 ? (a / 1e6).toFixed(2) + 'M' : a >= 1e3 ? Math.round(a / 1e3) + 'K' : Math.round(a));
+    var sub = mv ? 'Biggest move: ' + (mv.side === 'SELL' ? 'sold ' : 'bought ') + mv.outcome + ' at ' + Math.round(mv.price) + '¢ · ' + money(mv.usd) + ' · ' + mv.title
+      : x.volume ? money(x.volume) + ' traded' : 'Profit from Kalshi\'s public leaderboard';
+    var txt = 'Top trader this week on ' + NAME[site] + ': ' + x.name + ', ' + pnl + '. via @alphainteldesk';
+    return '<div class="gb-r"><a class="gb-m" href="' + esc(mv ? mv.url : x.url) + '" target="_blank" rel="noopener"><b>' + esc(x.name) +
+      '</b><i>' + esc(sub) + '</i></a>' +
+      '<span class="gb-p' + (site === 'alpha' ? ' a' : '') + '">' + SHORT[site] + '</span>' +
+      '<span class="gb-p ' + (x.pnl < 0 ? 'hi' : 'lo') + '">' + esc(pnl) + '</span>' +
+      shareBtn(txt, SITE + 'top-traders.html') + '</div>';
+  }
   function show(t) {
     var T = TABS[t], d = data[t];
     [].forEach.call(document.querySelectorAll('.gb-tab'), function (b) { b.classList.toggle('on', b.getAttribute('data-t') === t); });
     document.getElementById('gapbox').classList.toggle('mv', t === 'movers');
+    document.getElementById('gapbox').classList.toggle('tr', t === 'traders');
     document.getElementById('gb-sub').textContent = T.sub;
     document.getElementById('gb-cols').innerHTML = T.cols;
     document.getElementById('gb-note').textContent = T.note;
@@ -1326,11 +1387,17 @@
         '<a class="gb-more" href="/gap-scanner.html">Click here for more price gaps <span>OPEN GAP SCANNER &rarr;</span></a>';
       return;
     }
+    if (t === 'traders') {
+      list = ['polymarket', 'kalshi', 'alpha'].filter(function (k) { return (d[k] || []).length; });
+      box.innerHTML = (list.length ? list.map(function (k) { return traderRow(k, d[k][0]); }).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
+        '<a class="gb-more" href="/top-traders.html">Top 20 on each site, by subject <span>OPEN TOP TRADERS &rarr;</span></a>';
+      return;
+    }
     list = (d.movers || []).slice(0, 3);                 // Nov 10: 3 rows + a link to the full Momentum Scanner page (renamed from Movers Nov 12), like the gaps tab
     box.innerHTML = (list.length ? list.map(moverRow).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
       '<a class="gb-more" href="/momentum-scanner.html">Click here for more big moves <span>OPEN MOMENTUM SCANNER &rarr;</span></a>';
   }
-  var cur = location.hash === '#movers' ? 'movers' : 'gaps';
+  var cur = location.hash === '#movers' ? 'movers' : location.hash === '#top-traders' ? 'traders' : 'gaps';
   function load() {                                        // first load, then fresh data every 5 minutes (no page reload)
     Object.keys(TABS).forEach(function (t) {
       fetch(TABS[t].file + '?v=' + Date.now()).then(function (r) { return r.json(); })
@@ -1631,7 +1698,7 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
     cs.sort(function (a, b) { return a.ms - b.ms; });
     if (cs.length) { var x = cs[0], hh = Math.floor(x.ms / 3600000), mi = Math.floor(x.ms % 3600000 / 60000);
       lines.push({ t: 'Closing in ' + (hh >= 48 ? Math.floor(hh / 24) + 'd ' + hh % 24 + 'h' : hh >= 1 ? hh + 'h ' + mi + 'm' : mi + ' min') + ' (' + x.site + '): ' + String(x.m.event).replace(/\?$/, ''),
-        u: '#closing-soon', c: 'SEE EXPIRATIONS \u2193' }); }
+        u: '#closing-soon', c: 'SEE EXPIRY HUB \u2193' }); }
     if (g.length) lines.push({ t: g.length + ' price gaps after fees · largest ' + g[0].net.toFixed(1) + '¢: ' + g[0].title.replace(/\?$/, ''),
                                u: '/gap-scanner.html', c: 'OPEN GAP SCANNER →' });
     if (mv.length) { var m = mv[0]; lines.push({ t: 'Biggest mover ' + (m.change > 0 ? '▲ +' : '▼ ') + m.change.toFixed(1) + '¢ in 24h (' + m.name + '): ' + m.title.replace(/\?$/, ''),
