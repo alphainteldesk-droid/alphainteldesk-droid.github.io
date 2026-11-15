@@ -1,0 +1,56 @@
+name: Daily Short
+# Nov 15, 2026: builds the 15-second YouTube Short from today's data (make_short.py), posts it to the Telegram
+# channel (send_short.py) and puts the video + YouTube title/description/tags on the "daily-short" release:
+#   https://github.com/alphainteldesk-droid/alphainteldesk-droid.github.io/releases/tag/daily-short
+# James uploads it to YouTube by hand (YouTube keeps API uploads from unaudited apps private).
+on:
+  schedule:
+    - cron: "43 14 * * *"         # 9:43 AM ET in winter (EST). When clocks go forward in March: change to "43 13 * * *"
+  workflow_dispatch:
+    inputs:
+      telegram:
+        description: "Post to the Telegram channel?"
+        type: boolean
+        default: true
+concurrency:
+  group: daily-short
+  cancel-in-progress: false
+permissions:
+  contents: write                 # release upload + saving short_state.json (which markets were featured recently)
+jobs:
+  short:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Tools (ffmpeg, fonts, Playwright with the runner's own Chrome)
+        run: |
+          which ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+          mkdir -p ~/.fonts && cp fonts/*.ttf ~/.fonts/ && fc-cache -f >/dev/null
+          python3 -m pip install --quiet --break-system-packages playwright numpy scipy || python3 -m pip install --quiet playwright numpy scipy
+      - name: Build the Short
+        run: |
+          mkdir -p /tmp/out
+          python3 make_short.py . /tmp/out/alpha-intel-desk-short.mp4 short_state.json
+          cat /tmp/out/alpha-intel-desk-short.txt
+      - name: Put it on the daily-short release (same download link every day)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view daily-short >/dev/null 2>&1 || gh release create daily-short --title "Daily Short" --notes "starting" --latest=false
+          gh release upload daily-short /tmp/out/alpha-intel-desk-short.mp4 /tmp/out/alpha-intel-desk-short.txt --clobber
+          gh release edit daily-short --title "Daily Short ($(TZ=America/New_York date '+%a %b %-d'))" --notes-file /tmp/out/alpha-intel-desk-short.txt
+      - name: Post to Telegram (after the release, so the download page is ready when the post appears)
+        if: github.event_name == 'schedule' || inputs.telegram
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: python3 send_short.py /tmp/out/alpha-intel-desk-short.mp4
+      - name: Save which markets were featured
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add short_state.json
+          git diff --cached --quiet || (git commit -m "Daily Short: featured markets" && git pull --rebase -X theirs -q && git push)
