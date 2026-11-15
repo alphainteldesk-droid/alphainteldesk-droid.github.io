@@ -1019,12 +1019,13 @@ def expiry_returns(alpha, sites):
     what you make after the fee IF it resolves that way (it pays $1), and the same figure per year (simple, not
     compounded). Uses the real ASK for Yes and 100 minus the real BID for No, never the midpoint; bid and ask must
     be within 4 cents. Alpha Arcade has no bid/ask in our feed, so its rows use the last price, are marked "est",
-    and need a trade in the last 48 h. No sports."""
+    and need a trade in the last 5 days (James, Nov 14: 5 days until Alpha Arcade has more volume; the Gap Scanner
+    keeps its own 48 h rule). No sports."""
     now = n.timestamp()
     iso = lambda t: datetime.fromtimestamp(t, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     try:
         tr = json.load(open("alpha_trades.json"))
-        live = {u for u, x in tr.items() if now - x.get("last", 0) <= 48 * 3600}
+        live = {u for u, x in tr.items() if now - x.get("last", 0) <= 5 * 86400}
     except Exception:
         live = None
     rows = []

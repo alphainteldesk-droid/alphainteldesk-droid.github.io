@@ -201,11 +201,15 @@
     el.onclick = function (e) { var b = e.target.closest('button'); if (!b) return; lv = b.getAttribute('data-v'); shown = 40; chips(); draw(); };
   }
   function draw() {
-    var r = rows.filter(function (x) { return lv === 'all' || x.level === lv; });
-    document.getElementById('r-rows').innerHTML = r.length ? r.slice(0, shown).map(function (x) {
-      return '<div class="card rr ' + x.level + '"><h3>' + esc(x.title) + '</h3><p class="vs"><a href="' + esc(x.urls[0]) + '" rel="noopener">' + NAMES[x.a] +
-        '</a> vs <a href="' + esc(x.urls[1]) + '" rel="noopener">' + NAMES[x.b] + '</a></p>' +
-        x.bad.map(bd('bad')).join('') + x.warn.map(bd('warn')).join('') + x.ok.map(bd('ok')).join('') + '</div>'; }).join('')
+    var by = {}, r = [];                       /* Nov 14: one card per market; each pair of sites is a block inside it */
+    rows.forEach(function (x) { if (lv !== 'all' && x.level !== lv) return;
+      if (!by[x.title]) { by[x.title] = { title: x.title, level: x.level, pairs: [] }; r.push(by[x.title]); }
+      by[x.title].pairs.push(x); });
+    document.getElementById('r-rows').innerHTML = r.length ? r.slice(0, shown).map(function (g) {
+      return '<div class="card rr ' + g.level + '"><h3>' + esc(g.title) + '</h3>' + g.pairs.map(function (x) {
+        return '<p class="vs"><a href="' + esc(x.urls[0]) + '" rel="noopener">' + NAMES[x.a] +
+          '</a> vs <a href="' + esc(x.urls[1]) + '" rel="noopener">' + NAMES[x.b] + '</a></p>' +
+          x.bad.map(bd('bad')).join('') + x.warn.map(bd('warn')).join('') + x.ok.map(bd('ok')).join(''); }).join('') + '</div>'; }).join('')
       : '<p class="empty">Nothing in this group right now.</p>';
     var m = document.getElementById('r-more'); m.hidden = r.length <= shown; m.textContent = 'SHOW MORE (' + (r.length - shown) + ' LEFT)';
   }

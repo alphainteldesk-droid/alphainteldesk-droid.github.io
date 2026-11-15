@@ -322,6 +322,9 @@ def add_also(matches):
     print("Movers: %d of %d also priced on another site" % (found, len(mv.get("movers", []))))
 
 
+DEADLINE_Q = re.compile(r"\bby\b|\bbefore\b|\buntil\b|\bthrough\b|\bin 20\d\d\b|\bthis (year|month|week)\b|\.\.\.", re.I)
+
+
 def rule_risk(matches):
     """Nov 14: Rule Risk (rules.json). One row per matched pair of sites with plain badges for what the two sets of
     rules agree and disagree on. Everything comes from checks the matcher already runs (flags, fine print, the
@@ -340,8 +343,14 @@ def rule_risk(matches):
             bad, warn, ok = [], [], []
             for fl in x.get("flags") or []:
                 if fl.startswith("end dates differ"):
-                    bad.append(["DEADLINE MISMATCH", "the two sites list end dates" +
-                                re.sub(r"(\d)h$", r"\1 hours", fl[len("end dates differ by"):]) + " apart"])
+                    apart = re.sub(r"(\d)h$", r"\1 hours", fl[len("end dates differ by"):])
+                    if fine.get("twin") or not DEADLINE_Q.search((row.get("title") or "") + " " + (row.get("outcome") or "")):
+                        # the event decides the answer (an election, a nomination), or the rules are word for word the
+                        # same: the date each site lists for closing is housekeeping, not a different contract
+                        warn.append(["LISTED END DATES DIFFER", "the sites list closing dates" + apart +
+                                     " apart; the event decides the answer, so check each site's cutoff"])
+                    else:
+                        bad.append(["DEADLINE MISMATCH", "the two sites list end dates" + apart + " apart"])
                 elif fl.startswith("resolution sources differ"):
                     bad.append(["SOURCE DIFFERS", fl.replace("resolution sources differ", "they settle from different sources")])
                 elif "draw" in fl or "overtime" in fl:
