@@ -637,7 +637,8 @@ def score(a, e):
     if any(l.lower() == "draw" for l in a["outcomes"]) and not omap.get("Draw") and not omap.get("draw"):
         flags.append("draw handled differently")
     ra, re_ = a["rules"].lower(), e["rules"].lower()
-    if ("regulation" in ra) != ("regulation" in re_) or ("overtime" in ra) != ("overtime" in re_):
+    game = sporty(e) or bool(sides(a["title"]))               # Nov 14: a sports check only; "regulation" in a bill's rules is not overtime
+    if game and (("regulation" in ra) != ("regulation" in re_) or ("overtime" in ra) != ("overtime" in re_)):
         flags.append("check overtime / extra-time rules")
     fp = fine_print(a["rules"], e["rules"])
     if fp["src"] == "differ":
