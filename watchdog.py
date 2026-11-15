@@ -50,7 +50,7 @@ def baseline(old, name, value):
 def checks():
     m, desk, gaps, mk, al = load("matches.json"), load("desk.json"), load("gaps.json"), load("markets.json"), load("alpha_live.json")
     ex = load("expiry.json")
-    xr = ex.get("rows") or []
+    xr = ex.get("all") or ex.get("rows") or []   # Nov 15: check the full list; the page shows the top 50 of it
     est = sum(1 for x in xr if x.get("fs") == "est" and x.get("site") != "alpha")
     pk_rows = sum(1 for x in xr if x.get("site") != "alpha") or 1
     dropped = sum((ex.get("dropped") or {}).values())
@@ -82,7 +82,7 @@ def checks():
                         "New markets came back empty. Ask Claude to check make_markets.py.", None),
         # Nov 15: The Danger Zone (expiry.json). Down if: stale, nearly empty, more than 10% of Polymarket/Kalshi rows on
         # ESTIMATED fees (= a site stopped publishing its fee and we're guessing), or the sanity check threw out 5%+ of rows.
-        "Danger Zone": (age_h(ex.get("updated", "")) <= 2 and len(xr) >= 30 and est <= 0.1 * pk_rows and dropped <= 0.05 * (len(xr) + dropped),
+        "Danger Zone": (age_h(ex.get("updated", "")) <= 2 and len(xr) >= 100 and len(ex.get("rows") or []) >= 30 and est <= 0.1 * pk_rows and dropped <= 0.05 * (len(xr) + dropped),
                         "updated %.1f h ago, %d contracts, %d on estimated fees, %d dropped by the sanity check"
                         % (age_h(ex.get("updated", "")), len(xr), est, dropped),
                         "The Danger Zone numbers can't be trusted right now (old prices, guessed fees or rows that don't add up). "
