@@ -227,6 +227,18 @@ def load_poly():
     return out
 
 
+def poly_fee(m):
+    """Nov 15: the fee Polymarket publishes for this market: (rate, exponent), fee per $1 = rate * (p(1-p))^exponent.
+    (0, 1) when fees are off; None when the market doesn't say (then we fall back to the category estimate)."""
+    if m.get("feesEnabled") is False:
+        return (0.0, 1)
+    fs = m.get("feeSchedule") or {}
+    try:
+        return (float(fs["rate"]), float(fs.get("exponent") or 1))
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
 def poly_event(ev):
     """One Polymarket event -> our shape (None if it has no live prices). Used for the full list AND for
     the Alpha-first lookups (Nov 14), so every rule here applies to both."""
@@ -263,6 +275,8 @@ def poly_event(ev):
                     pass
                 e.setdefault("ends", {})[lbl] = ts(m.get("endDate"))
                 e.setdefault("qs", {})[lbl] = q
+                if poly_fee(m) is not None:            # Nov 15: the market's own fee, not our category guess
+                    e.setdefault("fr", {})[lbl] = poly_fee(m)
                 if m.get("oneDayPriceChange") is not None:
                     e.setdefault("chg", {})[lbl] = round(float(m.get("oneDayPriceChange") or 0) * 100, 1)
                     e.setdefault("v24", {})[lbl] = float(m.get("volume24hr") or 0)
@@ -336,8 +350,23 @@ def alpha_first(alpha, poly):
           % (len(todo), tried, added, fuller, time.time() - t0))
 
 
+def kalshi_fees():
+    """Nov 15: Kalshi's fee multiplier for every series (one call). Taker fee per $1 = 0.07 * multiplier * p(1-p);
+    almost all are 1, a few are 0.5 or 0 (no fee). {} if the call fails (then 0.07 for everything, as before)."""
+    try:
+        d = get("https://api.elections.kalshi.com/trade-api/v2/series?limit=1000")
+        out = {x["ticker"]: float(x.get("fee_multiplier") if x.get("fee_multiplier") is not None else 1)
+               for x in d.get("series") or [] if x.get("ticker")}
+        print("Kalshi fees: %d series, %d with a lower fee" % (len(out), sum(1 for v in out.values() if v < 1)))
+        return out
+    except Exception as err:
+        print("Kalshi fees: series list failed -", err)
+        return {}
+
+
 def load_kalshi():
     """All open Kalshi events; each market in an event is one outcome."""
+    fees = kalshi_fees()
     evs, cur = [], ""
     for _ in range(MAX_PAGES_KALSHI):
         try:
@@ -356,6 +385,8 @@ def load_kalshi():
         e = {"title": ev.get("title") or "", "outcomes": {}, "text": ev.get("sub_title") or "", "end": 0,
              "volume": 0.0, "volume24h": 0.0, "rules": "", "url": "https://kalshi.com/markets/" + (ev.get("series_ticker") or k.split("-")[0]).lower(),
              "categories": [ev.get("category") or ""], "alt": ""}
+        if ev.get("series_ticker") in fees:             # Nov 15: the series' own fee (multiplier x 7%)
+            e["fr_all"] = (0.07 * fees[ev["series_ticker"]], 1)
         for m in ev.get("markets") or []:
             if m.get("status") not in (None, "active", "open"):
                 continue
@@ -750,14 +781,16 @@ def poly_kalshi(poly, kalshi, used):
              "volume": round(e["volume"]), "volume24h": round(e["volume24h"]), "matched_outcome": om.get(lead),
              "outcomes": {l: e["outcomes"][x] for l, x in om.items() if x is not None},
              "book": {l: (e.get("book") or {}).get(x) for l, x in om.items() if x is not None},
-             "spread": {l: (e.get("spr") or {}).get(x) for l, x in om.items() if x is not None}}
+             "spread": {l: (e.get("spr") or {}).get(x) for l, x in om.items() if x is not None},
+             "fr": site_fee(e, om.get(lead))}
         row = {"title": p["title"], "close": datetime.fromtimestamp(a["end"] or e["end"], timezone.utc).strftime(f),
                "sites": {"polymarket": {"url": p["url"], "title": p["title"], "score": s, "flags": fl, "label": label, "fine": fp,
                                         "volume": round(p["volume"]), "volume24h": round(p["volume24h"]),
                                         "matched_outcome": lead, "outcomes": outs,
                                         "spread": (p.get("spr") or {}) if len(p["outcomes"]) > 1 else
                                                   {"Yes": next(iter((p.get("spr") or {}).values()), None)},
-                                        "book": {lead: (p.get("book") or {}).get(lead if len(p["outcomes"]) > 1 else next(iter(p["outcomes"])))}},
+                                        "book": {lead: (p.get("book") or {}).get(lead if len(p["outcomes"]) > 1 else next(iter(p["outcomes"])))},
+                                        "fr": site_fee(p, lead if len(p["outcomes"]) > 1 else next(iter(p["outcomes"])))},
                          "kalshi": k},
                "flags": fl, "score": s, "categories": (p.get("categories") or []) + (e.get("categories") or []),
                "outcome": lead, "prices": {"polymarket": outs[lead], "kalshi": k["outcomes"].get(lead)},
@@ -1001,6 +1034,11 @@ EXP_MIN_VOL = {"polymarket": 20000, "kalshi": 5000, "alpha": 50}
 EXP_SKIP = ("weather", "climate")      # daily temperature and rain brackets: hundreds of rows, little interest
 
 
+def site_fee(e, label):
+    """Nov 15: the fee the site itself publishes for this outcome as (rate, exponent), or None if it doesn't say."""
+    return (e.get("fr") or {}).get(label) or e.get("fr_all")
+
+
 def exp_fee_rate(site, e):
     """Taker fee rate r (fee per $1 contract = r * p * (1 - p)); same numbers as make_gaps.fee_rate."""
     if site == "kalshi":
@@ -1013,6 +1051,36 @@ def exp_fee_rate(site, e):
     if "crypto" in cats:
         return 0.07
     return 0.04 if any(k in cats for k in ("politic", "election", "tech", "finance", "business")) else 0.05
+
+
+def exp_sane(rows, now):
+    """Nov 15: last check before anything reaches The Danger Zone. Recompute every number from scratch and drop
+    any row that doesn't add up: closed already, price outside 80-98.5, a fee that can't be right, or a return /
+    per-year figure that doesn't match the price and fee. Logs what it dropped (the watchdog reads the count)."""
+    good, bad = [], {}
+    for x in rows:
+        p = x["ask"] / 100
+        why = None
+        if not (EXP_LO <= x["ask"] <= EXP_HI):
+            why = "price out of range"
+        elif not (0 <= x["fee"] <= 100 * 0.10 * p * (1 - p) + 0.01):   # no site charges over 10% of p(1-p)
+            why = "fee out of range"
+        elif not (0.25 * 86400 <= datetime.strptime(x["close"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).timestamp() - now
+                  <= (EXP_DAYS + 1) * 86400):
+            why = "closes outside the window"
+        elif abs((100 - x["ask"] - x["fee"]) / (x["ask"] + x["fee"]) * 100 - x["ret"]) > 0.02:
+            why = "return doesn't add up"
+        elif x["days"] >= 3 and abs(x["ret"] * 365 / x["days"] - x["apr"]) > max(2, 0.01 * x["apr"]):
+            why = "per-year doesn't add up"
+        elif x["side"] not in ("Yes", "No") or not x.get("url"):
+            why = "missing side or link"
+        if why:
+            bad[why] = bad.get(why, 0) + 1
+        else:
+            good.append(x)
+    if bad:
+        print("Expiry returns: sanity check dropped %s" % bad)
+    return good, bad
 
 
 def expiry_returns(alpha, sites):
@@ -1032,11 +1100,13 @@ def expiry_returns(alpha, sites):
     rows = []
 
     def add(site, e, label, side, ask, end, est):
+        """fee per contract = rate * (p(1-p))^exponent; the site's own published rate when it gives one."""
         days = (end - now) / 86400
         if not (EXP_LO <= ask <= EXP_HI) or not (0.25 <= days <= EXP_DAYS):
             return None
-        r = exp_fee_rate(site, e)
-        fee = 100 * r * (ask / 100) * (1 - ask / 100)
+        own = site_fee(e, label) if site != "alpha" else None
+        r, ex = own or (exp_fee_rate(site, e), 1)
+        fee = 100 * r * ((ask / 100) * (1 - ask / 100)) ** ex
         cost = ask + fee
         ret = (100 - cost) / cost * 100
         if ret < 0.3:
@@ -1044,7 +1114,8 @@ def expiry_returns(alpha, sites):
         return {"site": site, "title": e["title"], "outcome": label, "side": side, "ask": round(ask, 1),
                 "fee": round(fee, 2), "ret": round(ret, 2), "apr": round(ret * 365 / days), "close": iso(end),
                 "days": round(days, 2), "volume": round(e.get("volume") or 0), "url": e["url"], "est": est,
-                "cat": next((c for c in e.get("categories") or [] if c), "")}
+                "cat": next((c for c in e.get("categories") or [] if c), ""),
+                "fs": "site" if own or site == "alpha" else "est", "fr": round(r, 4)}   # where the fee came from (watchdog counts the estimates)
 
     for site in ("polymarket", "kalshi"):
         for e in sites.get(site) or []:
@@ -1074,11 +1145,18 @@ def expiry_returns(alpha, sites):
                 if row:
                     got.append(row)
         rows += sorted(got, key=lambda x: -x["ret"])[:EXP_PER_EVENT]
+    rows, bad = exp_sane(rows, now)
     total, keep = len(rows), []
     for lo, hi in ((0, 3), (3, 7), (7, 31), (31, 91), (91, EXP_DAYS + 1)):   # the busiest 150 in each window, so every filter on the page has rows
         keep += sorted([x for x in rows if lo <= x["days"] < hi], key=lambda x: (x["site"] != "alpha", -x["volume"]))[:150]
     rows = sorted(keep, key=lambda x: x["days"])
-    json.dump({"updated": iso(now), "total": total, "rows": rows}, open("expiry.json", "w"), separators=(",", ":"))
+    fees = {}
+    for x in rows:                                     # which fee rates were used: the watchdog alerts James when a new one shows up
+        k = x["site"] + (" est" if x["fs"] == "est" else "")
+        fees.setdefault(k, {})
+        fees[k][str(x["fr"])] = fees[k].get(str(x["fr"]), 0) + 1
+    json.dump({"updated": iso(now), "total": total, "dropped": bad, "fees": fees, "rows": rows},
+              open("expiry.json", "w"), separators=(",", ":"))
     from collections import Counter
     print("Expiry returns: %d contracts at %s-%s cents settling within %d days %s"
           % (len(rows), EXP_LO, EXP_HI, EXP_DAYS, dict(Counter(x["site"] for x in rows))))
@@ -1156,6 +1234,7 @@ def main():
                                   "label": "SAME" if s >= 90 else "SIMILAR", "fine": fine_print(a["rules"], e["rules"]),
                                   "volume": round(e["volume"]), "volume24h": round(e["volume24h"])}
             row["sites"][name]["matched_outcome"] = om.get(lead)
+            row["sites"][name]["fr"] = site_fee(e, om.get(lead))
             # this site's price for every Alpha outcome it lines up with
             row["sites"][name]["outcomes"] = {l: e["outcomes"][k] for l, k in om.items() if k is not None}
             row["sites"][name]["book"] = {l: (e.get("book") or {}).get(k) for l, k in om.items() if k is not None}

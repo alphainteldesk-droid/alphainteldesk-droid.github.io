@@ -114,6 +114,9 @@
   .xt .ret { color:#3ddc84; font-weight:700; } .xt .est { color:var(--muted); font-size:.7rem; }
   .xt .hot { color:#ff6b6b; }
   .xt .be { color:var(--amber); font-weight:700; }
+  .stale { margin:10px 0; padding:10px 14px; border:1px solid #ff6b6b; border-radius:8px; background:rgba(255,107,107,.1); color:#ffb3b3; font-weight:600; }
+  .tw.old { opacity:.45; }
+  .confirm { margin:8px 0 0; color:var(--text); font-size:.9rem; }
   .tagline { margin:-4px 0 14px; font:700 1rem "JetBrains Mono",monospace; letter-spacing:.02em; color:#ff7a7a; }
   .edge { margin:26px 0 8px; padding:18px 20px; border:1px solid rgba(255,179,71,.5); border-radius:12px;
     background:linear-gradient(90deg, rgba(255,179,71,.10), var(--panel) 60%); }
@@ -159,6 +162,7 @@
     the fee, the same return per year, and the one number that matters most: <b>how often you need to be right</b> to come out ahead.
     Polymarket, Kalshi and Alpha Arcade, side by side.</p>
   <p class="note" id="x-upd"></p>
+  <p class="stale" id="x-stale" hidden></p>
   <p class="note"><a href="#edge">Gain an edge on your call: use the desk's free research tools before you buy &darr;</a></p>
 
   <div class="ctl">
@@ -167,8 +171,9 @@
     <span class="lbl">SORT</span><div class="chips" id="f-sort"></div>
     <span class="lbl">DAILY PRICE MARKETS</span><div class="chips" id="f-px"></div>
   </div>
-  <div class="tw"><table class="xt"><thead><tr><th>MARKET</th><th>BUY AT</th><th class="hide">FEE</th><th>RETURN</th><th class="hide">PER YEAR</th><th title="The chance it has to happen for this to be worth it, after the fee">NEED TO BE RIGHT</th><th>SETTLES IN</th></tr></thead>
+  <div class="tw" id="x-tw"><table class="xt"><thead><tr><th>MARKET</th><th>BUY AT</th><th class="hide">FEE</th><th>RETURN</th><th class="hide">PER YEAR</th><th title="The chance it has to happen for this to be worth it, after the fee">NEED TO BE RIGHT</th><th>SETTLES IN</th></tr></thead>
     <tbody id="x-rows"><tr><td colspan="7">Loading…</td></tr></tbody></table></div>
+  <p class="confirm"><b>Prices change by the minute.</b> Always confirm the price, the fee and the rules on the site itself before you buy.</p>
   <p class="note">The return only happens if the market resolves the way the row says. If it doesn't, the contract pays nothing and you lose what you paid. A high price means the market thinks it is likely, not that it is certain. Not financial advice. Always check each site's rules before you trade.</p>
 
 
@@ -187,7 +192,8 @@
 
   <h2 id="how">How this page works</h2>
   <div class="qa"><b>What is "Buy at"?</b><span>The price you can actually buy at right now: the best ask for Yes, or 100¢ minus the best bid for No. Never the midpoint. We skip any contract whose bid and ask are more than 4¢ apart.</span></div>
-  <div class="qa"><b>How is the return worked out?</b><span>(100¢ − price − fee) ÷ (price + fee). The fee is each site's own trading fee for a market order. Holding to settlement has no second fee.</span></div>
+  <div class="qa"><b>How is the return worked out?</b><span>(100¢ − price − fee) ÷ (price + fee). The fee is the trading fee each site publishes for that exact market, read fresh every update. If a site doesn't publish one, we estimate it and mark it "est". Holding to settlement has no second fee. Kalshi rounds each order's fee up to the next cent, so a very small order (a few contracts) pays a little more than shown.</span></div>
+  <div class="qa"><b>How do you keep the numbers right?</b><span>Every update recomputes every row from scratch and throws out anything that doesn't add up. A watchdog checks the page after every update and alerts us if prices go stale, if a site stops publishing its fees, or if a fee rate changes. If prices are more than an hour old, this page tells you so.</span></div>
   <div class="qa"><b>What is "Need to be right"?</b><span>The price plus the fee, read as a chance. Buying at 93¢ with a 0.4¢ fee means you risk 93.4¢ to make 6.6¢,
     so you only come out ahead over time if this outcome happens more than 93.4% of the time. The market's price is its own guess at that chance.
     The trade is worth it when you know something, or have read the rules more closely, and think the real chance is higher. If you don't, the price is probably about right.</span></div>
@@ -241,7 +247,7 @@
       var what = x.outcome && x.outcome.toLowerCase() !== 'yes' ? esc(x.outcome) + ': ' : '';
       return '<tr><td><span class="v">' + NAMES[x.site] + '</span><a href="' + esc(x.url) + '" rel="noopener">' + esc(x.title) + '</a>' +
         '<span class="o">Pays if ' + what + '<b>' + x.side + '</b> · risk ' + (x.ask + x.fee).toFixed(1) + '¢ to make ' + (100 - x.ask - x.fee).toFixed(1) + '¢</span></td>' +
-        '<td>' + x.ask.toFixed(1) + '¢' + (x.est ? ' <span class="est">est</span>' : '') + '</td><td class="hide">' + x.fee.toFixed(2) + '¢</td>' +
+        '<td>' + x.ask.toFixed(1) + '¢' + (x.est ? ' <span class="est">est</span>' : '') + '</td><td class="hide">' + x.fee.toFixed(2) + '¢' + (x.fs === 'est' ? ' <span class="est" title="This site did not publish a fee for this market, so this is our estimate">est</span>' : '') + '</td>' +
         '<td class="ret">+' + x.ret.toFixed(1) + '%</td><td class="hide">' + (x.days >= 3 ? x.apr.toLocaleString('en-US') + '%' : '<span title="Under 3 days: too short for a yearly figure">–</span>') + '</td>' +
         '<td class="be" title="Lose ' + (x.ask + x.fee).toFixed(1) + '¢ if wrong, make ' + (100 - x.ask - x.fee).toFixed(1) + '¢ if right">' + (x.ask + x.fee).toFixed(1) + '%+</td><td>' + left(x.close) + '</td></tr>'; }).join('')
       : '<tr><td colspan="7">Nothing fits these filters right now.</td></tr>';
@@ -254,6 +260,11 @@
     rows = d.rows || [];
     var m = Math.max(0, Math.round((Date.now() - Date.parse(d.updated)) / 60000));
     document.getElementById('x-upd').textContent = rows.length + ' contracts · last checked ' + (m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago');
+    if (m > 60) {   /* Nov 15: never let old prices look current */
+      var w = document.getElementById('x-stale'); w.hidden = false;
+      w.textContent = 'These prices are ' + (m < 120 ? m + ' minutes' : Math.round(m / 60) + ' hours') + ' old because our update is running late. Do not trade from them: check the live price on each site.';
+      document.getElementById('x-tw').classList.add('old');
+    }
     draw();
   }).catch(function () { document.getElementById('x-rows').innerHTML = '<tr><td colspan="7">Loading late. Try again in a few minutes.</td></tr>'; });
 })();

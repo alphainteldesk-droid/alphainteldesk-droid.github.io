@@ -49,6 +49,11 @@ def baseline(old, name, value):
 
 def checks():
     m, desk, gaps, mk, al = load("matches.json"), load("desk.json"), load("gaps.json"), load("markets.json"), load("alpha_live.json")
+    ex = load("expiry.json")
+    xr = ex.get("rows") or []
+    est = sum(1 for x in xr if x.get("fs") == "est" and x.get("site") != "alpha")
+    pk_rows = sum(1 for x in xr if x.get("site") != "alpha") or 1
+    dropped = sum((ex.get("dropped") or {}).values())
     c = m.get("counts") or {}
     nm = mk.get("new_markets") or {}
     pk = c.get("poly_kalshi")
@@ -75,6 +80,13 @@ def checks():
         "New markets": (len(nm.get("kalshi") or []) + len(nm.get("polymarket") or []) > 0,
                         "%d Polymarket, %d Kalshi" % (len(nm.get("polymarket") or []), len(nm.get("kalshi") or [])),
                         "New markets came back empty. Ask Claude to check make_markets.py.", None),
+        # Nov 15: The Danger Zone (expiry.json). Down if: stale, nearly empty, more than 10% of Polymarket/Kalshi rows on
+        # ESTIMATED fees (= a site stopped publishing its fee and we're guessing), or the sanity check threw out 5%+ of rows.
+        "Danger Zone": (age_h(ex.get("updated", "")) <= 2 and len(xr) >= 100 and est <= 0.1 * pk_rows and dropped <= 0.05 * (len(xr) + dropped),
+                        "updated %.1f h ago, %d contracts, %d on estimated fees, %d dropped by the sanity check"
+                        % (age_h(ex.get("updated", "")), len(xr), est, dropped),
+                        "The Danger Zone numbers can't be trusted right now (old prices, guessed fees or rows that don't add up). "
+                        "Ask Claude to check the 'Expiry returns' and 'Kalshi fees' lines in the run log.", len(xr)),
         "Gap Scanner": (age_h(gaps.get("updated", "")) <= 2, "updated %.1f h ago, %d gaps" % (age_h(gaps.get("updated", "")),
                         len(gaps.get("gaps") or [])), "The Gap Scanner stopped updating. Ask Claude to check the run log.", None),
     }
@@ -108,6 +120,30 @@ def gh(method, path, body=None):
                                           "Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=20) as r:
         return json.load(r)
+
+
+def fee_watch(old):
+    """Nov 15: tell James when a site starts charging a fee rate we haven't seen before (or a known one returns after
+    30+ days). The site already uses the new rate; the alert is so he can check the numbers look right."""
+    seen = dict(old.get("fees_seen") or {})
+    first = not seen
+    new = []
+    for site, rates in (load("expiry.json").get("fees") or {}).items():
+        for rate, n in rates.items():
+            k = site + " " + rate
+            if k not in seen or age_h(seen[k]) > 30 * 24:
+                new.append("%s: %s%% fee rate (%d contracts)" % (site, round(float(rate) * 100, 2), n))
+            seen[k] = now.strftime(F)
+    if new and not first:                                     # the first run only learns what's normal
+        print("Watchdog: new fee rates:", "; ".join(new))
+        try:
+            gh("POST", "/issues", {"title": "ℹ Alpha Intel Desk: a site's fees changed",
+                                   "body": "New fee rates seen on The Danger Zone (checked %s UTC):\n\n- %s\n\n"
+                                           "The site already uses the new fees. Have a quick look at a few rows, then close this issue. @%s"
+                                           % (now.strftime("%b %d %H:%M"), "\n- ".join(new), OWNER)})
+        except Exception as err:
+            print("Watchdog: fee alert failed -", err)
+    return seen
 
 
 def main():
@@ -145,7 +181,9 @@ def main():
         if not ok:
             down.append(name)
         print("Watchdog: %-24s %s | %s" % (name, "OK  " if ok else "DOWN", seen))
-    json.dump({"updated": now.strftime(F), "all_ok": not down, "down": down, "self_fix": fixed, "feeds": feeds},
+    seen_fees = fee_watch(old)
+    json.dump({"updated": now.strftime(F), "all_ok": not down, "down": down, "self_fix": fixed, "feeds": feeds,
+               "fees_seen": seen_fees},
               open("health.json", "w"), indent=1)
     print("Watchdog:", "all feeds live" if not down else "DOWN: " + ", ".join(down), "| self-fix:", fixed or "none")
 

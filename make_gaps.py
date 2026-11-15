@@ -36,7 +36,14 @@ def is_sports(cats):
 
 
 def fee_rate(site, row):
-    """Taker fee rate r; fee per $1 contract = r * p * (1 - p)."""
+    """Taker fee rate r; fee per $1 contract = r * p * (1 - p).
+    Nov 15: the fee the site publishes for this market comes first (matches.json "fr" = [rate, exponent]);
+    the estimates below are only the fallback. All published exponents are 1 today; fee_pts() warns if not."""
+    own = (row["sites"].get(site) or {}).get("fr")
+    if own:
+        if float(own[1]) != 1:
+            print("Fees: %s publishes exponent %s on %s - using the rate with exponent 1" % (site, own[1], row.get("title", "")[:40]))
+        return float(own[0])
     if site == "kalshi":
         return 0.07
     if site == "alpha":

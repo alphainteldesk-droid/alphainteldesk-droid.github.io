@@ -1082,7 +1082,11 @@
     drawHub();
     fetch('expiry.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (x) {
       exp = x.rows || [];
-      if (x.updated) document.getElementById('hub-upd').textContent = 'Updated ' + when(x.updated) + '.';
+      if (x.updated) {
+        var old = (Date.now() - new Date(x.updated)) / 60000 > 60, u = document.getElementById('hub-upd');
+        u.textContent = old ? 'These prices are over an hour old: check each site before you trade.' : 'Updated ' + when(x.updated) + '.';
+        if (old) { u.style.color = '#ff7a7a'; hubRows.style.opacity = '.5'; }
+      }
       drawHub();
     }).catch(function () { exp = []; drawHub(); });
     // when the same market is matched on the other sites (SAME grade, outcomes within 40¢), show all prices side by side
