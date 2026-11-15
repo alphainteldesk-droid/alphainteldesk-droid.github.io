@@ -606,7 +606,7 @@
   }
   /* Gap Scanner panel in the space under MONEY NEVER SLEEPS */
   .deskwrap { position:relative; container-type:inline-size; }
-  .gapbox { position:absolute; left:.7%; top:46.4%; width:54%; height:53%; box-sizing:border-box; overflow:hidden;
+  .gapbox { position:absolute; left:.7%; top:46.4%; width:44.4%; height:53%; box-sizing:border-box; overflow:hidden;
     display:flex; flex-direction:column; padding:.55cqw .85cqw; border-radius:5px;
     background:rgba(5,12,20,.9); border:1px solid rgba(255,179,71,.5);
     box-shadow:0 0 22px rgba(255,179,71,.12), inset 0 0 22px rgba(63,219,230,.05);
@@ -646,10 +646,10 @@
   a.gb-m { color:inherit; text-decoration:none; } a.gb-m:hover b { text-decoration:underline; }
   .ldot { width:.45cqw; height:.45cqw; border-radius:50%; background:var(--cyan); box-shadow:0 0 6px var(--cyan);
     display:inline-block; animation:blink 1.4s infinite; }
-  .gb-cols, .gb-r { display:grid; grid-template-columns:1fr 4.1cqw 4.1cqw 4.1cqw 4.5cqw 1.8cqw; gap:.4cqw; align-items:center; }
+  .gb-cols, .gb-r { display:grid; grid-template-columns:1fr 3.6cqw 3.6cqw 3.6cqw 4.3cqw 1.7cqw; gap:.3cqw; align-items:center; }   /* Nov 15: tighter price columns so market names fit */
   #gapbox.mv .gb-cols, #gapbox.mv .gb-r { grid-template-columns:1fr 4.1cqw 3.8cqw 5.8cqw 4.2cqw 1.8cqw; }
   #gapbox.tr .gb-cols, #gapbox.tr .gb-r { grid-template-columns:1fr 4.1cqw 6.4cqw 1.8cqw; }
-  .gb-tabs .gb-tab { font-size:.92cqw; padding:.3cqw .55cqw; }   /* Nov 15: three tabs need a little less room */
+  .gb-tabs .gb-tab { font-size:.88cqw; padding:.3cqw .5cqw; }   /* Nov 15: three tabs need a little less room */
   .gb-cols { font:600 .68cqw "JetBrains Mono",monospace; letter-spacing:.08em; color:#8fa3b8;
     padding-bottom:.2cqw; border-bottom:1px solid rgba(63,219,230,.2); }
   .gb-cols span:not(:first-child) { text-align:center; } .gb-cols .a { color:var(--amber); }
@@ -719,7 +719,7 @@
   .hero-t { font:700 clamp(1.9rem,3.6vw,2.7rem)/1.05 "Space Grotesk",sans-serif; color:#f3f6fa; letter-spacing:-.01em; }
   .hero-s { margin:4px 0 0; color:#c9d3dc; font-size:clamp(1rem,1.5vw,1.2rem); }
   @media (max-width:640px) { .hero { padding:16px 12px 10px; } .hero .sign { font-size:.7rem; margin-bottom:8px; } }
-  .desk .mns { left:56.5%; top:93.8%; transform:translateY(-50%); padding-left:0;
+  .desk .mns { left:45.6%; top:93.8%; transform:translateY(-50%); padding-left:0;
     font:400 max(5px,.87cqw) "JetBrains Mono",monospace; letter-spacing:.31em;
     color:#b4bec5; text-shadow:0 1px 3px rgba(0,0,0,.85); }   /* Nov 13: matched to "INFORMATION IS OUR EDGE" in the photo */
   @media (max-width:760px) {
@@ -916,7 +916,7 @@
       <button class="gb-tab" data-t="movers" role="tab" data-tip="Markets that moved 5¢ or more in the last 24 hours, with real trading behind the move. Tap WHY? to see the news."><i class="ldot"></i>MOMENTUM SCANNER</button>
       <button class="gb-tab" data-t="traders" role="tab" data-tip="The most profitable traders of the last 7 days on Polymarket, Kalshi and Alpha Arcade, and their biggest move. Full boards on the Top Traders page."><i class="ldot"></i>TOP TRADERS</button>
 </div>
-    <span class="gb-s"><span id="gb-sub">GAPS AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
+    <span class="gb-s"><span id="gb-sub">AFTER FEES</span> · <span id="gb-upd">HOURLY</span></span></div>
   <div class="gb-cols" id="gb-cols"></div>
   <div id="gb-rows"><div class="gb-empty">Scanning Polymarket, Kalshi and Alpha Arcade&hellip;</div></div>
   <div class="gb-f"><span><span id="gb-note">No sports · fees estimated · check each site's rules before you trade</span>
@@ -1330,17 +1330,17 @@
   var SITE = 'https://alphainteldesk.com/';
   var data = {}, shares = [];
   var TABS = {
-    gaps: { file: 'gaps.json', sub: 'GAPS AFTER FEES',
+    gaps: { file: 'gaps.json', sub: 'AFTER FEES',
       cols: '<span>MARKET</span><span>POLY</span><span>KALSHI</span><span class="a">ALPHA</span><span>GAP</span><span></span>',
       note: "All 3 sites first · no sports · fees estimated · check each site's rules before you trade",
       go: ['/gap-scanner.html', 'OPEN GAP SCANNER &rarr;'],
       empty: 'No gaps pass our filters right now. Prices are lined up across Polymarket, Kalshi and Alpha Arcade. Checked every 20 minutes.' },
-    movers: { file: 'movers.json', sub: '24H MOVES',
+    movers: { file: 'movers.json', sub: '24H',
       cols: '<span>MARKET</span><span>SITE</span><span>NOW</span><span>24H CHANGE</span><span>WHY?</span><span></span>',
       note: 'No sports · moves of 5¢+ with real trading · "Why?" opens a news search',
       go: ['#calendar', '2-WEEK CALENDAR &darr;'],
       empty: 'No big moves with real volume in the last 24 hours. Checked every 20 minutes.' },
-    traders: { file: 'traders.json', sub: 'LAST 7 DAYS',   /* Nov 15: Top Traders moved into the panel (James) */
+    traders: { file: 'traders.json', sub: '7 DAYS',   /* Nov 15: Top Traders moved into the panel (James) */
       cols: '<span>TRADER · BIGGEST MOVE</span><span>SITE</span><span>PROFIT</span><span></span>',
       note: 'Past profit doesn\'t predict future results · Alpha Arcade is all-time profit',
       go: ['/top-traders.html', 'OPEN TOP TRADERS &rarr;'],
