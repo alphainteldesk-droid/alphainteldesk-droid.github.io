@@ -593,6 +593,28 @@ def sources_in(text):
     return {name: fam for name, fam, pat in SOURCES if _re.search(pat, t)}
 
 
+# Nov 15: Danger Zone settlement line (who decides the result, clear-cut or a judgement call)
+SETTLE_VAGUE = _re.compile(r"credible report|consensus of|widely reported|sole discretion|(?:its|the|our) discretion|"
+                   r"in (?:its|our|the) (?:sole )?judg|reasonabl[ey] (?:determine|interpret)|spirit of", _re.I)
+SETTLE_SRC = _re.compile(r"(?:primary )?resolution source (?:for this market )?(?:will be|is|shall be)\s+(?:the |an? )?([^.\n]{3,90})", _re.I)
+SETTLE_KAL = _re.compile(r"Resolution source: (.+?)\.\s*$")
+
+
+def settle_info(text):
+    """Nov 15 (James): who decides the result, and is it clear-cut? -> {"g": clear|mixed|judgement|none, "src": "..."}"""
+    t = text or ""
+    names = [x.strip() for x in (SETTLE_KAL.search(t).group(1).split(",") if SETTLE_KAL.search(t) else []) if x.strip()]
+    names += [k for k in sources_in(t) if k != "Credible reporting" and k not in names]
+    if not names:
+        m = SETTLE_SRC.search(t)
+        if m and not _re.match(r"(?i)(a )?consensus|credible", m.group(1)):
+            names = [_re.split(r",| and | or |;|\(| however| but", m.group(1))[0].strip().rstrip("…")]
+    vague = bool(SETTLE_VAGUE.search(t))
+    g = ("mixed" if vague else "clear") if names else ("judgement" if vague else "none")
+    src = ", ".join(names[:2])
+    return {"g": g, "src": src[:48] + ("…" if len(src) > 48 else "")}
+
+
 import collections as _col
 FINE_WATCH = {"unknown": _col.Counter(), "seen": set()}
 _CUE = _re.compile(r"[^.]*\b(resolution source|resolve[sd]? (?:according to|based on|using|per)|according to|"
@@ -1136,7 +1158,8 @@ def expiry_returns(alpha, sites):
                 "cat": next((c for c in e.get("categories") or [] if c), ""),
                 "fs": "site" if own or site == "alpha" else "est", "fr": round(r, 4),
                 "id": (e.get("book") or {}).get(label) if site != "alpha" else (e.get("apps") or {}).get(label),
-                "q": (e.get("qs") or {}).get(label) or ""}   # Nov 15 (James): the site's full question for this contract, shown in plain words   # Nov 15: Kalshi ticker / Polymarket Yes token, for the track record   # where the fee came from (watchdog counts the estimates)
+                "q": (e.get("qs") or {}).get(label) or "",
+                "st": settle_info(e.get("rules") or "") if site != "alpha" else None}   # Alpha rules arrive cut off (Courier): later   # Nov 15 (James): the site's full question for this contract, shown in plain words   # Nov 15: Kalshi ticker / Polymarket Yes token, for the track record   # where the fee came from (watchdog counts the estimates)
 
     for site in ("polymarket", "kalshi"):
         for e in sites.get(site) or []:
