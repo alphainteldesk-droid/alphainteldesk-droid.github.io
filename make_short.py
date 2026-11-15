@@ -107,7 +107,8 @@ async def main():
     clicks, swooshes = [], []
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path=shutil.which("google-chrome") or "/usr/bin/google-chrome")
-        ctx = await b.new_context(viewport={"width": W, "height": H}, device_scale_factor=DPR)
+        ctx = await b.new_context(viewport={"width": W, "height": H}, device_scale_factor=DPR,
+                                  timezone_id="America/New_York", locale="en-US")   # GitHub runs on UTC: show Eastern times
         pg = await ctx.new_page()
 
         async def go(path):
@@ -175,7 +176,7 @@ async def main():
             D_WHEN, D_TITLE, d["side"].upper(), d["ask"], d["ret"])
         def s3(t, s):
             scr = lerp(0, sy3, (s - 0.2) / 1.5)
-            x, y = lerp(dz2[0], tw[0] - 34, (s - 1.6) / 1.0), lerp(dz2[1], tw[2] + 20 - sy3, (s - 1.6) / 1.0)
+            x, y = lerp(dz2[0], tw[0] - 12, (s - 1.6) / 1.0), lerp(dz2[1], tw[2] + 36 - sy3, (s - 1.6) / 1.0)   # just under the return figure
             hi = "#aid-row" if s > 2.6 else None
             return [x, y, 1, 0, 0, 0, cap3 if s > 0.9 else "", min(1, max(0, (s - 0.9) / 0.3)), scr, hi]
         await shoot(4.2, s3)
