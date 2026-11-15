@@ -550,7 +550,11 @@
   .split .cal-h h2 { font-size:1.2rem; }
   .hub .cal-h h2 { gap:12px; }
   .hub-tag { display:block; color:#ff7a7a; font-weight:700; margin-bottom:2px; }
-  .hub-cols, .hub-r { display:grid; grid-template-columns:minmax(0,1fr) 52px 62px 66px 74px; gap:10px; align-items:center; }
+  .hub-cols, .hub-r { display:grid; grid-template-columns:minmax(0,1fr) 46px 58px 62px 30px 70px; gap:9px; align-items:center; }
+  .hub-r > .dzg { justify-self:center; min-width:20px; text-align:center; padding:1px 4px; border-radius:4px; border:1px solid; font:700 .74rem "JetBrains Mono",monospace; }   /* Nov 15: DZ Grade */
+  .dzg.a { color:#3ddc84; border-color:rgba(61,220,132,.6); background:rgba(61,220,132,.13); } .dzg.b { color:#3fdbe6; border-color:rgba(63,219,230,.55); background:rgba(63,219,230,.1); }
+  .dzg.c { color:#ffb347; border-color:rgba(255,179,71,.55); background:rgba(255,179,71,.1); } .dzg.d { color:#ff8a8a; border-color:rgba(255,107,107,.55); background:rgba(255,107,107,.12); }
+  .dzg.n { color:var(--muted); border-color:rgba(255,255,255,.12); font-weight:500; }
   .hub-r > span.sd { justify-self:end; padding:2px 6px; border-radius:3px; font:700 .7rem "JetBrains Mono",monospace; letter-spacing:.06em; }
   .hub-r > .sd.y { color:#3ee88a; border:1px solid rgba(62,232,138,.5); background:rgba(62,232,138,.1); }
   .hub-r > .sd.n { color:#ff8a8a; border:1px solid rgba(255,122,122,.5); background:rgba(255,122,122,.1); }
@@ -587,7 +591,28 @@
   @keyframes dzshine { 0%, 55% { left:-40%; } 100% { left:130%; } }
   @keyframes dznudge { 50% { transform:translateX(6px); } }
   @keyframes dzpulse { 50% { box-shadow:0 0 26px rgba(255,90,90,.5); } }
-  @media (prefers-reduced-motion:reduce) { .dz-go, .dz-tape, .dz-in::after, .dz-ar { animation:none; } }
+  /* Nov 15 (James): bigger button that fills the box, with a figure walking through a door into the Danger Zone (6 s loop) */
+  #closing-soon .dz-go { flex:1 0 auto; min-height:150px; display:flex; margin-top:16px; }
+  #closing-soon .dz-in { flex:1; padding:14px 22px 14px 12px; gap:18px; }
+  #closing-soon .dz-l { flex:1; } #closing-soon .dz-l b { font-size:clamp(1.25rem, 2.1vw, 1.8rem); letter-spacing:.14em; line-height:1.2; }
+  #closing-soon .dz-l small { font-size:.82rem; margin-top:8px; } #closing-soon .dz-ar { font-size:2.4rem; }
+  .dz-door { flex:none; width:clamp(150px, 15vw, 210px); height:auto; align-self:flex-end; margin-bottom:-6px; overflow:visible; }
+  .dzd-man { animation:dzwalk 6s linear infinite; }
+  .dzd-bob { animation:dzbob .5s ease-in-out infinite; }
+  .dzd-leg, .dzd-arm2 { transform-origin:0 -28px; animation:dzswing .5s ease-in-out infinite; } .dzd-arm2 { transform-origin:0 -46px; }
+  .dzd-leg2, .dzd-arm { transform-origin:0 -28px; animation:dzswing .5s ease-in-out infinite reverse; } .dzd-arm { transform-origin:0 -46px; }
+  .dzd-panel, .dzd-knob { transform-box:view-box; transform-origin:117px 73px; animation:dzopen 6s ease-in-out infinite; }
+  .dzd-beam { opacity:0; animation:dzbeam 6s ease-in-out infinite; }
+  .dzd-sign { animation:dzblink 1s steps(2) infinite; }
+  @keyframes dzwalk { 0% { transform:translate(-15px,118px); opacity:1; } 30% { transform:translate(98px,118px); opacity:1; }
+    40% { transform:translate(98px,118px); } 58% { transform:translate(134px,116px) scale(.86); opacity:1; } 62% { transform:translate(138px,116px) scale(.82); opacity:0; } 100% { transform:translate(138px,116px); opacity:0; } }
+  @keyframes dzbob { 50% { transform:translateY(-1.5px); } }
+  @keyframes dzswing { 0%, 100% { transform:rotate(22deg); } 50% { transform:rotate(-22deg); } }
+  @keyframes dzopen { 0%, 30% { transform:scaleX(1); } 40%, 64% { transform:scaleX(.12); } 76%, 100% { transform:scaleX(1); } }
+  @keyframes dzbeam { 0%, 30% { opacity:0; } 40%, 62% { opacity:.4; } 76%, 100% { opacity:0; } }
+  @keyframes dzblink { 50% { opacity:.35; } }
+  @media (max-width:640px) { .dz-door { width:120px; } #closing-soon .dz-go { min-height:120px; } #closing-soon .dz-in { gap:10px; padding:10px 12px 10px 6px; } }
+  @media (prefers-reduced-motion:reduce) { .dz-go, .dz-tape, .dz-in::after, .dz-ar, .dzd-man, .dzd-bob, .dzd-leg, .dzd-leg2, .dzd-arm, .dzd-arm2, .dzd-panel, .dzd-knob, .dzd-beam, .dzd-sign { animation:none; } .dzd-man { transform:translate(70px,118px); } }
   .hub.urgent .cal-f button[data-h="soon"] { animation:calglow 1.2s ease-in-out infinite; box-shadow:0 0 0 1px #ff7a7a; }
   @media (max-width: 1000px) {
     .split { grid-template-columns:1fr; margin:12px 8px 0; }
@@ -964,7 +989,21 @@
   <div class="hub-rows" id="hub-rows"><p class="cal-none">Loading&hellip;</p></div>
   <a class="dz-go" href="/expiry-returns.html" aria-label="Open The Danger Zone: every contract, every filter, plus tools to research your call">
     <span class="dz-tape" aria-hidden="true"></span>
-    <span class="dz-in"><span class="dz-l"><b>ENTER THE DANGER ZONE</b><small id="dz-stats">Our top 50 contracts, plus tools to research your call</small></span>
+    <span class="dz-in"><svg class="dz-door" viewBox="0 0 200 130" aria-hidden="true">
+        <defs><radialGradient id="dzglow" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#ff3b3b" stop-opacity=".95"/><stop offset="1" stop-color="#5a0000" stop-opacity=".9"/></radialGradient>
+          <pattern id="dzhaz" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="10" fill="#ffb347"/><rect x="5" width="5" height="10" fill="#14181f"/></pattern></defs>
+        <line x1="0" y1="118" x2="200" y2="118" stroke="rgba(255,179,71,.35)" stroke-width="2"/>
+        <polygon class="dzd-beam" points="118,118 150,118 185,128 95,128" fill="#ff3b3b"/>
+        <rect x="111" y="22" width="46" height="96" fill="url(#dzhaz)"/>
+        <rect x="117" y="28" width="34" height="90" fill="url(#dzglow)"/>
+        <g class="dzd-man"><g class="dzd-bob"><circle cx="0" cy="-58" r="6.5" fill="#e8eef5"/><path d="M0 -51 L0 -28" stroke="#e8eef5" stroke-width="6" stroke-linecap="round"/>
+          <path class="dzd-arm" d="M0 -46 L-7 -33" stroke="#e8eef5" stroke-width="4" stroke-linecap="round"/><path class="dzd-arm2" d="M0 -46 L7 -33" stroke="#e8eef5" stroke-width="4" stroke-linecap="round"/>
+          <path class="dzd-leg" d="M0 -28 L-6 -10" stroke="#e8eef5" stroke-width="5" stroke-linecap="round"/><path class="dzd-leg2" d="M0 -28 L6 -10" stroke="#e8eef5" stroke-width="5" stroke-linecap="round"/></g></g>
+        <rect class="dzd-panel" x="117" y="28" width="34" height="90" fill="#2a3240" stroke="#566375" stroke-width="1.5"/>
+        <circle class="dzd-knob" cx="145" cy="76" r="2.2" fill="#ffb347"/>
+        <rect x="114" y="6" width="40" height="12" rx="2" fill="#2a0d0d" stroke="#ff6b6b" stroke-width="1"/>
+        <text class="dzd-sign" x="134" y="15.2" text-anchor="middle" font-family="JetBrains Mono,monospace" font-weight="800" font-size="8" fill="#ff6b6b" letter-spacing="1">DANGER</text>
+      </svg><span class="dz-l"><b>ENTER THE DANGER ZONE</b><small id="dz-stats">Our top 50 contracts, plus tools to research your call</small></span>
       <span class="dz-ar" aria-hidden="true">&rarr;</span></span>
   </a>
   <p class="cal-foot">If it resolves the other way, the contract pays nothing and you lose what you paid. A high price means likely, not certain. Not financial advice.</p>
@@ -1071,13 +1110,23 @@
       .filter(function (m) { return new Date(m.closes) > Date.now(); })
       .sort(function (a, b) { return new Date(a.closes) - new Date(b.closes); });
     if (soonList.length && new Date(soonList[0].closes) - Date.now() < 6 * 3600000) hub.classList.add('urgent');
+    function ckey(x) {   /* Nov 15 (James): rows open the Danger Zone page at this contract (same key as the page's share links) */
+      var t = x.site + '|' + (x.id || x.url) + '|' + x.side, h = 5381;
+      for (var k = 0; k < t.length; k++) h = ((h * 33) ^ t.charCodeAt(k)) >>> 0;
+      return h.toString(36); }
+    function dzg(x) {   /* Nov 15: same DZ Grade as the Danger Zone page = Liquidity + Rules, averaged, rounded toward the weaker */
+      var L = { A: 4, B: 3, C: 2, D: 1 }, R = { clear: 4, mixed: 3, none: 2, judgement: 1 }, G = ['', 'D', 'C', 'B', 'A'];
+      var l = x.ex ? (x.ex.usd ? L[x.ex.g] : 1) : 0, r = x.st ? R[x.st.g] : 0;
+      if (!l || !r) return '<span class="dzg n" title="' + (x.site === 'alpha' ? 'Alpha Arcade grades coming soon' : 'Not graded yet') + '">–</span>';
+      var g = G[Math.floor((l + r) / 2)];
+      return '<span class="dzg ' + g.toLowerCase() + '" title="DZ Grade ' + g + ': Liquidity ' + G[l] + ' + Rules ' + G[r] + '. Details on the Danger Zone page.">' + g + '</span>'; }
     function expRow(x) {   // Nov 15 (James): just the side, the price now, the return if right, and the close date
       var cd = new Date(x.close), y = cd.getFullYear() !== new Date().getFullYear();
-      return '<a class="hub-r" href="' + esc(x.url) + '" target="_blank" rel="noopener" title="Return after a ' + x.fee.toFixed(2) + '¢ fee, if it resolves this way">' +
+      return '<a class="hub-r" href="/expiry-returns.html#c=' + ckey(x) + '" title="Open on the Danger Zone page. Return after a ' + x.fee.toFixed(2) + '¢ fee, if it resolves this way">' +
         '<span class="hub-m"><b>' + esc(x.title) + '</b><i><span class="st' + (x.site === 'alpha' ? ' a' : '') + '">' + SH[x.site] + '</span>' +
         (x.outcome && x.outcome.toLowerCase() !== 'yes' && x.outcome !== x.title ? ' · ' + esc(x.outcome) : '') + '</i></span>' +
         '<span class="sd ' + (x.side === 'Yes' ? 'y' : 'n') + '">' + x.side.toUpperCase() + '</span>' +
-        '<span>' + x.ask.toFixed(1) + '¢' + (x.est ? '*' : '') + '</span><span class="g">+' + x.ret.toFixed(1) + '%</span>' +
+        '<span>' + x.ask.toFixed(1) + '¢' + (x.est ? '*' : '') + '</span><span class="g">+' + x.ret.toFixed(1) + '%</span>' + dzg(x) +
         '<span class="y">' + cd.toLocaleDateString('en-US', y ? { month: 'short', day: 'numeric', year: '2-digit' } : { month: 'short', day: 'numeric' }) + '</span></a>';
     }
     function soonRow(m) {
@@ -1098,7 +1147,7 @@
         hubRows.innerHTML = soonList.length ? soonList.slice(0, 12).map(soonRow).join('') : '<p class="cal-none">No markets closing in the next few days.</p>';
         return;
       }
-      hubCols.innerHTML = '<span>CONTRACT</span><span>SIDE</span><span>PRICE</span><span title="After fees, if it resolves this way">RETURN</span><span>CLOSES</span>';
+      hubCols.innerHTML = '<span>CONTRACT</span><span>SIDE</span><span>PRICE</span><span title="After fees, if it resolves this way">RETURN</span><span title="DZ Grade: Liquidity + Rules">DZ</span><span>CLOSES</span>';
       if (!exp) { hubRows.innerHTML = '<p class="cal-none">Loading&hellip;</p>'; return; }
       var long = hubTab === 'long';
       var list = exp.filter(function (x) { var dd = (new Date(x.close) - Date.now()) / 86400000;
