@@ -604,11 +604,15 @@ def settle_info(text):
     """Nov 15 (James): who decides the result, and is it clear-cut? -> {"g": clear|mixed|judgement|none, "src": "..."}"""
     t = text or ""
     names = [x.strip() for x in (SETTLE_KAL.search(t).group(1).split(",") if SETTLE_KAL.search(t) else []) if x.strip()]
-    names += [k for k in sources_in(t) if k != "Credible reporting" and k not in names]
-    if not names:
+    if not names:                           # Kalshi lists its own; otherwise the sources we recognise in the rules
+        names = [k for k in sources_in(t) if k != "Credible reporting"]
+    if not names:                           # else the name after "resolution source ... will be", if it looks like a name
         m = SETTLE_SRC.search(t)
-        if m and not _re.match(r"(?i)(a )?consensus|credible", m.group(1)):
-            names = [_re.split(r",| and | or |;|\(| however| but", m.group(1))[0].strip().rstrip("…")]
+        if m:
+            x = _re.sub(r"(?i)^(official (information|data|results?|announcements?) (from|of|by) (the )?)", "", m.group(1))
+            x = _re.split(r",| and | or |;|\(| however| but| found at| at http| which", x)[0].strip().rstrip("…")
+            if x[:1].isupper() and not _re.match(r"(?i)(a )?consensus|credible", x):
+                names = [x]
     vague = bool(SETTLE_VAGUE.search(t))
     g = ("mixed" if vague else "clear") if names else ("judgement" if vague else "none")
     src = ", ".join(names[:2])
