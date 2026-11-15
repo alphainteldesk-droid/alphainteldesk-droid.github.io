@@ -256,6 +256,7 @@ def poly_event(ev):
                 e["outcomes"][lbl] = round(prices[0] * 100, 1)
                 if bb is not None and ba is not None:  # Nov 14: bid/ask width in cents (wide = the midpoint isn't a real price)
                     e.setdefault("spr", {})[lbl] = round((float(ba) - float(bb)) * 100, 1)
+                    e.setdefault("ba", {})[lbl] = (round(float(bb) * 100, 1), round(float(ba) * 100, 1))
                 try:                                   # Yes token id: lets make_gaps.py read the order book (fillable size)
                     e.setdefault("book", {})[lbl] = json.loads(m.get("clobTokenIds") or "[]")[0]
                 except (ValueError, TypeError, IndexError):
@@ -366,6 +367,7 @@ def load_kalshi():
             e["outcomes"][label] = round(p * 100, 1) if p > 0 else None
             if bid > 0 and ask > 0:
                 e.setdefault("spr", {})[label] = round((ask - bid) * 100, 1)
+                e.setdefault("ba", {})[label] = (round(bid * 100, 1), round(ask * 100, 1))
             if m.get("ticker"):
                 e.setdefault("book", {})[label] = m["ticker"]       # for the order book (fillable size)
             e.setdefault("ends", {})[label] = ts(m.get("expected_expiration_time") or m.get("close_time"))
@@ -993,6 +995,88 @@ def calendar_links(alpha, sites):
     print("Calendar links: %d events linked" % len(out))
 
 
+EXP_LO, EXP_HI, EXP_SPREAD, EXP_DAYS, EXP_PER_EVENT = 85, 98.5, 4, 30, 2
+EXP_MIN_VOL = {"polymarket": 5000, "kalshi": 500, "alpha": 50}
+
+
+def exp_fee_rate(site, e):
+    """Taker fee rate r (fee per $1 contract = r * p * (1 - p)); same numbers as make_gaps.fee_rate."""
+    if site == "kalshi":
+        return 0.07
+    if site == "alpha":
+        return (e.get("fee") / 1e6) if e.get("fee") else 0.07
+    cats = " ".join(e.get("categories") or []).lower()
+    if "geopolitic" in cats:
+        return 0.0
+    if "crypto" in cats:
+        return 0.07
+    return 0.04 if any(k in cats for k in ("politic", "election", "tech", "finance", "business")) else 0.05
+
+
+def expiry_returns(alpha, sites):
+    """Nov 14: Expiry Returns (expiry.json). Contracts you can buy today at 85-98.5 cents that settle within 30 days:
+    what you make after the fee IF it resolves that way (it pays $1), and the same figure per year (simple, not
+    compounded). Uses the real ASK for Yes and 100 minus the real BID for No, never the midpoint; bid and ask must
+    be within 4 cents. Alpha Arcade has no bid/ask in our feed, so its rows use the last price, are marked "est",
+    and need a trade in the last 48 h. No sports."""
+    now = n.timestamp()
+    iso = lambda t: datetime.fromtimestamp(t, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    try:
+        tr = json.load(open("alpha_trades.json"))
+        live = {u for u, x in tr.items() if now - x.get("last", 0) <= 48 * 3600}
+    except Exception:
+        live = None
+    rows = []
+
+    def add(site, e, label, side, ask, end, est):
+        days = (end - now) / 86400
+        if not (EXP_LO <= ask <= EXP_HI) or not (0.25 <= days <= EXP_DAYS):
+            return None
+        r = exp_fee_rate(site, e)
+        fee = 100 * r * (ask / 100) * (1 - ask / 100)
+        cost = ask + fee
+        ret = (100 - cost) / cost * 100
+        if ret < 0.3:
+            return None
+        return {"site": site, "title": e["title"], "outcome": label, "side": side, "ask": round(ask, 1),
+                "fee": round(fee, 2), "ret": round(ret, 2), "apr": round(ret * 365 / days), "close": iso(end),
+                "days": round(days, 2), "volume": round(e.get("volume") or 0), "url": e["url"], "est": est,
+                "cat": next((c for c in e.get("categories") or [] if c), "")}
+
+    for site in ("polymarket", "kalshi"):
+        for e in sites.get(site) or []:
+            if (e.get("volume") or 0) < EXP_MIN_VOL[site] or sporty(e):
+                continue
+            got = []
+            for label, (bid, ask) in (e.get("ba") or {}).items():
+                if ask - bid > EXP_SPREAD or bid <= 0:
+                    continue
+                end = (e.get("ends") or {}).get(label) or e["end"]
+                for side, px in (("Yes", ask), ("No", 100 - bid)):
+                    row = add(site, e, label, side, px, end, False)
+                    if row:
+                        got.append(row)
+            rows += sorted(got, key=lambda x: -x["ret"])[:EXP_PER_EVENT]
+    for a in alpha:
+        if a["volume"] < EXP_MIN_VOL["alpha"] or sporty(a) or (live is not None and a["url"] not in live):
+            continue
+        got = []
+        for label, p in a["outcomes"].items():
+            if p is None:
+                continue
+            end = (label_date(label, a["end"]) if len(a["outcomes"]) > 1 else None) or a["end"]
+            for side, px in (("Yes", p), ("No", 100 - p)):
+                row = add("alpha", a, label, side, px, end, True)
+                if row:
+                    got.append(row)
+        rows += sorted(got, key=lambda x: -x["ret"])[:EXP_PER_EVENT]
+    rows.sort(key=lambda x: x["days"])
+    json.dump({"updated": iso(now), "rows": rows[:400]}, open("expiry.json", "w"), separators=(",", ":"))
+    from collections import Counter
+    print("Expiry returns: %d contracts at %s-%s cents settling within %d days %s"
+          % (len(rows), EXP_LO, EXP_HI, EXP_DAYS, dict(Counter(x["site"] for x in rows))))
+
+
 def main():
     alpha = load_alpha()
     sites = {}
@@ -1021,6 +1105,10 @@ def main():
         calendar_links(alpha, sites)
     except Exception as err:
         print("Calendar links failed:", err)
+    try:
+        expiry_returns(alpha, sites)
+    except Exception as err:
+        print("Expiry returns failed:", err)
     idxs = {k: build_index(v) for k, v in sites.items()}
     try:
         fix = json.load(open("match_fixes.json"))      # {"block": [["alpha id", "other url"], ...]}
