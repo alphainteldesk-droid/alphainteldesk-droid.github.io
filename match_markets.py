@@ -996,7 +996,7 @@ def calendar_links(alpha, sites):
     print("Calendar links: %d events linked" % len(out))
 
 
-EXP_LO, EXP_HI, EXP_SPREAD, EXP_DAYS, EXP_PER_EVENT = 85, 98.5, 4, 180, 2   # Nov 15: 30 -> 180 days (James: Expiry Hub, 1-6 months)
+EXP_LO, EXP_HI, EXP_SPREAD, EXP_DAYS, EXP_PER_EVENT = 80, 98.5, 4, 180, 2   # Nov 15: 30 -> 180 days, 85 -> 80 cents (James: Expiry Hub)
 EXP_MIN_VOL = {"polymarket": 20000, "kalshi": 5000, "alpha": 50}
 EXP_SKIP = ("weather", "climate")      # daily temperature and rain brackets: hundreds of rows, little interest
 
@@ -1016,7 +1016,7 @@ def exp_fee_rate(site, e):
 
 
 def expiry_returns(alpha, sites):
-    """Nov 14: Expiry Returns (expiry.json). Contracts you can buy today at 85-98.5 cents that settle within 180 days (30 until Nov 15):
+    """Nov 14: Expiry Returns (expiry.json). Contracts you can buy today at 80-98.5 cents (85 until Nov 15) that settle within 180 days (30 until Nov 15):
     what you make after the fee IF it resolves that way (it pays $1), and the same figure per year (simple, not
     compounded). Uses the real ASK for Yes and 100 minus the real BID for No, never the midpoint; bid and ask must
     be within 4 cents. Alpha Arcade has no bid/ask in our feed, so its rows use the last price, are marked "est",
