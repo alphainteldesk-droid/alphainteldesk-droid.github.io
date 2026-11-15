@@ -296,7 +296,8 @@
   function dz(x) { var l = liq(x), r = rul(x); if (!l || !r) return null;
     return LET[Math.floor((LQ[l.g] + LQ[r.g]) / 2)]; }
   function exit(x) {
-    if (x.site === 'alpha') return '<span class="xg s" title="Alpha Arcade grades coming soon">soon</span>';
+    if (x.site === 'alpha') { var ra = rul(x);   /* Alpha: Rules graded; Liquidity needs the on-chain order book (coming soon) */
+      return '<span class="xg s" title="Alpha Arcade liquidity grade coming soon">soon</span>' + (ra ? '<small>Rules ' + ra.g + '</small>' : ''); }
     var g = dz(x); if (!g) return '<span class="est">—</span>';
     return '<button class="xg ' + g.toLowerCase() + ' xbtn" aria-expanded="false" title="Tap for details">' + g + '</button>' +
       '<small>Liq ' + liq(x).g + ' · Rules ' + rul(x).g + '</small>'; }

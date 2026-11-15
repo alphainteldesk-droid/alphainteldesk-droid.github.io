@@ -1163,7 +1163,7 @@ def expiry_returns(alpha, sites):
                 "fs": "site" if own or site == "alpha" else "est", "fr": round(r, 4),
                 "id": (e.get("book") or {}).get(label) if site != "alpha" else (e.get("apps") or {}).get(label),
                 "q": (e.get("qs") or {}).get(label) or "",
-                "st": settle_info(e.get("rules") or "") if site != "alpha" else None}   # Alpha rules arrive cut off (Courier): later   # Nov 15 (James): the site's full question for this contract, shown in plain words   # Nov 15: Kalshi ticker / Polymarket Yes token, for the track record   # where the fee came from (watchdog counts the estimates)
+                "st": settle_info(e.get("rules") or "")}   # Alpha: needs the full rules from the Courier (300-char cut removed Nov 15)   # Nov 15 (James): the site's full question for this contract, shown in plain words   # Nov 15: Kalshi ticker / Polymarket Yes token, for the track record   # where the fee came from (watchdog counts the estimates)
 
     for site in ("polymarket", "kalshi"):
         for e in sites.get(site) or []:
