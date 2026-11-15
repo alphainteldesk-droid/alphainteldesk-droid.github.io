@@ -996,7 +996,8 @@ def calendar_links(alpha, sites):
 
 
 EXP_LO, EXP_HI, EXP_SPREAD, EXP_DAYS, EXP_PER_EVENT = 85, 98.5, 4, 30, 2
-EXP_MIN_VOL = {"polymarket": 5000, "kalshi": 500, "alpha": 50}
+EXP_MIN_VOL = {"polymarket": 20000, "kalshi": 5000, "alpha": 50}
+EXP_SKIP = ("weather", "climate")      # daily temperature and rain brackets: hundreds of rows, little interest
 
 
 def exp_fee_rate(site, e):
@@ -1045,7 +1046,8 @@ def expiry_returns(alpha, sites):
 
     for site in ("polymarket", "kalshi"):
         for e in sites.get(site) or []:
-            if (e.get("volume") or 0) < EXP_MIN_VOL[site] or sporty(e):
+            if (e.get("volume") or 0) < EXP_MIN_VOL[site] or sporty(e) \
+                    or any(k in " ".join(e.get("categories") or []).lower() for k in EXP_SKIP):
                 continue
             got = []
             for label, (bid, ask) in (e.get("ba") or {}).items():
@@ -1070,8 +1072,11 @@ def expiry_returns(alpha, sites):
                 if row:
                     got.append(row)
         rows += sorted(got, key=lambda x: -x["ret"])[:EXP_PER_EVENT]
-    rows.sort(key=lambda x: x["days"])
-    json.dump({"updated": iso(now), "rows": rows[:400]}, open("expiry.json", "w"), separators=(",", ":"))
+    total, keep = len(rows), []
+    for lo, hi in ((0, 3), (3, 7), (7, EXP_DAYS + 1)):      # the busiest 170 in each window, so every filter on the page has rows
+        keep += sorted([x for x in rows if lo <= x["days"] < hi], key=lambda x: (x["site"] != "alpha", -x["volume"]))[:170]
+    rows = sorted(keep, key=lambda x: x["days"])
+    json.dump({"updated": iso(now), "total": total, "rows": rows}, open("expiry.json", "w"), separators=(",", ":"))
     from collections import Counter
     print("Expiry returns: %d contracts at %s-%s cents settling within %d days %s"
           % (len(rows), EXP_LO, EXP_HI, EXP_DAYS, dict(Counter(x["site"] for x in rows))))
