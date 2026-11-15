@@ -287,7 +287,8 @@
       '<small><span class="xp">sell </span>' + usd(e.usd) + '<span class="xp"> now</span></small>'; }
   function pays(x) {   /* Nov 15 (James): one plain sentence saying what has to happen for you to get $1 */
     var yn = x.side === 'No' ? '<b class="not">NO</b>' : '<b class="yes">YES</b>';
-    if (x.q && /^will\b/i.test(x.q) && x.q !== x.title)
+    var lo = (x.outcome || '').toLowerCase();
+    if (x.q && x.q !== x.title && (/^will\b/i.test(x.q) || (/\?\s*$/.test(x.q) && (lo === 'yes' || x.q.toLowerCase().indexOf(lo) >= 0))))
       return '<span class="o">You get $1 if the answer is ' + yn + ': <i>' + esc(x.q) + '</i></span>';
     var o = x.outcome && x.outcome.toLowerCase() !== 'yes' && x.outcome !== x.title ? x.outcome : '';
     if (!o) return '<span class="o">You get $1 if the answer is ' + yn + '</span>';
