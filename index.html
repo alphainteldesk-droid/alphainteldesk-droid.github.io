@@ -546,7 +546,10 @@
   .split .cal-h h2 { font-size:1.2rem; }
   .hub .cal-h h2 { gap:12px; }
   .hub-tag { display:block; color:#ff7a7a; font-weight:700; margin-bottom:2px; }
-  .hub-cols, .hub-r { display:grid; grid-template-columns:minmax(0,1fr) 62px 66px 66px 78px; gap:10px; align-items:center; }
+  .hub-cols, .hub-r { display:grid; grid-template-columns:minmax(0,1fr) 52px 62px 66px 74px; gap:10px; align-items:center; }
+  .hub-r > span.sd { justify-self:end; padding:2px 6px; border-radius:3px; font:700 .7rem "JetBrains Mono",monospace; letter-spacing:.06em; }
+  .hub-r > .sd.y { color:#3ee88a; border:1px solid rgba(62,232,138,.5); background:rgba(62,232,138,.1); }
+  .hub-r > .sd.n { color:#ff8a8a; border:1px solid rgba(255,122,122,.5); background:rgba(255,122,122,.1); }
   .hub.soonv .hub-cols, .hub.soonv .hub-r { grid-template-columns:minmax(0,1fr) 62px 56px 92px; }
   .hub-cols { font:700 .62rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--muted); padding:0 8px 6px; border-bottom:1px solid rgba(63,219,230,.2); }
   .hub-cols span:not(:first-child) { text-align:right; }
@@ -568,8 +571,8 @@
     .split .cal-g { max-height:none; overflow:visible; }
   }
   @media (max-width: 560px) {
-    .hub-cols, .hub-r { grid-template-columns:minmax(0,1fr) 54px 62px; gap:8px; }
-    .hub-cols span:nth-child(2), .hub-cols span:nth-child(4), .hub-r > span:nth-child(2), .hub-r > span:nth-child(4) { display:none; }
+    .hub-cols, .hub-r { grid-template-columns:minmax(0,1fr) 44px 58px 54px; gap:8px; }
+    .hub-cols span:nth-child(3), .hub-r > span:nth-child(3) { display:none; }
     .hub.soonv .hub-cols, .hub.soonv .hub-r { grid-template-columns:minmax(0,1fr) 50px 44px 70px; }
     .hub.soonv .hub-cols span, .hub.soonv .hub-r > span { display:block; }
   }
@@ -723,11 +726,9 @@
     <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
     <nav>
       <a class="on" href="/">Home</a>
-      <a href="/top-traders.html">Top Traders</a>
-      <a href="/expiry-returns.html">Danger Zone</a>
       <a href="/gap-scanner.html">Gap Scanner</a>
+      <a href="/expiry-returns.html">Danger Zone</a>
       <a href="#guides">Guides</a>
-      <a href="/about.html">About</a>
     </nav>
   </div>
 </header>
@@ -934,7 +935,7 @@
   <span id="expiry-hub"></span>
   <div class="cal-h"><div><h2><span class="beacon" aria-hidden="true"></span>THE DANGER ZONE<span class="beacon b2" aria-hidden="true"></span></h2>
     <p><b class="hub-tag">80¢+ contracts settling in 1&ndash;6 months. Up to 25% return, and one wrong call could cost it all.</b>
-      Each row shows the return after fees, the same return per year, and how often you need to be right. <span id="hub-upd"></span></p></div>
+      Each row shows the side to buy, the price now, your return after fees if you're right, and the close date. <span id="hub-upd"></span></p></div>
     <div class="cal-f" id="hub-f"><button class="on" data-h="long">1&ndash;6 MONTHS</button><button data-h="near">UNDER 1 MONTH</button><button data-h="soon" style="--c:#ff7a7a">SETTLING NEXT</button></div></div>
   <div class="hub-cols" id="hub-cols"></div>
   <div class="hub-rows" id="hub-rows"><p class="cal-none">Loading&hellip;</p></div>
@@ -993,6 +994,8 @@
         <a href="https://t.me/alphainteldesk" rel="noopener">Telegram</a>
         <a href="https://www.youtube.com/@alphainteldesk" rel="noopener">YouTube</a>
         <a href="/about.html">About</a>
+        <a href="/top-traders.html">Top Traders</a>
+        <a href="/about.html">About</a>
         <a href="/disclosures.html">Disclosures</a>
       </div>
     </div>
@@ -1041,12 +1044,14 @@
       .filter(function (m) { return new Date(m.closes) > Date.now(); })
       .sort(function (a, b) { return new Date(a.closes) - new Date(b.closes); });
     if (soonList.length && new Date(soonList[0].closes) - Date.now() < 6 * 3600000) hub.classList.add('urgent');
-    function expRow(x) {
-      var what = x.outcome && x.outcome.toLowerCase() !== 'yes' ? x.outcome + ': ' : '', cost = x.ask + x.fee;
-      return '<a class="hub-r" href="' + esc(x.url) + '" target="_blank" rel="noopener" title="Risk ' + cost.toFixed(1) + '¢ to make ' + (100 - cost).toFixed(1) + '¢ after the fee">' +
-        '<span class="hub-m"><b>' + esc(x.title) + '</b><i><span class="st' + (x.site === 'alpha' ? ' a' : '') + '">' + SH[x.site] + '</span> · pays if ' + esc(what) + '<em>' + x.side + '</em> · settles in ' + dleft(x.close) + '</i></span>' +
+    function expRow(x) {   // Nov 15 (James): just the side, the price now, the return if right, and the close date
+      var cd = new Date(x.close), y = cd.getFullYear() !== new Date().getFullYear();
+      return '<a class="hub-r" href="' + esc(x.url) + '" target="_blank" rel="noopener" title="Return after a ' + x.fee.toFixed(2) + '¢ fee, if it resolves this way">' +
+        '<span class="hub-m"><b>' + esc(x.title) + '</b><i><span class="st' + (x.site === 'alpha' ? ' a' : '') + '">' + SH[x.site] + '</span>' +
+        (x.outcome && x.outcome.toLowerCase() !== 'yes' && x.outcome !== x.title ? ' · ' + esc(x.outcome) : '') + '</i></span>' +
+        '<span class="sd ' + (x.side === 'Yes' ? 'y' : 'n') + '">' + x.side.toUpperCase() + '</span>' +
         '<span>' + x.ask.toFixed(1) + '¢' + (x.est ? '*' : '') + '</span><span class="g">+' + x.ret.toFixed(1) + '%</span>' +
-        '<span class="y">' + (x.days >= 3 ? Math.round(x.apr) + '%' : '–') + '</span><span class="n">' + cost.toFixed(1) + '%+</span></a>';
+        '<span class="y">' + cd.toLocaleDateString('en-US', y ? { month: 'short', day: 'numeric', year: '2-digit' } : { month: 'short', day: 'numeric' }) + '</span></a>';
     }
     function soonRow(m) {
       var ms = new Date(m.closes) - Date.now(), hit = matchBy[m.url], also = '';
@@ -1066,7 +1071,7 @@
         hubRows.innerHTML = soonList.length ? soonList.slice(0, 12).map(soonRow).join('') : '<p class="cal-none">No markets closing in the next few days.</p>';
         return;
       }
-      hubCols.innerHTML = '<span>CONTRACT</span><span>BUY AT</span><span>RETURN</span><span>PER YEAR</span><span title="How often it has to happen to be worth it">NEED RIGHT</span>';
+      hubCols.innerHTML = '<span>CONTRACT</span><span>SIDE</span><span>PRICE</span><span title="After fees, if it resolves this way">RETURN</span><span>CLOSES</span>';
       if (!exp) { hubRows.innerHTML = '<p class="cal-none">Loading&hellip;</p>'; return; }
       var long = hubTab === 'long';
       var list = exp.filter(function (x) { var dd = (new Date(x.close) - Date.now()) / 86400000;
