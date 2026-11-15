@@ -24,6 +24,21 @@ n = datetime.now(timezone.utc)
 f = "%Y-%m-%dT%H:%M:%SZ"
 
 
+
+def kalshi_end_picker(mk):
+    """Nov 15: Kalshi sometimes stamps every rung of a deadline ladder with the FIRST rung's
+    expected_expiration_time (KXALIENS: 'Before Jan 20, 2029' said Jan 1, 2027), while close_time is right.
+    If 2+ markets in an event share one expected time but have different close times, use the later close_time."""
+    by = {}
+    for m in mk:
+        by.setdefault(m.get("expected_expiration_time"), set()).add(m.get("close_time"))
+    def pick(m):
+        exp, close = m.get("expected_expiration_time"), m.get("close_time")
+        if exp and close and len(by.get(exp, ())) > 1 and ts(close) > ts(exp):
+            return close
+        return exp or close
+    return pick
+
 def get(url):
     """GET JSON. If a site says "too many requests" (HTTP 429), wait and try again (up to 4 tries) - Nov 10."""
     import time, urllib.error
@@ -387,6 +402,7 @@ def load_kalshi():
              "categories": [ev.get("category") or ""], "alt": ""}
         if ev.get("series_ticker") in fees:             # Nov 15: the series' own fee (multiplier x 7%)
             e["fr_all"] = (0.07 * fees[ev["series_ticker"]], 1)
+        kend = kalshi_end_picker(ev.get("markets") or [])
         for m in ev.get("markets") or []:
             if m.get("status") not in (None, "active", "open"):
                 continue
@@ -401,7 +417,7 @@ def load_kalshi():
                 e.setdefault("ba", {})[label] = (round(bid * 100, 1), round(ask * 100, 1))
             if m.get("ticker"):
                 e.setdefault("book", {})[label] = m["ticker"]       # for the order book (fillable size)
-            e.setdefault("ends", {})[label] = ts(m.get("expected_expiration_time") or m.get("close_time"))
+            e.setdefault("ends", {})[label] = ts(kend(m))
             e.setdefault("qs", {})[label] = m.get("title") or ""
             pb = float(m.get("previous_yes_bid_dollars") or 0)
             pa = float(m.get("previous_yes_ask_dollars") or 0)
@@ -412,7 +428,7 @@ def load_kalshi():
             e["volume"] += float(m.get("volume_fp") or m.get("volume") or 0)
             e["volume24h"] += float(m.get("volume_24h_fp") or m.get("volume_24h") or 0)
             e["text"] += " " + (m.get("title") or "") + " " + label
-            e["end"] = e["end"] or ts(m.get("expected_expiration_time") or m.get("close_time"))
+            e["end"] = e["end"] or ts(kend(m))
             if not e["rules"]:                 # Nov 12: primary + secondary rules (secondary often names the source)
                 e["rules"] = ((m.get("rules_primary") or "") + " " + (m.get("rules_secondary") or "")).strip()
         srcs = [x.get("name") or x.get("url") or "" for x in (ev.get("settlement_sources") or []) if isinstance(x, dict)]
