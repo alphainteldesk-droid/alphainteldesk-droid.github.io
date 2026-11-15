@@ -1,0 +1,18 @@
+name: Exit grade test
+on:
+  push:
+    branches: [exit-test]
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 exit_grade.py
+      - run: |
+          python3 - <<'P'
+          import json, random
+          rows=[r for r in json.load(open("expiry.json"))["rows"] if "ex" in r]
+          random.seed(1)
+          for r in random.sample(rows, min(25,len(rows))):
+              print("%-10s %-3s ask %5.1f | bid %s | $%7d down to %s | %s | %s / %s" % (r["site"], r["side"], r["ask"], r["ex"]["bid"], r["ex"]["usd"], r["ex"]["px"], r["ex"]["g"], r["title"][:45], r["outcome"][:25]))
+          P
