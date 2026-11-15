@@ -606,7 +606,7 @@
   }
   /* Gap Scanner panel in the space under MONEY NEVER SLEEPS */
   .deskwrap { position:relative; container-type:inline-size; }
-  .gapbox { position:absolute; left:.7%; top:46.4%; width:41.6%; height:53%; box-sizing:border-box; overflow:hidden;
+  .gapbox { position:absolute; left:.7%; top:46.4%; width:54%; height:53%; box-sizing:border-box; overflow:hidden;
     display:flex; flex-direction:column; padding:.55cqw .85cqw; border-radius:5px;
     background:rgba(5,12,20,.9); border:1px solid rgba(255,179,71,.5);
     box-shadow:0 0 22px rgba(255,179,71,.12), inset 0 0 22px rgba(63,219,230,.05);
@@ -719,7 +719,7 @@
   .hero-t { font:700 clamp(1.9rem,3.6vw,2.7rem)/1.05 "Space Grotesk",sans-serif; color:#f3f6fa; letter-spacing:-.01em; }
   .hero-s { margin:4px 0 0; color:#c9d3dc; font-size:clamp(1rem,1.5vw,1.2rem); }
   @media (max-width:640px) { .hero { padding:16px 12px 10px; } .hero .sign { font-size:.7rem; margin-bottom:8px; } }
-  .desk .mns { left:45.6%; top:93.8%; transform:translateY(-50%); padding-left:0;
+  .desk .mns { left:56.5%; top:93.8%; transform:translateY(-50%); padding-left:0;
     font:400 max(5px,.87cqw) "JetBrains Mono",monospace; letter-spacing:.31em;
     color:#b4bec5; text-shadow:0 1px 3px rgba(0,0,0,.85); }   /* Nov 13: matched to "INFORMATION IS OUR EDGE" in the photo */
   @media (max-width:760px) {
@@ -748,6 +748,7 @@
       <a href="/gap-scanner.html">Gap Scanner</a>
       <a href="/expiry-returns.html">Danger Zone</a>
       <a href="#guides">Guides</a>
+      <a href="/about.html">About</a>
     </nav>
   </div>
 </header>
@@ -1113,7 +1114,7 @@
       var lng = exp.filter(function (r) { var dd = (new Date(r.close) - Date.now()) / 86400000; return dd >= 30 && dd <= 183; });
       var best = Math.max.apply(null, lng.map(function (r) { return r.ret; }).concat([0]));
       if (exp.length) document.getElementById('dz-stats').textContent = exp.length + ' contracts live' +
-        (best >= 1 ? ' · up to ' + Math.floor(best) + '% in 1–6 month markets' : '') + ' · research tools inside';
+        (best >= 1 ? ' · up to ' + best.toFixed(1) + '% in 1–6 month markets' : '') + ' · research tools inside';
       if (x.updated) {
         var old = (Date.now() - new Date(x.updated)) / 60000 > 60, u = document.getElementById('hub-upd');
         u.textContent = old ? 'These prices are over an hour old: check each site before you trade.' : 'Updated ' + when(x.updated) + '.';
