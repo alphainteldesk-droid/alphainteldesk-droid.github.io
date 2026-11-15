@@ -13,11 +13,11 @@
 <script data-goatcounter="https://alphainteldesk.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Expiry Hub: Prediction Market Contracts at 80¢+ Settling Within 6 Months, Return After Fees | Alpha Intel Desk</title>
+<title>The Danger Zone: Prediction Market Contracts at 80¢+ Settling Within 6 Months, Return After Fees | Alpha Intel Desk</title>
 <meta name="description" content="High-probability prediction market contracts that settle in days to 6 months: the buy price, the fee, the return if it pays out, the yearly rate and how often you need to be right, side by side for Polymarket, Kalshi and Alpha Arcade. Free, updated every 20 minutes.">
 <link rel="canonical" href="https://alphainteldesk.com/expiry-returns.html">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
-<meta property="og:title" content="Expiry Hub by Alpha Intel Desk">
+<meta property="og:title" content="The Danger Zone by Alpha Intel Desk">
 <meta property="og:description" content="Real-time intelligence for prediction markets.">
 <meta property="og:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
 <meta name="twitter:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
@@ -114,6 +114,15 @@
   .xt .ret { color:#3ddc84; font-weight:700; } .xt .est { color:var(--muted); font-size:.7rem; }
   .xt .hot { color:#ff6b6b; }
   .xt .be { color:var(--amber); font-weight:700; }
+  .tagline { margin:-4px 0 14px; font:700 1rem "JetBrains Mono",monospace; letter-spacing:.02em; color:#ff7a7a; }
+  .edge { margin:26px 0 8px; padding:18px 20px; border:1px solid rgba(255,179,71,.5); border-radius:12px;
+    background:linear-gradient(90deg, rgba(255,179,71,.10), var(--panel) 60%); }
+  .edge h2 { margin:0 0 6px; } .edge p { margin:0 0 12px; color:var(--muted); }
+  .edge-g { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); }
+  .edge-g a { display:block; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:rgba(5,12,20,.6); color:var(--text); }
+  .edge-g a:hover { border-color:var(--cyan); text-decoration:none; background:rgba(63,219,230,.07); }
+  .edge-g b { display:block; color:var(--cyan); font:700 .78rem "JetBrains Mono",monospace; letter-spacing:.1em; }
+  .edge-g span { color:var(--muted); font-size:.86rem; }
   .tw { overflow-x:auto; }
   @media (max-width:640px) { .xt .hide { display:none; } .xt td, .xt th { padding:8px 6px; } }
   .foot { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
@@ -133,7 +142,7 @@
     <nav>
       <a href="/">Home</a>
       <a href="/top-traders.html">Top Traders</a>
-      <a class="on" href="/expiry-returns.html">Expiry Hub</a>
+      <a class="on" href="/expiry-returns.html">Danger Zone</a>
       <a href="/gap-scanner.html">Gap Scanner</a>
       <a href="/#guides">Guides</a>
       <a href="/about.html">About</a>
@@ -143,12 +152,14 @@
 
 <main class="wrap">
   <span class="tag live"><i></i>Live · checked every 20 minutes</span>
-  <h1>Expiry Hub</h1>
+  <h1>The Danger Zone</h1>
+  <p class="tagline">80¢+ contracts settling in 1&ndash;6 months. Up to 25% return, and one wrong call costs it all.</p>
   <p class="lead">Contracts priced at 80¢ or more that settle within the next 6 months. Call it right and each contract pays $1
     when the market settles. Call it wrong and it pays nothing. So each row shows the return after
     the fee, the same return per year, and the one number that matters most: <b>how often you need to be right</b> to come out ahead.
     Polymarket, Kalshi and Alpha Arcade, side by side.</p>
   <p class="note" id="x-upd"></p>
+  <p class="note"><a href="#edge">Gain an edge on your call: use the desk's free research tools before you buy &darr;</a></p>
 
   <div class="ctl">
     <span class="lbl">SITE</span><div class="chips" id="f-site"></div>
@@ -159,6 +170,20 @@
   <div class="tw"><table class="xt"><thead><tr><th>MARKET</th><th>BUY AT</th><th class="hide">FEE</th><th>RETURN</th><th class="hide">PER YEAR</th><th title="The chance it has to happen for this to be worth it, after the fee">NEED TO BE RIGHT</th><th>SETTLES IN</th></tr></thead>
     <tbody id="x-rows"><tr><td colspan="7">Loading…</td></tr></tbody></table></div>
   <p class="note">The return only happens if the market resolves the way the row says. If it doesn't, the contract pays nothing and you lose what you paid. A high price means the market thinks it is likely, not that it is certain. Not financial advice. Always check each site's rules before you trade.</p>
+
+
+  <section class="edge" id="edge">
+    <h2>Gain an edge on your call</h2>
+    <p>The price tells you what the market thinks. Your edge is knowing something it hasn't priced in yet. Before you buy, check it with the desk's free research tools:</p>
+    <div class="edge-g">
+      <a href="/rule-risk.html"><b>RULE RISK &rarr;</b><span>Read the fine print first. Deadlines, sources and cancel rules can differ between sites.</span></a>
+      <a href="/gap-scanner.html"><b>GAP SCANNER &rarr;</b><span>Is the same contract cheaper on another site? Buy where the price is best.</span></a>
+      <a href="/#calendar"><b>CATALYST CALENDAR &rarr;</b><span>What's scheduled before it settles: data releases, the Fed, votes, earnings.</span></a>
+      <a href="/momentum-scanner.html"><b>MOMENTUM SCANNER &rarr;</b><span>Has the price been moving? A sudden drop can mean news you haven't seen.</span></a>
+      <a href="/top-traders.html"><b>TOP TRADERS &rarr;</b><span>See what the week's most profitable traders are buying and selling.</span></a>
+      <a href="/conflict-radar.html"><b>CONFLICT RADAR &rarr;</b><span>World headlines next to the markets they move. Most useful for geopolitics contracts.</span></a>
+    </div>
+  </section>
 
   <h2 id="how">How this page works</h2>
   <div class="qa"><b>What is "Buy at"?</b><span>The price you can actually buy at right now: the best ask for Yes, or 100¢ minus the best bid for No. Never the midpoint. We skip any contract whose bid and ask are more than 4¢ apart.</span></div>

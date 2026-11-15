@@ -545,6 +545,7 @@
   .split .cal-d > * { flex:none; }
   .split .cal-h h2 { font-size:1.2rem; }
   .hub .cal-h h2 { gap:12px; }
+  .hub-tag { display:block; color:#ff7a7a; font-weight:700; margin-bottom:2px; }
   .hub-cols, .hub-r { display:grid; grid-template-columns:minmax(0,1fr) 62px 66px 66px 78px; gap:10px; align-items:center; }
   .hub.soonv .hub-cols, .hub.soonv .hub-r { grid-template-columns:minmax(0,1fr) 62px 56px 92px; }
   .hub-cols { font:700 .62rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--muted); padding:0 8px 6px; border-bottom:1px solid rgba(63,219,230,.2); }
@@ -723,7 +724,7 @@
     <nav>
       <a class="on" href="/">Home</a>
       <a href="/top-traders.html">Top Traders</a>
-      <a href="/expiry-returns.html">Expiry Hub</a>
+      <a href="/expiry-returns.html">Danger Zone</a>
       <a href="/gap-scanner.html">Gap Scanner</a>
       <a href="#guides">Guides</a>
       <a href="/about.html">About</a>
@@ -928,16 +929,16 @@
   <p class="cal-foot">Tap any event for details and related prices on Polymarket, Kalshi and Alpha Arcade. Dates come from official
     schedules (BLS, BEA, Census, the Fed, company investor pages); an "expected date" is not yet confirmed. Not financial advice.</p>
 </section>
-<section class="calsec hub" id="closing-soon" aria-label="Expiry Hub: contracts settling within 6 months">
+<section class="calsec hub" id="closing-soon" aria-label="The Danger Zone: contracts settling within 6 months">
   <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
   <span id="expiry-hub"></span>
-  <div class="cal-h"><div><h2><span class="beacon" aria-hidden="true"></span>EXPIRY HUB<span class="beacon b2" aria-hidden="true"></span></h2>
-    <p>Contracts priced 80¢ or more that pay $1 if they resolve that way: the return after fees, the same return per year,
-      and how often you need to be right for it to be worth it. Plus the markets settling next on all three sites. <span id="hub-upd"></span></p></div>
+  <div class="cal-h"><div><h2><span class="beacon" aria-hidden="true"></span>THE DANGER ZONE<span class="beacon b2" aria-hidden="true"></span></h2>
+    <p><b class="hub-tag">80¢+ contracts settling in 1&ndash;6 months. Up to 25% return, and one wrong call costs it all.</b>
+      Each row shows the return after fees, the same return per year, and how often you need to be right. <span id="hub-upd"></span></p></div>
     <div class="cal-f" id="hub-f"><button class="on" data-h="long">1&ndash;6 MONTHS</button><button data-h="near">UNDER 1 MONTH</button><button data-h="soon" style="--c:#ff7a7a">SETTLING NEXT</button></div></div>
   <div class="hub-cols" id="hub-cols"></div>
   <div class="hub-rows" id="hub-rows"><p class="cal-none">Loading&hellip;</p></div>
-  <a class="tt-all" href="/expiry-returns.html">Every contract, every filter, all three sites &middot; Open Expiry Hub &rarr;</a>
+  <a class="tt-all" href="/expiry-returns.html">Every contract, every filter, plus tools to research your call &middot; Open The Danger Zone &rarr;</a>
   <p class="cal-foot">If it resolves the other way, the contract pays nothing and you lose what you paid. A high price means likely, not certain. Not financial advice.</p>
 </section>
 </div>
@@ -1698,7 +1699,7 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
     cs.sort(function (a, b) { return a.ms - b.ms; });
     if (cs.length) { var x = cs[0], hh = Math.floor(x.ms / 3600000), mi = Math.floor(x.ms % 3600000 / 60000);
       lines.push({ t: 'Closing in ' + (hh >= 48 ? Math.floor(hh / 24) + 'd ' + hh % 24 + 'h' : hh >= 1 ? hh + 'h ' + mi + 'm' : mi + ' min') + ' (' + x.site + '): ' + String(x.m.event).replace(/\?$/, ''),
-        u: '#closing-soon', c: 'SEE EXPIRY HUB \u2193' }); }
+        u: '#closing-soon', c: 'SEE THE DANGER ZONE \u2193' }); }
     if (g.length) lines.push({ t: g.length + ' price gaps after fees · largest ' + g[0].net.toFixed(1) + '¢: ' + g[0].title.replace(/\?$/, ''),
                                u: '/gap-scanner.html', c: 'OPEN GAP SCANNER →' });
     if (mv.length) { var m = mv[0]; lines.push({ t: 'Biggest mover ' + (m.change > 0 ? '▲ +' : '▼ ') + m.change.toFixed(1) + '¢ in 24h (' + m.name + '): ' + m.title.replace(/\?$/, ''),
