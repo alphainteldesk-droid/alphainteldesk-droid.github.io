@@ -6,7 +6,9 @@
 #   "open":    contracts still waiting for a result (the working list).
 # Results: Kalshi /markets?tickers=... -> "result" yes/no; Polymarket gamma /markets?clob_token_ids=...&closed=true
 # -> outcomePrices ["1","0"] = Yes won, once umaResolutionStatus is "resolved".
-# Alpha Arcade rows are not tracked yet (no market id in our feed). Runs after match_markets.py in the update job.
+# Alpha Arcade: read on-chain from the public Algorand API (never Alpha Arcade's own site): each outcome is an app
+# with global state is_resolved=1 and outcome=1 (Yes paid) / 0 (No paid). Checked Nov 15 against 4 UFC 334 fights
+# settled on Polymarket. Runs after match_markets.py in the update job.
 import json
 import re
 import time
@@ -17,6 +19,7 @@ from datetime import datetime, timezone
 UA = {"User-Agent": "AlphaIntelDesk/1.0 (+https://alphainteldesk.com)", "Accept": "application/json"}
 KALSHI = "https://api.elections.kalshi.com/trade-api/v2/markets?"
 GAMMA = "https://gamma-api.polymarket.com/markets?"
+ALGOD = "https://mainnet-api.algonode.cloud/v2/applications/"
 GONE_SECS = 6 * 3600          # off the list for 6 h -> it may have settled early: check it
 RECHECK_SECS = 6 * 3600       # not settled yet -> look again in 6 h
 GIVE_UP_DAYS = 45             # still no result 45 days after close -> stop checking, count it nowhere
@@ -69,6 +72,22 @@ def poly_results(tokens):
     return out
 
 
+def alpha_results(apps):
+    """{app_id: 'yes'/'no'} for resolved Alpha Arcade outcomes (one small request per app)."""
+    import base64
+    out = {}
+    for a in apps:
+        try:
+            gs = get(ALGOD + str(int(a))).get("params", {}).get("global-state") or []
+        except Exception as err:
+            print("Track record: Algorand lookup for %s failed (%s)" % (a, err))
+            continue
+        g = {base64.b64decode(x["key"]).decode("latin-1"): (x.get("value") or {}).get("uint") for x in gs}
+        if g.get("is_resolved") == 1 and g.get("outcome") in (0, 1):
+            out[str(a)] = "yes" if g["outcome"] == 1 else "no"
+    return out
+
+
 def bucket(days):
     return "1-6 months" if days >= 30 else "under 1 month"
 
@@ -83,7 +102,7 @@ def main():
 
     new = 0                                    # 1. log contracts the first time we list them
     for x in rows:
-        if x.get("site") not in ("polymarket", "kalshi") or not x.get("id"):
+        if x.get("site") not in ("polymarket", "kalshi", "alpha") or not x.get("id"):
             continue
         k = "%s|%s|%s" % (x["site"], x["id"], x["side"])
         if k in st["open"]:
@@ -108,6 +127,11 @@ def main():
         res.update(poly_results([k.split("|")[1] for k in due if k.startswith("polymarket|")]))
     except Exception as err:
         print("Track record: Polymarket lookup failed (%s)" % err)
+
+    try:
+        res.update(alpha_results([k.split("|")[1] for k in due if k.startswith("alpha|")]))
+    except Exception as err:
+        print("Track record: Alpha Arcade lookup failed (%s)" % err)
 
     done = st.setdefault("done", {})                 # keys already scored (so a contract is never counted twice)
     settled = paid = voided = gaveup = 0

@@ -195,8 +195,10 @@ def load_alpha():
             sd = sides(m.get("title"))
             label = re.sub(r"(?i)^the\s+", "", sd[0]) if sd else "Yes"
             outs = {label: price(yes.get("yesProb"))}
+            apps = {label: yes.get("marketAppId") or m.get("marketAppId")}
         else:
             outs = {o.get("label") or "?": price(o.get("yesProb")) for o in opts}
+            apps = {o.get("label") or "?": o.get("marketAppId") for o in opts}
             live = {k: v for k, v in outs.items()
                     if (label_date(k, end) or end) >= n.timestamp() - 2 * 86400}   # drop deadlines already passed
             outs = live or outs
@@ -204,6 +206,7 @@ def load_alpha():
                     "volume": vol, "volume24h": float(m.get("twentyFourHrVolume") or 0),
                     "categories": (m.get("primaryCategories") or []) + (m.get("categories") or []),
                     "rules": m.get("rules") or "", "fee": m.get("feeBasePercent"),
+                    "apps": apps,     # Nov 15: Algorand app id per outcome (the track record reads the result on-chain)
                     "url": "https://www.alphaarcade.com/market/" + (m.get("slug") or "")})
     return out
 
@@ -1132,7 +1135,7 @@ def expiry_returns(alpha, sites):
                 "days": round(days, 2), "volume": round(e.get("volume") or 0), "url": e["url"], "est": est,
                 "cat": next((c for c in e.get("categories") or [] if c), ""),
                 "fs": "site" if own or site == "alpha" else "est", "fr": round(r, 4),
-                "id": (e.get("book") or {}).get(label) if site != "alpha" else None}   # Nov 15: Kalshi ticker / Polymarket Yes token, for the track record   # where the fee came from (watchdog counts the estimates)
+                "id": (e.get("book") or {}).get(label) if site != "alpha" else (e.get("apps") or {}).get(label)}   # Nov 15: Kalshi ticker / Polymarket Yes token, for the track record   # where the fee came from (watchdog counts the estimates)
 
     for site in ("polymarket", "kalshi"):
         for e in sites.get(site) or []:
