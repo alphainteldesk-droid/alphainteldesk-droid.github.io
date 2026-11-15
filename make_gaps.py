@@ -322,6 +322,66 @@ def add_also(matches):
     print("Movers: %d of %d also priced on another site" % (found, len(mv.get("movers", []))))
 
 
+def rule_risk(matches):
+    """Nov 14: Rule Risk (rules.json). One row per matched pair of sites with plain badges for what the two sets of
+    rules agree and disagree on. Everything comes from checks the matcher already runs (flags, fine print, the
+    scanner's own leave-out rules); nothing here is a new judgement.
+    level: differ = the rules are known to differ, check = something could not be confirmed, clear = they line up."""
+    rows = []
+    for row in matches:
+        if is_sports(row.get("categories") or []):
+            continue
+        sites = row["sites"]
+        pairs = [("alpha", s) for s in ("polymarket", "kalshi") if s in sites] if "alpha" in sites else [("polymarket", "kalshi")]
+        lined_up = brackets_ok(row) and lean_ok(row)
+        for a, b in pairs:
+            x = sites[b]
+            fine = x.get("fine") or {}
+            bad, warn, ok = [], [], []
+            for fl in x.get("flags") or []:
+                if fl.startswith("end dates differ"):
+                    bad.append(["DEADLINE MISMATCH", "the two sites list end dates" +
+                                re.sub(r"(\d)h$", r"\1 hours", fl[len("end dates differ by"):]) + " apart"])
+                elif fl.startswith("resolution sources differ"):
+                    bad.append(["SOURCE DIFFERS", fl.replace("resolution sources differ", "they settle from different sources")])
+                elif "draw" in fl or "overtime" in fl:
+                    bad.append(["TIE RULE DIFFERS", fl])
+                else:
+                    bad.append(["RULES DIFFER", fl])
+            if COMBO.search(row.get("title") or ""):
+                bad.append(["COMBO MARKET", "two events in one question rarely mean the same thing on two sites"])
+            if not lined_up:
+                bad.append(["PRICES DON'T LINE UP", "the two sites disagree across the whole event, which points to different rules"])
+            if fine.get("twin"):
+                ok.append(["IDENTICAL RULES", "both sites publish the same rules, word for word"])
+            elif fine.get("src") == "match":
+                ok.append(["SAME SOURCE", ", ".join((fine.get("srcs") or [])[:3]) + " on both"])
+            elif fine.get("src") == "differ" and not any(t[0] == "SOURCE DIFFERS" for t in bad):
+                bad.append(["SOURCE DIFFERS", ", ".join((fine.get("srcs") or [])[:4])])
+            elif fine.get("src") == "similar":
+                warn.append(["DIFFERENT OUTLETS", "both use news reports, but not the same ones: " + ", ".join((fine.get("srcs") or [])[:4])])
+            elif not fine.get("twin"):
+                warn.append(["SOURCE NOT NAMED", "at least one site doesn't say who decides the answer"])
+            if fine.get("void") == "check" and not fine.get("twin"):
+                warn.append(["CANCEL RULE ON ONE SITE", "only one site says what happens if the event is cancelled"])
+            if not bad and not warn and not ok:
+                continue
+            o = row.get("outcome") or ""
+            pa, pb = (sites[a].get("outcomes") or {}).get(o), (x.get("outcomes") or {}).get(o)
+            if pa is None and len(sites[a].get("outcomes") or {}) == 1:
+                pa = next(iter(sites[a]["outcomes"].values()))
+            rows.append({"title": row["title"], "outcome": o, "close": row.get("close"), "a": a, "b": b,
+                         "urls": [sites[a]["url"], x["url"]], "prices": [pa, pb],
+                         "level": "differ" if bad else "check" if warn else "clear",
+                         "bad": bad, "warn": warn, "ok": ok,
+                         "volume": round(max(x.get("volume") or 0, sites[a].get("volume") or 0))})
+    order = {"differ": 0, "check": 1, "clear": 2}
+    rows.sort(key=lambda r: (order[r["level"]], -r["volume"]))
+    counts = {k: sum(r["level"] == k for r in rows) for k in order}
+    json.dump({"updated": n.strftime(f), "counts": counts, "rows": rows}, open("rules.json", "w"), separators=(",", ":"))
+    print("Rule risk: %d pairs | rules differ %d, check %d, clear %d" % (len(rows), counts["differ"], counts["check"], counts["clear"]))
+
+
 def main():
     try:
         mj = json.load(open("matches.json"))
@@ -334,6 +394,10 @@ def main():
     except Exception:
         alpha_fresh = False
     g = gaps(mj["matches"], alpha_fresh)
+    try:
+        rule_risk(mj["matches"])
+    except Exception as err:
+        print("Rule risk failed:", err)
     try:                                               # Nov 10: Movers page - same market's price on the other sites
         add_also(mj["matches"])
     except Exception as err:

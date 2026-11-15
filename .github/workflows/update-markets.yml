@@ -70,4 +70,5 @@ jobs:
           [ -f traders_full.json ] && git add traders_full.json
           [ -f fresh.json ] && git add fresh.json fresh_state.json
           [ -f expiry.json ] && git add expiry.json
+          [ -f rules.json ] && git add rules.json
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -X theirs -q && git push)   # if another run pushed meanwhile, keep this run's fresher files

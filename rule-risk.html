@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8TDJGLE2W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D8TDJGLE2W');
+</script>
+<!-- GoatCounter: public visitor counter (Nov 14) -->
+<script data-goatcounter="https://alphainteldesk.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rule Risk: Same Prediction Market, Different Rules on Polymarket, Kalshi, Alpha Arcade | Alpha Intel Desk</title>
+<meta name="description" content="The same question can resolve differently on two prediction market sites. See every matched market on Polymarket, Kalshi and Alpha Arcade with what its rules agree and disagree on: deadlines, resolution sources and cancel rules. Free, updated every 20 minutes.">
+<link rel="canonical" href="https://alphainteldesk.com/rule-risk.html">
+<link rel="icon" type="image/svg+xml" href="logo.svg">
+<meta property="og:title" content="Rule Risk by Alpha Intel Desk">
+<meta property="og:description" content="Real-time intelligence for prediction markets.">
+<meta property="og:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
+<meta name="twitter:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@alphainteldesk">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#0b1420; --panel:#111d2c; --line:#1f3044;
+    --cyan:#3fdbe6; --amber:#ffb347; --text:#e8eef5; --muted:#8fa3b8; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--navy); color:var(--text);
+    font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.6; }
+  a { color:var(--cyan); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  .wrap { max-width:760px; margin:0 auto; padding:0 16px; }
+  header { border-bottom:1px solid var(--line); position:sticky; top:0;
+    background:rgba(11,20,32,.92); backdrop-filter:blur(8px); z-index:10; }
+  .bar { display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:12px 16px; max-width:1120px; margin:0 auto; }
+  .brand { display:flex; align-items:center; gap:10px; color:var(--text);
+    font-weight:700; font-size:1.1rem; }
+  .brand img { width:36px; height:36px; }
+  nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; }
+  nav a { color:var(--muted); }
+  nav a:hover, nav a.on { color:var(--text); text-decoration:none; }
+  .tag { font-family:"JetBrains Mono",monospace; font-size:.75rem;
+    letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
+  h1 { font-size:clamp(1.6rem,4vw,2.3rem); margin:8px 0 12px; line-height:1.2; }
+  h2 { font-size:1.25rem; margin:36px 0 10px; }
+  .lead { color:var(--muted); font-size:1.08rem; }
+  .card { background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:18px 20px; margin:12px 0; }
+  .card h3 { margin:0 0 4px; font-size:1.02rem; }
+  .card p { margin:0; color:var(--muted); }
+  .soon { font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--amber);
+    letter-spacing:.1em; margin-left:6px; }
+  .wrap { max-width:1120px; }
+  .lead { max-width:820px; }
+  .note { color:var(--muted); font-size:.85rem; font-family:"JetBrains Mono",monospace; }
+  .tag.live i { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--cyan); margin-right:8px; box-shadow:0 0 8px var(--cyan); animation:lv 1.6s ease-in-out infinite; }
+  .tag.live { color:var(--cyan); }
+  @keyframes lv { 50% { opacity:.35; } }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 6px; }
+  .chip { font:600 .78rem "JetBrains Mono",monospace; letter-spacing:.08em; text-transform:uppercase; padding:7px 12px; border-radius:6px;
+    border:1px solid var(--line); background:var(--panel); color:var(--muted); cursor:pointer; }
+  .chip.on { border-color:var(--cyan); color:var(--cyan); box-shadow:0 0 10px rgba(63,219,230,.25); }
+  .cols { display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); align-items:start; margin-top:10px; }
+  .venue { font:500 .72rem "JetBrains Mono",monospace; letter-spacing:.16em; color:var(--cyan); border:1px solid var(--line); border-radius:5px; padding:3px 8px; }
+  .sub { color:var(--muted); font-size:.82rem; margin:8px 0 0; }
+  .tt { list-style:none; margin:8px 0 0; padding:0; }
+  .tt li { display:flex; gap:10px; padding:8px 0; border-top:1px solid var(--line); }
+  .tt li:first-child { border-top:0; }
+  .tt li[hidden] { display:none; }
+  main.wrap { padding-top:22px; }
+  .tt-r { flex:none; width:1.8em; font:700 .95rem "JetBrains Mono",monospace; color:var(--amber); }
+  .tt-b { flex:1 1 auto; min-width:0; }
+  .tt-b > a:first-child { font-weight:600; overflow-wrap:anywhere; }
+  .tt-b > b { float:right; margin-left:10px; font:600 .95rem "JetBrains Mono",monospace; }
+  .tt-b > b.up { color:#3ddc84; } .tt-b > b.dn { color:#ff6b6b; }
+  .tt-m { display:block; clear:both; color:var(--muted); font-size:.82rem; margin-top:2px; text-decoration:none; }
+  a.tt-m:hover { color:var(--cyan); text-decoration:none; }
+  .tt-sub { font:600 .7rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--amber); margin:16px 0 4px; padding-top:12px; border-top:1px solid var(--line); }
+  .tt-big { list-style:none; margin:0; padding:0; }
+  .tt-big li { padding:5px 0; font-size:.85rem; }
+  .tt-big a { color:var(--muted); } .tt-big a:hover { color:var(--cyan); text-decoration:none; }
+  .tt-big b { color:#e8eef5; font-family:"JetBrains Mono",monospace; }
+  .more { display:block; width:100%; margin-top:10px; padding:8px; border:1px dashed var(--line); border-radius:8px; background:none; color:var(--cyan);
+    font:600 .78rem "JetBrains Mono",monospace; letter-spacing:.1em; cursor:pointer; }
+  .qa { margin:10px 0; } .qa b { display:block; } .qa span { color:var(--muted); }
+  .rec { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:16px 0 4px; }
+  .rec div { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .rec b { display:block; font:700 1.5rem "JetBrains Mono",monospace; color:var(--text); }
+  .rec span { color:var(--muted); font-size:.8rem; }
+  .fw { border-left:3px solid var(--amber); }
+  .fw.won { border-left-color:#3ddc84; } .fw.lost { border-left-color:#ff6b6b; }
+  .fw-top { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; font:600 .72rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--muted); }
+  .fw-top .st { color:var(--amber); } .fw.won .st { color:#3ddc84; } .fw.lost .st { color:#ff6b6b; }
+  .fw h3 { margin:6px 0 6px; font-size:1.08rem; } .fw h3 a { color:var(--text); }
+  .fw-line { color:var(--text); margin:0 0 4px; } .fw-line b { font-family:"JetBrains Mono",monospace; color:var(--amber); }
+  .fw-w { color:var(--muted); font-size:.85rem; margin:0; } .fw-w a { color:var(--muted); text-decoration:underline; }
+  .empty { color:var(--muted); border:1px dashed var(--line); border-radius:12px; padding:22px; text-align:center; }
+  .ctl { display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center; margin:14px 0 6px; }
+  .ctl .lbl { font:600 .7rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--muted); margin-right:2px; }
+  .ctl .chips { margin:0; }
+  .xt { width:100%; border-collapse:collapse; margin-top:10px; font-size:.92rem; }
+  .xt th { text-align:right; font:600 .68rem "JetBrains Mono",monospace; letter-spacing:.12em; color:var(--muted); padding:8px 10px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  .xt th:first-child, .xt td:first-child { text-align:left; }
+  .xt td { padding:10px; border-bottom:1px solid var(--line); text-align:right; vertical-align:top; font-family:"JetBrains Mono",monospace; white-space:nowrap; }
+  .xt td:first-child { font-family:inherit; white-space:normal; }
+  .xt td a { color:var(--text); font-weight:600; } .xt td a:hover { color:var(--cyan); text-decoration:none; }
+  .xt .o { display:block; color:var(--muted); font-size:.82rem; } .xt .o b { color:var(--amber); }
+  .xt .v { font:500 .66rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--cyan); margin-right:8px; }
+  .xt .ret { color:#3ddc84; font-weight:700; } .xt .est { color:var(--muted); font-size:.7rem; }
+  .xt .hot { color:#ff6b6b; }
+  .tw { overflow-x:auto; }
+  @media (max-width:640px) { .xt .hide { display:none; } .xt td, .xt th { padding:8px 6px; } }
+  .rr { border-left:3px solid var(--line); }
+  .rr.differ { border-left-color:#ff6b6b; } .rr.check { border-left-color:var(--amber); } .rr.clear { border-left-color:#3ddc84; }
+  .rr h3 { margin:0 0 4px; font-size:1.02rem; }
+  .rr .vs { font:500 .72rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--muted); margin:0 0 8px; } .rr .vs a { color:var(--cyan); }
+  .bd { display:flex; gap:10px; align-items:baseline; margin:5px 0; font-size:.88rem; color:var(--muted); }
+  .bd b { flex:none; font:800 .66rem/1 "JetBrains Mono",monospace; letter-spacing:.08em; padding:4px 7px; border-radius:4px; color:#0b1420; }
+  .bd.bad b { background:#ff6b6b; } .bd.warn b { background:#ffb347; } .bd.ok b { background:#3ee88a; }
+  .chip .n { opacity:.7; margin-left:6px; }
+  .foot { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  footer { border-top:1px solid var(--line); margin-top:48px; padding:24px 0 40px; color:var(--muted); font-size:.85rem; }
+  .social { display:flex; gap:16px; flex-wrap:wrap; }
+  @media (prefers-reduced-motion:reduce) { .tag.live i { animation:none; } }
+</style>
+<meta property="og:url" content="https://alphainteldesk.com/rule-risk.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Alpha Intel Desk">
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/top-traders.html">Top Traders</a>
+      <a href="/#closing-soon">Expirations</a>
+      <a href="/gap-scanner.html">Gap Scanner</a>
+      <a href="/#guides">Guides</a>
+      <a href="/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <span class="tag live"><i></i>Live · checked every 20 minutes</span>
+  <h1>Rule Risk</h1>
+  <p class="lead">Same question, different rules. Two sites can list the same event and still settle it differently: another deadline,
+    another source, another rule if it's cancelled. A price gap between them isn't a gap if the contracts aren't the same. Here is every market we match, and what its rules agree and disagree on.</p>
+  <p class="note" id="r-upd"></p>
+
+  <div class="chips" id="f-lv"></div>
+  <div id="r-rows"><p class="empty">Loading…</p></div>
+  <button class="more" id="r-more" hidden>SHOW MORE</button>
+  <p class="note">Checks are automatic, from each site's published rules, and can miss things. A green badge is not a guarantee. Always read each site's rules before you trade. Not financial advice.</p>
+
+  <h2 id="how">How this page works</h2>
+  <div class="qa"><b>What do the colours mean?</b><span>Red: we found a real difference in the rules. Amber: something we couldn't confirm, so read the rules yourself. Green: the rules line up on everything we check.</span></div>
+  <div class="qa"><b>What gets checked?</b><span>End dates, thresholds, who decides the answer (the resolution source), what happens if the event is cancelled, tie and overtime rules, and whether the two sites' prices behave like the same contract.</span></div>
+  <div class="qa"><b>What is "Identical rules"?</b><span>Both sites publish the same rules text, word for word. Alpha Arcade often does this with Polymarket's markets.</span></div>
+  <div class="qa"><b>How does this connect to the Gap Scanner?</b><span>Red pairs never appear as a price gap. Amber pairs can appear, graded B. Green pairs are graded A.</span></div>
+
+  <h2>Keep going</h2>
+  <p><a href="/gap-scanner.html">Gap Scanner: price gaps after fees →</a> &nbsp;·&nbsp; <a href="/expiry-returns.html">Expiry Returns →</a> &nbsp;·&nbsp; <a href="/top-traders.html">Top Traders →</a></p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><strong style="color:var(--text)">Alpha Intel Desk</strong><br>Information is our edge.</div>
+      <div class="social">
+        <a href="https://x.com/alphainteldesk" rel="noopener">X</a>
+        <a href="https://t.me/alphainteldesk" rel="noopener">Telegram</a>
+        <a href="https://www.youtube.com/@alphainteldesk" rel="noopener">YouTube</a>
+        <a href="/disclosures.html">Disclosures</a>
+      </div>
+    </div>
+    <p>Not financial advice. Prediction markets involve risk, and you can lose money.
+      Some links on this site are referral links and may earn us a commission at no cost to you.</p>
+    <p>&copy; 2026 Alpha Intel Desk</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  var NAMES = { polymarket: 'POLYMARKET', kalshi: 'KALSHI', alpha: 'ALPHA ARCADE' };
+  var lv = 'differ', shown = 40, rows = [], counts = {};
+  function bd(cls) { return function (t) { return '<div class="bd ' + cls + '"><b>' + esc(t[0]) + '</b><span>' + esc(t[1]) + '</span></div>'; }; }
+  function chips() {
+    var opts = [['differ', 'Rules differ'], ['check', 'Check the rules'], ['clear', 'Rules line up'], ['all', 'All']];
+    var el = document.getElementById('f-lv');
+    el.innerHTML = opts.map(function (o) { var c = o[0] === 'all' ? rows.length : (counts[o[0]] || 0);
+      return '<button class="chip' + (lv === o[0] ? ' on' : '') + '" data-v="' + o[0] + '">' + o[1] + '<span class="n">' + c + '</span></button>'; }).join('');
+    el.onclick = function (e) { var b = e.target.closest('button'); if (!b) return; lv = b.getAttribute('data-v'); shown = 40; chips(); draw(); };
+  }
+  function draw() {
+    var r = rows.filter(function (x) { return lv === 'all' || x.level === lv; });
+    document.getElementById('r-rows').innerHTML = r.length ? r.slice(0, shown).map(function (x) {
+      return '<div class="card rr ' + x.level + '"><h3>' + esc(x.title) + '</h3><p class="vs"><a href="' + esc(x.urls[0]) + '" rel="noopener">' + NAMES[x.a] +
+        '</a> vs <a href="' + esc(x.urls[1]) + '" rel="noopener">' + NAMES[x.b] + '</a></p>' +
+        x.bad.map(bd('bad')).join('') + x.warn.map(bd('warn')).join('') + x.ok.map(bd('ok')).join('') + '</div>'; }).join('')
+      : '<p class="empty">Nothing in this group right now.</p>';
+    var m = document.getElementById('r-more'); m.hidden = r.length <= shown; m.textContent = 'SHOW MORE (' + (r.length - shown) + ' LEFT)';
+  }
+  document.getElementById('r-more').onclick = function () { shown += 40; draw(); };
+  fetch('rules.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    rows = d.rows || []; counts = d.counts || {};
+    var m = Math.max(0, Math.round((Date.now() - Date.parse(d.updated)) / 60000));
+    document.getElementById('r-upd').textContent = rows.length + ' matched pairs · last checked ' + (m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago');
+    chips(); draw();
+  }).catch(function () { document.getElementById('r-rows').innerHTML = '<p class="empty">Loading late. Try again in a few minutes.</p>'; });
+})();
+</script>
+<script>
+(function () {   // fresh prices: reload every 10 minutes while open, or on return to a tab left 10+ minutes
+  var t0 = Date.now();
+  setInterval(function () { if (document.visibilityState === 'visible' && Date.now() - t0 > 10 * 60000) location.reload(); }, 60000);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible' && Date.now() - t0 > 10 * 60000) location.reload();
+  });
+})();
+</script>
+</body>
+</html>

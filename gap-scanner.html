@@ -209,6 +209,7 @@
     <div class="fr fg" role="row"><span><b class="gr gr-B">GRADED B</b></span><span>Every check we can run passed, but one site doesn't name its source, they use different news outlets, or only one says what happens if it's cancelled.</span></div>
     <div class="fr fg" role="row"><span><b>Not shown</b></span><span>Different deadline, threshold, scope or resolution source. That isn't a real gap.</span></div>
   </div>
+  <p class="note"><a href="/rule-risk.html">Rule Risk: every matched market and what its rules agree and disagree on →</a></p>
   <h3 class="sub" id="filters">What we leave out</h3>
   <div class="fee-tbl" role="table" aria-label="Prices and markets left out of the scanner">
     <div class="fr fg" role="row"><span><b>Wide bid/ask</b></span><span>If the best bid and ask are more than 10¢ apart, the midpoint isn't a price anyone can trade, so we skip it.</span></div>
@@ -271,7 +272,9 @@
       : f.src === 'similar' ? q + 'sources: ' + esc(f.srcs.join(', ')) + ' (different outlets)'
       : q + 'source not named on both sites';
     var vd = f.void === 'check' ? q + 'cancel rules: only one site says' : ok + 'cancel rules';
-    return '<div class="gp-fine"><a href="#grades" class="gr gr-' + esc(g.grade) + '" title="How well the two sites\' rules match. Click to see what A and B mean.">GRADED ' + esc(g.grade) + '</a>' +
+    var why = f.twin ? 'IDENTICAL RULES' : f.src === 'match' ? (f.void === 'check' ? 'CANCEL RULE ON ONE SITE' : 'SAME SOURCE')
+      : f.src === 'similar' ? 'DIFFERENT OUTLETS' : 'SOURCE NOT NAMED';   // Nov 14: the reason behind the grade, same words as the Rule Risk page
+    return '<div class="gp-fine"><a href="#grades" class="gr gr-' + esc(g.grade) + '" title="How well the two sites\' rules match. Click to see what A and B mean.">GRADED ' + esc(g.grade) + ' · ' + why + '</a>' +
       ok + 'end date ' + ok + 'threshold ' + ok + 'US/world ' + ok + 'draw/overtime ' + src + ' ' + vd + '</div>';
   }
   function fillLine(g) {         // Nov 12: what the order books say right now
