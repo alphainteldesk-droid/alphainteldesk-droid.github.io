@@ -1113,7 +1113,7 @@
       var lng = exp.filter(function (r) { var dd = (new Date(r.close) - Date.now()) / 86400000; return dd >= 30 && dd <= 183; });
       var best = Math.max.apply(null, lng.map(function (r) { return r.ret; }).concat([0]));
       if (exp.length) document.getElementById('dz-stats').textContent = exp.length + ' contracts live' +
-        (best ? ' · up to +' + best.toFixed(1) + '% in 1–6 months' : '') + ' · research tools inside';
+        (best >= 1 ? ' · up to ' + Math.floor(best) + '% in 1–6 month markets' : '') + ' · research tools inside';
       if (x.updated) {
         var old = (Date.now() - new Date(x.updated)) / 60000 > 60, u = document.getElementById('hub-upd');
         u.textContent = old ? 'These prices are over an hour old: check each site before you trade.' : 'Updated ' + when(x.updated) + '.';
