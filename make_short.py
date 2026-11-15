@@ -44,8 +44,9 @@ g = sorted(pool, key=lambda x: (not x["all3"], -x["net"]))[0]           # all th
 G_TITLE = label(g["title"], g["outcome"])
 GAP = ("Priced on all 3 sites · %.1f¢ gap after fees" if g["all3"] else "%.1f¢ gap after fees") % g["net"]
 
-rows = [r for r in json.load(open(os.path.join(SITE, "expiry.json")))["rows"]
-        if 0.5 <= r["days"] <= 7 and not PX.search(r["title"] + " " + (r.get("cat") or "")) and r["ask"] >= 80 and r["ret"] >= 5]   # James: 5%+ only
+_ex = json.load(open(os.path.join(SITE, "expiry.json")))
+_ok = lambda r: 0.5 <= r["days"] <= 7 and not PX.search(r["title"] + " " + (r.get("cat") or "")) and r["ask"] >= 80 and r["ret"] >= 5   # James: 5%+ only
+rows = [r for r in _ex["rows"] if _ok(r)] or [r for r in _ex.get("all") or [] if _ok(r)]   # Nov 15: the top-50 list first, else the full list
 dk = lambda r: "dz|%s|%s|%s" % (r["title"], r["outcome"], r["side"])
 pool = [r for r in rows if dk(r) not in seen] or rows
 score = lambda r: min(r["ret"], 20) * min(1, math.log10(max(r["volume"], 10)) / 5.3)   # good return AND a busy market

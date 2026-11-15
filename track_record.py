@@ -96,8 +96,10 @@ def main():
     now = time.time()
     try:
         st = json.load(open("track.json"))
+        if st.get("v") != 2:                    # Nov 15 (James): restart once for the top-50 list (0 had settled)
+            raise ValueError("restart")
     except Exception:
-        st = {"started": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "open": {}, "misses": [], "agg": {}}
+        st = {"v": 2, "started": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "open": {}, "misses": [], "agg": {}}
     rows = json.load(open("expiry.json")).get("rows") or []
 
     new = 0                                    # 1. log contracts the first time we list them

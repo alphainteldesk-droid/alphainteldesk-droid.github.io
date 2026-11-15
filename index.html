@@ -964,7 +964,7 @@
   <div class="hub-rows" id="hub-rows"><p class="cal-none">Loading&hellip;</p></div>
   <a class="dz-go" href="/expiry-returns.html" aria-label="Open The Danger Zone: every contract, every filter, plus tools to research your call">
     <span class="dz-tape" aria-hidden="true"></span>
-    <span class="dz-in"><span class="dz-l"><b>ENTER THE DANGER ZONE</b><small id="dz-stats">Every contract, every filter, plus tools to research your call</small></span>
+    <span class="dz-in"><span class="dz-l"><b>ENTER THE DANGER ZONE</b><small id="dz-stats">Our top 50 contracts, plus tools to research your call</small></span>
       <span class="dz-ar" aria-hidden="true">&rarr;</span></span>
   </a>
   <p class="cal-foot">If it resolves the other way, the contract pays nothing and you lose what you paid. A high price means likely, not certain. Not financial advice.</p>
@@ -1116,7 +1116,7 @@
       exp = x.rows || [];
       var lng = exp.filter(function (r) { var dd = (new Date(r.close) - Date.now()) / 86400000; return dd >= 30 && dd <= 183; });
       var best = Math.max.apply(null, lng.map(function (r) { return r.ret; }).concat([0]));
-      if (exp.length) document.getElementById('dz-stats').textContent = exp.length + ' contracts live' +
+      if (exp.length) document.getElementById('dz-stats').textContent = (exp.length >= 40 ? 'Top ' + exp.length + ' contracts' : exp.length + ' contracts live') +
         (best >= 1 ? ' · up to ' + best.toFixed(1) + '% in 1–6 month markets' : '') + ' · research tools inside';
       if (x.updated) {
         var old = (Date.now() - new Date(x.updated)) / 60000 > 120, u = document.getElementById('hub-upd');

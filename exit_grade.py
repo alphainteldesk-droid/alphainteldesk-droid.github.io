@@ -7,6 +7,8 @@
 # to expiry.json. Alpha Arcade's book is on-chain (Fillable phase 2): no "ex", the page says "soon".
 # Public data only, read-only. Never raises: if a book can't be read the row just has no grade.
 import json
+import math
+import re
 import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -50,6 +52,34 @@ def grade(usd):
     return next(g for lo, g in GRADES if usd >= lo)
 
 
+TOP = 50                 # James, Nov 15: a short list, not 600 rows
+ALPHA_SPOTS = 10         # the 10 busiest Alpha Arcade contracts always make the list (Alpha is the site's niche)
+PX = re.compile(r"bitcoin|ethereum|solana|dogecoin|\b(btc|eth|xrp|sol|doge|bnb)\b|\bprices?\b|\b(s&p|nasdaq|dow|nikkei|ftse|wti|brent|gold|silver|treasury|yield)\b|\bclose (above|below|at)\b", re.I)
+EXIT_W = {"A": 1.0, "B": 0.85, "C": 0.65}
+
+
+def score(r):
+    """Good return (capped at 10%, so steadier 90¢+ contracts compete) x easy to sell x busy market. Same volume factor as the Daily Short."""
+    w = EXIT_W.get((r.get("ex") or {}).get("g"), 0.6)
+    return min(r["ret"], 10) * w * min(1, math.log10(max(r.get("volume") or 0, 10)) / 5.3)
+
+
+def curate(rows):
+    """The top 50: no daily price markets, no D (hard to sell) grades, the best contract per market,
+    10 spots kept for Alpha Arcade (busiest first; their books aren't graded yet), the rest by score."""
+    ok = [r for r in rows if not (r["days"] < 3 and PX.search(r["title"] + " " + (r.get("cat") or "")))
+          and (r.get("ex") or {}).get("g") != "D"]
+    best = {}
+    for r in ok:
+        k = (r["site"], r["title"])
+        if k not in best or score(r) > score(best[k]):
+            best[k] = r
+    ok = list(best.values())
+    alpha = sorted([r for r in ok if r["site"] == "alpha"], key=lambda r: -(r.get("volume") or 0))[:ALPHA_SPOTS]
+    rest = sorted([r for r in ok if r["site"] != "alpha"], key=lambda r: -score(r))[:TOP - len(alpha)]
+    return sorted(alpha + rest, key=lambda r: r["days"])
+
+
 def main(path="expiry.json"):
     d = json.load(open(path))
     todo = [r for r in d["rows"] if r.get("site") in ("polymarket", "kalshi") and r.get("id")]
@@ -84,6 +114,11 @@ def main(path="expiry.json"):
             v = sorted(r["ex"]["usd"] for r in todo if "ex" in r and r["site"] == site)
             if v:
                 print("  %s: n=%d median $%s p25 $%s p75 $%s" % (site, len(v), v[len(v) // 2], v[len(v) // 4], v[3 * len(v) // 4]))
+    d["all"] = d["rows"]                               # the full list stays in the file (the Daily Short falls back to it)
+    d["rows"] = curate(d["rows"])
+    from collections import Counter
+    print("Danger Zone top %d: %s | windows %s" % (len(d["rows"]), dict(Counter(r["site"] for r in d["rows"])),
+          dict(Counter("<7d" if r["days"] < 7 else "<31d" if r["days"] < 31 else "1-3m" if r["days"] < 91 else "3-6m" for r in d["rows"]))))
     json.dump(d, open(path, "w"), separators=(",", ":"))
 
 
