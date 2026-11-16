@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-16T22:32:05Z",
+ "updated": "2026-11-16T22:59:08Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -8,20 +8,20 @@
    "outcome": "Howard Lutnick",
    "close": "2029-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 46.0,
-    "kalshi": 61.5,
+    "polymarket": 45.5,
+    "kalshi": 63.0,
     "alpha": null
    },
    "low": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 46.0,
+    "price": 45.5,
     "url": "https://polymarket.com/event/who-will-be-the-next-to-leave-the-trump-cabinet-before-2029"
    },
    "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 61.5,
+    "price": 63.0,
     "url": "https://kalshi.com/markets/kxcabout"
    },
    "urls": {
@@ -29,20 +29,20 @@
     "kalshi": "https://kalshi.com/markets/kxcabout"
    },
    "volumes": {
-    "polymarket": 34933,
-    "kalshi": 108268
+    "polymarket": 34938,
+    "kalshi": 109234
    },
    "volumes24": {
     "polymarket": 66,
-    "kalshi": 13966
+    "kalshi": 16633
    },
-   "raw": 15.5,
-   "fees": 2.7,
-   "net": 12.8,
+   "raw": 17.5,
+   "fees": 2.6,
+   "net": 14.9,
    "all3": false,
    "fee_low": 0.99,
-   "fee_high": 1.66,
-   "fair": 56.2,
+   "fee_high": 1.63,
+   "fair": 57.1,
    "grade": "B",
    "fine": {
     "src": "unknown",
@@ -55,11 +55,14 @@
    "rate_high": 0.07,
    "category": "Trump",
    "fill": {
-    "usd": 444,
-    "shares": 477,
-    "exec": 7.3
+    "usd": 53,
+    "shares": 59,
+    "exec": 8.3
    },
-   "chg": {}
+   "chg": {
+    "polymarket": -0.5,
+    "kalshi": 1.5
+   }
   },
   {
    "title": "Anthropic announces a Millennium Prize solution by...?",
@@ -87,7 +90,7 @@
     "kalshi": "https://kalshi.com/markets/kxanthropicmillennium"
    },
    "volumes": {
-    "polymarket": 85841,
+    "polymarket": 86065,
     "kalshi": 22214
    },
    "volumes24": {
@@ -113,13 +116,11 @@
    "rate_high": 0.07,
    "category": "AI",
    "fill": {
-    "usd": 305,
-    "shares": 322,
+    "usd": 952,
+    "shares": 1008,
     "exec": 5.7
    },
-   "chg": {
-    "polymarket": -2.0
-   }
+   "chg": {}
   },
   {
    "title": "Marco Rubio announces a presidential run by...?",
@@ -151,8 +152,8 @@
     "kalshi": 11464
    },
    "volumes24": {
-    "polymarket": 887,
-    "kalshi": 36
+    "polymarket": 885,
+    "kalshi": 24
    },
    "raw": 8.0,
    "fees": 2.5,
@@ -209,11 +210,11 @@
    },
    "volumes": {
     "polymarket": 218764,
-    "kalshi": 695848
+    "kalshi": 695853
    },
    "volumes24": {
-    "polymarket": 903,
-    "kalshi": 1915
+    "polymarket": 883,
+    "kalshi": 1920
    },
    "raw": 6.0,
    "fees": 0.5,
@@ -294,6 +295,59 @@
    "chg": {}
   },
   {
+   "title": "Top 5 Most Searched People on Google 2026",
+   "outcome": "Jensen Huang",
+   "close": "2026-12-31T23:59:00Z",
+   "prices": {
+    "polymarket": 81.0,
+    "kalshi": 74.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 74.5,
+    "url": "https://kalshi.com/markets/kxranklistgooglesearchtop5"
+   },
+   "high": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 81.0,
+    "url": "https://polymarket.com/event/top-5-most-searched-people-on-google-2026"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/top-5-most-searched-people-on-google-2026",
+    "kalshi": "https://kalshi.com/markets/kxranklistgooglesearchtop5"
+   },
+   "volumes": {
+    "polymarket": 80576,
+    "kalshi": 271648
+   },
+   "volumes24": {
+    "polymarket": 6705,
+    "kalshi": 5465
+   },
+   "raw": 6.5,
+   "fees": 2.1,
+   "net": 4.4,
+   "all3": false,
+   "fee_low": 1.33,
+   "fee_high": 0.77,
+   "fair": 76.4,
+   "grade": "A",
+   "fine": {
+    "src": "match",
+    "srcs": [
+     "Google Trends"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.07,
+   "rate_high": 0.05,
+   "category": "Tech",
+   "chg": {}
+  },
+  {
    "title": "Iowa Republican Presidential Caucus Winner 2028",
    "outcome": "Glenn Youngkin",
    "close": "2028-11-08T04:59:00Z",
@@ -324,7 +378,7 @@
    },
    "volumes24": {
     "polymarket": 2705,
-    "kalshi": 3517
+    "kalshi": 4690
    },
    "raw": 4.2,
    "fees": 0.5,
@@ -344,59 +398,6 @@
    "rate_low": 0.07,
    "rate_high": 0.04,
    "category": "Politics",
-   "chg": {}
-  },
-  {
-   "title": "Top 5 Most Searched People on Google 2026",
-   "outcome": "Erling Haaland",
-   "close": "2026-12-31T23:59:00Z",
-   "prices": {
-    "polymarket": 55.0,
-    "kalshi": 61.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 55.0,
-    "url": "https://polymarket.com/event/top-5-most-searched-people-on-google-2026"
-   },
-   "high": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 61.5,
-    "url": "https://kalshi.com/markets/kxranklistgooglesearchtop5"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/top-5-most-searched-people-on-google-2026",
-    "kalshi": "https://kalshi.com/markets/kxranklistgooglesearchtop5"
-   },
-   "volumes": {
-    "polymarket": 80443,
-    "kalshi": 271648
-   },
-   "volumes24": {
-    "polymarket": 11190,
-    "kalshi": 6281
-   },
-   "raw": 6.5,
-   "fees": 2.9,
-   "net": 3.6,
-   "all3": false,
-   "fee_low": 1.24,
-   "fee_high": 1.66,
-   "fair": 59.4,
-   "grade": "A",
-   "fine": {
-    "src": "match",
-    "srcs": [
-     "Google Trends"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.05,
-   "rate_high": 0.07,
-   "category": "Tech",
    "chg": {}
   },
   {
@@ -430,7 +431,7 @@
    },
    "volumes24": {
     "polymarket": 555,
-    "kalshi": 656
+    "kalshi": 651
    },
    "raw": 2.9,
    "fees": 0.5,
@@ -452,16 +453,14 @@
    "rate_low": 0.04,
    "rate_high": 0.07,
    "category": "Prediction Markets",
-   "chg": {
-    "kalshi": -1.5
-   }
+   "chg": {}
   },
   {
    "title": "Ken Martin out as DNC Chair by...? ",
    "outcome": "Yes",
    "close": "2027-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 10.5,
+    "polymarket": 11.0,
     "kalshi": 6.0,
     "alpha": null
    },
@@ -474,7 +473,7 @@
    "high": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 10.5,
+    "price": 11.0,
     "url": "https://polymarket.com/event/ken-martin-out-as-dnc-chair-by"
    },
    "urls": {
@@ -489,13 +488,13 @@
     "polymarket": 85,
     "kalshi": 335
    },
-   "raw": 4.5,
+   "raw": 5.0,
    "fees": 0.8,
-   "net": 3.7,
+   "net": 4.2,
    "all3": false,
    "fee_low": 0.39,
-   "fee_high": 0.38,
-   "fair": 10.3,
+   "fee_high": 0.39,
+   "fair": 10.7,
    "grade": "B",
    "fine": {
     "src": "unknown",
@@ -513,7 +512,7 @@
     "exec": -2.8
    },
    "chg": {
-    "polymarket": -0.5
+    "polymarket": 0.5
    }
   },
   {
