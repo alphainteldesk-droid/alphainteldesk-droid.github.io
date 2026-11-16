@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-16T10:28:10Z",
+ "updated": "2026-11-16T10:56:54Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -8,14 +8,14 @@
    "outcome": "J.D. Vance",
    "close": "2028-11-08T04:59:00Z",
    "prices": {
-    "polymarket": 23.0,
+    "polymarket": 23.5,
     "kalshi": 31.5,
     "alpha": null
    },
    "low": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 23.0,
+    "price": 23.5,
     "url": "https://polymarket.com/event/iowa-presidential-republican-caucus-winner-202610282"
    },
    "high": {
@@ -33,16 +33,16 @@
     "kalshi": 2982
    },
    "volumes24": {
-    "polymarket": 3580,
-    "kalshi": 307
+    "polymarket": 3171,
+    "kalshi": 275
    },
-   "raw": 8.5,
+   "raw": 8.0,
    "fees": 2.2,
-   "net": 6.3,
+   "net": 5.8,
    "all3": false,
-   "fee_low": 0.71,
+   "fee_low": 0.72,
    "fee_high": 1.51,
-   "fair": 24.0,
+   "fair": 24.5,
    "grade": "B",
    "fine": {
     "src": "unknown",
@@ -55,11 +55,13 @@
    "rate_high": 0.07,
    "category": "Politics",
    "fill": {
-    "usd": 376,
-    "shares": 396,
+    "usd": 1015,
+    "shares": 1077,
     "exec": 3.8
    },
-   "chg": {}
+   "chg": {
+    "polymarket": 0.5
+   }
   },
   {
    "title": "Pete Hegseth impeached by...?",
@@ -115,124 +117,10 @@
    "rate_high": 0.07,
    "category": "Post Election",
    "fill": {
-    "usd": 177,
-    "shares": 187,
+    "usd": 342,
+    "shares": 360,
     "exec": 4.6
    },
-   "chg": {}
-  },
-  {
-   "title": "Marco Rubio announces a presidential run by...?",
-   "outcome": "June 30, 2027",
-   "close": "2027-07-01T03:59:00Z",
-   "prices": {
-    "polymarket": 31.5,
-    "kalshi": 39.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 31.5,
-    "url": "https://polymarket.com/event/marco-rubio-announces-a-presidential-run-byptptpt"
-   },
-   "high": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 39.5,
-    "url": "https://kalshi.com/markets/kxrubiorun"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/marco-rubio-announces-a-presidential-run-byptptpt",
-    "kalshi": "https://kalshi.com/markets/kxrubiorun"
-   },
-   "volumes": {
-    "polymarket": 25347,
-    "kalshi": 11464
-   },
-   "volumes24": {
-    "polymarket": 2696,
-    "kalshi": 397
-   },
-   "raw": 8.0,
-   "fees": 2.5,
-   "net": 5.5,
-   "all3": false,
-   "fee_low": 0.86,
-   "fee_high": 1.67,
-   "fair": 32.7,
-   "grade": "B",
-   "fine": {
-    "src": "similar",
-    "srcs": [
-     "AP",
-     "Bloomberg",
-     "CBS",
-     "CNN"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.04,
-   "rate_high": 0.07,
-   "category": "Trump",
-   "fill": {
-    "usd": 5,
-    "shares": 5,
-    "exec": 1.5
-   },
-   "chg": {}
-  },
-  {
-   "title": "Which bills will become law in 2026?",
-   "outcome": "DEFIANCE Act",
-   "close": "2027-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 8.8,
-    "kalshi": 3.0,
-    "alpha": null
-   },
-   "low": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 3.0,
-    "url": "https://kalshi.com/markets/kxbills"
-   },
-   "high": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 8.8,
-    "url": "https://polymarket.com/event/which-bills-will-become-law-in-2026"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/which-bills-will-become-law-in-2026",
-    "kalshi": "https://kalshi.com/markets/kxbills"
-   },
-   "volumes": {
-    "polymarket": 218421,
-    "kalshi": 695592
-   },
-   "volumes24": {
-    "polymarket": 1366,
-    "kalshi": 1770
-   },
-   "raw": 5.8,
-   "fees": 0.5,
-   "net": 5.3,
-   "all3": false,
-   "fee_low": 0.2,
-   "fee_high": 0.32,
-   "fair": 8.3,
-   "grade": "A",
-   "fine": {
-    "src": "match",
-    "srcs": [
-     "Library of Congress"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.07,
-   "rate_high": 0.04,
-   "category": "Congress",
    "chg": {}
   },
   {
@@ -347,6 +235,59 @@
    "chg": {}
   },
   {
+   "title": "Which bills will become law in 2026?",
+   "outcome": "DEFIANCE Act",
+   "close": "2027-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 8.8,
+    "kalshi": 3.1,
+    "alpha": null
+   },
+   "low": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 3.1,
+    "url": "https://kalshi.com/markets/kxbills"
+   },
+   "high": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 8.8,
+    "url": "https://polymarket.com/event/which-bills-will-become-law-in-2026"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/which-bills-will-become-law-in-2026",
+    "kalshi": "https://kalshi.com/markets/kxbills"
+   },
+   "volumes": {
+    "polymarket": 218421,
+    "kalshi": 695592
+   },
+   "volumes24": {
+    "polymarket": 1366,
+    "kalshi": 1770
+   },
+   "raw": 5.7,
+   "fees": 0.5,
+   "net": 5.2,
+   "all3": false,
+   "fee_low": 0.21,
+   "fee_high": 0.32,
+   "fair": 8.3,
+   "grade": "A",
+   "fine": {
+    "src": "match",
+    "srcs": [
+     "Library of Congress"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.07,
+   "rate_high": 0.04,
+   "category": "Congress",
+   "chg": {}
+  },
+  {
    "title": "Pablo Picasso's \u201cLe Baiser\u201d Sale Price",
    "outcome": "$60m-$70m",
    "close": "2026-11-18T04:59:00Z",
@@ -376,7 +317,7 @@
     "kalshi": 14904
    },
    "volumes24": {
-    "polymarket": 172,
+    "polymarket": 132,
     "kalshi": 2270
    },
    "raw": 6.0,
@@ -397,9 +338,7 @@
    "rate_low": 0.07,
    "rate_high": 0.05,
    "category": "Art",
-   "chg": {
-    "polymarket": 0.5
-   }
+   "chg": {}
   },
   {
    "title": "Another Fed rate hike in 2026?",
@@ -432,7 +371,7 @@
    },
    "volumes24": {
     "alpha": 0,
-    "polymarket": 20944
+    "polymarket": 20269
    },
    "raw": 5.2,
    "fees": 0.8,
@@ -508,6 +447,69 @@
    "rate_high": 0.04,
    "category": "Trump",
    "chg": {}
+  },
+  {
+   "title": "Marco Rubio announces a presidential run by...?",
+   "outcome": "June 30, 2027",
+   "close": "2027-07-01T03:59:00Z",
+   "prices": {
+    "polymarket": 31.5,
+    "kalshi": 39.0,
+    "alpha": null
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 31.5,
+    "url": "https://polymarket.com/event/marco-rubio-announces-a-presidential-run-byptptpt"
+   },
+   "high": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 39.0,
+    "url": "https://kalshi.com/markets/kxrubiorun"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/marco-rubio-announces-a-presidential-run-byptptpt",
+    "kalshi": "https://kalshi.com/markets/kxrubiorun"
+   },
+   "volumes": {
+    "polymarket": 25347,
+    "kalshi": 11464
+   },
+   "volumes24": {
+    "polymarket": 2696,
+    "kalshi": 397
+   },
+   "raw": 7.5,
+   "fees": 2.5,
+   "net": 5.0,
+   "all3": false,
+   "fee_low": 0.86,
+   "fee_high": 1.67,
+   "fair": 32.6,
+   "grade": "B",
+   "fine": {
+    "src": "similar",
+    "srcs": [
+     "AP",
+     "Bloomberg",
+     "CBS",
+     "CNN"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.04,
+   "rate_high": 0.07,
+   "category": "Trump",
+   "fill": {
+    "usd": 0,
+    "shares": 0,
+    "exec": 0.5
+   },
+   "chg": {
+    "kalshi": -0.5
+   }
   },
   {
    "title": "Will Trump cut corporate taxes before 2027?",
