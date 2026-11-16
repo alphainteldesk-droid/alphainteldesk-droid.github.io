@@ -566,7 +566,7 @@ SOURCES = [
     ("Reuters", "news", r"reuters"), ("Bloomberg", "news", r"bloomberg"), ("Decision Desk", "news", r"decision desk"),
     ("BLS", "gov", r"bureau of labor statistics|\bbls\b"), ("BEA", "gov", r"bureau of economic analysis|\bbea\b"),
     ("Federal Reserve", "gov", r"federal reserve|\bfomc\b"), ("US Treasury", "gov", r"treasury"),
-    ("Census Bureau", "gov", r"census bureau"), ("Congress", "gov", r"congress\.gov|clerk of the house|senate\.gov"),
+    ("Census Bureau", "gov", r"census bureau"), ("Congress", "gov", r"congress\.gov|clerk of the house|senate\.gov|library of congress"),
     ("Federal Register", "gov", r"federal register"), ("NOAA / NWS", "gov", r"\bnoaa\b|national weather service"),
     ("Binance", "crypto", r"binance"), ("Coinbase", "crypto", r"coinbase"), ("CoinGecko", "crypto", r"coingecko"),
     ("CoinMarketCap", "crypto", r"coinmarketcap"), ("Kraken", "crypto", r"kraken"), ("Chainlink", "crypto", r"chainlink"),
@@ -577,11 +577,26 @@ SOURCES = [
     ("Christie's", "data", r"christie"), ("Sotheby's", "data", r"sotheby"), ("Wikipedia", "data", r"wikipedia"),
     # Nov 14 (from fine_watch.json, the wording both sites actually use):
     ("ESPN", "sports", r"\bespn\b"), ("DAZN", "sports", r"\bdazn\b"), ("Tapology", "sports", r"tapology"),
-    ("CF Benchmarks", "crypto", r"cf benchmarks|\bbrti\b"), ("Library of Congress", "gov", r"library of congress"),
+    ("CF Benchmarks", "crypto", r"cf benchmarks|\bbrti\b"),
     ("Rotten Tomatoes", "data", r"rotten tomatoes"), ("Recording Academy", "data", r"recording academy"),
     ("Academy (AMPAS)", "data", r"academy of motion picture|\bampas\b"), ("CMA Awards", "data", r"cma awards|country music association"),
     ("IMF PortWatch", "data", r"portwatch"), ("French Constitutional Council", "gov", r"conseil constitutionnel|constitutional council"),
     ("World Health Organization", "gov", r"world health organization"),
+    # Nov 16 grade check (unrecognised wording in fine_watch.json; Library of Congress folded into Congress, same source):
+    ("Formula 1", "sports", r"formula 1\b|\bf1\b"), ("NHL", "sports", r"\bnhl\b"), ("NFL", "sports", r"\bnfl\b"),
+    ("Netflix", "data", r"(?:reported by|resolution source:) netflix"), ("Knesset", "gov", r"knesset"),
+    ("Democratic Party", "gov", r"official democratic party|resolution source: democratic party|democratic national committee"),
+    ("Republican Party", "gov", r"official republican party|resolution source: republican party|republican national committee"),
+    ("OpenAI", "data", r"resolution source: openai|official (?:information|announcements?) from openai"),
+    ("Anthropic", "data", r"resolution source: anthropic|official (?:information|announcements?) from anthropic"),
+    ("SpaceX", "data", r"resolution source: spacex|official (?:information|announcements?) from spacex"),
+    ("LMArena", "data", r"lm ?arena|resolution source for this market is the arena"),
+    ("Trading Economics", "data", r"trading economics"), ("State election board", "gov", r"board of elections"),
+    ("BBC", "news", r"\bbbc\b"), ("Prime Minister's Office", "gov", r"prime minister's office"),
+    ("Office of the Presidency", "gov", r"office of the presidency"),
+    ("SEC EDGAR", "gov", r"\bedgar\b|securities and exchange commission"),
+    ("Smithsonian GVP", "data", r"smithsonian|global volcanism"), ("CME Group", "data", r"\bcme\b"),
+    ("Central bank", "gov", r"announced by the central bank"),
     ("Credible reporting", "news", r"consensus of credible (?:reporting|sources)"),
 ]
 CANCEL = r"50[-/ ]?50|fifty[- ]fifty|refund|\bvoid|cancel|postpone|annul"
@@ -633,6 +648,7 @@ _CUE = _re.compile(r"[^.]*\b(resolution source|resolve[sd]? (?:according to|base
 
 def _watch(text):
     """Nov 12: remember rules sentences that point at a source we don't recognise (reviewed weekly)."""
+    text = _re.sub(r"\bU\.S\.", "US", text or "")       # Nov 16: "Resolution source: U.S. ..." was cut at "U."
     h = hash(text)
     if not text or h in FINE_WATCH["seen"]:
         return
@@ -655,7 +671,8 @@ def fine_print(ra, rb):
         src = "unknown"                                  # one site doesn't name a source in its rules text
     elif both:
         src = "match"
-    elif {"news"} >= set(a.values()) | set(b.values()) or "Credible reporting" in a or "Credible reporting" in b:
+    elif (set(a.values()) | set(b.values()) <= {"news"} or set(a.values()) | set(b.values()) <= {"sports"}   # Nov 16: two sports
+          or "Credible reporting" in a or "Credible reporting" in b):                                   # sources = similar
         src = "similar"                                  # different news outlets calling the same result; "a consensus of
                                                          # credible reporting" (Polymarket's stock wording) never counts as a different source
     else:
