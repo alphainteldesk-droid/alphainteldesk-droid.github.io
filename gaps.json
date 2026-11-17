@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-17T01:56:32Z",
+ "updated": "2026-11-17T02:38:58Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -34,7 +34,7 @@
    },
    "volumes24": {
     "alpha": 40,
-    "polymarket": 306091
+    "polymarket": 306084
    },
    "raw": 13.1,
    "fees": 1.5,
@@ -60,20 +60,20 @@
    "outcome": "December 31, 2026",
    "close": "2028-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 8.5,
-    "kalshi": 17.5,
+    "polymarket": 8.0,
+    "kalshi": 18.0,
     "alpha": null
    },
    "low": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 8.5,
+    "price": 8.0,
     "url": "https://polymarket.com/event/anthropic-announces-a-millennium-prize-solution-byptptpt"
    },
    "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 17.5,
+    "price": 18.0,
     "url": "https://kalshi.com/markets/kxanthropicmillennium"
    },
    "urls": {
@@ -88,13 +88,13 @@
     "polymarket": 556,
     "kalshi": 265
    },
-   "raw": 9.0,
+   "raw": 10.0,
    "fees": 1.3,
-   "net": 7.7,
+   "net": 8.7,
    "all3": false,
-   "fee_low": 0.31,
-   "fee_high": 1.01,
-   "fair": 8.9,
+   "fee_low": 0.29,
+   "fee_high": 1.03,
+   "fair": 8.4,
    "grade": "A",
    "fine": {
     "src": "match",
@@ -106,7 +106,10 @@
    "rate_low": 0.04,
    "rate_high": 0.07,
    "category": "AI",
-   "chg": {}
+   "chg": {
+    "polymarket": -0.5,
+    "kalshi": 0.5
+   }
   },
   {
    "title": "Which bills will become law in 2026?",
@@ -223,6 +226,64 @@
    "chg": {}
   },
   {
+   "title": "New pandemic before 2028?",
+   "outcome": "Yes",
+   "close": "2028-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 9.5,
+    "kalshi": 15.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 9.5,
+    "url": "https://polymarket.com/event/new-pandemic-before-2028"
+   },
+   "high": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 15.5,
+    "url": "https://kalshi.com/markets/kxnewoutbreak-p"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/new-pandemic-before-2028",
+    "kalshi": "https://kalshi.com/markets/kxnewoutbreak-p"
+   },
+   "volumes": {
+    "polymarket": 40651,
+    "kalshi": 23289
+   },
+   "volumes24": {
+    "polymarket": 157,
+    "kalshi": 148
+   },
+   "raw": 6.0,
+   "fees": 1.3,
+   "net": 4.7,
+   "all3": false,
+   "fee_low": 0.43,
+   "fee_high": 0.92,
+   "fair": 10.0,
+   "grade": "B",
+   "fine": {
+    "src": "unknown",
+    "srcs": [
+     "World Health Organization"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.05,
+   "rate_high": 0.07,
+   "category": "disease",
+   "fill": {
+    "usd": 5,
+    "shares": 5,
+    "exec": 3.7
+   },
+   "chg": {}
+  },
+  {
    "title": "Strait of Hormuz traffic returns to normal by...?",
    "outcome": "March 31, 2027",
    "close": "2028-01-01T04:59:00Z",
@@ -249,11 +310,11 @@
    },
    "volumes": {
     "polymarket": 13951,
-    "kalshi": 9309200
+    "kalshi": 9309276
    },
    "volumes24": {
-    "polymarket": 1822,
-    "kalshi": 12690
+    "polymarket": 1823,
+    "kalshi": 12707
    },
    "raw": 6.5,
    "fees": 1.8,
@@ -274,6 +335,61 @@
    "rate_high": 0.05,
    "category": "Oil",
    "chg": {}
+  },
+  {
+   "title": "Who will be the next to leave the Trump Cabinet?",
+   "outcome": "Pete Hegseth",
+   "close": "2029-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 17.5,
+    "kalshi": 12.0,
+    "alpha": null
+   },
+   "low": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 12.0,
+    "url": "https://kalshi.com/markets/kxcabout"
+   },
+   "high": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 17.5,
+    "url": "https://polymarket.com/event/who-will-be-the-next-to-leave-the-trump-cabinet-before-2029"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/who-will-be-the-next-to-leave-the-trump-cabinet-before-2029",
+    "kalshi": "https://kalshi.com/markets/kxcabout"
+   },
+   "volumes": {
+    "polymarket": 35149,
+    "kalshi": 110688
+   },
+   "volumes24": {
+    "polymarket": 637,
+    "kalshi": 17532
+   },
+   "raw": 5.5,
+   "fees": 1.3,
+   "net": 4.2,
+   "all3": false,
+   "fee_low": 0.74,
+   "fee_high": 0.58,
+   "fair": 16.0,
+   "grade": "B",
+   "fine": {
+    "src": "unknown",
+    "srcs": [
+     "Credible reporting"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.07,
+   "rate_high": 0.04,
+   "category": "Trump",
+   "chg": {
+    "kalshi": -1.0
+   }
   },
   {
    "title": "Top 5 Most Searched People on Google 2026",
@@ -301,12 +417,12 @@
     "kalshi": "https://kalshi.com/markets/kxranklistgooglesearchtop5"
    },
    "volumes": {
-    "polymarket": 80697,
-    "kalshi": 271801
+    "polymarket": 80711,
+    "kalshi": 272180
    },
    "volumes24": {
-    "polymarket": 5320,
-    "kalshi": 4082
+    "polymarket": 6293,
+    "kalshi": 4443
    },
    "raw": 7.0,
    "fees": 2.9,
@@ -326,64 +442,7 @@
    "rate_low": 0.05,
    "rate_high": 0.07,
    "category": "Tech",
-   "chg": {
-    "polymarket": 0.5
-   }
-  },
-  {
-   "title": "Who will be the next to leave the Trump Cabinet?",
-   "outcome": "Pete Hegseth",
-   "close": "2029-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 17.5,
-    "kalshi": 13.0,
-    "alpha": null
-   },
-   "low": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 13.0,
-    "url": "https://kalshi.com/markets/kxcabout"
-   },
-   "high": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 17.5,
-    "url": "https://polymarket.com/event/who-will-be-the-next-to-leave-the-trump-cabinet-before-2029"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/who-will-be-the-next-to-leave-the-trump-cabinet-before-2029",
-    "kalshi": "https://kalshi.com/markets/kxcabout"
-   },
-   "volumes": {
-    "polymarket": 35149,
-    "kalshi": 110584
-   },
-   "volumes24": {
-    "polymarket": 256,
-    "kalshi": 17434
-   },
-   "raw": 4.5,
-   "fees": 1.4,
-   "net": 3.1,
-   "all3": false,
-   "fee_low": 0.79,
-   "fee_high": 0.58,
-   "fair": 16.2,
-   "grade": "B",
-   "fine": {
-    "src": "unknown",
-    "srcs": [
-     "Credible reporting"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.07,
-   "rate_high": 0.04,
-   "category": "Trump",
-   "chg": {
-    "kalshi": -0.5
-   }
+   "chg": {}
   },
   {
    "title": "Ken Martin out as DNC Chair by...? ",
@@ -444,124 +503,63 @@
    "chg": {}
   },
   {
-   "title": "Will Trump meet with Fl\u00e1vio Bolsonaro in 2026?",
-   "outcome": "Yes",
+   "title": "Which companies will the US take a stake in?",
+   "outcome": "Unusual Machines",
    "close": "2027-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 8.5,
-    "kalshi": 12.5,
+    "polymarket": 11.5,
+    "kalshi": 16.0,
     "alpha": null
    },
    "low": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 8.5,
-    "url": "https://polymarket.com/event/will-trump-meet-with-flavio-bolsonaro-in-2026"
+    "price": 11.5,
+    "url": "https://polymarket.com/event/which-companies-will-the-us-take-a-stake-in"
    },
    "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 12.5,
-    "url": "https://kalshi.com/markets/kxtrumpflaviomeet"
+    "price": 16.0,
+    "url": "https://kalshi.com/markets/kxusacompanystake"
    },
    "urls": {
-    "polymarket": "https://polymarket.com/event/will-trump-meet-with-flavio-bolsonaro-in-2026",
-    "kalshi": "https://kalshi.com/markets/kxtrumpflaviomeet"
+    "polymarket": "https://polymarket.com/event/which-companies-will-the-us-take-a-stake-in",
+    "kalshi": "https://kalshi.com/markets/kxusacompanystake"
    },
    "volumes": {
-    "polymarket": 215214,
-    "kalshi": 6377
+    "polymarket": 246654,
+    "kalshi": 1256335
    },
    "volumes24": {
-    "polymarket": 3898,
-    "kalshi": 0
+    "polymarket": 5281,
+    "kalshi": 50104
    },
-   "raw": 4.0,
-   "fees": 0.8,
+   "raw": 4.5,
+   "fees": 1.3,
    "net": 3.2,
    "all3": false,
-   "fee_low": 0.0,
-   "fee_high": 0.77,
-   "fair": 8.5,
-   "grade": "B",
-   "fine": {
-    "src": "similar",
-    "srcs": [
-     "ABC News",
-     "AP",
-     "BBC",
-     "Bloomberg"
-    ],
-    "void": "check"
-   },
-   "rate_low": 0.0,
-   "rate_high": 0.07,
-   "category": "Trump",
-   "fill": {
-    "usd": 0,
-    "shares": 0,
-    "exec": 0.4
-   },
-   "chg": {}
-  },
-  {
-   "title": "Two SpaceX Starships dock together by\u2026?",
-   "outcome": "December 31, 2027",
-   "close": "2028-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 66.5,
-    "kalshi": 71.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 66.5,
-    "url": "https://polymarket.com/event/two-spacex-starships-dock-together-by"
-   },
-   "high": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 71.5,
-    "url": "https://kalshi.com/markets/kxstarshipdock"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/two-spacex-starships-dock-together-by",
-    "kalshi": "https://kalshi.com/markets/kxstarshipdock"
-   },
-   "volumes": {
-    "polymarket": 101878,
-    "kalshi": 97079
-   },
-   "volumes24": {
-    "polymarket": 1573,
-    "kalshi": 355
-   },
-   "raw": 5.0,
-   "fees": 2.3,
-   "net": 2.7,
-   "all3": false,
-   "fee_low": 0.89,
-   "fee_high": 1.43,
-   "fair": 68.5,
+   "fee_low": 0.41,
+   "fee_high": 0.94,
+   "fair": 13.5,
    "grade": "B",
    "fine": {
     "src": "similar",
     "srcs": [
      "AP",
+     "Bloomberg",
      "CBS",
-     "CNN",
-     "Credible reporting"
+     "CNN"
     ],
     "void": "none"
    },
    "rate_low": 0.04,
    "rate_high": 0.07,
-   "category": "SpaceX",
+   "category": "Politics",
    "fill": {
     "usd": 0,
     "shares": 0,
-    "exec": -2.3
+    "exec": -1.3
    },
    "chg": {}
   }
