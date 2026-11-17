@@ -593,6 +593,8 @@
   @keyframes dzpulse { 50% { box-shadow:0 0 26px rgba(255,90,90,.5); } }
   /* Nov 15 (James): bigger button that fills the box, with a figure walking through a door into the Danger Zone (6 s loop) */
   #closing-soon .dz-go { flex:1 0 auto; min-height:150px; display:flex; margin-top:16px; }
+  #closing-soon .dz-go.dz-top { flex:none; margin:4px 0 16px; }
+  #closing-soon #hub-f { margin-bottom:12px; }
   #closing-soon .dz-in { flex:1; padding:14px 22px 14px 12px; gap:18px; }
   #closing-soon .dz-l { flex:1; } #closing-soon .dz-l b { font-size:clamp(1.25rem, 2.1vw, 1.8rem); letter-spacing:.14em; line-height:1.2; }
   #closing-soon .dz-l small { font-size:.82rem; margin-top:8px; } #closing-soon .dz-ar { font-size:2.4rem; }
@@ -982,9 +984,31 @@
   <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
   <span id="expiry-hub"></span>
   <div class="cal-h"><div><h2><span class="beacon" aria-hidden="true"></span>THE DANGER ZONE<span class="beacon b2" aria-hidden="true"></span></h2>
-    <p><b class="hub-tag">80¢+ contracts settling in 1&ndash;6 months. Up to 25% return, but one wrong call could cost it all.</b>
+    <p><b class="hub-tag">80¢+ contracts settling in 1&ndash;6 months. Up to <span id="hub-best">25%</span> return, but one wrong call could cost it all.</b>
       Each row shows the side to buy, the price now, your return after fees if you're right, and the close date. <span id="hub-upd"></span></p></div>
-    <div class="cal-f" id="hub-f"><button class="on" data-h="long">1&ndash;6 MONTHS</button><button data-h="near">UNDER 1 MONTH</button><button data-h="soon" style="--c:#ff7a7a">SETTLING NEXT</button></div></div>
+</div>
+  <!-- Nov 17 (James): same button up top, so nobody has to scroll to get in -->
+  <a class="dz-go dz-top" href="/expiry-returns.html" aria-label="Open The Danger Zone: every contract, every filter, plus tools to research your call">
+    <span class="dz-tape" aria-hidden="true"></span>
+    <span class="dz-in"><svg class="dz-door" viewBox="0 0 200 130" aria-hidden="true">
+        <defs><radialGradient id="dzglow2" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#ff3b3b" stop-opacity=".95"/><stop offset="1" stop-color="#5a0000" stop-opacity=".9"/></radialGradient>
+          <pattern id="dzhaz2" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="10" fill="#ffb347"/><rect x="5" width="5" height="10" fill="#14181f"/></pattern></defs>
+        <line x1="0" y1="118" x2="200" y2="118" stroke="rgba(255,179,71,.35)" stroke-width="2"/>
+        <polygon class="dzd-beam" points="118,118 150,118 185,128 95,128" fill="#ff3b3b"/>
+        <rect x="111" y="22" width="46" height="96" fill="url(#dzhaz2)"/>
+        <rect x="117" y="28" width="34" height="90" fill="url(#dzglow2)"/>
+        <g class="dzd-man"><g class="dzd-bob"><circle cx="0" cy="-58" r="6.5" fill="#e8eef5"/><path d="M0 -51 L0 -28" stroke="#e8eef5" stroke-width="6" stroke-linecap="round"/>
+          <path class="dzd-arm" d="M0 -46 L-7 -33" stroke="#e8eef5" stroke-width="4" stroke-linecap="round"/><path class="dzd-arm2" d="M0 -46 L7 -33" stroke="#e8eef5" stroke-width="4" stroke-linecap="round"/>
+          <path class="dzd-leg" d="M0 -28 L-6 -10" stroke="#e8eef5" stroke-width="5" stroke-linecap="round"/><path class="dzd-leg2" d="M0 -28 L6 -10" stroke="#e8eef5" stroke-width="5" stroke-linecap="round"/></g></g>
+        <rect class="dzd-panel" x="117" y="28" width="34" height="90" fill="#2a3240" stroke="#566375" stroke-width="1.5"/>
+        <circle class="dzd-knob" cx="145" cy="76" r="2.2" fill="#ffb347"/>
+        <rect x="114" y="6" width="40" height="12" rx="2" fill="#2a0d0d" stroke="#ff6b6b" stroke-width="1"/>
+        <text class="dzd-sign" x="134" y="15.2" text-anchor="middle" font-family="JetBrains Mono,monospace" font-weight="800" font-size="8" fill="#ff6b6b" letter-spacing="1">DANGER</text>
+      </svg><span class="dz-l"><b>ENTER THE DANGER ZONE</b><small id="dz-stats-top">Our top 50 contracts, plus tools to research your call</small></span>
+      <span class="dz-ar" aria-hidden="true">&rarr;</span></span>
+  </a>
+
+  <div class="cal-f" id="hub-f"><button class="on" data-h="long">1&ndash;6 MONTHS</button><button data-h="near">UNDER 1 MONTH</button><button data-h="soon" style="--c:#ff7a7a">SETTLING NEXT</button></div>
   <div class="hub-cols" id="hub-cols"></div>
   <div class="hub-rows" id="hub-rows"><p class="cal-none">Loading&hellip;</p></div>
   <a class="dz-go" href="/expiry-returns.html" aria-label="Open The Danger Zone: every contract, every filter, plus tools to research your call">
@@ -1165,7 +1189,8 @@
       exp = x.rows || [];
       var lng = exp.filter(function (r) { var dd = (new Date(r.close) - Date.now()) / 86400000; return dd >= 30 && dd <= 183; });
       var best = Math.max.apply(null, lng.map(function (r) { return r.ret; }).concat([0]));
-      if (exp.length) document.getElementById('dz-stats').textContent = (exp.length >= 40 ? 'Top ' + exp.length + ' contracts' : exp.length + ' contracts live') +
+      if (best >= 1) document.getElementById('hub-best').textContent = best.toFixed(1) + '%';   // Nov 17: same live number as the buttons
+      if (exp.length) document.getElementById('dz-stats-top').textContent = document.getElementById('dz-stats').textContent = (exp.length >= 40 ? 'Top ' + exp.length + ' contracts' : exp.length + ' contracts live') +
         (best >= 1 ? ' · up to ' + best.toFixed(1) + '% in 1–6 month markets' : '') + ' · research tools inside';
       if (x.updated) {
         var old = (Date.now() - new Date(x.updated)) / 60000 > 120, u = document.getElementById('hub-upd');
