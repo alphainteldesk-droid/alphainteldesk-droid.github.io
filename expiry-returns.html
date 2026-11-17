@@ -14,7 +14,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Danger Zone: Prediction Market Contracts at 80¢+ Settling Within 6 Months, Return After Fees | Alpha Intel Desk</title>
-<meta name="description" content="High-probability prediction market contracts that settle in days to 6 months: the buy price, the fee, the side to buy, the price now, the return after fees if you are right and the close date, side by side for Polymarket, Kalshi and Alpha Arcade. Free, updated every 20 minutes.">
+<meta name="description" content="High-probability prediction market contracts that settle in days to 6 months: the buy price, the fee, the side to buy, the price now, the return after fees if you are right and the close date, side by side for Polymarket, Kalshi and Alpha Arcade. Free, updated through the day.">
 <link rel="canonical" href="https://alphainteldesk.com/expiry-returns.html">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 <meta property="og:title" content="The Danger Zone by Alpha Intel Desk">
@@ -193,13 +193,14 @@
 </header>
 
 <main class="wrap">
-  <span class="tag live"><i></i>Live · checked every 20 minutes</span>
+  <span class="tag live"><i></i><span id="x-live">Live · updated through the day</span></span>
   <h1>The Danger Zone</h1>
   <p class="tagline">80¢+ contracts settling in 1&ndash;6 months. Up to <span id="x-best">25%</span> return, but one wrong call could cost it all.</p>
-  <p class="lead">Our top 50 contracts priced at 80¢ or more that settle within the next 6 months, picked from hundreds for
-    return, how easy they are to sell, and how busy the market is. Call it right and each contract pays $1
-    when the market settles. Call it wrong and it pays nothing. Each row shows the side to buy, the price right now,
-    your return after fees if you're right, and the date it closes. Polymarket, Kalshi and Alpha Arcade, side by side.</p>
+  <p class="lead">Our top 50 contracts at 80¢ or more that settle within 6 months, chosen from hundreds. We rank them on
+    the return after fees, how easy they are to sell, how clear their rules are, and how busy the market is.</p>
+  <p class="lead"><b>How it pays:</b> if you're right, each contract pays $1 when the market settles. If you're wrong, it pays nothing.
+    Each row shows the side to buy, the price now, your return after fees if you're right, and the close date, for Polymarket,
+    Kalshi and Alpha Arcade side by side.</p>
   <p class="note" id="x-upd"></p>
   <p class="stale" id="x-stale" hidden></p>
   <p class="note"><a href="#edge">Gain an edge on your call: use the desk's free research tools before you buy &darr;</a> &middot; <a href="#track">Our track record &darr;</a></p>
@@ -209,7 +210,7 @@
     <span class="lbl">SETTLES WITHIN</span><div class="chips" id="f-days"></div>
     <span class="lbl">SORT</span><div class="chips" id="f-sort"></div>
   </div>
-  <p class="x-shared" id="x-shared" hidden>The contract in your link isn't in today's top 50 any more: prices and the list change every 20 minutes. Here's the current list.</p>
+  <p class="x-shared" id="x-shared" hidden>The contract in your link isn't in today's top 50 any more: prices and the list change through the day. Here's the current list.</p>
   <div class="gkey"><b>DZ GRADE</b>
     <span><span class="xg a">A</span>clean</span>
     <span><span class="xg b">B</span>solid</span>
@@ -399,7 +400,8 @@
       .map(function (r) { return r.ret; }).concat([0]));
     if (best >= 1) document.getElementById('x-best').textContent = best.toFixed(1) + '%';   // Nov 17 (James): same live number as the homepage
     var m = Math.max(0, Math.round((Date.now() - Date.parse(d.updated)) / 60000));
-    document.getElementById('x-upd').textContent = (d.all && d.all.length > rows.length ? 'Top ' + rows.length + ' of ' + d.all.length + ' contracts checked' : rows.length + ' contracts') + ' · last checked ' + (m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago');
+    document.getElementById('x-upd').textContent = d.all && d.all.length > rows.length ? 'Top ' + rows.length + ' of ' + d.all.length + ' contracts checked' : rows.length + ' contracts';
+    document.getElementById('x-live').textContent = 'Live · last checked ' + (m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago');   // Nov 17 (James): one time, not two
     if (m > 120) {   /* Nov 15: never let old prices look current. James: warn at 2 h only (GitHub queues runs 30+ min on busy days) */
       var w = document.getElementById('x-stale'); w.hidden = false;
       w.textContent = 'These prices are ' + (m < 180 ? Math.floor(m / 60) + ' h ' + (m % 60) + ' min' : Math.round(m / 60) + ' hours') + ' old because our update is running late. Do not trade from them: check the live price on each site.';
