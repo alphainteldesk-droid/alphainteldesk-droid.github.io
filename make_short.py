@@ -54,6 +54,8 @@ d = max(pool, key=score)
 D_DAY = datetime.strptime(d["close"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).astimezone(ET)
 D_WHEN = "today" if D_DAY.date() == datetime.now(ET).date() else D_DAY.strftime("%A")
 D_TITLE = label(d["title"], d["outcome"])
+import dz_link
+D_LINK = dz_link.url(d, _ex.get("rows") or [])   # Nov 17 (James): the post opens the Danger Zone page at this contract
 st["seen"][gk(g)] = st["seen"][dk(d)] = now
 st["seen"] = {k: t for k, t in st["seen"].items() if now - t < 14 * 86400}
 
@@ -206,9 +208,9 @@ async def main():
     json.dump(st, open(STATE, "w"), separators=(",", ":"))
     title = "Your Daily Gap: %.1f¢ + a Potential +%d%% Expiring Market Alert 🚨" % (g["net"], int(d["ret"]))   # James, Nov 15
     desc = ("Today's biggest prediction market price gap after fees: %s. Plus a Danger Zone contract that closes %s: %s, %s at %.0f¢.\n"
-            "Not financial advice. https://alphainteldesk.com" % (G_TITLE, D_WHEN, D_TITLE, d["side"].upper(), d["ask"]))
+            "See it on Alpha Intel Desk: %s\nNot financial advice." % (G_TITLE, D_WHEN, D_TITLE, d["side"].upper(), d["ask"], D_LINK))
     tags = "#predictionmarkets #polymarket #kalshi #alphaarcade #algorand #trading #markets #shorts"
-    open(OUT.rsplit(".", 1)[0] + ".txt", "w").write("TITLE\n%s\n\nDESCRIPTION\n%s\n\nHASHTAGS\n%s\n" % (title, desc, tags))
+    open(OUT.rsplit(".", 1)[0] + ".txt", "w").write("TITLE\n%s\n\nDESCRIPTION\n%s\n\nHASHTAGS\n%s\n\nLINK\n%s\n" % (title, desc, tags, D_LINK))
     print("Short: %s (%.1f s) | gap: %s | danger zone: %s (%s)" % (OUT, total, G_TITLE, D_TITLE, D_WHEN))
 
 

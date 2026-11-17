@@ -618,7 +618,7 @@ SETTLE_KAL = _re.compile(r"Resolution source: (.+?)\.\s*$")
 def _settle_row(text):
     """Cut-off rules (ending in "…") that name no source might name one further on: no grade rather than a wrong C."""
     r = settle_info(text)
-    return None if r["g"] == "none" and text.rstrip().endswith("…") else r
+    return None if r["g"] == "none" and text.rstrip().endswith(("…", "...")) else r   # Nov 17: Alpha cuts with "..."
 
 
 def settle_info(text):

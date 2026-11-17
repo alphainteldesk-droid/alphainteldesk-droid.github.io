@@ -195,7 +195,7 @@
 <main class="wrap">
   <span class="tag live"><i></i>Live · checked every 20 minutes</span>
   <h1>The Danger Zone</h1>
-  <p class="tagline">80¢+ contracts settling in 1&ndash;6 months. Up to 25% return, but one wrong call could cost it all.</p>
+  <p class="tagline">80¢+ contracts settling in 1&ndash;6 months. Up to <span id="x-best">25%</span> return, but one wrong call could cost it all.</p>
   <p class="lead">Our top 50 contracts priced at 80¢ or more that settle within the next 6 months, picked from hundreds for
     return, how easy they are to sell, and how busy the market is. Call it right and each contract pays $1
     when the market settles. Call it wrong and it pays nothing. Each row shows the side to buy, the price right now,
@@ -254,7 +254,7 @@
   <div class="qa"><b>How do you keep the numbers right?</b><span>Every update recomputes every row from scratch and throws out anything that doesn't add up. A watchdog checks the page after every update and alerts us if prices go stale, if a site stops publishing its fees, or if a fee rate changes. If prices are more than 2 hours old, this page tells you so.</span></div>
   <div class="qa"><b>What can go wrong?</b><span>The outcome goes the other way and you lose the full price. Settlement can also be late or disputed, which ties your money up longer than the close date says. A very high return usually means the market sees real risk.</span></div>
   <div class="qa"><b>Why "est" on Alpha Arcade rows?</b><span>Alpha Arcade's live bid and ask aren't in our feed yet, so those rows use the last price and only appear if the market traded in the last 5 days. Check the order book before you trade.</span></div>
-  <div class="qa"><b>How are the 50 picked?</b><span>We check hundreds of contracts every update and keep the best one per market. Each gets a score from its return after fees, how easy it is to sell (the A–D grade) and how much the market trades. The top 40 make the list, plus the 10 busiest Alpha Arcade contracts, so the site's Alpha coverage doesn't get crowded out by bigger sites. Contracts that are hard to sell (D) and daily crypto or price markets are left out.</span></div>
+  <div class="qa"><b>How are the 50 picked?</b><span>We check hundreds of contracts every update and keep the best one per market. Each gets a score from its return after fees, how easy it is to sell, how clear its rules are (the two halves of the DZ Grade) and how much the market trades. The top 40 make the list, plus the 10 busiest Alpha Arcade contracts, so the site's Alpha coverage doesn't get crowded out by bigger sites. Contracts that are hard to sell (D) and daily crypto or price markets are left out.</span></div>
   <div class="qa"><b>What else is left out?</b><span>Sports, thin markets, anything settling in under 6 hours or over 6 months, and returns under 0.3% after fees.</span></div>
 
   <h2>Keep going</h2>
@@ -395,6 +395,9 @@
 
   fetch('expiry.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     rows = d.rows || [];
+    var best = Math.max.apply(null, rows.filter(function (r) { var dd = (new Date(r.close) - Date.now()) / 86400000; return dd >= 30 && dd <= 183; })
+      .map(function (r) { return r.ret; }).concat([0]));
+    if (best >= 1) document.getElementById('x-best').textContent = best.toFixed(1) + '%';   // Nov 17 (James): same live number as the homepage
     var m = Math.max(0, Math.round((Date.now() - Date.parse(d.updated)) / 60000));
     document.getElementById('x-upd').textContent = (d.all && d.all.length > rows.length ? 'Top ' + rows.length + ' of ' + d.all.length + ' contracts checked' : rows.length + ' contracts') + ' · last checked ' + (m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago');
     if (m > 120) {   /* Nov 15: never let old prices look current. James: warn at 2 h only (GitHub queues runs 30+ min on busy days) */

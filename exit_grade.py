@@ -58,10 +58,16 @@ PX = re.compile(r"bitcoin|ethereum|solana|dogecoin|\b(btc|eth|xrp|sol|doge|bnb)\
 EXIT_W = {"A": 1.0, "B": 0.85, "C": 0.65}
 
 
+RULES_W = {"clear": 1.0, "mixed": 0.95, "none": 0.9, "judgement": 0.85}   # rules grade A B C D; not graded yet = 0.9
+
+
 def score(r):
-    """Good return (capped at 10%, so steadier 90¢+ contracts compete) x easy to sell x busy market. Same volume factor as the Daily Short."""
+    """Good return (capped at 10%, so steadier 90¢+ contracts compete) x easy to sell x busy market x clear rules.
+    Same volume factor as the Daily Short. Nov 17 (James): the rules half of the DZ Grade counts too, as a gentle nudge
+    (a stronger one pushed nearly every Polymarket geopolitics market out, since most say "consensus of credible reporting")."""
     w = EXIT_W.get((r.get("ex") or {}).get("g"), 0.6)
-    return min(r["ret"], 10) * w * min(1, math.log10(max(r.get("volume") or 0, 10)) / 5.3)
+    rw = RULES_W.get((r.get("st") or {}).get("g"), 0.9)
+    return min(r["ret"], 10) * w * rw * min(1, math.log10(max(r.get("volume") or 0, 10)) / 5.3)
 
 
 def curate(rows):

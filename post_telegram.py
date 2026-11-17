@@ -38,6 +38,19 @@ if any(new.get(k) for k, _ in venues):
         for m in new.get(key, []):
             parts.append(line(m, label + " · ✨ new"))
 
+try:   # Nov 17 (James): one Danger Zone contract, linking to its highlighted row on our page (not straight to the other site)
+    import dz_link, exit_grade
+    top = json.load(open("expiry.json")).get("rows") or []
+    pool = [r for r in top if 1 <= r["days"] <= 30 and r.get("site") != "alpha"
+            and not exit_grade.PX.search(r["title"] + " " + (r.get("cat") or ""))]   # no daily crypto/price markets
+    if pool:
+        x = max(pool, key=exit_grade.score)
+        nm = x["title"] + ("" if x["outcome"] in ("Yes", x["title"]) else " — " + x["outcome"])
+        parts.append("\n🚨 <b>Danger Zone pick</b>")
+        parts.append(f'<a href="{escape(dz_link.url(x, top))}">{escape(nm)}</a>\n   <b>{x["side"].upper()} at {x["ask"]:.0f}¢</b> · '
+                     f'+{x["ret"]:.1f}% after fees if right · closes {when(x["close"])}')
+except Exception as err:
+    print("Danger Zone pick skipped:", err)
 parts.append(f'\n📡 Live board, updated hourly: <a href="{SITE}">alphainteldesk.com</a>')
 parts.append("<i>Not financial advice.</i>")
 
