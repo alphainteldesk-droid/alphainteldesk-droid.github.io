@@ -88,6 +88,19 @@ def alpha_results(apps):
     return out
 
 
+LQ, RL, LET = {"A": 4, "B": 3, "C": 2, "D": 1}, {"clear": 4, "mixed": 3, "none": 2, "judgement": 1}, ["", "D", "C", "B", "A"]
+
+
+def grades(x):
+    """Nov 17 (James): the DZ Grade when we listed it (same maths as the page: Liquidity + Rules, rounded toward the weaker),
+    so the track record can show whether A contracts really pay out more often than C's. "-" = not graded (e.g. Alpha)."""
+    e, r = x.get("ex"), x.get("st") or {}
+    lg = (e.get("g") if e.get("usd") else "D") if e else None
+    rg = LET[RL[r["g"]]] if r.get("g") in RL else None
+    g = LET[(LQ[lg] + RL[r["g"]]) // 2] if lg and rg else "-"
+    return {"g": g, "lg": lg or "-", "rg": rg or "-"}
+
+
 def bucket(days):
     return "1-6 months" if days >= 30 else "under 1 month"
 
@@ -109,13 +122,22 @@ def main():
         k = "%s|%s|%s" % (x["site"], x["id"], x["side"])
         if k in st["open"]:
             st["open"][k]["ls"] = now
+            if "g" not in st["open"][k]:              # Nov 17: contracts logged before grades were saved get today's grade
+                st["open"][k].update(grades(x), gl=1)
             continue
         if k in st.get("done", {}):
             continue
         st["open"][k] = {"t": x["title"], "o": x["outcome"], "s": x["side"], "a": x["ask"], "f": x["fee"],
                          "r": x["ret"], "c": x["close"], "d": x["days"], "u": x["url"], "fs": now, "ls": now,
                          "px": bool(x["days"] < 3 and PX.search(x["title"] + " " + (x.get("cat") or "")))}
+        st["open"][k].update(grades(x))
         new += 1
+
+    for x in json.load(open("expiry.json")).get("all") or []:   # Nov 17: grade older entries from the full list too
+        if x.get("id"):
+            v = st["open"].get("%s|%s|%s" % (x.get("site"), x["id"], x.get("side")))
+            if v is not None and "g" not in v:
+                v.update(grades(x), gl=1)
 
     due = [k for k, v in st["open"].items()          # 2. which ones may have settled
            if (now > ts(v["c"]) + 3600 or now - v["ls"] > GONE_SECS) and now >= v.get("nx", 0)]
@@ -158,6 +180,11 @@ def main():
         g["n"] += 1
         g["won"] += won
         g["pl"] += v["r"] / 100 if won else -1.0       # $1 in at our listed price (fee included): +return or -$1
+        if not v["px"] and v.get("g"):            # Nov 17: results by DZ Grade at listing ("-" = not graded)
+            gg = st.setdefault("by_grade", {}).setdefault(v["g"], {"n": 0, "won": 0, "pl": 0.0})
+            gg["n"] += 1
+            gg["won"] += won
+            gg["pl"] += v["r"] / 100 if won else -1.0
         settled += 1
         paid += won
         if not won:
@@ -178,6 +205,9 @@ def main():
     summ["all"] = {"n": n_all, "won": sum(g["won"] for g in main_g),
                    "pct": round(100 * sum(g["won"] for g in main_g) / n_all, 1) if n_all else None,
                    "ret": round(100 * sum(g["pl"] for g in main_g) / n_all, 2) if n_all else None}
+    summ["by_grade"] = {k: {"n": g["n"], "won": g["won"], "pct": round(100 * g["won"] / g["n"], 1),
+                            "ret": round(100 * g["pl"] / g["n"], 2)} for k, g in sorted((st.get("by_grade") or {}).items()) if g["n"]}
+    summ["waiting_by_grade"] = dict(__import__("collections").Counter(v.get("g", "?") for v in st["open"].values() if not v["px"]))
     st["summary"] = summ
     json.dump(st, open("track.json", "w"), separators=(",", ":"))
     print("Track record: %d new listed, %d checked, %d settled (%d paid out, %d void), %d gave up, %d waiting; "
