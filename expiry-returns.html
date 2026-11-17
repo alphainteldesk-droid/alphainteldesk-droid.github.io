@@ -131,6 +131,11 @@
   .stale { margin:10px 0; padding:10px 14px; border:1px solid #ff6b6b; border-radius:8px; background:rgba(255,107,107,.1); color:#ffb3b3; font-weight:600; }
   .tw.old { opacity:.45; }
   .confirm { margin:8px 0 0; color:var(--text); font-size:.9rem; }
+  .howpay { max-width:760px; margin:6px 0 14px; padding:12px 16px; border:1px solid rgba(255,179,71,.35); border-left:3px solid var(--amber);
+    border-radius:6px; background:rgba(255,179,71,.06); }   /* Nov 17 (James): a real row, worked through */
+  .howpay > b { font:700 .72rem "JetBrains Mono",monospace; letter-spacing:.14em; color:var(--amber); }
+  .howpay p { margin:6px 0 0; line-height:1.55; } .howpay .hp-m { font-weight:600; } .howpay .g { color:#3ddc84; font-weight:700; }
+  .howpay small { display:block; margin-top:6px; color:var(--muted); font-size:.8rem; }
   .tagline { margin:-4px 0 14px; font:700 1rem "JetBrains Mono",monospace; letter-spacing:.02em; color:#ff7a7a; }
   .edge { margin:26px 0 8px; padding:18px 20px; border:1px solid rgba(255,179,71,.5); border-radius:12px;
     background:linear-gradient(90deg, rgba(255,179,71,.10), var(--panel) 60%); }
@@ -198,9 +203,10 @@
   <p class="tagline">80¢+ contracts settling in 1&ndash;6 months. Up to <span id="x-best">25%</span> return, but one wrong call could cost it all.</p>
   <p class="lead">Our top 50 contracts at 80¢ or more that settle within 6 months, chosen from hundreds. We rank them on
     the return after fees, how easy they are to sell, how clear their rules are, and how busy the market is.</p>
-  <p class="lead"><b>How it pays:</b> if you're right, each contract pays $1 when the market settles. If you're wrong, it pays nothing.
-    Each row shows the side to buy, the price now, your return after fees if you're right, and the close date, for Polymarket,
-    Kalshi and Alpha Arcade side by side.</p>
+  <div class="howpay" id="x-how"><b>HOW IT WORKS</b><p>Say you buy a contract at 84¢. If you're right, it pays $1 when the market settles:
+    your 84¢ back plus 16¢ profit. If you're wrong, it pays nothing and you lose the 84¢.</p></div>
+  <p class="lead">Each row shows the side to buy, the price now, your return after fees if you're right, and the close date, for
+    Polymarket, Kalshi and Alpha Arcade side by side.</p>
   <p class="note" id="x-upd"></p>
   <p class="stale" id="x-stale" hidden></p>
   <p class="note"><a href="#edge">Gain an edge on your call: use the desk's free research tools before you buy &darr;</a> &middot; <a href="#track">Our track record &darr;</a></p>
@@ -290,6 +296,20 @@
   var PX = /bitcoin|ethereum|solana|dogecoin|\b(btc|eth|xrp|sol|doge|bnb)\b|\bprices?\b|\b(s&p|nasdaq|dow|nikkei|ftse|wti|brent|gold|silver|treasury|yield)\b|\bclose (above|below|at)\b/i;
   function daily(x) { return x.days < 3 && PX.test(x.title + ' ' + (x.cat || '')); }
   function yr(x) { return x.days >= 3 ? x.apr : -1; }   /* a per-year figure for a position held under 3 days is noise */
+  function howWorks() {   /* Nov 17 (James): explain the maths with today's busiest plain-English row */
+    var ok = rows.filter(function (r) { return r.q && /^Will /.test(r.q) && /\?$/.test(r.q) && r.ask >= 80 && r.fee != null; })
+      .sort(function (a, b) { return (b.volume || 0) - (a.volume || 0); });
+    var x = ok[0]; if (!x) return;
+    var side = x.side.toUpperCase(), p = x.ask, f = x.fee, gap = 100 - p, net = gap - f, c = function (v) { return v.toFixed(1) + '¢'; };
+    var nm = esc(x.title) + (x.outcome && x.outcome !== x.title && x.outcome !== 'Yes' ? ' · ' + esc(x.outcome) : '');
+    document.getElementById('x-how').innerHTML = '<b>HOW IT WORKS, WITH A REAL ROW</b>' +
+      '<p><span class="hp-m">' + nm + '</span>: ' + side + ' at ' + c(p) + ', return <span class="g">+' + x.ret.toFixed(1) + '%</span></p>' +
+      '<p>If you think the answer to <i>"' + esc(x.q) + '"</i> is <b>' + side + '</b>, you buy ' + side + ' at ' + c(p) +
+      ' (the market puts that at about ' + Math.round(p) + '%). If you\'re right, each contract pays $1 when the market settles: your ' + c(p) +
+      ' back plus ' + c(gap) + ' profit. After the ' + c(f) + ' trading fee that\'s ' + c(net) + ' on the ' + c(p + f) + ' you put in, the <span class="g">+' +
+      x.ret.toFixed(1) + '%</span> in the Return column. If you\'re wrong, it pays nothing and you lose what you paid.</p>' +
+      '<small>This assumes the market settles normally: no delays, disputes or rule surprises. Not financial advice.</small>';
+  }
   function ckey(x) {   /* Nov 15 (James): a short, stable id for each contract, used in share links back to this page */
     var t = x.site + '|' + (x.id || x.url) + '|' + x.side, h = 5381;
     for (var k = 0; k < t.length; k++) h = ((h * 33) ^ t.charCodeAt(k)) >>> 0;
@@ -398,6 +418,7 @@
     rows = d.rows || [];
     var best = Math.max.apply(null, rows.filter(function (r) { var dd = (new Date(r.close) - Date.now()) / 86400000; return dd >= 30 && dd <= 183; })
       .map(function (r) { return r.ret; }).concat([0]));
+    howWorks();
     if (best >= 1) document.getElementById('x-best').textContent = best.toFixed(1) + '%';   // Nov 17 (James): same live number as the homepage
     var m = Math.max(0, Math.round((Date.now() - Date.parse(d.updated)) / 60000));
     document.getElementById('x-upd').textContent = d.all && d.all.length > rows.length ? 'Top ' + rows.length + ' of ' + d.all.length + ' contracts checked' : rows.length + ' contracts';
