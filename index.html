@@ -550,7 +550,7 @@
   .split .cal-h h2 { font-size:1.2rem; }
   .hub .cal-h h2 { gap:12px; }
   .hub-tag { display:block; color:#ff7a7a; font-weight:700; margin-bottom:2px; }
-  .hub-cols, .hub-r { display:grid; grid-template-columns:minmax(0,1fr) 46px 58px 62px 30px 80px; gap:9px; align-items:center; }
+  .hub-cols, .hub-r { display:grid; grid-template-columns:minmax(0,1fr) 46px 58px 62px 42px 80px; gap:9px; align-items:center; }
   .hub-r > .dzg { justify-self:center; min-width:20px; text-align:center; padding:1px 4px; border-radius:4px; border:1px solid; font:700 .74rem "JetBrains Mono",monospace; }   /* Nov 15: DZ Grade */
   .dzg.a { color:#3ddc84; border-color:rgba(61,220,132,.6); background:rgba(61,220,132,.13); } .dzg.b { color:#3fdbe6; border-color:rgba(63,219,230,.55); background:rgba(63,219,230,.1); }
   .dzg.c { color:#ffb347; border-color:rgba(255,179,71,.55); background:rgba(255,179,71,.1); } .dzg.d { color:#ff8a8a; border-color:rgba(255,107,107,.55); background:rgba(255,107,107,.12); }
@@ -560,7 +560,8 @@
   .hub-r > .sd.n { color:#ff8a8a; border:1px solid rgba(255,122,122,.5); background:rgba(255,122,122,.1); }
   .hub.soonv .hub-cols, .hub.soonv .hub-r { grid-template-columns:minmax(0,1fr) 62px 56px 92px; }
   .hub-cols { font:700 .62rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--muted); padding:0 8px 6px; border-bottom:1px solid rgba(63,219,230,.2); }
-  .hub-cols span:not(:first-child) { text-align:center; }   /* Nov 17 (James): every column centred under its title */
+  .hub-cols span:not(:first-child) { text-align:center; }
+  .hub-cols .dzh { font-size:.56rem; letter-spacing:.04em; line-height:1.15; }   /* Nov 17 (James): "DZ GRADE", not just "DZ" */   /* Nov 17 (James): every column centred under its title */
   .hub-rows { flex:1 1 auto; display:flex; flex-direction:column; }
   .hub-r { padding:8px; border-bottom:1px solid rgba(255,255,255,.05); color:var(--text); text-decoration:none; }
   .hub-r:hover { background:rgba(63,219,230,.07); text-decoration:none; }
@@ -621,7 +622,7 @@
     .split .cal-g { max-height:none; overflow:visible; }
   }
   @media (max-width: 560px) {
-    .hub-cols, .hub-r { grid-template-columns:minmax(0,1fr) 40px 58px 24px 66px; gap:6px; }   /* Nov 17: room for the DZ column, CLOSES stays on the row */
+    .hub-cols, .hub-r { grid-template-columns:minmax(0,1fr) 40px 58px 36px 66px; gap:6px; }   /* Nov 17: room for the DZ column, CLOSES stays on the row */
     .hub-r > span:last-child { font-size:.74rem; } .hub-cols { letter-spacing:.04em; }
     .hub-cols span:nth-child(3), .hub-r > span:nth-child(3) { display:none; }
     .hub.soonv .hub-cols, .hub.soonv .hub-r { grid-template-columns:minmax(0,1fr) 50px 44px 70px; }
@@ -1172,7 +1173,7 @@
         hubRows.innerHTML = soonList.length ? soonList.slice(0, 12).map(soonRow).join('') : '<p class="cal-none">No markets closing in the next few days.</p>';
         return;
       }
-      hubCols.innerHTML = '<span>CONTRACT</span><span>SIDE</span><span>PRICE</span><span title="After fees, if it resolves this way">RETURN</span><span title="DZ Grade: Liquidity + Rules">DZ</span><span>CLOSES</span>';
+      hubCols.innerHTML = '<span>CONTRACT</span><span>SIDE</span><span>PRICE</span><span title="After fees, if it resolves this way">RETURN</span><span title="DZ Grade: Liquidity + Rules" class="dzh">DZ<br>GRADE</span><span>CLOSES</span>';
       if (!exp) { hubRows.innerHTML = '<p class="cal-none">Loading&hellip;</p>'; return; }
       var long = hubTab === 'long';
       var list = exp.filter(function (x) { var dd = (new Date(x.close) - Date.now()) / 86400000;

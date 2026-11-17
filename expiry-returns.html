@@ -92,6 +92,11 @@
   .trk-big { display:flex; flex-wrap:wrap; gap:14px 34px; margin:12px 0 4px; }
   .trk-big div { min-width:130px; } .trk-big b { display:block; font:700 1.7rem "JetBrains Mono",monospace; color:var(--cyan); }
   .trk-big b.neg { color:#ff6b6b; } .trk-big span { color:var(--muted); font-size:.8rem; }
+  .trk-gc { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:10px 0 6px; }   /* Nov 17 (James): proof the grades work */
+  .trk-gc > div { border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:rgba(255,255,255,.02); }
+  .trk-gc .xg { display:inline-block; width:auto; font-size:.95rem; padding:2px 9px; } .trk-gc i { font-style:normal; color:var(--muted); font-size:.8rem; margin-left:6px; } .trk-gc b { display:block; margin-top:8px; font:700 1.35rem "JetBrains Mono",monospace; color:var(--text); }
+  .trk-gc span { display:block; color:var(--muted); font-size:.78rem; margin-top:2px; }
+  @media (max-width:640px) { .trk-gc { grid-template-columns:repeat(2,minmax(0,1fr)); } }
   .trk ul { list-style:none; padding:0; margin:8px 0 0; } .trk li { padding:7px 0; border-top:1px solid var(--line); font-size:.9rem; }
   .trk li small { color:var(--muted); font-family:"JetBrains Mono",monospace; }
   .qa { margin:10px 0; } .qa b { display:block; } .qa span { color:var(--muted); }
@@ -235,6 +240,9 @@
     <p class="sub" id="trk-sub">Loading…</p>
     <div class="trk-big" id="trk-big"></div>
     <p class="note" id="trk-grp"></p>
+    <div class="trk-gr" id="trk-gr" hidden><p class="tt-sub">RESULTS BY DZ GRADE</p>
+      <p class="sub">Do better grades pay out more often? We save each contract's DZ Grade on the day we list it, then record what happened. We started saving grades on Nov 17; some contracts listed before then have no grade and count only in the totals above.</p>
+      <div class="trk-gc" id="trk-gc"></div></div>
     <div id="trk-miss"></div>
   </section>
 
@@ -409,6 +417,15 @@
       });
       document.getElementById('trk-grp').textContent = parts.join(' · ');
     }
+    var by = m.by_grade || {}, wb = m.waiting_by_grade || {}, GMIN = 5, any = 0;
+    document.getElementById('trk-gc').innerHTML = ['A', 'B', 'C', 'D'].map(function (k) {
+      var x = by[k] || { n: 0 }, w = wb[k] || 0; any += x.n + w;
+      var big = x.n >= GMIN ? x.pct.toFixed(0) + '%' : '—';
+      var txt = x.n >= GMIN ? 'paid out (' + x.won + ' of ' + x.n + ')<br>$1 each: ' + (x.ret > 0 ? '+' : '') + x.ret.toFixed(1) + '%' + (w ? '<br>' + w + ' waiting' : '')
+                            : (x.n ? x.won + ' of ' + x.n + ' paid out so far' : 'none settled yet') + '<br>' + w + ' waiting · % shows after ' + GMIN + ' settle';
+      return '<div><span class="xg ' + k.toLowerCase() + '">' + k + '</span><i>' + { A: 'clean', B: 'solid', C: 'watch out', D: 'risky' }[k] + '</i><b>' + big + '</b><span>' + txt + '</span></div>';
+    }).join('');
+    if (any) document.getElementById('trk-gr').hidden = false;
     var miss = (d.misses || []).filter(function (x) { return !x.px; }).slice(0, 8);
     if (miss.length) document.getElementById('trk-miss').innerHTML = '<p class="tt-sub">MOST RECENT THAT DIDN\'T PAY OUT</p><ul>' + miss.map(function (x) {
       return '<li><a href="' + esc(x.u) + '" rel="nofollow noopener" target="_blank">' + esc(x.t) + '</a>' +
