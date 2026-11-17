@@ -4,7 +4,7 @@
 #   Yes holder sells into Yes bids. No holder sells into No bids
 #   (Polymarket: No bids = the Yes token's asks mirrored, 1 - price; Kalshi lists No bids directly).
 # Adds row["ex"] = {"usd": dollars, "px": lowest price counted (cents), "bid": best bid (cents), "g": "A".."D"}
-# to expiry.json. Alpha Arcade's book is on-chain (Fillable phase 2): no "ex", the page says "soon".
+# to expiry.json. Alpha Arcade (Nov 17): its on-chain book via the public Algorand indexer (fillable._alpha), Yes/No bids.
 # Public data only, read-only. Never raises: if a book can't be read the row just has no grade.
 import json
 import math
@@ -13,7 +13,7 @@ import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from fillable import _poly, _kalshi
+from fillable import _poly, _kalshi, _alpha
 
 WITHIN = 0.02            # count bids down to 2 cents under the best bid
 BUDGET = 120             # seconds; whatever isn't read by then gets no grade this run
@@ -34,7 +34,9 @@ def depth(site, row, tries=3):
 
 def _depth(site, row):
     """-> (usd, lowest price counted, best bid) for selling the row's side, or None if no bids."""
-    if site == "polymarket":
+    if site == "alpha":                                     # Nov 17: on-chain book, Yes and No bids listed separately
+        held = _alpha(row["id"])["yes" if row["side"] == "Yes" else "no"]
+    elif site == "polymarket":
         asks, bids = _poly(row["id"])                       # the Yes token's book
         held = bids if row["side"] == "Yes" else [(round(1 - p, 4), q) for p, q in asks]
     else:
@@ -72,9 +74,9 @@ def score(r):
 
 def curate(rows):
     """The top 50: no daily price markets, no D (hard to sell) grades, the best contract per market,
-    10 spots kept for Alpha Arcade (busiest first; their books aren't graded yet), the rest by score."""
+    10 spots kept for Alpha Arcade (busiest first, even with a thin book: the page says so), the rest by score."""
     ok = [r for r in rows if not (r["days"] < 3 and PX.search(r["title"] + " " + (r.get("cat") or "")))
-          and (r.get("ex") or {}).get("g") != "D"]
+          and (r["site"] == "alpha" or (r.get("ex") or {}).get("g") != "D")]   # Nov 17 (James): Alpha keeps its 10 spots even when its book is thin
     best = {}
     for r in ok:
         k = (r["site"], r["title"])
@@ -88,7 +90,7 @@ def curate(rows):
 
 def main(path="expiry.json"):
     d = json.load(open(path))
-    todo = [r for r in d["rows"] if r.get("site") in ("polymarket", "kalshi") and r.get("id")]
+    todo = [r for r in d["rows"] if r.get("site") in ("polymarket", "kalshi", "alpha") and r.get("id")]
     t0, done, fail, empty = time.time(), 0, 0, 0
     ex = ThreadPoolExecutor(WORKERS)
     futs = {ex.submit(depth, r["site"], r): r for r in todo}
@@ -116,7 +118,7 @@ def main(path="expiry.json"):
         print("Exit grade: %d of %d books read in %.0fs (%d failed, %d no bids) | $ depth p10 %s p25 %s p50 %s p75 %s p90 %s | grades %s"
               % (done, len(todo), time.time() - t0, fail, empty, pct(.1), pct(.25), pct(.5), pct(.75), pct(.9),
                  {g: sum(1 for r in todo if r.get("ex", {}).get("g") == g) for _, g in GRADES}))
-        for site in ("polymarket", "kalshi"):
+        for site in ("polymarket", "kalshi", "alpha"):
             v = sorted(r["ex"]["usd"] for r in todo if "ex" in r and r["site"] == site)
             if v:
                 print("  %s: n=%d median $%s p25 $%s p75 $%s" % (site, len(v), v[len(v) // 2], v[len(v) // 4], v[3 * len(v) // 4]))

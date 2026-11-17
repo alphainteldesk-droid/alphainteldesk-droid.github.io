@@ -16,6 +16,45 @@ def _get(url):
         return json.load(r)
 
 
+def _alpha(app_id):
+    """Nov 17: Alpha Arcade's book is on-chain. Every order is a small app created by the market app, so the
+    market app's address lists them (public Algorand indexer, no Alpha API key). Open limit orders only, as the
+    Alpha SDK reads them: position 1 = Yes, 0 = No; side 1 = buy, 0 = sell; price and quantity in millionths.
+    -> {"yes": [(price $, shares) high->low], "no": [...]} = what a holder of that side can sell into right now:
+    direct buyers of that side + sellers of the other side at 1 - price (Alpha's "complementary matching",
+    alpha-sdk utils/matching.ts). Wallet addresses are never read or kept."""
+    import base64, hashlib
+    pk = hashlib.new("sha512_256", b"appID" + int(app_id).to_bytes(8, "big")).digest()
+    addr = base64.b32encode(pk + hashlib.new("sha512_256", pk).digest()[-4:]).decode().rstrip("=")
+    out, nxt = {"yes": [], "no": []}, ""
+    for _ in range(10):                                     # 1,000 orders a page; 10 pages is far more than any market has
+        d = _get("https://mainnet-idx.algonode.cloud/v2/accounts/%s/created-applications?limit=1000%s"
+                 % (addr, "&next=" + nxt if nxt else ""))
+        apps = d.get("applications") or []
+        for a in apps:
+            if a.get("deleted"):
+                continue
+            g = {}
+            for kv in (a.get("params") or {}).get("global-state") or []:
+                k = base64.b64decode(kv["key"]).decode("latin1")
+                if k in ("price", "quantity", "quantity_filled", "side", "position", "slippage"):
+                    g[k] = kv["value"].get("uint", 0)
+            left = g.get("quantity", 0) - g.get("quantity_filled", 0)
+            if left <= 0 or g.get("slippage") != 0 or not g.get("price"):
+                continue
+            pos, p = ("yes" if g.get("position") == 1 else "no"), g["price"] / 1e6
+            if g.get("side") == 1:                          # a buy order: a holder of that side can sell to it
+                out[pos].append((p, left / 1e6))
+            else:                                           # a sell order: a holder of the OTHER side gets 1 - p (merge)
+                out["no" if pos == "yes" else "yes"].append((round(1 - p, 6), left / 1e6))
+        nxt = d.get("next-token") or ""
+        if len(apps) < 1000 or not nxt:
+            break
+    for k in out:
+        out[k].sort(reverse=True)
+    return out
+
+
 def _poly(token):
     """Polymarket CLOB book for one outcome token -> (asks low->high, bids high->low) as [(price $, shares)]."""
     d = _get("https://clob.polymarket.com/book?token_id=" + str(token))
