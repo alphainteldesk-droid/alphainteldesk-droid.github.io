@@ -1,28 +1,28 @@
 {
- "updated": "2026-11-18T07:00:07Z",
+ "updated": "2026-11-18T07:05:29Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
   {
    "title": "Next NVIDIA CEO: internal or external?",
-   "outcome": "External",
+   "outcome": "Internal",
    "close": "2029-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 50.5,
-    "kalshi": 67.0,
+    "polymarket": 44.5,
+    "kalshi": 27.5,
     "alpha": null
    },
    "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 50.5,
-    "url": "https://polymarket.com/event/next-nvidia-ceo-internal-or-external"
-   },
-   "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 67.0,
+    "price": 27.5,
     "url": "https://kalshi.com/markets/kxnvdaceohire"
+   },
+   "high": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 44.5,
+    "url": "https://polymarket.com/event/next-nvidia-ceo-internal-or-external"
    },
    "urls": {
     "polymarket": "https://polymarket.com/event/next-nvidia-ceo-internal-or-external",
@@ -36,13 +36,13 @@
     "polymarket": 12506,
     "kalshi": 1645
    },
-   "raw": 16.5,
-   "fees": 2.5,
-   "net": 14.0,
+   "raw": 17.0,
+   "fees": 2.4,
+   "net": 14.6,
    "all3": false,
-   "fee_low": 1.0,
-   "fee_high": 1.55,
-   "fair": 50.8,
+   "fee_low": 1.4,
+   "fee_high": 0.99,
+   "fair": 44.4,
    "grade": "B",
    "fine": {
     "src": "similar",
@@ -54,18 +54,10 @@
     ],
     "void": "none"
    },
-   "rate_low": 0.04,
-   "rate_high": 0.07,
+   "rate_low": 0.07,
+   "rate_high": 0.04,
    "category": "ceo",
-   "fill": {
-    "usd": 303,
-    "shares": 341,
-    "exec": 8.4
-   },
-   "chg": {
-    "polymarket": -0.5,
-    "kalshi": -3.0
-   }
+   "chg": {}
   },
   {
    "title": "Strait of Hormuz traffic returns to normal by...?",
@@ -225,61 +217,6 @@
    "rate_low": 0.04,
    "rate_high": 0.07,
    "category": "Politics",
-   "chg": {
-    "polymarket": 1.5
-   }
-  },
-  {
-   "title": "Which bills will become law in 2026?",
-   "outcome": "DEFIANCE Act",
-   "close": "2027-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 9.0,
-    "kalshi": 3.0,
-    "alpha": null
-   },
-   "low": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 3.0,
-    "url": "https://kalshi.com/markets/kxbills"
-   },
-   "high": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 9.0,
-    "url": "https://polymarket.com/event/which-bills-will-become-law-in-2026"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/which-bills-will-become-law-in-2026",
-    "kalshi": "https://kalshi.com/markets/kxbills"
-   },
-   "volumes": {
-    "polymarket": 219702,
-    "kalshi": 696897
-   },
-   "volumes24": {
-    "polymarket": 938,
-    "kalshi": 1028
-   },
-   "raw": 6.0,
-   "fees": 0.5,
-   "net": 5.5,
-   "all3": false,
-   "fee_low": 0.2,
-   "fee_high": 0.33,
-   "fair": 8.5,
-   "grade": "A",
-   "fine": {
-    "src": "match",
-    "srcs": [
-     "Congress"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.07,
-   "rate_high": 0.04,
-   "category": "Congress",
    "chg": {}
   },
   {
@@ -288,13 +225,13 @@
    "close": "2029-01-01T04:59:00Z",
    "prices": {
     "polymarket": 17.5,
-    "kalshi": 10.8,
+    "kalshi": 11.8,
     "alpha": null
    },
    "low": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 10.8,
+    "price": 11.8,
     "url": "https://kalshi.com/markets/kxcabout"
    },
    "high": {
@@ -315,13 +252,13 @@
     "polymarket": 55,
     "kalshi": 4783
    },
-   "raw": 6.7,
+   "raw": 5.7,
    "fees": 1.3,
-   "net": 5.4,
+   "net": 4.4,
    "all3": false,
-   "fee_low": 0.67,
+   "fee_low": 0.73,
    "fee_high": 0.58,
-   "fair": 15.7,
+   "fair": 15.9,
    "grade": "B",
    "fine": {
     "src": "unknown",
@@ -333,7 +270,9 @@
    "rate_low": 0.07,
    "rate_high": 0.04,
    "category": "Trump",
-   "chg": {}
+   "chg": {
+    "kalshi": 1.0
+   }
   },
   {
    "title": "Which companies will the US take a stake in?",
@@ -389,9 +328,66 @@
    "rate_low": 0.04,
    "rate_high": 0.07,
    "category": "Politics",
-   "chg": {
-    "polymarket": 1.5
-   }
+   "chg": {}
+  },
+  {
+   "title": "Gyanesh Kumar out as Chief Election Commissioner of India by December 31?",
+   "outcome": "Yes",
+   "close": "2027-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 6.5,
+    "kalshi": 10.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 6.5,
+    "url": "https://polymarket.com/event/gyanesh-kumar-out-as-chief-election-commissioner-of-india-by-december-31"
+   },
+   "high": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 10.5,
+    "url": "https://kalshi.com/markets/kxgyaneshout"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/gyanesh-kumar-out-as-chief-election-commissioner-of-india-by-december-31",
+    "kalshi": "https://kalshi.com/markets/kxgyaneshout"
+   },
+   "volumes": {
+    "polymarket": 47810,
+    "kalshi": 6248
+   },
+   "volumes24": {
+    "polymarket": 65,
+    "kalshi": 0
+   },
+   "raw": 4.0,
+   "fees": 0.9,
+   "net": 3.1,
+   "all3": false,
+   "fee_low": 0.24,
+   "fee_high": 0.66,
+   "fair": 6.6,
+   "grade": "B",
+   "fine": {
+    "src": "similar",
+    "srcs": [
+     "Credible reporting",
+     "Reuters"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.04,
+   "rate_high": 0.07,
+   "category": "India",
+   "fill": {
+    "usd": 12,
+    "shares": 12,
+    "exec": 2.1
+   },
+   "chg": {}
   },
   {
    "title": "US announces end of Iranian blockade by...?",
@@ -560,9 +556,7 @@
     "shares": 0,
     "exec": 1.5
    },
-   "chg": {
-    "kalshi": -1.0
-   }
+   "chg": {}
   }
  ]
 }
