@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-18T17:54:46Z",
+ "updated": "2026-11-18T18:06:01Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -70,7 +70,7 @@
    "close": "2029-01-01T04:59:00Z",
    "prices": {
     "polymarket": 5.5,
-    "kalshi": 15.5,
+    "kalshi": 15.0,
     "alpha": null
    },
    "low": {
@@ -82,7 +82,7 @@
    "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 15.5,
+    "price": 15.0,
     "url": "https://kalshi.com/markets/kxcabout"
    },
    "urls": {
@@ -95,15 +95,15 @@
    },
    "volumes24": {
     "polymarket": 823,
-    "kalshi": 6263
+    "kalshi": 6276
    },
-   "raw": 10.0,
+   "raw": 9.5,
    "fees": 1.1,
-   "net": 8.9,
+   "net": 8.4,
    "all3": false,
    "fee_low": 0.21,
-   "fee_high": 0.92,
-   "fair": 8.9,
+   "fee_high": 0.89,
+   "fair": 8.6,
    "grade": "B",
    "fine": {
     "src": "unknown",
@@ -115,7 +115,9 @@
    "rate_low": 0.04,
    "rate_high": 0.07,
    "category": "Trump",
-   "chg": {}
+   "chg": {
+    "kalshi": -0.5
+   }
   },
   {
    "title": "Next NVIDIA CEO: internal or external?",
@@ -147,8 +149,8 @@
     "kalshi": 4254
    },
    "volumes24": {
-    "polymarket": 9610,
-    "kalshi": 4101
+    "polymarket": 9570,
+    "kalshi": 4254
    },
    "raw": 11.0,
    "fees": 2.7,
@@ -172,7 +174,7 @@
    "rate_high": 0.07,
    "category": "ceo",
    "fill": {
-    "usd": 963,
+    "usd": 962,
     "shares": 1026,
     "exec": 5.3
    },
@@ -205,11 +207,11 @@
    },
    "volumes": {
     "polymarket": 15299,
-    "kalshi": 9353600
+    "kalshi": 9353611
    },
    "volumes24": {
     "polymarket": 496,
-    "kalshi": 39174
+    "kalshi": 41736
    },
    "raw": 10.0,
    "fees": 2.5,
@@ -287,9 +289,7 @@
     "shares": 72,
     "exec": 3.5
    },
-   "chg": {
-    "polymarket": 1.0
-   }
+   "chg": {}
   },
   {
    "title": "Iowa Republican Presidential Caucus Winner 2028",
@@ -348,59 +348,6 @@
     "shares": 41,
     "exec": 3.9
    },
-   "chg": {}
-  },
-  {
-   "title": "Top 5 Most Searched People on Google 2026",
-   "outcome": "Lula da Silva",
-   "close": "2026-12-31T23:59:00Z",
-   "prices": {
-    "polymarket": 32.0,
-    "kalshi": 24.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 24.5,
-    "url": "https://kalshi.com/markets/kxranklistgooglesearchtop5"
-   },
-   "high": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 32.0,
-    "url": "https://polymarket.com/event/top-5-most-searched-people-on-google-2026"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/top-5-most-searched-people-on-google-2026",
-    "kalshi": "https://kalshi.com/markets/kxranklistgooglesearchtop5"
-   },
-   "volumes": {
-    "polymarket": 107524,
-    "kalshi": 304513
-   },
-   "volumes24": {
-    "polymarket": 8989,
-    "kalshi": 25099
-   },
-   "raw": 7.5,
-   "fees": 2.4,
-   "net": 5.1,
-   "all3": false,
-   "fee_low": 1.29,
-   "fee_high": 1.09,
-   "fair": 28.9,
-   "grade": "A",
-   "fine": {
-    "src": "match",
-    "srcs": [
-     "Google Trends"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.07,
-   "rate_high": 0.05,
-   "category": "Tech",
    "chg": {}
   },
   {
@@ -488,11 +435,11 @@
    },
    "volumes": {
     "polymarket": 248620,
-    "kalshi": 1267796
+    "kalshi": 1267872
    },
    "volumes24": {
     "polymarket": 1230,
-    "kalshi": 8562
+    "kalshi": 8561
    },
    "raw": 5.2,
    "fees": 0.8,
@@ -516,6 +463,61 @@
    "rate_high": 0.07,
    "category": "Politics",
    "chg": {}
+  },
+  {
+   "title": "Top 5 Most Searched People on Google 2026",
+   "outcome": "Lula da Silva",
+   "close": "2026-12-31T23:59:00Z",
+   "prices": {
+    "polymarket": 30.5,
+    "kalshi": 24.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 24.5,
+    "url": "https://kalshi.com/markets/kxranklistgooglesearchtop5"
+   },
+   "high": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 30.5,
+    "url": "https://polymarket.com/event/top-5-most-searched-people-on-google-2026"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/top-5-most-searched-people-on-google-2026",
+    "kalshi": "https://kalshi.com/markets/kxranklistgooglesearchtop5"
+   },
+   "volumes": {
+    "polymarket": 107529,
+    "kalshi": 304607
+   },
+   "volumes24": {
+    "polymarket": 8989,
+    "kalshi": 25031
+   },
+   "raw": 6.0,
+   "fees": 2.4,
+   "net": 3.6,
+   "all3": false,
+   "fee_low": 1.29,
+   "fee_high": 1.06,
+   "fair": 28.0,
+   "grade": "A",
+   "fine": {
+    "src": "match",
+    "srcs": [
+     "Google Trends"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.07,
+   "rate_high": 0.05,
+   "category": "Tech",
+   "chg": {
+    "polymarket": -1.5
+   }
   },
   {
    "title": "US announces end of Iranian blockade by...?",
@@ -544,11 +546,11 @@
    },
    "volumes": {
     "alpha": 12916,
-    "polymarket": 53839863
+    "polymarket": 53843411
    },
    "volumes24": {
     "alpha": 5,
-    "polymarket": 124480
+    "polymarket": 115036
    },
    "raw": 3.4,
    "fees": 1.1,
