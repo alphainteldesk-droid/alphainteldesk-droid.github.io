@@ -35,7 +35,10 @@ def depth(site, row, tries=3):
 def _depth(site, row):
     """-> (usd, lowest price counted, best bid) for selling the row's side, or None if no bids."""
     if site == "alpha":                                     # Nov 17: on-chain book, Yes and No bids listed separately
-        held = _alpha(row["id"])["yes" if row["side"] == "Yes" else "no"]
+        book = _alpha(row["id"])
+        held = book["yes" if row["side"] == "Yes" else "no"]
+        asks = book["ask_yes" if row["side"] == "Yes" else "ask_no"]
+        row["_ask"] = (asks[0][0] * 100, sum(q for a, q in asks if a <= asks[0][0] + 1e-9)) if asks else None   # Nov 19: real best ask
     elif site == "polymarket":
         asks, bids = _poly(row["id"])                       # the Yes token's book
         held = bids if row["side"] == "Yes" else [(round(1 - p, 4), q) for p, q in asks]
@@ -88,6 +91,40 @@ def curate(rows):
     return sorted(alpha + rest, key=lambda r: r["days"])
 
 
+LO, HI = 80, 98.5        # same price window as match_markets.EXP_LO / EXP_HI
+
+
+def alpha_real_prices(rows):
+    """Nov 19 (James): Alpha Arcade rows used the last trade price ("est"). Now that we read Alpha's on-chain book,
+    use the real best ask (what you'd pay right now) and redo the fee, return and per-year figure from it.
+    No sellers at all: the row keeps the last price, stays "est" and says so. A real ask outside 80-98.5 or a
+    return under 0.3% drops the row, same rules as every other site."""
+    real = noask = gone = 0
+    for r in list(rows):
+        if r.get("site") != "alpha" or "_ask" not in r:
+            continue
+        got = r.pop("_ask")
+        if not got:
+            r["noask"] = True
+            noask += 1
+            continue
+        ask, q = got
+        p = ask / 100
+        fee = 100 * r["fr"] * p * (1 - p)
+        cost = ask + fee
+        ret = (100 - cost) / cost * 100
+        if not (LO <= ask <= HI) or ret < 0.3:
+            rows.remove(r)
+            gone += 1
+            continue
+        r.update(last=r["ask"], ask=round(ask, 1), fee=round(fee, 2), ret=round(ret, 2),
+                 apr=round(ret * 365 / r["days"]), est=False, askq=round(q))
+        real += 1
+    if real or noask or gone:
+        print("Danger Zone: Alpha real ask on %d rows, %d with no sellers (kept as est), %d dropped (real ask outside 80-98.5c or return under 0.3%%)"
+              % (real, noask, gone))
+
+
 def main(path="expiry.json"):
     d = json.load(open(path))
     todo = [r for r in d["rows"] if r.get("site") in ("polymarket", "kalshi", "alpha") and r.get("id")]
@@ -122,6 +159,12 @@ def main(path="expiry.json"):
             v = sorted(r["ex"]["usd"] for r in todo if "ex" in r and r["site"] == site)
             if v:
                 print("  %s: n=%d median $%s p25 $%s p75 $%s" % (site, len(v), v[len(v) // 2], v[len(v) // 4], v[3 * len(v) // 4]))
+    try:
+        alpha_real_prices(d["rows"])
+    except Exception as e:                             # never let this stop the Danger Zone building
+        print("Danger Zone: Alpha real ask skipped (%s)" % e)
+        for r in d["rows"]:
+            r.pop("_ask", None)
     d["all"] = d["rows"]                               # the full list stays in the file (the Daily Short falls back to it)
     d["rows"] = curate(d["rows"])
     from collections import Counter

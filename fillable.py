@@ -26,7 +26,7 @@ def _alpha(app_id):
     import base64, hashlib
     pk = hashlib.new("sha512_256", b"appID" + int(app_id).to_bytes(8, "big")).digest()
     addr = base64.b32encode(pk + hashlib.new("sha512_256", pk).digest()[-4:]).decode().rstrip("=")
-    out, nxt = {"yes": [], "no": []}, ""
+    out, nxt = {"yes": [], "no": [], "ask_yes": [], "ask_no": []}, ""
     for _ in range(10):                                     # 1,000 orders a page; 10 pages is far more than any market has
         d = _get("https://mainnet-idx.algonode.cloud/v2/accounts/%s/created-applications?limit=1000%s"
                  % (addr, "&next=" + nxt if nxt else ""))
@@ -43,15 +43,19 @@ def _alpha(app_id):
             if left <= 0 or g.get("slippage") != 0 or not g.get("price"):
                 continue
             pos, p = ("yes" if g.get("position") == 1 else "no"), g["price"] / 1e6
-            if g.get("side") == 1:                          # a buy order: a holder of that side can sell to it
+            other = "no" if pos == "yes" else "yes"
+            if g.get("side") == 1:                          # a buy order: a holder of that side can sell to it,
                 out[pos].append((p, left / 1e6))
-            else:                                           # a sell order: a holder of the OTHER side gets 1 - p (merge)
-                out["no" if pos == "yes" else "yes"].append((round(1 - p, 6), left / 1e6))
+                out["ask_" + other].append((round(1 - p, 6), left / 1e6))   # and a buyer of the other side gets it at 1 - p
+            else:                                           # a sell order: a holder of the OTHER side gets 1 - p (merge),
+                out[other].append((round(1 - p, 6), left / 1e6))
+                out["ask_" + pos].append((p, left / 1e6))   # and anyone can buy that side at p
+    # Nov 19: "ask_yes"/"ask_no" = what you'd pay to BUY each side right now, cheapest first (Danger Zone real prices)
         nxt = d.get("next-token") or ""
         if len(apps) < 1000 or not nxt:
             break
     for k in out:
-        out[k].sort(reverse=True)
+        out[k].sort(reverse=not k.startswith("ask_"))
     return out
 
 
