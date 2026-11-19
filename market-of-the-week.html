@@ -16,7 +16,7 @@
 <title>Market of the Week: One Prediction Market, Both Sides, Prices on Polymarket, Kalshi and Alpha Arcade | Alpha Intel Desk</title>
 <meta name="description" content="Each week Alpha Intel Desk picks one prediction market by formula: the case for YES and NO from public reporting, live prices on Polymarket, Kalshi and Alpha Arcade, the key dates, and a public archive of how every pick ended.">
 <link rel="canonical" href="https://alphainteldesk.com/market-of-the-week.html">
-<link rel="icon" type="image/svg+xml" href="logo.svg">
+<link rel="icon" type="image/svg+xml" href="/logo.svg">
 <meta property="og:title" content="Market of the Week by Alpha Intel Desk">
 <meta property="og:description" content="Real-time intelligence for prediction markets.">
 <meta property="og:image" content="https://alphainteldesk.com/card.jpg?v=202611101401">
@@ -25,94 +25,13 @@
 <meta name="twitter:site" content="@alphainteldesk">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<style>
-:root { --navy:#0b1420; --panel:#111d2c; --line:#1f3044; --cyan:#3fdbe6; --amber:#ffb347; --text:#e8eef5; --muted:#8fa3b8; --yes:#3ddc84; --no:#ff8a8a; }
-* { box-sizing:border-box; }
-body { margin:0; background:var(--navy); color:var(--text); font-family:"Space Grotesk",system-ui,sans-serif; line-height:1.6; }
-a { color:var(--cyan); text-decoration:none; }
-header { border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(11,20,32,.92); backdrop-filter:blur(8px); z-index:10; }
-.bar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 16px; max-width:1120px; margin:0 auto; }
-.brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:700; font-size:1.1rem; }
-.brand img { width:36px; height:36px; }
-nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; } nav a { color:var(--muted); } nav a.on { color:var(--text); }
-.wrap { max-width:1000px; margin:0 auto; padding:22px 16px 10px; }
-.mono { font-family:"JetBrains Mono",monospace; }
-.tag { font:500 .75rem "JetBrains Mono",monospace; letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
-.tag i { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--cyan); margin-right:8px; box-shadow:0 0 8px var(--cyan); }
-.tag.live { color:var(--cyan); margin-left:18px; }
-h1 { font-size:clamp(1.7rem,4.2vw,2.5rem); margin:8px 0 6px; line-height:1.15; }
-.why { color:var(--muted); font-size:1.1rem; margin:0 0 18px; max-width:780px; }
-.why b { color:var(--text); }
-h2 { font:700 .78rem "JetBrains Mono",monospace; letter-spacing:.16em; color:var(--amber); text-transform:uppercase; margin:30px 0 10px; }
-.panel { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
-/* price board */
-.board { display:grid; grid-template-columns:repeat(3,1fr) 1.15fr; gap:12px; }
-.px { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
-.px .v { font:500 .68rem "JetBrains Mono",monospace; letter-spacing:.16em; color:var(--cyan); }
-.px b { display:block; font:700 2rem "JetBrains Mono",monospace; margin:4px 0 0; }
-.px span { color:var(--muted); font-size:.8rem; }
-.px.off b { color:var(--muted); font-size:1.1rem; margin:12px 0 6px; }
-.px.sum { border-color:rgba(63,219,230,.45); }
-.px.sum b { font-size:1.3rem; color:var(--cyan); }
-.px.sum div { font-size:.85rem; color:var(--muted); margin-top:4px; } .px.sum div em { font-style:normal; color:var(--text); }
-/* both sides */
-.sides { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-.side { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
-.side.y { border-top:3px solid var(--yes); } .side.n { border-top:3px solid var(--no); }
-.side h3 { margin:0 0 8px; font-size:1.05rem; } .side.y h3 span { color:var(--yes); } .side.n h3 span { color:var(--no); }
-.side h3 small { float:right; font:600 .8rem "JetBrains Mono",monospace; color:var(--muted); }
-.side ul { margin:0; padding-left:18px; } .side li { margin:6px 0; color:#cdd8e4; }
-.side .sum { margin:10px 0 0; padding-top:10px; border-top:1px solid var(--line); font-size:.9rem; color:var(--muted); }
-/* timeline */
-.tl { display:grid; grid-template-columns:repeat(6,1fr); position:relative; margin-top:6px; }
-.tl:before { content:""; position:absolute; left:6%; right:6%; top:9px; height:2px; background:var(--line); }
-.tl div { position:relative; text-align:center; padding:0 4px; }
-.tl i { display:block; width:14px; height:14px; margin:2px auto 8px; border-radius:50%; background:var(--line); border:2px solid var(--navy); position:relative; }
-.tl .done i { background:var(--muted); } .tl .next i { background:var(--amber); box-shadow:0 0 10px var(--amber); } .tl .end i { background:var(--cyan); box-shadow:0 0 10px var(--cyan); }
-.tl b { display:block; font:700 .8rem "JetBrains Mono",monospace; } .tl span { display:block; color:var(--muted); font-size:.78rem; line-height:1.35; }
-.tl .next b { color:var(--amber); } .tl .end b { color:var(--cyan); } .tl .after { opacity:.55; }
-/* chart */
-svg { width:100%; height:auto; display:block; }
-svg .g { stroke:var(--line); } svg .ax { fill:var(--muted); font:11px "JetBrains Mono",monospace; text-anchor:end; } svg .ax.mid { text-anchor:middle; }
-svg .ln { fill:none; stroke:var(--cyan); stroke-width:2.5; } svg .mk { fill:var(--amber); } svg .now { fill:var(--cyan); stroke:var(--navy); stroke-width:2; }
-svg .lbl { fill:var(--amber); font:600 12px "JetBrains Mono",monospace; }
-.cnote { color:var(--muted); font-size:.82rem; margin:8px 0 0; }
-.legend { display:flex; gap:18px; font-size:.8rem; color:var(--muted); margin-bottom:6px; } .legend b { color:var(--cyan); }
-/* rules + formula */
-.two { display:grid; grid-template-columns:1.2fr 1fr; gap:14px; }
-.pay p { margin:0 0 8px; } .pay .src { color:var(--muted); font-size:.85rem; margin:0; }
-.pay .warn { border-left:3px solid var(--amber); padding:6px 10px; background:rgba(255,179,71,.07); font-size:.88rem; margin:10px 0 0; }
-.ok { list-style:none; margin:0; padding:0; } .ok li { padding:6px 0; border-top:1px solid var(--line); font-size:.9rem; display:flex; justify-content:space-between; gap:10px; }
-.ok li:first-child { border-top:0; } .ok li span:first-child:before { content:"✓ "; color:var(--yes); font-weight:700; }
-.ok li span:last-child { font-family:"JetBrains Mono",monospace; color:var(--muted); font-size:.82rem; }
-/* archive */
-table { width:100%; border-collapse:collapse; font-size:.9rem; }
-th { text-align:left; font:600 .68rem "JetBrains Mono",monospace; letter-spacing:.12em; color:var(--muted); padding:8px 10px; border-bottom:1px solid var(--line); }
-td { padding:10px; border-bottom:1px solid var(--line); } td.m { font-family:"JetBrains Mono",monospace; }
-.pill { font:700 .7rem "JetBrains Mono",monospace; padding:2px 8px; border-radius:4px; border:1px solid var(--amber); color:var(--amber); }
-.cta { display:flex; flex-wrap:wrap; gap:10px; margin:22px 0 0; }
-.btn { font:700 .8rem "JetBrains Mono",monospace; letter-spacing:.08em; padding:10px 16px; border-radius:8px; border:1px solid var(--cyan); color:var(--cyan); }
-.btn.solid { background:var(--cyan); color:var(--navy); }
-.disc { color:var(--muted); font-size:.78rem; border-top:1px solid var(--line); margin-top:28px; padding-top:12px; }
-.preview { background:#ffb347; color:#0b1420; text-align:center; font:700 .78rem "JetBrains Mono",monospace; letter-spacing:.12em; padding:6px; }
-@media (max-width:760px) { .board { grid-template-columns:1fr 1fr; } .sides, .two { grid-template-columns:1fr; } .tl { grid-template-columns:repeat(3,1fr); row-gap:14px; } .tl:before { display:none; } }
-
-.foot { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
-footer { border-top:1px solid var(--line); margin-top:48px; padding:24px 0 40px; color:var(--muted); font-size:.85rem; }
-footer .wrap { padding-top:0; } .social { display:flex; gap:16px; flex-wrap:wrap; }
-.verify { margin:26px 0 0; padding:14px 16px; border:1px solid rgba(255,179,71,.45); border-left:4px solid var(--amber); border-radius:8px; background:rgba(255,179,71,.07); }
-.verify b { color:var(--amber); } .verify p { margin:4px 0 0; color:#cdd8e4; font-size:.92rem; }
-.srcs { font-size:.72rem; margin-left:4px; white-space:nowrap; } .srcs a { color:var(--muted); margin-left:3px; } .srcs a:hover { color:var(--cyan); }
-.wait { color:var(--muted); border:1px dashed var(--line); border-radius:12px; padding:22px; text-align:center; }
-.chk { color:var(--muted); font-size:.75rem; font-family:"JetBrains Mono",monospace; }
-
-</style>
+<link rel="stylesheet" href="/motw.css?v=1">
 </head>
 <body>
 
 <header>
   <div class="bar">
-    <a class="brand" href="/"><img src="logo.svg" alt="">Alpha Intel Desk</a>
+    <a class="brand" href="/"><img src="/logo.svg" alt="">Alpha Intel Desk</a>
     <nav>
       <a href="/">Home</a>
       <a href="/gap-scanner.html">Gap Scanner</a>
@@ -149,109 +68,6 @@ footer .wrap { padding-top:0; } .social { display:flex; gap:16px; flex-wrap:wrap
   </div>
 </footer>
 
-<script>
-(function () {
-  function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
-  var SITES = ['alpha', 'polymarket', 'kalshi'], NAME = { alpha: 'ALPHA ARCADE', polymarket: 'POLYMARKET', kalshi: 'KALSHI' };
-  var COL = { alpha: '#3fdbe6', polymarket: '#8fa8ff', kalshi: '#3ddc84' }, LONG = { alpha: 'Alpha Arcade', polymarket: 'Polymarket', kalshi: 'Kalshi' };
-  function c(p) { return p == null ? '—' : (Math.round(p * 10) / 10) + '¢'; }
-  function day(t, y) { return new Date(t * 1000).toLocaleDateString('en-US', y ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' }); }
-  function money(v) { return v >= 1e6 ? '$' + (v / 1e6).toFixed(1) + 'M' : v >= 1e3 ? '$' + (v / 1e3).toFixed(1) + 'K' : '$' + Math.round(v); }
-  function srcs(list) {
-    return '<span class="srcs">' + (list || []).map(function (u, i) {
-      var h = u.split('/')[2].replace('www.', ''); return '<a href="' + esc(u) + '" rel="nofollow noopener" target="_blank" title="' + esc(h) + '">[' + (i + 1) + ']</a>';
-    }).join('') + '</span>';
-  }
-  var VERIFY = '<div class="verify"><b>Always verify the rules yourself.</b><p>We read every price twice and every point on this page has at least two independent sources, ' +
-    'but we can still be wrong, and sites can change their rules. Read the market\'s full rules on the site before you trade. Nothing here is a tip to buy or sell.</p></div>' +
-    '<p class="disc">Not financial advice. Both Sides is a summary of public reporting, not a prediction. Prices are midpoints and don\'t include spreads or fees. Referral links may earn us a commission.</p>';
-
-  function chart(cur) {
-    var s = cur.series || [];
-    if (s.length < 2) return '<p class="cnote">The chart starts building from the moment of the pick (one point an hour). Check back in a few hours.</p>';
-    var W = 1000, H = 230, L = 50, R = 20, T = 12, B = 30, t0 = s[0][0], t1 = s[s.length - 1][0], all = [];
-    s.forEach(function (r) { r.slice(1).forEach(function (p) { if (p != null) all.push(p); }); });
-    var lo = Math.floor((Math.min.apply(null, all) - 3) / 5) * 5, hi = Math.ceil((Math.max.apply(null, all) + 3) / 5) * 5;
-    var X = function (t) { return L + (t - t0) / Math.max(1, t1 - t0) * (W - L - R); }, Y = function (p) { return T + (hi - p) / (hi - lo) * (H - T - B); };
-    var g = '';
-    for (var v = lo; v <= hi; v += 5) g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" class="g"/><text x="' + (L - 8) + '" y="' + (Y(v) + 4) + '" class="ax">' + v + '¢</text>';
-    var step = Math.max(21600, Math.ceil((t1 - t0) / 5 / 86400) * 86400);
-    for (var t = Math.ceil(t0 / step) * step; t < t1 - step / 3; t += step) g += '<text x="' + X(t) + '" y="' + (H - 8) + '" class="ax mid">' +
-      new Date(t * 1000).toLocaleString('en-US', step < 86400 ? { month: 'short', day: 'numeric', hour: 'numeric' } : { month: 'short', day: 'numeric' }) + '</text>';
-    var lines = '', leg = [];
-    SITES.forEach(function (site, i) {
-      var d = '', n = 0;
-      s.forEach(function (r) { var p = r[i + 1]; if (p == null) return; d += (n++ ? 'L' : 'M') + X(r[0]).toFixed(1) + ',' + Y(p).toFixed(1); });
-      if (n > 1) { lines += '<path d="' + d + '" fill="none" stroke="' + COL[site] + '" stroke-width="2.5"/>'; leg.push('<span><b style="color:' + COL[site] + '">━</b> ' + LONG[site] + '</span>'); }
-    });
-    return '<div class="legend">' + leg.join('') + '<span>Picked ' + day(cur.picked) + ' · one point an hour until it settles</span></div>' +
-      '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="YES price on each site since the pick">' + g + lines + '</svg>';
-  }
-
-  fetch('motw.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
-    var m = document.getElementById('mw'), cur = d.current;
-    if (!cur) {
-      m.innerHTML = '<span class="tag">Market of the Week</span><h1>This week\'s pick is being verified</h1>' +
-        '<p class="wait">Our formula has a candidate. It goes live once two separate price checks, at least 30 minutes apart, agree. Usually within the hour.</p>' + VERIFY;
-      return;
-    }
-    var st = cur.story || {}, ps = cur.confirmed || cur.prices || {}, have = SITES.filter(function (s) { return ps[s] != null; });
-    var vals = have.map(function (s) { return ps[s]; }), mid = vals.reduce(function (a, b) { return a + b; }, 0) / vals.length;
-    var gap = Math.max.apply(null, vals) - Math.min.apply(null, vals), close = new Date(cur.close).getTime() / 1000 - 6 * 3600;   /* sites often stamp the end as the next morning UTC (Dec 31 11:59 PM ET = Jan 1 UTC) */
-    var left = Math.max(0, Math.round((close - Date.now() / 1000) / 86400));
-    var board = SITES.map(function (s) {
-      if (ps[s] == null) return '<div class="px off"><span class="v">' + NAME[s] + '</span><b>Not listed</b><span>No matching market</span></div>';
-      return '<div class="px"><span class="v">' + NAME[s] + '</span><b>' + c(ps[s]) + '</b><span>YES · <a href="' + esc(cur.urls[s]) + '" rel="nofollow noopener" target="_blank">open on ' + LONG[s] + '</a></span></div>';
-    }).join('') + '<div class="px sum"><span class="v">THE MARKET SAYS</span><b>~' + Math.round(mid) + '% YES</b><div>Price gap: <em>' + gap.toFixed(1) + '¢</em>' +
-      (gap < 3 ? ', too small to beat fees' : '') + '<br>Closes <em>' + day(close) + '</em> · ' + left + ' days left<br><span class="chk">checked twice · ' +
-      (cur.checked ? new Date(cur.checked * 1000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : 'at pick') + '</span></div></div>';
-    var side = function (k, label, p) {
-      var pts = st[k] || [];
-      if (!pts.length) return '<div class="side ' + k[0] + '"><h3>The case for <span>' + label + '</span> <small>~' + Math.round(p) + '¢</small></h3><p class="sum">Write-up coming. Every point needs two independent sources before it goes up.</p></div>';
-      return '<div class="side ' + k[0] + '"><h3>The case for <span>' + label + '</span> <small>~' + Math.round(p) + '¢</small></h3><ul>' +
-        pts.map(function (x) { return '<li>' + esc(x.t) + srcs(x.sources) + '</li>'; }).join('') + '</ul>' + (st[k + '_note'] ? '<p class="sum">' + esc(st[k + '_note']) + '</p>' : '') + '</div>';
-    };
-    var clock = (st.clock || []).slice(), html = '';
-    clock.push({ d: day(close), t: 'This market closes', s: 'end', at: 1 });
-    var order = { done: 0, next: 1, end: 2, after: 3 };
-    clock.sort(function (a, b) { return order[a.s] - order[b.s]; });
-    if (clock.length > 1) html = '<h2>The clock</h2><div class="panel"><div class="tl" style="grid-template-columns:repeat(' + clock.length + ',1fr)">' +
-      clock.map(function (x) { return '<div class="' + x.s + '"><i></i><b>' + esc(x.d) + '</b><span>' + esc(x.t) + '</span></div>'; }).join('') + '</div></div>';
-    var arch = [cur].concat(d.archive || []);
-    var rows = arch.map(function (a) {
-      var pp = a.picked_prices || a.prices || {}, nw = a === cur ? ps : (a.now || {}), f = SITES.filter(function (s) { return pp[s] != null; })[0];
-      var res = a.result ? '<span class="pill" style="border-color:' + (a.result === 'YES' ? '#3ddc84;color:#3ddc84' : '#ff8a8a;color:#ff8a8a') + '">' + a.result + '</span>' : '<span class="pill">' + (a === cur ? 'THIS WEEK' : 'OPEN') + '</span>';
-      return '<tr><td class="m">' + (a.n || '') + '</td><td class="m">' + day(a.picked) + '</td><td>' + esc(a.title) + '</td><td class="m">' + c(pp[f]) + ' <small class="chk">' + (f ? LONG[f] : '') + '</small></td><td class="m">' + c(nw[f]) + '</td><td>' + res + '</td></tr>';
-    }).join('');
-    var gd = { A: 'Grade A · same rules on each site', B: 'Grade B · checks passed, small differences' }[cur.grade] || cur.grade;
-    m.innerHTML = '<span class="tag">Market of the Week · #' + (cur.n || 1) + ' · picked ' + day(cur.picked) + '</span><span class="tag live"><i></i>Live prices</span>' +
-      '<h1>' + esc(cur.title) + '</h1>' + (st.hook ? '<p class="why">' + esc(st.hook) + '</p>' : '') +
-      '<div class="board">' + board + '</div>' +
-      '<h2>Both sides</h2><div class="sides">' + side('yes', 'YES', mid) + side('no', 'NO', 100 - mid) + '</div>' + html +
-      '<h2>Price since it was picked</h2><div class="panel">' + chart(cur) + '</div>' +
-      '<h2>What has to happen to get paid</h2><div class="two"><div class="panel pay">' +
-      (st.pay_yes ? '<p><b>' + esc(st.pay_yes) + '</b></p><p>' + esc(st.pay_no) + '</p><p class="src">' + esc(st.pay_src) + ' Rules: ' + esc(gd) + '.</p>' +
-        (st.watch ? '<p class="warn">' + esc(st.watch) + '</p>' : '') : '<p>Read the full rules on each site before you trade.</p><p class="src">Rules: ' + esc(gd) + '.</p>') +
-      '</div><div class="panel"><ul class="ok">' +
-      '<li><span>On ' + have.length + ' sites' + (ps.alpha != null ? ', Alpha included' : '') + '</span><span>' + have.map(function (s) { return LONG[s].split(' ')[0]; }).join(' · ') + '</span></li>' +
-      '<li><span>A real debate (30–70¢)</span><span>' + Math.round(mid) + '¢</span></li>' +
-      '<li><span>Settles in 2–8 weeks</span><span>' + (cur.days || left) + ' days</span></li>' +
-      '<li><span>Busy market</span><span>' + money(cur.vol24 || 0) + ' / 24h</span></li>' +
-      '<li><span>Clear rules</span><span>Grade ' + esc(cur.grade) + '</span></li>' +
-      '<li><span>Prices checked twice</span><span>within 3¢</span></li></ul>' +
-      '<p class="cnote">Picked automatically every Monday by this formula. No sports, no daily price markets, no repeats within 8 weeks.</p></div></div>' +
-      '<h2>Past picks</h2><div class="panel"><table><tr><th>#</th><th>PICKED</th><th>MARKET</th><th>PICKED AT</th><th>NOW</th><th>RESULT</th></tr>' + rows +
-      '</table><p class="cnote">Every pick stays here with its result, so you can see how the picks played out.</p></div>' +
-      '<div class="cta">' + have.map(function (s, i) { return '<a class="btn' + (i ? '' : ' solid') + '" href="' + esc(cur.urls[s]) + '" rel="nofollow noopener" target="_blank">Open on ' + LONG[s] + '</a>'; }).join('') +
-      '<a class="btn" href="#" id="mw-share">Share this pick</a><a class="btn" href="https://t.me/alphainteldesk">Get it on Telegram</a></div>' + VERIFY;
-    document.title = 'Market of the Week: ' + cur.title + ' | Alpha Intel Desk';
-    document.getElementById('mw-share').onclick = function (e) {
-      e.preventDefault(); var u = 'https://alphainteldesk.com/market-of-the-week.html', t = 'Market of the Week: ' + cur.title + ' Both sides + live prices';
-      if (navigator.share) navigator.share({ title: t, url: u }).catch(function () {});
-      else if (navigator.clipboard) navigator.clipboard.writeText(t + ' ' + u).then(function () { e.target.textContent = 'Link copied'; });
-    };
-  }).catch(function () { document.getElementById('mw').innerHTML = '<h1>Market of the Week</h1><p class="wait">Couldn\'t load this week\'s pick. Try again in a minute.</p>'; });
-})();
-</script>
+<script src="/motw.js?v=1"></script>
 </body>
 </html>

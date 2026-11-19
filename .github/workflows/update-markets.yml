@@ -78,5 +78,6 @@ jobs:
           [ -f expiry.json ] && git add expiry.json
           [ -f track.json ] && git add track.json
           [ -f rules.json ] && git add rules.json
-          [ -f motw.json ] && git add motw.json
+          [ -f motw.json ] && git add motw.json sitemap.xml
+          [ -d motw ] && git add motw
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -X theirs -q && git push)   # if another run pushed meanwhile, keep this run's fresher files

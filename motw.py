@@ -162,14 +162,66 @@ def story_for(key):
 
 
 def settle(entry, row):
-    """Result for an archived pick once its close date has passed: YES/NO when the price is decided."""
+    """Result once the close date has passed: YES/NO when every site is at 97c+ / 3c- on TWO readings in a row.
+    If the market has dropped out of the feeds, the last confirmed prices are used."""
     if entry.get("result") or ts(entry["close"]) is None or NOW < ts(entry["close"]):
         return
-    ps = snapshot(row) if row else {}
-    if ps and all(p >= 97 for p in ps.values()):
-        entry["result"] = "YES"
-    elif ps and all(p <= 3 for p in ps.values()):
-        entry["result"] = "NO"
+    ps = (snapshot(row) if row else {}) or entry.get("now") or {}
+    r = "YES" if ps and all(p >= 97 for p in ps.values()) else "NO" if ps and all(p <= 3 for p in ps.values()) else None
+    if r and entry.get("settle_seen") == r:
+        entry["result"] = r
+        entry["resolved"] = round(NOW)
+        print("Market of the Week: #%s settled %s (checked twice): %s" % (entry.get("n"), r, entry["title"]))
+    else:
+        entry["settle_seen"] = r
+        if not r:
+            print("Market of the Week: #%s closed, result not clear yet: %s %s" % (entry.get("n"), entry["title"], ps))
+
+
+def slugify(t):
+    import re
+    s = re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")
+    return s[:70].rstrip("-")
+
+
+def write_page(e):
+    """motw/<slug>.html: the main page's look, with the write-up written into the HTML for search engines;
+    motw.js then fills in live prices. Rewritten each run, so it always matches motw.json."""
+    import html as H, re
+    try:
+        tpl = open("market-of-the-week.html").read()
+    except Exception:
+        return
+    st = e.get("story") or {}
+    title = e["title"]
+    desc = (st.get("hook") or ("Market of the Week: " + title + " Both sides, live prices on each site and the key dates.")).replace('"', "'")
+    url = "https://alphainteldesk.com/motw/%s.html" % e["slug"]
+    pg = re.sub(r"<title>.*?</title>", "<title>%s Odds, Both Sides and Key Dates | Market of the Week | Alpha Intel Desk</title>" % H.escape(title.rstrip("?")), tpl, count=1, flags=re.S)
+    pg = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="%s">' % H.escape(desc[:300]), pg, count=1)
+    pg = pg.replace("https://alphainteldesk.com/market-of-the-week.html", url)
+    pg = pg.replace('content="Market of the Week by Alpha Intel Desk"', 'content="%s | Market of the Week"' % H.escape(title))
+    pg = pg.replace("<body>", '<body data-slug="%s">' % e["slug"], 1)
+    li = lambda pts: "".join("<li>%s</li>" % H.escape(p["t"]) for p in pts)
+    static = ('<p class="crumb"><a href="/market-of-the-week.html">&larr; Market of the Week</a></p>'
+              '<span class="tag">Market of the Week #%s &middot; picked %s</span><h1>%s</h1>%s'
+              '<h2>The case for YES</h2><ul>%s</ul><h2>The case for NO</h2><ul>%s</ul>%s'
+              % (e.get("n", ""), datetime.fromtimestamp(e["picked"], ET).strftime("%b %-d, %Y"), H.escape(title),
+                 '<p class="why">%s</p>' % H.escape(st["hook"]) if st.get("hook") else "", li(st.get("yes") or []), li(st.get("no") or []),
+                 '<p>%s</p><p>%s</p>' % (H.escape(st.get("pay_yes", "")), H.escape(st.get("pay_no", ""))) if st.get("pay_yes") else ""))
+    pg = re.sub(r'(<main class="wrap" id="mw">).*?(</main>)', lambda m: m.group(1) + static + m.group(2), pg, count=1, flags=re.S)
+    os.makedirs("motw", exist_ok=True)
+    path = "motw/%s.html" % e["slug"]
+    old = open(path).read() if os.path.exists(path) else None
+    if old != pg:
+        open(path, "w").write(pg)
+    try:                                                          # list it in the sitemap once
+        sm = open("sitemap.xml").read()
+        if url not in sm:
+            sm = sm.replace("</urlset>", "  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>\n</urlset>"
+                            % (url, datetime.now(timezone.utc).strftime("%Y-%m-%d")))
+            open("sitemap.xml", "w").write(sm)
+    except Exception:
+        pass
 
 
 def main():
@@ -209,7 +261,7 @@ def main():
                 cur["ended"] = round(NOW)
                 arch.insert(0, cur)
             cur = dict(nxt, prices=ps, picked=round(NOW), picked_prices=ps, confirmed=ps, last_read=ps,
-                       series=[[round(NOW)] + [ps.get(s) for s in SITES]], n=len(arch) + 1)
+                       series=[[round(NOW)] + [ps.get(s) for s in SITES]], n=len(arch) + 1, slug=slugify(nxt["title"]))
             cur.pop("staged", None)
             nxt = None
             print("Market of the Week: NEW PICK LIVE (approved): %s %s" % (cur["title"], ps))
@@ -234,14 +286,26 @@ def main():
             print("Market of the Week: current pick not in today's matches (kept, prices not updated)")
         cur["story"] = story_for(cur["key"])
 
-    # 3) archive: latest confirmed price + results once closed
+    # 3) previous picks keep updating until they settle (same verify-twice rule for prices and results)
     for a in arch:
+        if a.get("result"):
+            continue
         row = find(matches, a["key"])
         if row:
             ps = snapshot(row)
-            if ps:
+            if ps and agree(a.get("last_read") or {}, ps):
                 a["now"] = ps
+                if NOW - (a.get("series") or [[0]])[-1][0] >= 3300:
+                    a.setdefault("series", []).append([round(NOW)] + [ps.get(s) for s in SITES])
+                    a["series"] = a["series"][-24 * 90:]
+            a["last_read"] = ps
         settle(a, row)
+
+    # 4) a permanent page per pick (Nov 19, James: look back at every Market of the Week)
+    for e in ([cur] if cur else []) + arch:
+        if not e.get("slug"):
+            e["slug"] = slugify(e["title"])
+        write_page(e)
 
     st = {"updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "current": cur,
           "pending": pend, "next": nxt, "archive": arch[:60], "sites": NAMES,
