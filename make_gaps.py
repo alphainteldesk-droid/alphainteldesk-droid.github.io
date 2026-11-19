@@ -15,6 +15,7 @@ NOTE = ("Matches are automatic. Always check each site's rules before you trade.
 # ---------- filters (tune here) ----------
 MIN_PRICE, MAX_PRICE = 3, 97          # skip near-certain outcomes: tiny prices are noisy
 MAX_RAW_GAP = 35                      # bigger usually means a stale or mismatched market
+FLIP_GAP, FLIP_SUM = 20, 6            # Nov 19: a 20¢+ gap whose two prices add up to 94-106 is a Yes/No flip
 LONGSHOT = 10                         # if the lower price is under 10 cents...
 MAX_RATIO = 3                         # ...the higher one can't be more than 3x it (thin/stale book)
 MIN_NET_GAP = 1.0                     # points left after estimated fees
@@ -145,7 +146,7 @@ def lean_ok(row):
 def gaps(matches, alpha_fresh):
     out = []
     live = alpha_traded_48h()
-    skipped = {"combo": 0, "alpha_idle": 0, "brackets": 0, "wide": 0, "lean": 0}
+    skipped = {"combo": 0, "alpha_idle": 0, "brackets": 0, "wide": 0, "lean": 0, "flip": 0}
     for row in matches:
         if is_sports(row.get("categories") or []):
             continue
@@ -192,6 +193,9 @@ def gaps(matches, alpha_fresh):
             raw = ps[hi] - ps[lo]
             if raw > MAX_RAW_GAP:
                 continue
+            if raw >= FLIP_GAP and abs(ps[lo] + ps[hi] - 100) <= FLIP_SUM:
+                skipped["flip"] += 1
+                continue                               # Nov 19: big gap but the prices add to ~100 = opposite sides
             if ps[lo] < LONGSHOT and ps[hi] > MAX_RATIO * ps[lo]:
                 continue                               # long shot on one site, not on the other: thin book
             f_lo, f_hi = fee_pts(fee_rate(lo, row), ps[lo]), fee_pts(fee_rate(hi, row), ps[hi])
@@ -217,6 +221,7 @@ def gaps(matches, alpha_fresh):
     print("Gaps: left out %d combo markets, %d bracket mismatches, %d idle Alpha Arcade prices (no trade in 48h), "
           "%d prices with a bid/ask wider than %d cents, %d events where one site is higher on nearly every outcome"
           % (skipped["combo"], skipped["brackets"], skipped["alpha_idle"], skipped["wide"], MAX_SPREAD, skipped["lean"]))
+    print("Gaps: left out %d likely Yes/No flips (gap %d¢+, prices add to ~100)" % (skipped["flip"], FLIP_GAP))
     out.sort(key=lambda g: -g["net"])
     three = [g for g in out if g["all3"]]              # every all-three-sites gap, always shown first
     rest = [g for g in out if not g["all3"]]

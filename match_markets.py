@@ -521,12 +521,23 @@ def period_clash(t1, t2):
     return any(x and y and not (x & y) for x, y in zip(a, b))
 
 
+_NEG = re.compile(r"\b(no|not|none|never|nobody|neither|without)\b")
+
+
+def negated(label):
+    """Nov 19: True for outcome names that say something does NOT happen ("No solution by ...", "Not before 2027").
+    A plain "No" side is handled separately."""
+    t = (label or "").lower().strip()
+    return t != "no" and bool(_NEG.search(t))
+
+
 def by_date_label(label, outs, ends, a_end=0):
     """Alpha option 'December 31' -> the other site's market for the same deadline."""
     d = label_date(label, a_end or None)
     if d is None:
         return None
-    real = [k for k in outs if k.lower() != "no"]
+    # Nov 19: "No solution by Dec 31, 2027" is the opposite of "Before 2028" - the dates match, the sides don't
+    real = [k for k in outs if k.lower() != "no" and negated(k) == negated(label)]
     return by_deadline(real, ends, d)
 
 
@@ -550,6 +561,8 @@ def map_outcome(label, outs, ends=None, a_end=0):
             continue
         if numbers(label) and numbers(k) != numbers(label):
             continue                                   # Above 4% is not Above $150
+        if negated(k) != negated(label):
+            continue                                   # Nov 19: "No one" is not "Someone"
         s = (covers(label, key_words(k)), -len(kw))          # best match, then shortest label
         if s > bs:
             best, bs = k, s
