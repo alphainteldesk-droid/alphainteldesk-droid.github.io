@@ -691,6 +691,8 @@
   .gb-r:hover { background:rgba(63,219,230,.06); }
   .gb-m { min-width:0; } .gb-m b { display:block; font-weight:700; font-size:1.1cqw; color:#fff;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .gb-gr { font:800 .66cqw/1 "JetBrains Mono",monospace; letter-spacing:.06em; padding:.18cqw .35cqw; border-radius:3px; margin-right:.45cqw; color:#0b1420; vertical-align:.05cqw; }
+  .gb-gr.gr-A { background:#3ee88a; } .gb-gr.gr-B { background:#ffb347; } .gb-gr.gr-C, .gb-gr.gr-D { background:#ff8a8a; }
   .gb-m i { font-style:normal; font-size:.84cqw; color:#a9bccf; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
   .gb-more { display:flex; justify-content:space-between; align-items:center; gap:.6cqw; padding:.35cqw .5cqw; margin-top:.15cqw;
     border:1px dashed rgba(63,219,230,.4); border-radius:3px; color:var(--cyan); font:700 .82cqw "JetBrains Mono",monospace; letter-spacing:.04em; text-decoration:none; }
@@ -725,7 +727,7 @@
     .gb-h { flex-wrap:wrap; gap:4px; } .gb-t { font-size:12px; white-space:nowrap; } .gb-s { font-size:8px; } .gb-cols, .gb-r { grid-template-columns:1fr 38px 38px 38px 44px 24px; gap:5px; }
     .gb-tab { font-size:13px; padding:5px 9px; letter-spacing:.08em; } .gb-sh { font-size:12px; padding:4px 0; }
     .gb-why, .gb-d { font-size:9px; padding:3px 0; } .gb-s { text-align:left; white-space:normal; font-size:9px; }
-    .gb-cols { font-size:8px; } .gb-m b { font-size:12.5px; } .gb-m i { font-size:10.5px; }
+    .gb-cols { font-size:8px; } .gb-m b { font-size:12.5px; } .gb-m i { font-size:10.5px; } .gb-gr { font-size:8.5px; padding:2px 4px; margin-right:5px; vertical-align:1px; } .gb-gw { display:none; }
     .gb-more { font-size:11px; padding:8px; } .gb-more span { font-size:9.5px; white-space:nowrap; }
     .gb-p { font-size:12px; } .gb-p.na small { font-size:7.5px; } .gb-ch { font-size:8px; margin-left:1px; vertical-align:2px; } .gb-3 { font-size:8px; padding:1px 3px; margin-right:4px; vertical-align:1px; } .gb-g { font-size:12px; } .gb-empty { font-size:12px; }
     .gb-f { font-size:9.5px; flex-direction:column; align-items:flex-start; } .gb-go { font-size:10px; padding:5px 8px; }
@@ -780,6 +782,7 @@
       <a class="on" href="/">Home</a>
       <a href="/gap-scanner.html">Gap Scanner</a>
       <a href="/expiry-returns.html">Danger Zone</a>
+      <a href="/market-of-the-week.html">Market of the Week</a>
       <a href="#guides">Guides</a>
       <a href="/about.html">About</a>
     </nav>
@@ -1039,12 +1042,24 @@
 <main class="wrap">
 
   <section id="market-of-the-week">
-    <div class="card motw">
+    <a class="card motw" id="motw-card" href="/market-of-the-week.html" style="display:block;color:inherit;text-decoration:none">
       <span class="tag">Market of the Week</span>
-      <h3>Coming soon</h3>
-      <p class="soon">Each week the desk picks one market worth watching, with the odds
-         and what to look for.</p>
-    </div>
+      <h3>This week's pick</h3>
+      <p class="soon">One market a week, picked by formula: both sides, live prices on each site, and how every past pick ended.</p>
+    </a>
+    <script>   /* Nov 19 (James): live Market of the Week card */
+    fetch('motw.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+      var c = d.current; if (!c) return;
+      var e = function (t) { return String(t).replace(/[&<>"]/g, function (x) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[x]; }); };
+      var N = { alpha: 'Alpha Arcade', polymarket: 'Polymarket', kalshi: 'Kalshi' }, p = c.confirmed || c.prices || {};
+      var px = ['alpha', 'polymarket', 'kalshi'].filter(function (k) { return p[k] != null; })
+        .map(function (k) { return N[k] + ' <b style="color:var(--text);font-family:JetBrains Mono,monospace">' + Math.round(p[k]) + '¢</b>'; }).join(' · ');
+      var h = c.story && c.story.hook ? c.story.hook.split('. ')[0] + '.' : '';
+      document.getElementById('motw-card').innerHTML = '<span class="tag">Market of the Week · #' + (c.n || 1) + '</span><h3>' + e(c.title) + '</h3>' +
+        '<p class="soon" style="color:var(--muted)">' + e(h) + '</p><p style="margin:8px 0 0;font-size:.9rem;color:var(--muted)">YES: ' + px +
+        '</p><p style="margin:10px 0 0;color:var(--cyan);font-weight:700">See both sides &rarr;</p>';
+    }).catch(function () {});
+    </script>
   </section>
 
   <section id="guides">
@@ -1447,7 +1462,7 @@
     var txt = 'Price gap after est. fees: ' + x.net.toFixed(1) + '¢ on "' + x.title + '" (' + x.outcome + '): ' +
       x.low.name + ' ' + Math.round(x.low.price) + '¢ vs ' + x.high.name + ' ' + Math.round(x.high.price) +
       '¢. Check each site\'s rules. via @alphainteldesk';
-    return '<div class="gb-r"><a class="gb-m" href="/gap-scanner.html"><b>' + esc(x.title) + '</b><i>' + esc(sub) + '</i></a>' +
+    return '<div class="gb-r"><a class="gb-m" href="/gap-scanner.html"><b>' + esc(x.title) + '</b><i>' + (x.grade ? '<em class="gb-gr gr-' + esc(x.grade) + '" title="How well the two sites\' rules match (A = same source, B = checks passed, small differences)"><span class="gb-gw">GRADED </span>' + esc(x.grade) + '</em>' : '') + esc(sub) + '</i></a>' +   /* Nov 19 (James): rule grade on the homepage rows */
       cell('polymarket') + cell('kalshi') + cell('alpha') +
       '<span class="gb-g' + (x.fill && !x.fill.usd ? ' nofill' : '') + '" title="' + esc(x.fill ? (x.fill.usd ? 'Fillable ≈ $' + Math.round(x.fill.usd).toLocaleString('en-US') + ' at real buy and sell prices' : 'Not fillable right now at real buy and sell prices') : 'Gap after fees, at midpoint prices') + '">' + esc(x.net.toFixed(1)) + '&cent;</span>' + shareBtn(txt, SITE + 'gap-scanner.html') + '</div>';
   }

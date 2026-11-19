@@ -32,6 +32,8 @@ jobs:
         continue-on-error: true
       - run: python3 track_record.py   # Nov 15: Danger Zone track record (did listed contracts pay out?)
         continue-on-error: true
+      - run: python3 motw.py   # Nov 19: Market of the Week (formula pick, verified twice, hourly price, archive)
+        continue-on-error: true
       - run: |                    # share-preview images (card.jpg, card-gaps.jpg) for links posted on X etc.
           python3 -m pip install --quiet --break-system-packages pillow || python3 -m pip install --quiet pillow
           python3 make_card.py
@@ -76,4 +78,5 @@ jobs:
           [ -f expiry.json ] && git add expiry.json
           [ -f track.json ] && git add track.json
           [ -f rules.json ] && git add rules.json
+          [ -f motw.json ] && git add motw.json
           git diff --cached --quiet || (git commit -m "Update markets" && git pull --rebase -X theirs -q && git push)   # if another run pushed meanwhile, keep this run's fresher files
