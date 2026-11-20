@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T07:00:10Z",
+ "updated": "2026-11-20T07:09:28Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -59,9 +59,7 @@
     "shares": 69,
     "exec": 3.5
    },
-   "chg": {
-    "polymarket": -3.0
-   }
+   "chg": {}
   },
   {
    "title": "US announces end of Iranian blockade by...?",
@@ -311,11 +309,11 @@
    },
    "volumes": {
     "polymarket": 947489,
-    "kalshi": 1073432
+    "kalshi": 1073439
    },
    "volumes24": {
     "polymarket": 1964,
-    "kalshi": 2475
+    "kalshi": 2476
    },
    "raw": 7.5,
    "fees": 2.6,
@@ -340,12 +338,10 @@
    "category": "Post Election",
    "fill": {
     "usd": 12,
-    "shares": 12,
+    "shares": 13,
     "exec": 1.4
    },
-   "chg": {
-    "kalshi": 0.5
-   }
+   "chg": {}
   },
   {
    "title": "Anthropic announces a Millennium Prize solution by...?",
@@ -457,9 +453,69 @@
    "fill": {
     "usd": 0,
     "shares": 0,
-    "exec": -0.2
+    "exec": 1.9
    },
    "chg": {}
+  },
+  {
+   "title": "OpenAI announces another Millennium Prize solution by...?",
+   "outcome": "December 31, 2027",
+   "close": "2028-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 44.5,
+    "kalshi": 51.0,
+    "alpha": null
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 44.5,
+    "url": "https://polymarket.com/event/openai-announces-another-millennium-prize-solution-by"
+   },
+   "high": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 51.0,
+    "url": "https://kalshi.com/markets/kxopenaianothermillennium"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/openai-announces-another-millennium-prize-solution-by",
+    "kalshi": "https://kalshi.com/markets/kxopenaianothermillennium"
+   },
+   "volumes": {
+    "polymarket": 1265311,
+    "kalshi": 79039
+   },
+   "volumes24": {
+    "polymarket": 1520,
+    "kalshi": 30
+   },
+   "raw": 6.5,
+   "fees": 2.7,
+   "net": 3.8,
+   "all3": false,
+   "fee_low": 0.99,
+   "fee_high": 1.75,
+   "fair": 44.7,
+   "grade": "A",
+   "fine": {
+    "src": "match",
+    "srcs": [
+     "OpenAI"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.04,
+   "rate_high": 0.07,
+   "category": "AI",
+   "fill": {
+    "usd": 0,
+    "shares": 0,
+    "exec": -0.7
+   },
+   "chg": {
+    "kalshi": 0.5
+   }
   },
   {
    "title": "Will Trump cut corporate taxes before 2027?",
@@ -492,7 +548,7 @@
    },
    "volumes24": {
     "polymarket": 50,
-    "kalshi": 145
+    "kalshi": 57
    },
    "raw": 4.3,
    "fees": 0.5,
@@ -516,64 +572,6 @@
     "usd": 0,
     "shares": 0,
     "exec": -1.6
-   },
-   "chg": {}
-  },
-  {
-   "title": "OpenAI announces another Millennium Prize solution by...?",
-   "outcome": "December 31, 2027",
-   "close": "2028-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 44.5,
-    "kalshi": 50.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 44.5,
-    "url": "https://polymarket.com/event/openai-announces-another-millennium-prize-solution-by"
-   },
-   "high": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 50.5,
-    "url": "https://kalshi.com/markets/kxopenaianothermillennium"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/openai-announces-another-millennium-prize-solution-by",
-    "kalshi": "https://kalshi.com/markets/kxopenaianothermillennium"
-   },
-   "volumes": {
-    "polymarket": 1265311,
-    "kalshi": 79039
-   },
-   "volumes24": {
-    "polymarket": 1520,
-    "kalshi": 30
-   },
-   "raw": 6.0,
-   "fees": 2.7,
-   "net": 3.3,
-   "all3": false,
-   "fee_low": 0.99,
-   "fee_high": 1.75,
-   "fair": 44.7,
-   "grade": "A",
-   "fine": {
-    "src": "match",
-    "srcs": [
-     "OpenAI"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.04,
-   "rate_high": 0.07,
-   "category": "AI",
-   "fill": {
-    "usd": 0,
-    "shares": 0,
-    "exec": -1.7
    },
    "chg": {}
   }
