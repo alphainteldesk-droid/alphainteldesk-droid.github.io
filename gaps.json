@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T18:54:21Z",
+ "updated": "2026-11-20T19:12:12Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -8,20 +8,20 @@
    "outcome": "December 31, 2027",
    "close": "2028-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 72.5,
-    "kalshi": 95.5,
+    "polymarket": 73.0,
+    "kalshi": 96.0,
     "alpha": null
    },
    "low": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 72.5,
+    "price": 73.0,
     "url": "https://polymarket.com/event/anthropic-announces-a-millennium-prize-solution-byptptpt"
    },
    "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 95.5,
+    "price": 96.0,
     "url": "https://kalshi.com/markets/kxanthropicmillennium"
    },
    "urls": {
@@ -29,20 +29,20 @@
     "kalshi": "https://kalshi.com/markets/kxanthropicmillennium"
    },
    "volumes": {
-    "polymarket": 93499,
-    "kalshi": 55417
+    "polymarket": 93902,
+    "kalshi": 55524
    },
    "volumes24": {
-    "polymarket": 5248,
-    "kalshi": 30367
+    "polymarket": 5801,
+    "kalshi": 32541
    },
    "raw": 23.0,
    "fees": 1.1,
    "net": 21.9,
    "all3": false,
-   "fee_low": 0.8,
-   "fee_high": 0.3,
-   "fair": 80.8,
+   "fee_low": 0.79,
+   "fee_high": 0.27,
+   "fair": 81.3,
    "grade": "A",
    "fine": {
     "src": "match",
@@ -55,11 +55,14 @@
    "rate_high": 0.07,
    "category": "AI",
    "fill": {
-    "usd": 121,
-    "shares": 135,
-    "exec": 14.9
+    "usd": 249,
+    "shares": 280,
+    "exec": 18.8
    },
-   "chg": {}
+   "chg": {
+    "polymarket": 0.5,
+    "kalshi": 0.5
+   }
   },
   {
    "title": "Who will be the next to leave the Trump Cabinet?",
@@ -87,12 +90,12 @@
     "kalshi": "https://kalshi.com/markets/kxcabout"
    },
    "volumes": {
-    "polymarket": 37051,
+    "polymarket": 37061,
     "kalshi": 130945
    },
    "volumes24": {
-    "polymarket": 327,
-    "kalshi": 3406
+    "polymarket": 287,
+    "kalshi": 3663
    },
    "raw": 8.9,
    "fees": 1.1,
@@ -114,9 +117,7 @@
    "rate_low": 0.07,
    "rate_high": 0.04,
    "category": "Trump",
-   "chg": {
-    "kalshi": 0.9
-   }
+   "chg": {}
   },
   {
    "title": "OpenAI IPO by...?",
@@ -233,8 +234,123 @@
    "chg": {}
   },
   {
+   "title": "Two SpaceX Starships dock together by\u2026?",
+   "outcome": "Yes",
+   "close": "2028-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 69.5,
+    "kalshi": 77.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 69.5,
+    "url": "https://polymarket.com/event/two-spacex-starships-dock-together-by"
+   },
+   "high": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 77.5,
+    "url": "https://kalshi.com/markets/kxstarshipdock"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/two-spacex-starships-dock-together-by",
+    "kalshi": "https://kalshi.com/markets/kxstarshipdock"
+   },
+   "volumes": {
+    "polymarket": 102072,
+    "kalshi": 99044
+   },
+   "volumes24": {
+    "polymarket": 0,
+    "kalshi": 1309
+   },
+   "raw": 8.0,
+   "fees": 2.1,
+   "net": 5.9,
+   "all3": false,
+   "fee_low": 0.85,
+   "fee_high": 1.22,
+   "fair": 72.9,
+   "grade": "B",
+   "fine": {
+    "src": "similar",
+    "srcs": [
+     "AP",
+     "CBS",
+     "CNN",
+     "Credible reporting"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.04,
+   "rate_high": 0.07,
+   "category": "SpaceX",
+   "fill": {
+    "usd": 26,
+    "shares": 27,
+    "exec": 3.9
+   },
+   "chg": {
+    "kalshi": 1.0
+   }
+  },
+  {
+   "title": "US announces end of Iranian blockade by...?",
+   "outcome": "December 31, 2026",
+   "close": "2027-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 13.6,
+    "kalshi": null,
+    "alpha": 20.2
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 13.6,
+    "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
+   },
+   "high": {
+    "site": "alpha",
+    "name": "Alpha Arcade",
+    "price": 20.2,
+    "url": "https://www.alphaarcade.com/market/us-announces-end-iranian-blockade-sep-2026"
+   },
+   "urls": {
+    "alpha": "https://www.alphaarcade.com/market/us-announces-end-iranian-blockade-sep-2026",
+    "polymarket": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
+   },
+   "volumes": {
+    "alpha": 12916,
+    "polymarket": 54356689
+   },
+   "volumes24": {
+    "alpha": 436,
+    "polymarket": 215078
+   },
+   "raw": 6.6,
+   "fees": 1.1,
+   "net": 5.5,
+   "all3": false,
+   "fee_low": 0.0,
+   "fee_high": 1.13,
+   "fair": 13.6,
+   "grade": "A",
+   "fine": {
+    "src": "match",
+    "srcs": [],
+    "void": "none",
+    "twin": true
+   },
+   "rate_low": 0.0,
+   "rate_high": 0.07,
+   "category": "Politics",
+   "chg": {}
+  },
+  {
    "title": "Trump declares a national emergency by...?",
-   "outcome": "December 31",
+   "outcome": "Yes",
    "close": "2027-01-01T04:59:00Z",
    "prices": {
     "polymarket": 11.5,
@@ -291,58 +407,6 @@
    "chg": {}
   },
   {
-   "title": "US announces end of Iranian blockade by...?",
-   "outcome": "December 31, 2026",
-   "close": "2027-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 13.7,
-    "kalshi": null,
-    "alpha": 20.2
-   },
-   "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 13.7,
-    "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
-   },
-   "high": {
-    "site": "alpha",
-    "name": "Alpha Arcade",
-    "price": 20.2,
-    "url": "https://www.alphaarcade.com/market/us-announces-end-iranian-blockade-sep-2026"
-   },
-   "urls": {
-    "alpha": "https://www.alphaarcade.com/market/us-announces-end-iranian-blockade-sep-2026",
-    "polymarket": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
-   },
-   "volumes": {
-    "alpha": 12916,
-    "polymarket": 54349239
-   },
-   "volumes24": {
-    "alpha": 438,
-    "polymarket": 213580
-   },
-   "raw": 6.5,
-   "fees": 1.1,
-   "net": 5.4,
-   "all3": false,
-   "fee_low": 0.0,
-   "fee_high": 1.13,
-   "fair": 13.7,
-   "grade": "A",
-   "fine": {
-    "src": "match",
-    "srcs": [],
-    "void": "none",
-    "twin": true
-   },
-   "rate_low": 0.0,
-   "rate_high": 0.07,
-   "category": "Politics",
-   "chg": {}
-  },
-  {
    "title": "Pete Hegseth impeached by...?",
    "outcome": "June 30, 2027",
    "close": "2027-07-01T03:59:00Z",
@@ -373,7 +437,7 @@
    },
    "volumes24": {
     "polymarket": 3159,
-    "kalshi": 1435
+    "kalshi": 1426
    },
    "raw": 8.0,
    "fees": 2.6,
@@ -404,79 +468,79 @@
    "chg": {}
   },
   {
-   "title": "Two SpaceX Starships dock together by\u2026?",
+   "title": "Will Trump be impeached before his term ends?",
    "outcome": "Yes",
-   "close": "2028-01-01T04:59:00Z",
+   "close": "2029-01-20T17:00:00Z",
    "prices": {
-    "polymarket": 69.5,
-    "kalshi": 76.5,
+    "polymarket": 74.0,
+    "kalshi": 67.5,
     "alpha": null
    },
    "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 69.5,
-    "url": "https://polymarket.com/event/two-spacex-starships-dock-together-by"
-   },
-   "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 76.5,
-    "url": "https://kalshi.com/markets/kxstarshipdock"
+    "price": 67.5,
+    "url": "https://kalshi.com/markets/kximpeach"
+   },
+   "high": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 74.0,
+    "url": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends"
    },
    "urls": {
-    "polymarket": "https://polymarket.com/event/two-spacex-starships-dock-together-by",
-    "kalshi": "https://kalshi.com/markets/kxstarshipdock"
+    "polymarket": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends",
+    "kalshi": "https://kalshi.com/markets/kximpeach"
    },
    "volumes": {
-    "polymarket": 102072,
-    "kalshi": 99044
+    "polymarket": 151337,
+    "kalshi": 1077360
    },
    "volumes24": {
-    "polymarket": 0,
-    "kalshi": 1309
+    "polymarket": 4161,
+    "kalshi": 5440
    },
-   "raw": 7.0,
-   "fees": 2.1,
-   "net": 4.9,
+   "raw": 6.5,
+   "fees": 2.3,
+   "net": 4.2,
    "all3": false,
-   "fee_low": 0.85,
-   "fee_high": 1.26,
-   "fair": 72.5,
+   "fee_low": 1.54,
+   "fee_high": 0.77,
+   "fair": 68.6,
    "grade": "B",
    "fine": {
     "src": "similar",
     "srcs": [
-     "AP",
-     "CBS",
-     "CNN",
+     "Congress",
      "Credible reporting"
     ],
     "void": "none"
    },
-   "rate_low": 0.04,
-   "rate_high": 0.07,
-   "category": "SpaceX",
+   "rate_low": 0.07,
+   "rate_high": 0.04,
+   "category": "Politics",
    "fill": {
-    "usd": 50,
-    "shares": 53,
-    "exec": 2.9
+    "usd": 14,
+    "shares": 15,
+    "exec": 1.7
    },
-   "chg": {}
+   "chg": {
+    "polymarket": 0.5
+   }
   },
   {
    "title": "OpenAI announces another Millennium Prize solution by...?",
    "outcome": "December 31, 2026",
    "close": "2028-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 7.8,
+    "polymarket": 8.2,
     "kalshi": 12.5,
     "alpha": null
    },
    "low": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 7.8,
+    "price": 8.2,
     "url": "https://polymarket.com/event/openai-announces-another-millennium-prize-solution-by"
    },
    "high": {
@@ -494,16 +558,16 @@
     "kalshi": 84757
    },
    "volumes24": {
-    "polymarket": 8629,
-    "kalshi": 4111
+    "polymarket": 11448,
+    "kalshi": 5748
    },
-   "raw": 4.7,
+   "raw": 4.3,
    "fees": 1.1,
-   "net": 3.6,
+   "net": 3.2,
    "all3": false,
-   "fee_low": 0.29,
+   "fee_low": 0.3,
    "fee_high": 0.77,
-   "fair": 7.8,
+   "fair": 8.2,
    "grade": "A",
    "fine": {
     "src": "match",
@@ -516,67 +580,6 @@
    "rate_high": 0.07,
    "category": "AI",
    "chg": {}
-  },
-  {
-   "title": "Will Trump be impeached before his term ends?",
-   "outcome": "Yes",
-   "close": "2029-01-20T17:00:00Z",
-   "prices": {
-    "polymarket": 73.5,
-    "kalshi": 67.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 67.5,
-    "url": "https://kalshi.com/markets/kximpeach"
-   },
-   "high": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 73.5,
-    "url": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends",
-    "kalshi": "https://kalshi.com/markets/kximpeach"
-   },
-   "volumes": {
-    "polymarket": 151337,
-    "kalshi": 1077285
-   },
-   "volumes24": {
-    "polymarket": 4161,
-    "kalshi": 5498
-   },
-   "raw": 6.0,
-   "fees": 2.3,
-   "net": 3.7,
-   "all3": false,
-   "fee_low": 1.54,
-   "fee_high": 0.78,
-   "fair": 68.5,
-   "grade": "B",
-   "fine": {
-    "src": "similar",
-    "srcs": [
-     "Congress",
-     "Credible reporting"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.07,
-   "rate_high": 0.04,
-   "category": "Politics",
-   "fill": {
-    "usd": 0,
-    "shares": 0,
-    "exec": 0.7
-   },
-   "chg": {
-    "polymarket": -0.5
-   }
   }
  ]
 }
