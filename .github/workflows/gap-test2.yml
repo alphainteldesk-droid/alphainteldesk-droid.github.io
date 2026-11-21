@@ -7,5 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: python3 make_gaps.py 2>&1 | grep -i "Alpha book\|Alpha no real\|left out\|Gaps: [0-9]" ; python3 -c "import json;[print('NOW ', g['title'][:50],'|',g['outcome'][:20],g['prices'],'net',g['net']) for g in json.load(open('gaps.json'))['gaps'] if g['prices'].get('alpha')]"
-      - run: ALPHA_IDLE_OFF=1 python3 make_gaps.py 2>&1 | grep -i "Alpha book\|Alpha no real\|left out\|Gaps: [0-9]" ; python3 -c "import json;[print('TEST', g['title'][:50],'|',g['outcome'][:20],g['prices'],'net',g['net'],g['grade']) for g in json.load(open('gaps.json'))['gaps'] if g['prices'].get('alpha')]"
+      - name: now
+        run: |
+          python3 make_gaps.py 2>&1 | grep -i -E "Alpha book|Alpha no real|left out|Gaps: [0-9]" || true
+          python3 -c "import json;[print('NOW ', g['title'][:50],'|',g['outcome'][:20],g['prices'],'net',g['net']) for g in json.load(open('gaps.json'))['gaps'] if g['prices'].get('alpha')]"
+      - name: test
+        run: |
+          ALPHA_IDLE_OFF=1 python3 make_gaps.py 2>&1 | grep -i -E "Alpha book|Alpha no real|left out|Gaps: [0-9]" || true
+          python3 -c "import json;[print('TEST', g['title'][:50],'|',g['outcome'][:20],g['prices'],'net',g['net'],g['grade']) for g in json.load(open('gaps.json'))['gaps'] if g['prices'].get('alpha')]"
