@@ -1,0 +1,18 @@
+/* Nov 21, 2026 (James): shared top-menu extras on every page: Tools dropdown + Telegram button */
+nav { align-items:center; }
+nav .nt { position:relative; }
+nav .nt > summary { list-style:none; cursor:pointer; color:var(--muted, #8fa3b8); }
+nav .nt > summary::-webkit-details-marker { display:none; }
+nav .nt > summary::after { content:" ▾"; font-size:.8em; }
+nav .nt[open] > summary, nav .nt > summary:hover, nav .nt.on > summary { color:var(--text, #e8eef5); }
+nav .nt-m { position:absolute; top:calc(100% + 10px); left:-12px; z-index:50; min-width:230px; padding:6px;
+  background:#0b1420; border:1px solid rgba(63,219,230,.4); border-radius:8px; box-shadow:0 12px 30px rgba(0,0,0,.6), 0 0 14px rgba(63,219,230,.12); }
+nav .nt-m a { display:block; padding:8px 10px; border-radius:5px; color:var(--text, #e8eef5) !important; white-space:nowrap; text-decoration:none !important; }
+nav .nt-m a small { display:block; color:var(--muted, #8fa3b8); font-size:.76rem; }
+nav .nt-m a:hover { background:rgba(63,219,230,.1); }
+nav a.nav-tg { color:#3fdbe6 !important; border:1px solid rgba(63,219,230,.5); border-radius:6px; padding:4px 10px; background:rgba(63,219,230,.06); }
+nav a.nav-tg:hover { background:rgba(63,219,230,.14); text-decoration:none; }
+@media (max-width:640px) {
+  nav a.nav-home { display:none; }               /* the logo already goes home */
+  nav .nt-m { left:0; right:auto; min-width:min(260px, calc(100vw - 32px)); }
+}
