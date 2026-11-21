@@ -144,6 +144,7 @@ def lean_ok(row):
 
 
 _BOOKS = {}
+ALPHA_RESERVED_MIN = 2.0               # Nov 21 (James): an Alpha gap only gets the reserved spot at 2c+ after fees
 MIN_BOOK_USD = 10                      # Nov 21: Alpha book price must have at least $10 of orders behind it
 
 
@@ -276,7 +277,7 @@ def gaps(matches, alpha_fresh):
     three = [g for g in out if g["all3"]]              # every all-three-sites gap, always shown first
     rest = [g for g in out if not g["all3"]]
     has_a = [g for g in rest if g["prices"].get("alpha") is not None]
-    keep = has_a[:MIN_ALPHA_ROWS]
+    keep = [g for g in has_a if g["net"] >= ALPHA_RESERVED_MIN][:MIN_ALPHA_ROWS]   # Nov 21 (James): reserved spot needs 2c+
     keep += [g for g in rest if g not in keep][:TOP - len(keep)]
     keep.sort(key=lambda g: -g["net"])
     return three + keep
