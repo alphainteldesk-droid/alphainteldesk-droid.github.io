@@ -552,12 +552,17 @@
   .mw-p .lb { font:700 .7rem "JetBrains Mono",monospace; letter-spacing:.16em; color:var(--cyan); margin:0 0 8px; }
   .mw-t { font-size:1.35rem; font-weight:700; line-height:1.25; margin:0 0 8px; color:var(--text); }
   .mw-t a { color:inherit; } .mw-hook { color:var(--muted); font-size:.93rem; margin:0 0 12px; }
-  .mw-px { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:8px; }
+  .mw-px { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
   .mw-px div { border:1px solid rgba(143,163,184,.22); border-radius:5px; padding:8px 10px; background:rgba(0,0,0,.25); }
   .mw-px span { display:block; font:700 .62rem "JetBrains Mono",monospace; letter-spacing:.12em; }
   .mw-px b { display:block; font:800 1.45rem "JetBrains Mono",monospace; color:var(--text); }
   .mw-px small { font:600 .72rem "JetBrains Mono",monospace; color:var(--muted); }
   .mw-px .up { color:#3ee88a; } .mw-px .dn { color:#ff7a7a; }
+  .mw-row { display:flex; justify-content:space-between; align-items:baseline; gap:6px; margin:4px 0 0; }
+  .mw-row i { font:700 .6rem "JetBrains Mono",monospace; letter-spacing:.1em; color:var(--muted); font-style:normal; }
+  .mw-row em { font:700 .95rem "JetBrains Mono",monospace; color:var(--muted); font-style:normal; }
+  .mw-row.now b { font-size:1.35rem; } .mw-px small { display:block; margin-top:4px; } .mw-px small em { font-style:normal; }
+  .mw-px .off { opacity:.5; } .mw-na { margin:10px 0 0; font:600 .8rem "JetBrains Mono",monospace; color:var(--muted); }
   .mw-svg { width:100%; height:auto; display:block; } .mw-svg .g { stroke:rgba(143,163,184,.15); } .mw-svg text { fill:#8fa3b8; font:11px "JetBrains Mono",monospace; }
   .mw-leg { display:flex; flex-wrap:wrap; gap:4px 14px; font-size:.78rem; color:var(--muted); margin-top:6px; }
   .mw-dates { list-style:none; margin:0; padding:0; }
@@ -571,7 +576,7 @@
   .mw-cta .go:hover { box-shadow:0 0 22px rgba(255,179,71,.6); }
   .mw-cta .ghost { color:var(--cyan); border:1px solid rgba(63,219,230,.45); }
   @media (max-width:980px) { .mw-g { grid-template-columns:1fr 1fr; } .mw-g .mw-p:first-child { grid-column:1 / -1; } }
-  @media (max-width:640px) { .mw { margin:12px 8px 0; } .mw-g { grid-template-columns:1fr; } }
+  @media (max-width:640px) { .mw { margin:12px 8px 0; } .mw-g { grid-template-columns:1fr; } .mw-px { grid-template-columns:1fr; } .mw-px .off span, .mw-px .off .mw-na { display:inline; margin:0 8px 0 0; } }
   .split { max-width:1400px; margin:18px auto 0; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:18px; align-items:stretch; }
   .split > .calsec { margin:0; max-width:none; display:flex; flex-direction:column; }
   .split .cal-g { grid-template-columns:1fr; max-height:640px; overflow-y:auto; padding-right:6px; flex:none; align-content:start;
@@ -1105,10 +1110,14 @@
     var cl = new Date(new Date(c.close).getTime() - 6 * 3600e3);
     document.getElementById('mw-when').textContent = 'Picked ' + new Date(c.picked * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) +
       ' · closes ' + cl.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + '.';
-    document.getElementById('mw-px').innerHTML = S.filter(function (k) { return p[k] != null; }).map(function (k) {
-      var ch = p0[k] != null ? p[k] - p0[k] : null;
-      return '<div><span style="color:' + C[k] + '">' + N[k] + '</span><b>' + Math.round(p[k] * 10) / 10 + '¢</b><small>YES · ' +
-        (ch == null || Math.abs(ch) < 0.05 ? 'flat since pick' : '<em class="' + (ch > 0 ? 'up' : 'dn') + '">' + (ch > 0 ? '▲ +' : '▼ ') + ch.toFixed(1) + '¢</em> since pick') + '</small></div>'; }).join('');
+    var pd = new Date(c.picked * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });   /* Nov 21 (James): price at the pick vs now, per site */
+    document.getElementById('mw-px').innerHTML = S.map(function (k) {
+      if (p[k] == null) return '<div class="off"><span style="color:' + C[k] + '">' + N[k] + '</span><p class="mw-na">Not listed</p></div>';
+      var f = function (v) { return v == null ? '—' : (Math.round(v * 10) / 10) + '¢'; }, ch = p0[k] != null ? p[k] - p0[k] : null;
+      return '<div><span style="color:' + C[k] + '">' + N[k] + '</span>' +
+        '<p class="mw-row"><i>PICKED</i><em>' + f(p0[k]) + '</em></p>' +
+        '<p class="mw-row now"><i>NOW</i><b>' + f(p[k]) + '</b></p>' +
+        '<small>' + (ch == null ? '' : Math.abs(ch) < 0.05 ? 'No change' : '<em class="' + (ch > 0 ? 'up' : 'dn') + '">' + (ch > 0 ? '▲ +' : '▼ ') + ch.toFixed(1) + '¢</em> since ' + e(pd)) + '</small></div>'; }).join('');
     var s = c.series || [], box = document.getElementById('mw-chart');
     if (s.length < 2) box.innerHTML = '<p class="mw-hook">The chart fills in hourly from the moment of the pick.</p>';
     else {
