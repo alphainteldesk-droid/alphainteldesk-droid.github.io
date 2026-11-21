@@ -1,0 +1,34 @@
+name: gap-test (throwaway)
+on:
+  push:
+    branches: [gap-test]
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          import json
+          a=json.load(open('alpha_live.json'))
+          apps={}
+          for m in a['markets']:
+              u="https://www.alphaarcade.com/market/"+(m.get('slug') or '')
+              ops=m.get('options') or []
+              d={o.get('label'):o.get('marketAppId') for o in ops}
+              if len(ops)==1 or all((o.get('label') or '').lower() in ('yes','no') for o in ops):
+                  y=next((o for o in ops if (o.get('label') or '').lower()=='yes'), ops[0] if ops else {})
+                  d={'__yes__':y.get('marketAppId')}
+              apps[u]=d
+          mj=json.load(open('matches.json'))
+          for r in mj['matches']:
+              x=r['sites'].get('alpha')
+              if not x: continue
+              d=apps.get(x['url'],{})
+              if '__yes__' in d: d={k:d['__yes__'] for k in x['outcomes']}
+              x['apps']=d
+          json.dump(mj,open('matches.json','w'))
+          print('apps injected')
+          PY
+      - run: python3 make_gaps.py 2>&1 | grep -v "FILL" | tail -40
+      - run: python3 -c "import json;[print(g['title'][:50],g['outcome'][:20],g['prices']) for g in json.load(open('gaps.json'))['gaps']]"
