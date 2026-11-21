@@ -184,6 +184,9 @@ def alpha_book_mid(alpha, outcome):
 def gaps(matches, alpha_fresh):
     out = []
     live = alpha_traded_48h()
+    import os
+    if os.environ.get("ALPHA_IDLE_OFF"):
+        live = None                                    # TEST: rely on the on-chain book check instead
     skipped = {"combo": 0, "alpha_idle": 0, "brackets": 0, "wide": 0, "lean": 0, "flip": 0, "alpha_book": 0}
     for row in matches:
         if is_sports(row.get("categories") or []):
