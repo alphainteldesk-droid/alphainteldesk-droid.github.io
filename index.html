@@ -585,6 +585,17 @@
   .split .cal-d { min-height:auto; flex:none; }
   .split .cal-d > * { flex:none; }
   .split .cal-h h2 { font-size:1.2rem; }
+  /* Nov 21 (James): calendar fills down to the Danger Zone's bottom edge on desktop, with bigger day boxes + text */
+  @media (min-width:1001px) {
+    .split .cal-g { flex:1 1 0; min-height:0; max-height:none; gap:9px; padding-bottom:18px;
+      -webkit-mask-image:linear-gradient(#000 calc(100% - 34px), transparent); mask-image:linear-gradient(#000 calc(100% - 34px), transparent); }
+    .split .cal-d { padding:10px 12px; gap:7px; }
+    .split .cal-dn { font-size:.9rem; }
+    .split .cal-e { font-size:.95rem; padding:8px 11px; }
+    .split .cal-e small { font-size:.7rem; margin-bottom:3px; }
+    .split .cal-odds { font-size:.76rem; margin-top:5px; }
+    .split .cal-d.today.empty::after { font-size:.88rem; }
+  }
   .hub .cal-h h2 { gap:12px; }
   .hub-tag { display:block; color:#ff7a7a; font-weight:700; margin-bottom:2px; }
   .hub-cols, .hub-r { display:grid; grid-template-columns:minmax(0,1fr) 46px 58px 62px 42px 80px; gap:9px; align-items:center; }
