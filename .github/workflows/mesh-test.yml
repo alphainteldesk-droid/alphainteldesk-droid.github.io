@@ -1,0 +1,12 @@
+name: mesh-test (throwaway)
+on:
+  push:
+    branches: [mesh-test]
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 mesh_probe.py
+        env:
+          MESH_API_KEY: ${{ secrets.MESH_API_KEY }}
