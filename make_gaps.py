@@ -144,12 +144,13 @@ def lean_ok(row):
 
 
 _BOOKS = {}
+MIN_BOOK_USD = 10                      # Nov 21: Alpha book price must have at least $10 of orders behind it
 
 
 def alpha_book_mid(alpha, outcome):
     """Nov 21 (James: the same Alpha gap sat on the board for days): Alpha's feed price can stay frozen even
     after trades, so check it against the real on-chain order book (fillable._alpha, as the Danger Zone does).
-    -> midpoint of best Yes bid and best Yes ask in cents; False = no buyer or no seller, or wider than
+    -> midpoint of the best Yes bid and ask with $10+ behind each, in cents; False = no buyer or no seller, or wider than
     MAX_SPREAD (no real price); None = book could not be read (keep the feed price)."""
     app = (alpha.get("apps") or {}).get(outcome)
     if not app:
@@ -164,9 +165,16 @@ def alpha_book_mid(alpha, outcome):
     b = _BOOKS[app]
     if b is None:
         return None
-    if not b["yes"] or not b["ask_yes"]:
+    def level(orders):                              # first price with $10+ behind it (a $1 order is not a price)
+        tot = 0.0
+        for px, q in orders:
+            tot += px * q
+            if tot >= MIN_BOOK_USD:
+                return 100 * px
+        return None
+    bid, ask = level(b["yes"]), level(b["ask_yes"])
+    if bid is None or ask is None:
         return False
-    bid, ask = 100 * b["yes"][0][0], 100 * b["ask_yes"][0][0]
     if ask - bid > MAX_SPREAD or ask < bid:
         return False
     return round((bid + ask) / 2, 1)
