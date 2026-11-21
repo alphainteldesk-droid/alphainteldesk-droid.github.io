@@ -784,6 +784,17 @@
   @keyframes blip { 0%{opacity:0} 4%{opacity:1} 60%{opacity:.15} 100%{opacity:0} }
   @media (prefers-reduced-motion: reduce) { .radar .sweep, .radar .blip { animation:none; opacity:1; } }
 
+  /* Nov 21 (James): shorter phone layout: Danger Zone top 5 + Calendar preview, each with a "show more" button */
+  .phmore { display:none; }
+  @media (max-width:640px) {
+    .phmore { display:block; width:100%; margin:10px 0 4px; padding:10px 12px; font:700 .8rem "JetBrains Mono",monospace; letter-spacing:.08em;
+      color:var(--cyan); background:rgba(63,219,230,.07); border:1px solid rgba(63,219,230,.45); border-radius:6px; cursor:pointer; }
+    #hub-rows:not(.all) > *:nth-child(n+6) { display:none; }
+    #calendar .cal-f { flex-wrap:nowrap; overflow-x:auto; padding-bottom:4px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+    #calendar .cal-f button { flex:none; }
+    .split #cal-g:not(.all) { max-height:380px; overflow:hidden; -webkit-mask-image:linear-gradient(#000 78%, transparent); mask-image:linear-gradient(#000 78%, transparent); }
+    #closing-soon .dz-go:not(.dz-top) { display:none; }   /* the same door button sits at the top of the box */
+  }
   /* Nov 21 (James): first-screen hero */
   .hx { max-width:1400px; margin:0 auto; padding:22px 20px 18px; display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:22px 36px; align-items:center;
     border-bottom:1px solid var(--line); background:radial-gradient(ellipse at 12% 0%, rgba(255,179,71,.09), transparent 55%), radial-gradient(ellipse at 95% 100%, rgba(63,219,230,.08), transparent 60%); }
@@ -1095,6 +1106,7 @@
     </div></div>
   <div class="cal-next" id="cal-next" hidden></div>
   <div class="cal-g" id="cal-g"><p class="cal-none">Loading the calendar&hellip;</p></div>
+  <button class="phmore" type="button" data-t="cal-g" data-more="Show the full 2 weeks ▾" data-less="Show less ▴">Show the full 2 weeks ▾</button>
   <div class="cal-x" id="cal-x" hidden></div>
   <p class="cal-foot">Tap any event for details and related prices on Polymarket, Kalshi and Alpha Arcade. Dates come from official
     schedules (BLS, BEA, Census, the Fed, company investor pages); an "expected date" is not yet confirmed. Not financial advice.</p>
@@ -1130,6 +1142,7 @@
   <div class="cal-f" id="hub-f"><button class="on" data-h="long">1&ndash;6 MONTHS</button><button data-h="near">UNDER 1 MONTH</button><button data-h="soon" style="--c:#ff7a7a">SETTLING NEXT</button></div>
   <div class="hub-cols" id="hub-cols"></div>
   <div class="hub-rows" id="hub-rows"><p class="cal-none">Loading&hellip;</p></div>
+  <button class="phmore" type="button" data-t="hub-rows" data-more="Show more contracts ▾" data-less="Show fewer ▴">Show more contracts ▾</button>
   <a class="dz-go" href="/expiry-returns.html" aria-label="Open The Danger Zone: every contract, every filter, plus tools to research your call">
     <span class="dz-tape" aria-hidden="true"></span>
     <span class="dz-in"><svg class="dz-door" viewBox="0 0 200 130" aria-hidden="true">
@@ -1999,6 +2012,15 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
     next();
   });
 })();
+</script>
+<script>   /* Nov 21: phone "show more" buttons (Danger Zone rows, Calendar) */
+document.querySelectorAll('.phmore').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var t = document.getElementById(b.getAttribute('data-t')), on = t.classList.toggle('all');
+    b.textContent = b.getAttribute(on ? 'data-less' : 'data-more');
+    if (!on) t.closest('section').scrollIntoView({ block: 'start', behavior: 'smooth' });
+  });
+});
 </script>
 </body>
 </html>
