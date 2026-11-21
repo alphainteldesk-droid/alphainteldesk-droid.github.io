@@ -350,6 +350,8 @@
         esc(g.low.name) + ', highest on ' + esc(g.high.name) +
         ' <button class="gp-sh" data-i="' + i + '">Share &#x2197;</button></div></div>';
     }).join('');
+    if (!d.gaps.some(function (g) { return g.prices && g.prices.alpha != null; }))   /* Nov 21 (James): only when no Alpha gap is listed */
+      b.insertAdjacentHTML('afterbegin', '<p class="note" style="border:1px dashed rgba(255,179,71,.5);border-radius:8px;padding:10px 14px;margin:0 0 12px;color:#ffcf8a">Alpha Arcade: no gap of 2¢+ right now. Alpha’s prices are in line with Polymarket and Kalshi after fees (checked against Alpha’s live order book).</p>');
     b.addEventListener('click', function (e) {
       var btn = e.target.closest('.gp-sh'); if (!btn) return;
       var g = d.gaps[+btn.getAttribute('data-i')], url = 'https://alphainteldesk.com/gap-scanner.html#g=' + gkey(g);   // Nov 17: lands on this gap

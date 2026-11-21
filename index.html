@@ -1660,6 +1660,8 @@
     document.getElementById('gb-sub').textContent = T.sub;
     document.getElementById('gb-cols').innerHTML = T.cols;
     document.getElementById('gb-note').textContent = T.note;
+    if (t === 'gaps' && d && d.gaps && d.gaps.length && !d.gaps.some(function (g) { return g.prices && g.prices.alpha != null; }))   /* Nov 21: only when no Alpha gap is listed */
+      document.getElementById('gb-note').innerHTML = '<b style="color:#ffcf8a">Alpha Arcade: no gap of 2¢+ right now. Alpha’s prices are in line with Polymarket and Kalshi after fees (live order book).</b> · ' + T.note;
     var go = document.getElementById('gb-go');
     go.href = T.go[0]; go.innerHTML = T.go[1];
     go.style.display = t === 'gaps' ? 'none' : '';          // the gaps tab has its own "more gaps" link row
