@@ -2,14 +2,25 @@ name: site-review (throwaway)
 on:
   push:
     branches: [site-review]
+    paths: [review_shot.py, .github/workflows/site-review.yml]
+permissions:
+  contents: write
 jobs:
   t:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pip install --quiet playwright && python -m playwright install --with-deps chromium > /dev/null
+      - run: pip install --quiet playwright pillow && python -m playwright install --with-deps chromium > /dev/null
       - run: python3 review_shot.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: review
-          path: out/
+      - run: |
+          python3 - <<'PY'
+          import glob
+          from PIL import Image
+          for f in glob.glob('out/*.png'):
+              im = Image.open(f).convert('RGB'); w, h = im.size
+              if h > 6000: im = im.crop((0, 0, w, 6000))
+              im.save(f[:-4] + '.jpg', quality=70); 
+          PY
+          rm -f out/*.png
+          git config user.name "github-actions[bot]"; git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add out && git commit -q -m "review output" && git push -q
