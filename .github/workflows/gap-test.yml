@@ -31,4 +31,12 @@ jobs:
           print('apps injected')
           PY
       - run: python3 make_gaps.py 2>&1 | grep -v "FILL" | grep -i "alpha\|gaps\|left out\|error\|trace"
+      - run: |
+          python3 - <<'PY'
+          import fillable
+          for app,lab in [(3705323992,'blockade Dec31'),(3762699081,'israel nov30')]:
+              b=fillable._alpha(app)
+              f=lambda L:[(round(p*100,1),round(q),round(p*q)) for p,q in L[:5]]
+              print(lab,'| BIDS yes (c,shares,$)',f(b['yes']),'| ASKS yes',f(b['ask_yes']))
+          PY
       - run: python3 -c "import json;[print(g['title'][:50],g['outcome'][:20],g['prices']) for g in json.load(open('gaps.json'))['gaps']]"
