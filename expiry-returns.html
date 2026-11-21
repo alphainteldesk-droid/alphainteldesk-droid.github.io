@@ -14,7 +14,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Danger Zone: Prediction Market Contracts at 80¢+ Settling Within 6 Months, Return After Fees | Alpha Intel Desk</title>
-<meta name="description" content="High-probability prediction market contracts that settle in days to 6 months: the buy price, the fee, the side to buy, the price now, the return after fees if you are right and the close date, side by side for Polymarket, Kalshi and Alpha Arcade. Free, updated through the day.">
+<meta name="description" content="High-probability prediction market contracts that settle in 1 week to 6 months: the buy price, the fee, the side to buy, the price now, the return after fees if you are right and the close date, side by side for Polymarket, Kalshi and Alpha Arcade. Free, updated through the day.">
 <link rel="canonical" href="https://alphainteldesk.com/expiry-returns.html">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
 <meta property="og:title" content="The Danger Zone by Alpha Intel Desk">
@@ -211,7 +211,7 @@
 <main class="wrap">
   <span class="tag live"><i></i><span id="x-live">Live · updated through the day</span></span>
   <h1>The Danger Zone</h1>
-  <p class="tagline">80¢+ contracts settling in 1&ndash;6 months. Up to <span id="x-best">25%</span> return, but one wrong call could cost it all.</p>
+  <p class="tagline">80¢+ contracts settling in 1 week to 6 months. Up to <span id="x-best">25%</span> return, but one wrong call could cost it all.</p>
   <p class="lead">Our top 50 contracts at 80¢ or more that settle within 6 months, chosen from hundreds. We rank them on
     the return after fees, how easy they are to sell, how clear their rules are, and how busy the market is.</p>
   <div class="howpay" id="x-how"><b>HOW IT WORKS</b><p>Say you buy a contract at 84¢. If you're right, it pays $1 when the market settles:
@@ -411,7 +411,7 @@
     if (nx && nx.classList.contains('xd')) { nx.remove(); b.setAttribute('aria-expanded', 'false'); return; }
     tr.insertAdjacentHTML('afterend', detail(shown[+b.parentNode.getAttribute('data-i')])); b.setAttribute('aria-expanded', 'true'); });
   chips('f-site', 'site', [['all', 'All'], ['polymarket', 'Polymarket'], ['kalshi', 'Kalshi'], ['alpha', 'Alpha Arcade']]);
-  chips('f-days', 'days', [[7, '7 days'], [30, '30 days'], [90, '3 months'], [180, '6 months']]);
+  chips('f-days', 'days', [[14, '14 days'], [30, '30 days'], [90, '3 months'], [180, '6 months']]);
   chips('f-sort', 'sort', [['soon', 'Closing soonest'], ['ret', 'Highest return']]);
   fetch('track.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     var m = d.summary || {}, a = m.all || {}, g = m.groups || {}, MIN = 10;

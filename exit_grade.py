@@ -57,6 +57,7 @@ def grade(usd):
     return next(g for lo, g in GRADES if usd >= lo)
 
 
+MIN_DAYS = 7             # Nov 21 (James): nothing settling within a week (weekly coin flips swamped the track record)
 TOP = 50                 # James, Nov 15: a short list, not 600 rows
 ALPHA_SPOTS = 10         # the 10 busiest Alpha Arcade contracts always make the list (Alpha is the site's niche)
 PX = re.compile(r"bitcoin|ethereum|solana|dogecoin|\b(btc|eth|xrp|sol|doge|bnb)\b|\bprices?\b|\b(s&p|nasdaq|dow|nikkei|ftse|wti|brent|gold|silver|treasury|yield)\b|\bclose (above|below|at)\b", re.I)
@@ -80,7 +81,7 @@ def curate(rows):
     10 spots kept for Alpha Arcade (busiest first, even with a thin book: the page says so), the rest by score."""
     from short_crypto import short_crypto            # Nov 21 (James): no weekly/daily crypto price contracts
     ok = [r for r in rows if not (r["days"] < 3 and PX.search(r["title"] + " " + (r.get("cat") or "")))
-          and not short_crypto(r["title"])
+          and not short_crypto(r["title"]) and r["days"] >= MIN_DAYS
           and (r["site"] == "alpha" or (r.get("ex") or {}).get("g") != "D")]   # Nov 17 (James): Alpha keeps its 10 spots even when its book is thin
     best = {}
     for r in ok:

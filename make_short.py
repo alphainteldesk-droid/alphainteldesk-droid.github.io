@@ -45,14 +45,14 @@ G_TITLE = label(g["title"], g["outcome"])
 GAP = ("Priced on all 3 sites · %.1f¢ gap after fees" if g["all3"] else "%.1f¢ gap after fees") % g["net"]
 
 _ex = json.load(open(os.path.join(SITE, "expiry.json")))
-_ok = lambda r: 0.5 <= r["days"] <= 7 and not PX.search(r["title"] + " " + (r.get("cat") or "")) and r["ask"] >= 80 and r["ret"] >= 5   # James: 5%+ only
+_ok = lambda r: 7 <= r["days"] <= 14 and not PX.search(r["title"] + " " + (r.get("cat") or "")) and r["ask"] >= 80 and r["ret"] >= 5   # James: 5%+ only
 rows = [r for r in _ex["rows"] if _ok(r)] or [r for r in _ex.get("all") or [] if _ok(r)]   # Nov 15: the top-50 list first, else the full list
 dk = lambda r: "dz|%s|%s|%s" % (r["title"], r["outcome"], r["side"])
 pool = [r for r in rows if dk(r) not in seen] or rows
 score = lambda r: min(r["ret"], 20) * min(1, math.log10(max(r["volume"], 10)) / 5.3)   # good return AND a busy market
 d = max(pool, key=score)
 D_DAY = datetime.strptime(d["close"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).astimezone(ET)
-D_WHEN = "today" if D_DAY.date() == datetime.now(ET).date() else D_DAY.strftime("%A")
+D_WHEN = D_DAY.strftime("%a %b ") + str(D_DAY.day)   # Nov 21: picks now settle in 7-14 days, so a date ("Fri Nov 28"), not a weekday
 D_TITLE = label(d["title"], d["outcome"])
 import dz_link
 D_LINK = dz_link.url(d, _ex.get("rows") or [])   # Nov 17 (James): the post opens the Danger Zone page at this contract
@@ -166,7 +166,7 @@ async def main():
         # ---- 3. Danger Zone: scroll to the table, point at the return column (8.6 - 12.8 s)
         swooshes.append(n[0] / FPS)
         await go("expiry-returns.html")
-        await pg.evaluate("()=>{for(const [id,re] of [['#f-days',/7 DAYS/i],['#f-sort',/highest/i]]){"
+        await pg.evaluate("()=>{for(const [id,re] of [['#f-days',/14 DAYS/i],['#f-sort',/highest/i]]){"
                           "const b=[...document.querySelectorAll(id+' .chip')].find(c=>re.test(c.textContent));b&&b.click()}}")
         await pg.wait_for_timeout(400)
         await pg.evaluate("([t,o])=>{const rs=[...document.querySelectorAll('#x-rows tr')];"
