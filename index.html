@@ -784,6 +784,44 @@
   @keyframes blip { 0%{opacity:0} 4%{opacity:1} 60%{opacity:.15} 100%{opacity:0} }
   @media (prefers-reduced-motion: reduce) { .radar .sweep, .radar .blip { animation:none; opacity:1; } }
 
+  /* Nov 21 (James): first-screen hero */
+  .hx { max-width:1400px; margin:0 auto; padding:22px 20px 18px; display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:22px 36px; align-items:center;
+    border-bottom:1px solid var(--line); background:radial-gradient(ellipse at 12% 0%, rgba(255,179,71,.09), transparent 55%), radial-gradient(ellipse at 95% 100%, rgba(63,219,230,.08), transparent 60%); }
+  .hx-top { display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px; margin-bottom:10px; }
+  .hx .sign { position:static; transform:none; display:inline-block; font-size:.72rem; }
+  .hx-eb { font:700 .74rem "JetBrains Mono",monospace; letter-spacing:.18em; color:var(--cyan); text-transform:uppercase; }
+  .hx h1 { font:800 clamp(1.7rem,3.4vw,2.75rem)/1.12 "Space Grotesk",sans-serif; margin:0 0 12px; color:#f3f6fa; letter-spacing:-.01em; }
+  .hx h1 em { font-style:normal; color:var(--amber); }
+  .hx-sub { color:#c9d3dc; font-size:1.05rem; margin:10px 0 14px; max-width:640px; } .hx-sub b { color:#ffb347; }
+  .hx-cta { display:flex; flex-wrap:wrap; gap:10px; }
+  .hx-cta a { font:700 .98rem "Space Grotesk",sans-serif; padding:12px 20px; border-radius:8px; text-decoration:none; }
+  .hx-go { color:#111 !important; background:var(--amber); box-shadow:0 0 18px rgba(255,179,71,.35); }
+  .hx-go:hover { box-shadow:0 0 26px rgba(255,179,71,.6); }
+  .hx-tg { color:var(--cyan) !important; border:1px solid rgba(63,219,230,.5); background:rgba(63,219,230,.06); }
+  .hx-trust { display:flex; flex-wrap:wrap; gap:6px 18px; margin:12px 0 0; color:var(--muted); font-size:.86rem; } .hx-trust a { color:var(--muted); text-decoration:underline; }
+  .hx-card { display:block; color:inherit !important; text-decoration:none !important; border:1px solid rgba(255,179,71,.5); border-radius:10px; padding:16px 18px;
+    background:linear-gradient(160deg, rgba(255,179,71,.10), rgba(7,15,25,.95) 45%); box-shadow:0 0 30px rgba(255,179,71,.12); transition:box-shadow .2s; }
+  .hx-card:hover { box-shadow:0 0 36px rgba(255,179,71,.3); }
+  .hx-card > span { display:block; }
+  .hx-ch { font:800 .74rem "JetBrains Mono",monospace; letter-spacing:.16em; color:var(--amber); }
+  .hx-ch i { display:inline-block; width:8px; height:8px; border-radius:50%; background:#3fdbe6; box-shadow:0 0 8px #3fdbe6; margin-right:8px; animation:calpulse 1.4s infinite; }
+  .hx-ch small { color:var(--muted); font-weight:600; letter-spacing:.06em; }
+  .hx-q { font-size:1.15rem; font-weight:700; margin:10px 0 2px; line-height:1.3; } .hx-o { color:var(--muted); font-size:.88rem; }
+  .hx-px { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:12px 0; }
+  .hx-px span { border:1px solid rgba(143,163,184,.22); border-radius:6px; padding:7px 9px; background:rgba(0,0,0,.25); }
+  .hx-px span.off { opacity:.45; }
+  .hx-px i { display:block; font:700 .6rem "JetBrains Mono",monospace; letter-spacing:.1em; font-style:normal; }
+  .hx-px b { display:block; font:800 1.3rem "JetBrains Mono",monospace; } .hx-px small { color:var(--muted); font-size:.7rem; }
+  .hx-net { display:flex !important; align-items:center; gap:12px; }
+  .hx-net b { font:800 2.3rem "JetBrains Mono",monospace; color:var(--amber); text-shadow:0 0 14px rgba(255,179,71,.45); }
+  .hx-net span { color:var(--muted); font-size:.85rem; line-height:1.3; } .hx-net em { font-style:normal; color:#3ee88a; }
+  .hx-more { margin-top:10px; border-top:1px dashed rgba(143,163,184,.25); }
+  .hx-more span { display:flex; justify-content:space-between; gap:10px; padding:6px 0; font-size:.86rem; color:#c9d3dc; }
+  .hx-more em { font-style:normal; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .hx-more b { font-family:"JetBrains Mono",monospace; color:var(--amber); }
+  .hx-foot { margin-top:8px; color:var(--cyan); font-weight:700; font-size:.92rem; } .hx-foot small { display:block; color:var(--muted); font-weight:400; font-size:.74rem; }
+  .hx > * { min-width:0; } .hx-eb { overflow-wrap:anywhere; }
+  @media (max-width:900px) { .hx-cta a { flex:1 1 100%; } .hx-eb { font-size:.62rem; letter-spacing:.12em; } .hx { grid-template-columns:minmax(0,1fr); padding:16px 14px 14px; gap:16px; } .hx h1 br { display:none; } .hx-sub { font-size:.98rem; margin:8px 0 12px; }
+    .hx-cta a { flex:1 1 auto; text-align:center; padding:11px 14px; font-size:.92rem; } }
   /* Hero brand block (Nov 12 mockup) */
   .hero { text-align:center; padding:14px 16px 10px; border-bottom:1px solid var(--line);
     background:radial-gradient(ellipse at 50% 0%, rgba(255,179,71,.08), transparent 65%); }
@@ -825,23 +863,56 @@
     </nav>
   </div>
 </header>
-<section class="hero" aria-label="Alpha Intel Desk">
-  <div class="sign">THE DESK IS OPEN</div>
-  <div class="hero-t">Alpha Intel Desk</div>
-</section>
-<section class="introband top" aria-label="About Alpha Intel Desk">
-  <div class="ib-text">
-    <h1>Real-time intelligence for prediction markets</h1>
+<!-- Nov 21 (James): first screen reworked: one promise, live proof, one main button, follow capture (replaces the
+     duplicate "Alpha Intel Desk" title + 4 stat boxes). Old blocks kept in git history (commit before this). -->
+<section class="hx" aria-label="Alpha Intel Desk: live price gaps across Polymarket, Kalshi and Alpha Arcade">
+  <div class="hx-l">
+    <div class="hx-top"><span class="sign">THE DESK IS OPEN</span><span class="hx-eb">Real-time intelligence for prediction markets</span></div>
+    <h1>Same question. Different price. <br><em>We find the gap, after fees.</em></h1>
     <div class="ib-sites" aria-label="Tracking Polymarket, Kalshi and Alpha Arcade"><span class="site s-poly"><i></i>POLYMARKET</span><span class="site s-kal"><i></i>KALSHI</span><span class="site s-alpha"><i></i>ALPHA ARCADE</span></div>
-    <p>Spot price gaps, catch the biggest movers, and see what's coming next across all three.</p>
+    <p class="hx-sub">Live price gaps, high-odds contracts and the week's biggest debate, side by side. The only desk that covers
+      <b>Alpha Arcade</b>. Free, no sign-up.</p>
+    <div class="hx-cta"><a class="hx-go" href="/gap-scanner.html">See today's gaps &rarr;</a>
+      <a class="hx-tg" href="https://t.me/alphainteldesk" rel="noopener">Get the 7 AM brief on Telegram</a></div>
+    <p class="hx-trust"><span>✓ Fees included</span><span>✓ Rules graded A–D</span><span id="hx-rec">✓ Public track record</span></p>
   </div>
-  <div class="ib-stats">
-    <div class="stat"><b>3</b><span>Prediction markets side by side</span></div>
-    <div class="stat"><b>24/7</b><span>Live market data</span></div>
-    <div class="stat"><b>20 min</b><span>Odds and listings refreshed</span></div>
-    <div class="stat"><b class="amber">Free</b><span>No sign-up, no paywall</span></div>
-  </div>
+  <a class="hx-card" id="hx-card" href="/gap-scanner.html" aria-label="Today's biggest price gap">
+    <span class="hx-ch"><i></i>TODAY'S BIGGEST GAP <small id="hx-age"></small></span>
+    <span class="hx-q" id="hx-q">Loading live prices&hellip;</span>
+    <span class="hx-o" id="hx-o"></span>
+    <span class="hx-px" id="hx-px"></span>
+    <span class="hx-net"><b id="hx-net">—</b><span>gap after fees<br><em id="hx-gr"></em></span></span>
+    <span class="hx-more" id="hx-more"></span>
+    <span class="hx-foot">Open the Gap Scanner &rarr; <small>Not guaranteed: always check both sites' rules.</small></span>
+  </a>
 </section>
+<script>   /* Nov 21: live proof card from gaps.json + track record line */
+(function () {
+  var N = { polymarket: 'POLYMARKET', kalshi: 'KALSHI', alpha: 'ALPHA ARCADE' }, C = { polymarket: '#8fa8ff', kalshi: '#3ddc84', alpha: '#ffb347' };
+  var e = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (x) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[x]; }); };
+  function gkey(g) { var t = g.title + '|' + g.outcome, h = 5381; for (var k = 0; k < t.length; k++) h = ((h * 33) ^ t.charCodeAt(k)) >>> 0; return h.toString(36); }
+  fetch('gaps.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    var gs = d.gaps || [], g = gs[0]; if (!g) return;
+    var m = Math.max(0, Math.round((Date.now() - Date.parse(d.updated)) / 60000));
+    document.getElementById('hx-age').textContent = '· ' + (m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago');
+    document.getElementById('hx-q').textContent = g.title;
+    document.getElementById('hx-o').textContent = g.outcome && g.outcome !== 'Yes' && g.outcome !== g.title ? 'Outcome: ' + g.outcome : '';
+    document.getElementById('hx-px').innerHTML = ['polymarket', 'kalshi', 'alpha'].map(function (k) {
+      var v = (g.prices || {})[k], lo = g.low && g.low.site === k, hi = g.high && g.high.site === k;
+      return '<span class="' + (v == null ? 'off' : '') + '"><i style="color:' + C[k] + '">' + N[k] + '</i><b>' + (v == null ? '—' : Math.round(v * 10) / 10 + '¢') +
+        '</b><small>' + (v == null ? 'not listed' : lo ? 'cheapest' : hi ? 'highest' : '') + '</small></span>'; }).join('');
+    document.getElementById('hx-net').textContent = g.net.toFixed(1) + '¢';
+    document.getElementById('hx-gr').textContent = g.grade ? 'Rules graded ' + g.grade : '';
+    document.getElementById('hx-card').href = '/gap-scanner.html#g=' + gkey(g);
+    document.getElementById('hx-more').innerHTML = gs.slice(1, 3).map(function (x) {
+      return '<span><em>' + e(x.title) + '</em><b>' + x.net.toFixed(1) + '¢</b></span>'; }).join('');
+  }).catch(function () { document.getElementById('hx-q').textContent = 'Live gaps are loading late. Open the Gap Scanner for the latest.'; });
+  fetch('track.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    var a = (d.summary || {}).all || {};
+    if (a.n >= 10) document.getElementById('hx-rec').innerHTML = '✓ <a href="/expiry-returns.html#track">Track record: ' + a.pct.toFixed(0) + '% paid out (' + a.won + ' of ' + a.n + ')</a>';
+  }).catch(function () {});
+})();
+</script>
 <!-- Nov 14: live strip moved here from the hero: clocks, then DESK PULSE, then the ticker, so all three are in view together -->
 <section class="livestrip" aria-label="World clocks and desk pulse">
   <div class="hclocks hc-l" aria-label="World market clocks">
