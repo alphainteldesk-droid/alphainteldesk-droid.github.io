@@ -87,6 +87,11 @@
   .tt-big b { color:#e8eef5; font-family:"JetBrains Mono",monospace; }
   .more { display:block; width:100%; margin-top:10px; padding:8px; border:1px dashed var(--line); border-radius:8px; background:none; color:var(--cyan);
     font:600 .78rem "JetBrains Mono",monospace; letter-spacing:.1em; cursor:pointer; }
+  .x-more { text-align:center; margin:12px 0 4px; }   /* Nov 21 (James): 25 rows, then a button for the other 25 */
+  .x-more button { font:700 .95rem "Space Grotesk",sans-serif; color:var(--cyan); background:rgba(63,219,230,.08); border:1px solid rgba(63,219,230,.5);
+    border-radius:8px; padding:10px 22px; cursor:pointer; box-shadow:0 0 12px rgba(63,219,230,.18); }
+  .x-more button:hover { background:rgba(63,219,230,.16); }
+  .trk-rm { color:var(--muted); font-size:.8rem; margin:6px 0 0; }
   .trk { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin:28px 0; }
   .trk h2 { margin:0 0 6px; }
   .trk-big { display:flex; flex-wrap:wrap; gap:14px 34px; margin:12px 0 4px; }
@@ -232,6 +237,7 @@
     <a href="#exit-qa">How it works</a></div>
   <div class="tw" id="x-tw"><table class="xt"><thead><tr><th>MARKET</th><th>SIDE</th><th>PRICE NOW</th><th title="After fees, if it resolves this way">RETURN IF RIGHT <span class="th-sub">after fees</span></th><th title="Liquidity + Rules, combined. Tap a grade for details.">DZ GRADE <span class="th-sub">tap for details</span></th><th>CLOSES</th></tr></thead>
     <tbody id="x-rows"><tr><td colspan="6">Loading…</td></tr></tbody></table></div>
+  <div class="x-more" id="x-more" hidden><button type="button" aria-expanded="false"></button></div>
   <p class="confirm"><b>Prices change by the minute.</b> Always confirm the price, the fee and the rules on the site itself before you buy.</p>
   <p class="note">The return only happens if the market resolves the way the row says. If it doesn't, the contract pays nothing and you lose what you paid. A high price means the market thinks it is likely, not that it is certain. Not financial advice. Always check each site's rules before you trade.</p>
 
@@ -241,6 +247,7 @@
     <p class="sub" id="trk-sub">Loading…</p>
     <div class="trk-big" id="trk-big"></div>
     <p class="note" id="trk-grp"></p>
+    <p class="trk-rm" id="trk-rm" hidden></p>
     <div class="trk-gr" id="trk-gr" hidden><p class="tt-sub">RESULTS BY DZ GRADE</p>
       <p class="sub">Do better grades pay out more often? We save each contract's DZ Grade on the day we list it, then record what happened. We started saving grades on Nov 17; some contracts listed before then have no grade and count only in the totals above.</p>
       <div class="trk-gc" id="trk-gc"></div></div>
@@ -266,7 +273,7 @@
   <div class="qa"><b>How is the return worked out?</b><span>(100¢ − price − fee) ÷ (price + fee). The fee is the trading fee each site publishes for that exact market, read fresh every update. If a site doesn't publish one, we estimate it and mark it "est". Holding to settlement has no second fee. Kalshi rounds each order's fee up to the next cent, so a very small order (a few contracts) pays a little more than shown.</span></div>
   <div class="qa" id="exit-qa"><b>What is the DZ Grade?</b><span>One letter for how clean a contract is to hold. It combines two things. <b>Liquidity</b>: how many dollars of buy orders sit on the order book within 2¢ of the best bid for your side, i.e. how much you could sell right now if you change your mind (A = $10,000+, B = $2,000+, C = $300+, D = less. D contracts aren't listed, except Alpha Arcade's 10 busiest: Alpha's order books are usually thin, so plan to hold those until they settle). <b>Rules</b>: how the result gets decided. A = a clear named source (like the BLS, the Federal Reserve or Rotten Tomatoes), B = a named source with "credible reporting" as a backup, C = no source named, D = a judgement call based on "credible reporting". The DZ Grade is the average of the two, rounded toward the weaker one. It does not tell you whether the contract will pay out. Alpha Arcade's order book is read straight from the Algorand blockchain.</span></div>
   <div class="qa"><b>How often are the rules checked?</b><span>Polymarket and Kalshi rules are read fresh on every update, roughly every hour. Alpha Arcade rules are read once, when a market first appears on the site. All checks are automatic and can miss things. Rule clarifications and changes are rare, but they do happen, so always read the final rules on the market's own page before you trade.</span></div>
-  <div class="qa"><b>How does the track record work?</b><span>Every contract (Polymarket, Kalshi and Alpha Arcade) is logged the first time it appears on this page, at the price we first listed it. When it settles we record whether it paid out. Each contract counts once, and nothing is removed afterwards. "If you'd bought $1 of each" is the average return after fees: a contract that pays out adds its return, one that doesn't loses the whole $1. Daily crypto and price markets are counted separately because they settle within days and would swamp the rest. Contracts a site cancels or settles 50-50 aren't counted. Past results don't predict future ones.</span></div>
+  <div class="qa"><b>How does the track record work?</b><span>Every contract (Polymarket, Kalshi and Alpha Arcade) is logged the first time it appears on this page, at the price we first listed it. When it settles we record whether it paid out. Each contract counts once. One change so far: on Nov 21, 2026 we stopped listing weekly and daily crypto price contracts (a Bitcoin price on a single day is a coin flip on one week's swing) and took their results out of the record; the exact number removed is shown under the track record. Monthly and longer crypto markets still count. "If you'd bought $1 of each" is the average return after fees: a contract that pays out adds its return, one that doesn't loses the whole $1. Daily crypto and price markets are counted separately because they settle within days and would swamp the rest. Contracts a site cancels or settles 50-50 aren't counted. Past results don't predict future ones.</span></div>
   <div class="qa"><b>How do you keep the numbers right?</b><span>Every update recomputes every row from scratch and throws out anything that doesn't add up. A watchdog checks the page after every update and alerts us if prices go stale, if a site stops publishing its fees, or if a fee rate changes. If prices are more than 2 hours old, this page tells you so.</span></div>
   <div class="qa"><b>What can go wrong?</b><span>The outcome goes the other way and you lose the full price. Settlement can also be late or disputed, which ties your money up longer than the close date says. A very high return usually means the market sees real risk.</span></div>
   <div class="qa"><b>Where do Alpha Arcade prices come from?</b><span>Straight from Alpha Arcade's order book on the Algorand blockchain: the price is the cheapest offer you could buy right now, same as Polymarket and Kalshi. If no one is selling at that moment, the row shows the last trade price marked "est". Alpha rows also need a trade in the last 5 days. Check the order book before you trade.</span></div>
@@ -371,11 +378,19 @@
     el.onclick = function (e) { var b = e.target.closest('button'); if (!b) return;
       st[key] = key === 'days' ? +b.getAttribute('data-v') : b.getAttribute('data-v'); chips(id, key, opts); draw(); };
   }
+  var FIRST = 25, more = false;
+  document.getElementById('x-more').firstChild.addEventListener('click', function () {
+    more = !more; draw();
+    if (!more) document.getElementById('x-tw').scrollIntoView({ block: 'start', behavior: 'smooth' }); });
   function draw() {
     var r = rows.filter(function (x) { return (st.site === 'all' || x.site === st.site) && (st.px === 'show' || !daily(x)) && (Date.parse(x.close) - Date.now()) / 86400000 <= st.days && Date.parse(x.close) > Date.now(); });
     r.sort(st.sort === 'ret' ? function (a, b) { return b.ret - a.ret; } : function (a, b) { return Date.parse(a.close) - Date.parse(b.close); });
     shown = r.slice(0, 120);
-    document.getElementById('x-rows').innerHTML = r.length ? shown.map(function (x, i) {
+    var mb = document.getElementById('x-more'), extra = shown.length - FIRST;   /* Nov 21 (James): first 25, button for the rest */
+    mb.hidden = extra <= 0;
+    mb.firstChild.textContent = more ? 'Show fewer ▴' : 'Show the other ' + extra + ' contract' + (extra === 1 ? '' : 's') + ' ▾';
+    mb.firstChild.setAttribute('aria-expanded', more ? 'true' : 'false');
+    document.getElementById('x-rows').innerHTML = r.length ? shown.slice(0, more ? shown.length : FIRST).map(function (x, i) {
       var cd = new Date(x.close), yr2 = cd.getFullYear() !== new Date().getFullYear();
       var day = cd.toLocaleDateString('en-US', yr2 ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' });
       var what = pays(x) + '<button class="dz-sh" data-i="' + i + '" title="Share a link to this contract on Alpha Intel Desk">↗ Share</button>' +
@@ -418,6 +433,11 @@
       });
       document.getElementById('trk-grp').textContent = parts.join(' · ');
     }
+    var rm = m.removed && m.removed.short_crypto;   /* Nov 21 (James): say openly what was taken out */
+    if (rm && rm.n) { var e = document.getElementById('trk-rm'); e.hidden = false;
+      e.textContent = 'Not counted: weekly and daily crypto price contracts. We stopped listing them on ' +
+        new Date(rm.date + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
+        ' and took their ' + rm.n + ' results out (' + rm.won + ' paid out, ' + (rm.n - rm.won) + ' didn\'t). Monthly and longer crypto markets still count.'; }
     var by = m.by_grade || {}, wb = m.waiting_by_grade || {}, GMIN = 5, any = 0;
     document.getElementById('trk-gc').innerHTML = ['A', 'B', 'C', 'D'].map(function (k) {
       var x = by[k] || { n: 0 }, w = wb[k] || 0; any += x.n + w;
@@ -452,7 +472,7 @@
     var cm = /#c=([0-9a-z]+)/.exec(location.hash);
     if (cm) {
       var hit = rows.filter(function (x) { return ckey(x) === cm[1]; })[0];
-      if (hit) { st.site = 'all'; st.days = 180; draw(); }
+      if (hit) { st.site = 'all'; st.days = 180; more = true; draw(); }   /* a shared link may point past row 25 */
       var tr = document.getElementById('c-' + cm[1]), note = document.getElementById('x-shared');
       if (tr) { tr.classList.add('shared'); setTimeout(function () { tr.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 300); }
       else { note.hidden = false; }

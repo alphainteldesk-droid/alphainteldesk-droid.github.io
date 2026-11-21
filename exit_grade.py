@@ -78,7 +78,9 @@ def score(r):
 def curate(rows):
     """The top 50: no daily price markets, no D (hard to sell) grades, the best contract per market,
     10 spots kept for Alpha Arcade (busiest first, even with a thin book: the page says so), the rest by score."""
+    from short_crypto import short_crypto            # Nov 21 (James): no weekly/daily crypto price contracts
     ok = [r for r in rows if not (r["days"] < 3 and PX.search(r["title"] + " " + (r.get("cat") or "")))
+          and not short_crypto(r["title"])
           and (r["site"] == "alpha" or (r.get("ex") or {}).get("g") != "D")]   # Nov 17 (James): Alpha keeps its 10 spots even when its book is thin
     best = {}
     for r in ok:

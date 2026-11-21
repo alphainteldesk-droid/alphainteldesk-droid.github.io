@@ -143,10 +143,47 @@ def lean_ok(row):
     return True
 
 
+_BOOKS = {}
+MIN_BOOK_USD = 10                      # Nov 21: Alpha book price must have at least $10 of orders behind it
+
+
+def alpha_book_mid(alpha, outcome):
+    """Nov 21 (James: the same Alpha gap sat on the board for days): Alpha's feed price can stay frozen even
+    after trades, so check it against the real on-chain order book (fillable._alpha, as the Danger Zone does).
+    -> midpoint of the best Yes bid and ask with $10+ behind each, in cents; False = no buyer or no seller, or wider than
+    MAX_SPREAD (no real price); None = book could not be read (keep the feed price)."""
+    app = (alpha.get("apps") or {}).get(outcome)
+    if not app:
+        return None
+    if app not in _BOOKS:
+        try:
+            from fillable import _alpha
+            _BOOKS[app] = _alpha(app)
+        except Exception as err:
+            print("  Alpha book read failed | %s | %s" % (outcome[:30], err))
+            _BOOKS[app] = None
+    b = _BOOKS[app]
+    if b is None:
+        return None
+    def level(orders):                              # first price with $10+ behind it (a $1 order is not a price)
+        tot = 0.0
+        for px, q in orders:
+            tot += px * q
+            if tot >= MIN_BOOK_USD:
+                return 100 * px
+        return None
+    bid, ask = level(b["yes"]), level(b["ask_yes"])
+    if bid is None or ask is None:
+        return False
+    if ask - bid > MAX_SPREAD or ask < bid:
+        return False
+    return round((bid + ask) / 2, 1)
+
+
 def gaps(matches, alpha_fresh):
     out = []
     live = alpha_traded_48h()
-    skipped = {"combo": 0, "alpha_idle": 0, "brackets": 0, "wide": 0, "lean": 0, "flip": 0}
+    skipped = {"combo": 0, "alpha_idle": 0, "brackets": 0, "wide": 0, "lean": 0, "flip": 0, "alpha_book": 0}
     for row in matches:
         if is_sports(row.get("categories") or []):
             continue
@@ -184,6 +221,17 @@ def gaps(matches, alpha_fresh):
                     continue                           # Nov 14: bid and ask too far apart to trust the midpoint
                 if p is not None and MIN_PRICE <= p <= MAX_PRICE:
                     table.setdefault(o, {})[site] = p
+        for o, ps in table.items():                     # Nov 21: Alpha price = real order book midpoint
+            if "alpha" in ps and len(ps) >= 2:
+                q = alpha_book_mid(row["sites"]["alpha"], o)
+                if q is False:
+                    del ps["alpha"]
+                    skipped["alpha_book"] += 1
+                    print("  Alpha no real book | %s | %s (feed %s)" % (row["title"][:40], o[:20], ps.get("alpha")))
+                elif q is not None:
+                    if abs(q - ps["alpha"]) >= 2:
+                        print("  Alpha book mid %s vs feed %s | %s | %s" % (q, ps["alpha"], row["title"][:40], o[:20]))
+                    ps["alpha"] = q
         best = None
         for o, ps in table.items():
             if len(ps) < 2:
@@ -221,6 +269,8 @@ def gaps(matches, alpha_fresh):
     print("Gaps: left out %d combo markets, %d bracket mismatches, %d idle Alpha Arcade prices (no trade in 48h), "
           "%d prices with a bid/ask wider than %d cents, %d events where one site is higher on nearly every outcome"
           % (skipped["combo"], skipped["brackets"], skipped["alpha_idle"], skipped["wide"], MAX_SPREAD, skipped["lean"]))
+    print("Gaps: left out %d Alpha Arcade prices with no real buyer/seller within %d cents (on-chain book)"
+          % (skipped["alpha_book"], MAX_SPREAD))
     print("Gaps: left out %d likely Yes/No flips (gap %d¢+, prices add to ~100)" % (skipped["flip"], FLIP_GAP))
     out.sort(key=lambda g: -g["net"])
     three = [g for g in out if g["all3"]]              # every all-three-sites gap, always shown first

@@ -1299,7 +1299,8 @@ def main():
     for a in alpha:
         row = {"title": a["title"], "close": datetime.fromtimestamp(a["end"], timezone.utc).strftime(f),
                "sites": {"alpha": {"url": a["url"], "outcomes": a["outcomes"], "volume": round(a["volume"]),
-                                   "volume24h": round(a["volume24h"]), "fee": a["fee"]}},
+                                   "volume24h": round(a["volume24h"]), "fee": a["fee"],
+                                   "apps": a.get("apps") or {}}},     # Nov 21: app id per outcome (Gap Scanner reads the real book)
                "flags": [], "score": 100, "categories": a["categories"]}
         lead = lead_of(a["outcomes"])
         row["outcome"] = lead

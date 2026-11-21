@@ -114,6 +114,14 @@ def main():
     except Exception:
         st = {"v": 2, "started": datetime.now(timezone.utc).strftime("%Y-%m-%d"), "open": {}, "misses": [], "agg": {}}
     rows = json.load(open("expiry.json")).get("rows") or []
+    from short_crypto import short_crypto            # Nov 21 (James): weekly/daily crypto price contracts are not counted
+    sc = [k for k, v in st["open"].items() if short_crypto(v["t"])]
+    for k in sc:
+        del st["open"][k]
+    st["misses"] = [m for m in st["misses"] if not short_crypto(m["t"])]
+    rows = [x for x in rows if not short_crypto(x.get("title"))]
+    if sc:
+        print("Track record: dropped %d weekly/daily crypto contracts still waiting" % len(sc))
 
     new = 0                                    # 1. log contracts the first time we list them
     for x in rows:
@@ -208,6 +216,8 @@ def main():
     summ["by_grade"] = {k: {"n": g["n"], "won": g["won"], "pct": round(100 * g["won"] / g["n"], 1),
                             "ret": round(100 * g["pl"] / g["n"], 2)} for k, g in sorted((st.get("by_grade") or {}).items()) if g["n"]}
     summ["waiting_by_grade"] = dict(__import__("collections").Counter(v.get("g", "?") for v in st["open"].values() if not v["px"]))
+    if st.get("removed"):
+        summ["removed"] = st["removed"]               # Nov 21: results taken out (shown on the page, so it's open about it)
     st["summary"] = summ
     json.dump(st, open("track.json", "w"), separators=(",", ":"))
     print("Track record: %d new listed, %d checked, %d settled (%d paid out, %d void), %d gave up, %d waiting; "
