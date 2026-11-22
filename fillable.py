@@ -82,17 +82,28 @@ def _kalshi(ticker):
     return asks, bids
 
 
-READ = {"polymarket": _poly, "kalshi": _kalshi}
+LADDER = (100, 250, 500, 1000, 2500, 5000, 10000, 25000)   # Nov 22 (James): "how far the gap holds as size grows"
 
 
-def walk(asks, bids, r_lo, r_hi):
+def _alpha_yes(app_id):
+    """Alpha Arcade on-chain book as (Yes asks low->high, Yes bids high->low), same shape as _poly/_kalshi."""
+    b = _alpha(app_id)
+    return sorted(b["ask_yes"]), sorted(b["yes"], reverse=True)
+
+
+READ = {"polymarket": _poly, "kalshi": _kalshi, "alpha": _alpha_yes}
+
+
+def walk(asks, bids, r_lo, r_hi, full=False):
     """Pair the cheap site's asks with the expensive site's bids while the gap after fees >= MIN_NET.
-    Returns (dollars needed for both sides, shares, best executable gap in cents after fees)."""
+    Returns (dollars needed for both sides, shares, best executable gap in cents after fees);
+    full=True also returns the fills [(cost $ of the pair, net cents, shares)] for the size ladder."""
     i = j = 0
     a = [list(x) for x in asks]
     b = [list(x) for x in bids]
     usd = shares = 0.0
     best = None
+    fills = []
     while i < len(a) and j < len(b):
         pa, pb = a[i][0], b[j][0]
         net = 100 * (pb - pa - r_lo * pa * (1 - pa) - r_hi * pb * (1 - pb))
@@ -103,41 +114,81 @@ def walk(asks, bids, r_lo, r_hi):
         q = min(a[i][1], b[j][1])
         usd += q * (pa + (1 - pb))           # Yes at pa on one site + No at (1 - pb) on the other
         shares += q
+        fills.append((pa + (1 - pb), net, q))
         a[i][1] -= q
         b[j][1] -= q
         if a[i][1] <= 1e-9:
             i += 1
         if b[j][1] <= 1e-9:
             j += 1
+    if full:
+        return round(usd), round(shares), best, fills
     return round(usd), round(shares), best
 
 
+def ladder(fills):
+    """[[dollars in, average gap after fees in cents per $1 pair]] for each LADDER step the books can fill."""
+    out, cost, sh, prof, k = [], 0.0, 0.0, 0.0, 0
+    for c, net, q in fills:
+        while q > 1e-9:
+            if k >= len(LADDER):
+                return out
+            take = min(q, (LADDER[k] - cost) / c)
+            cost += take * c
+            sh += take
+            prof += take * net
+            q -= take
+            if cost >= LADDER[k] - 1e-6:
+                out.append([LADDER[k], round(prof / sh, 1)])
+                k += 1
+    return out
+
+
+def _book_id(row, site, outcome, url):
+    x = row["sites"].get(site) or {}
+    if site == "alpha":
+        return (x.get("apps") or {}).get(outcome)
+    tid = (x.get("book") or {}).get(outcome)
+    if not tid and site == "polymarket":                 # Nov 22: multi-outcome Polymarket events store one token only
+        from gap_chart import poly_token
+        tid = poly_token(url or x.get("url"), outcome)
+    return tid
+
+
 def add_fillable(gaps, matches):
-    """Adds g['fill'] = {'usd', 'shares', 'exec'} where both books could be read. Never raises."""
+    """Adds g['fill'] where both books could be read. Never raises. Nov 22 (James): the TRADE TICKET.
+    g['fill'] = {usd, shares, exec, avg (average gap over the whole fillable size), profit ($),
+                 ladder [[$ in, avg gap c]], buy {site, yes (c), fee (c)}, sell {site, no (c), fee (c)}, t}"""
+    import time
     rows = {(m["title"], m.get("close")): m for m in matches}
     done = 0
     for g in gaps:
         try:
             lo, hi = g["low"]["site"], g["high"]["site"]
-            if lo not in READ or hi not in READ:
-                print("  FILL skip (Alpha Arcade book: phase 2) | %s" % g["title"][:50])
-                continue
             row = rows.get((g["title"], g.get("close")))
             if not row:
                 continue
-            tl = (row["sites"][lo].get("book") or {}).get(g["outcome"])
-            th = (row["sites"][hi].get("book") or {}).get(g["outcome"])
+            tl = _book_id(row, lo, g["outcome"], g["low"].get("url"))
+            th = _book_id(row, hi, g["outcome"], g["high"].get("url"))
             if not tl or not th:
                 print("  FILL no book id | %s | %s=%s %s=%s" % (g["title"][:44], lo, bool(tl), hi, bool(th)))
                 continue
             asks, _ = READ[lo](tl)
             _, bids = READ[hi](th)
-            usd, sh, best = walk(asks, bids, g.get("rate_low") or 0, g.get("rate_high") or 0)
-            g["fill"] = {"usd": usd, "shares": sh, "exec": best}
+            rl, rh = g.get("rate_low") or 0, g.get("rate_high") or 0
+            usd, sh, best, fills = walk(asks, bids, rl, rh, full=True)
+            f = {"usd": usd, "shares": sh, "exec": best, "t": int(time.time())}
+            if asks and bids:
+                pa, pb = asks[0][0], bids[0][0]
+                f["buy"] = {"site": lo, "yes": round(100 * pa, 1), "fee": round(100 * rl * pa * (1 - pa), 2)}
+                f["sell"] = {"site": hi, "no": round(100 * (1 - pb), 1), "fee": round(100 * rh * pb * (1 - pb), 2)}
+            if fills:
+                prof = sum(q * n for _, n, q in fills)
+                f.update(avg=round(prof / sum(q for _, _, q in fills), 1), profit=round(prof / 100), ladder=ladder(fills))
+            g["fill"] = f
             done += 1
-            print("  FILL $%-7s %6s sh | exec gap %s¢ (mid gap %s¢) | best ask %s %s, best bid %s %s | %s" % (
-                usd, sh, best, g["net"], lo, asks[0][0] if asks else "-", hi, bids[0][0] if bids else "-",
-                g["title"][:40]))
+            print("  FILL $%-7s %6s sh | exec %s¢ avg %s¢ (mid gap %s¢) | ladder %s | %s %s" % (
+                usd, sh, best, f.get("avg"), g["net"], f.get("ladder"), lo + ">" + hi, g["title"][:40]))
         except Exception as err:
             print("  FILL failed | %s | %s" % (g.get("title", "")[:44], err))
     print("Fillable: order books read for %d of %d gaps" % (done, len(gaps)))
