@@ -124,3 +124,9 @@ a.card:hover, .gl a.card:hover { border-color: rgba(63, 219, 230, .55) !importan
 
 /* ---- Footer lines up with the logo and content on every page ---- */
 footer .wrap { max-width: 1120px !important; }
+
+/* Follow box at the end of tool pages (Nov 22) */
+.follow{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:36px 0 8px;padding:18px 20px;background:var(--panel,#0f1b29);border:1px solid var(--line);border-left:3px solid var(--cyan,#22d3ee);border-radius:12px}
+.follow h3{margin:0 0 4px}
+.follow p{margin:0;color:var(--muted);max-width:60ch}
+.follow-b{display:flex;gap:10px;flex-wrap:wrap}

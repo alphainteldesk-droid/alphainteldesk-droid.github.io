@@ -9,6 +9,15 @@ import html, json, re, sys
 SITE = "https://alphainteldesk.com"
 
 
+FOLLOW = '''<section class="follow" aria-label="Follow Alpha Intel Desk">
+  <div><h3>Get this every morning</h3>
+  <p>Free 7 AM desk brief on Telegram: the biggest price gaps, Danger Zone picks and today's market-moving events. Follow on X for the best finds during the day.</p></div>
+  <div class="follow-b"><a class="chip on" href="https://t.me/alphainteldesk" rel="noopener">Join on Telegram</a>
+  <a class="chip" href="https://x.com/alphainteldesk" rel="noopener">Follow on X</a></div>
+</section>
+'''
+
+
 def shell():
     g = open("guides.html").read()
     head = g[:g.index("<title>")]
@@ -32,7 +41,7 @@ def page(title, desc, url, body, og_type="article", img=SITE + "/banner.png"):
             % (html.escape(title), html.escape(desc), url, html.escape(title), html.escape(desc), img, url, og_type))
     tail = head_tail.replace('href="/site.css', 'href="/site.css')
     return (head + meta + fonts + style + "\n" + tail + '<link rel="stylesheet" href="/dossier.css?v=1">\n</head>\n<body>\n\n'
-            + header.replace('src="logo.svg"', 'src="/logo.svg"') + '\n\n<main class="wrap">\n' + body + '\n</main>\n\n' + footer)
+            + header.replace('src="logo.svg"', 'src="/logo.svg"') + '\n\n<main class="wrap">\n' + body + '\n' + FOLLOW + '</main>\n\n' + footer)
 
 
 def build_one(slug, body_path, charts_path):
