@@ -314,13 +314,19 @@
   }
   var NM = { polymarket: 'Polymarket', kalshi: 'Kalshi', alpha: 'Alpha Arcade' };
   var money = function (v) { return '$' + Math.round(v).toLocaleString('en-US'); };
+  function away(iso) {          // "about 2 years away": a 7% gap locked up for 2 years is a different trade from one closing next week
+    var d = (Date.parse(iso) - Date.now()) / 86400000;
+    return d < 14 ? ', ' + Math.max(1, Math.round(d)) + ' days away' : d < 60 ? ', about ' + Math.round(d / 7) + ' weeks away'
+      : d < 548 ? ', about ' + Math.round(d / 30.4) + ' months away' : ', about ' + (Math.round(d / 365 * 2) / 2) + ' years away'; }
   function ticket(g) {           // Nov 22 (James): trade ticket with the size ladder
     var f = g.fill; if (!f || !f.usd || !f.buy || !f.sell) return '';
-    var cost = f.buy.yes + f.buy.fee + f.sell.no + f.sell.fee, pct = f.exec / cost * 100;
+    var cost = 100 - f.exec, pct = f.exec / cost * 100;
     var t = new Date(f.t * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
     var lad = f.ladder || [], top = lad.length ? lad[0][1] : f.exec;
     var rows = lad.map(function (r) { return '<tr><td>' + money(r[0]) + '</td><td class="g">' + r[1].toFixed(1) + '¢</td><td><i style="width:' +
       Math.max(4, Math.round(r[1] / Math.max(top, 0.1) * 90)) + 'px"></i></td></tr>'; }).join('') +
+      (f.avg != null && (!lad.length || f.usd > lad[lad.length - 1][0] * 1.05) ? '<tr><td>all ' + money(f.usd) + '</td><td class="g">' + f.avg.toFixed(1) + '¢</td><td><i style="width:' +
+        Math.max(4, Math.round(f.avg / Math.max(top, 0.1) * 90)) + 'px"></i></td></tr>' : '') +
       '<tr><td>above ' + money(f.usd) + '</td><td class="x">gone</td><td style="color:var(--muted)">gap under 1¢ after fees</td></tr>';
     var link = function (s) { var u = (g.urls || {})[s]; return u ? ' <a href="' + esc(u) + '" target="_blank" rel="noopener">open ↗</a>' : ''; };
     return '<details class="tk"><summary>TRADE TICKET<span>which side where · cost · how far the gap holds as size grows</span></summary><div class="tk-b">' +
@@ -333,7 +339,7 @@
       '<table class="tk-l"><tr><th>PUT IN (BOTH SIDES)</th><th>AVG GAP AFTER FEES</th><th></th></tr>' + rows + '</table>' +
       '<div class="tk-n">Order books at the ' + esc(t) + ' check; they change by the minute, so check both before you trade. Filling everything up to ' + money(f.usd) +
         ' would lock in about ' + money(f.profit || 0) + ' if both sites settle the same way. That depends on the rules matching: see the GRADED line above. ' +
-        'Your money is tied up until it settles (' + esc(when(g.close)) + '). Kalshi rounds each order\'s fee up to the next cent, so very small orders pay a little more. Not financial advice.</div>' +
+        'Your money is tied up until it settles (' + esc(new Date(g.close).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })) + away(g.close) + '). Kalshi rounds each order\'s fee up to the next cent, so very small orders pay a little more. Not financial advice.</div>' +
       '</div></details>';
   }
   function feeMath(g) {          // "5.0¢ gap − 0.9¢ Polymarket fee − 1.7¢ Kalshi fee = 2.4¢ after fees"
