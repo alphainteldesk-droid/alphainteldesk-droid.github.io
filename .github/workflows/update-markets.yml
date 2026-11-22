@@ -28,6 +28,8 @@ jobs:
         continue-on-error: true
       - run: python3 exit_grade.py   # Nov 15: Danger Zone Exit grade (live order-book depth, 2-min cap)
         continue-on-error: true
+      - run: python3 dz_chop.py   # Nov 22: Danger Zone Chop (48h price swing + mini-chart points, 1-min cap)
+        continue-on-error: true
       - run: python3 make_gaps.py
         continue-on-error: true
       - run: python3 gap_chart.py   # Nov 21: Live Gap Chart (real 7-day price history for every gap)
@@ -85,6 +87,7 @@ jobs:
           [ -f traders_full.json ] && git add traders_full.json
           [ -f fresh.json ] && git add fresh.json fresh_state.json
           [ -f expiry.json ] && git add expiry.json
+          [ -f dz_alpha_hist.json ] && git add dz_alpha_hist.json
           [ -f track.json ] && git add track.json
           [ -f rules.json ] && git add rules.json
           [ -f motw.json ] && git add motw.json sitemap.xml

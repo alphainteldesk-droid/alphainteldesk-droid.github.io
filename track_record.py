@@ -128,8 +128,11 @@ def main():
         if x.get("site") not in ("polymarket", "kalshi", "alpha") or not x.get("id"):
             continue
         k = "%s|%s|%s" % (x["site"], x["id"], x["side"])
+        sw = (x.get("ch") or {}).get("sw")              # Nov 22 (James): Chop = 48h swing; keep the biggest seen while listed
         if k in st["open"]:
             st["open"][k]["ls"] = now
+            if sw is not None:
+                st["open"][k]["cm"] = max(sw, st["open"][k].get("cm", 0))
             if "g" not in st["open"][k]:              # Nov 17: contracts logged before grades were saved get today's grade
                 st["open"][k].update(grades(x), gl=1)
             continue
@@ -139,6 +142,8 @@ def main():
                          "r": x["ret"], "c": x["close"], "d": x["days"], "u": x["url"], "fs": now, "ls": now,
                          "px": bool(x["days"] < 3 and PX.search(x["title"] + " " + (x.get("cat") or "")))}
         st["open"][k].update(grades(x))
+        if sw is not None:
+            st["open"][k].update(ch=sw, cm=sw)
         new += 1
 
     for x in json.load(open("expiry.json")).get("all") or []:   # Nov 17: grade older entries from the full list too
@@ -193,6 +198,11 @@ def main():
             gg["n"] += 1
             gg["won"] += won
             gg["pl"] += v["r"] / 100 if won else -1.0
+        if not v["px"] and "cm" in v:             # Nov 22: results by Chop (any 48h swing of 10c+ while listed), not shown
+            cg = st.setdefault("by_chop", {}).setdefault("choppy" if v["cm"] >= 10 else "steady", {"n": 0, "won": 0, "pl": 0.0})
+            cg["n"] += 1                          # on the page yet: checked once there are 30+ results
+            cg["won"] += won
+            cg["pl"] += v["r"] / 100 if won else -1.0
         settled += 1
         paid += won
         if not won:
@@ -215,6 +225,8 @@ def main():
                    "ret": round(100 * sum(g["pl"] for g in main_g) / n_all, 2) if n_all else None}
     summ["by_grade"] = {k: {"n": g["n"], "won": g["won"], "pct": round(100 * g["won"] / g["n"], 1),
                             "ret": round(100 * g["pl"] / g["n"], 2)} for k, g in sorted((st.get("by_grade") or {}).items()) if g["n"]}
+    summ["by_chop"] = {k: {"n": g["n"], "won": g["won"], "pct": round(100 * g["won"] / g["n"], 1),
+                           "ret": round(100 * g["pl"] / g["n"], 2)} for k, g in sorted((st.get("by_chop") or {}).items()) if g["n"]}
     summ["waiting_by_grade"] = dict(__import__("collections").Counter(v.get("g", "?") for v in st["open"].values() if not v["px"]))
     if st.get("removed"):
         summ["removed"] = st["removed"]               # Nov 21: results taken out (shown on the page, so it's open about it)
