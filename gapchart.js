@@ -6,7 +6,7 @@
 (function () {
   var C = { polymarket: '#5b8cff', kalshi: '#2fe0a0', alpha: '#ffb347' };
   var N = { polymarket: 'POLYMARKET', kalshi: 'KALSHI', alpha: 'ALPHA ARCADE' };
-  var TAU = Math.PI * 2, MONO = '"JetBrains Mono",monospace';
+  var TAU = Math.PI * 2, MONO = '"Space Grotesk",system-ui,sans-serif';
   var calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var css = document.createElement('style');
   css.textContent =

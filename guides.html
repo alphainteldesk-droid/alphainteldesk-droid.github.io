@@ -43,13 +43,13 @@
   nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; }
   nav a { color:var(--muted); }
   nav a:hover, nav a.on { color:var(--text); text-decoration:none; }
-  .tag { font-family:"JetBrains Mono",monospace; font-size:.75rem;
-    letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
+  .tag { font-family:"Space Grotesk",system-ui,sans-serif; font-size:.75rem;
+    letter-spacing:.06em; color:var(--amber); text-transform:uppercase; }
   h1 { font-size:clamp(1.6rem,4vw,2.3rem); margin:8px 0 12px; line-height:1.2; }
   h2 { font-size:1.35rem; margin:44px 0 10px; }
   h3 { font-size:1.05rem; margin:22px 0 6px; }
   .lead { color:var(--muted); font-size:1.08rem; }
-  .meta { color:var(--muted); font-size:.82rem; font-family:"JetBrains Mono",monospace; }
+  .meta { color:var(--muted); font-size:.82rem; font-family:"Space Grotesk",system-ui,sans-serif; }
   main { padding:40px 0 8px; }
   ul { padding-left:20px; } li { margin:4px 0; }
 
@@ -60,13 +60,13 @@
   .table-wrap { overflow-x:auto; margin:16px 0; border:1px solid var(--line); border-radius:12px; }
   table { border-collapse:collapse; width:100%; min-width:620px; font-size:.92rem; }
   th, td { text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
-  thead th { background:var(--panel); font-family:"JetBrains Mono",monospace; font-weight:500;
-    font-size:.74rem; letter-spacing:.12em; color:var(--cyan); }
+  thead th { background:var(--panel); font-family:"Space Grotesk",system-ui,sans-serif; font-weight:500;
+    font-size:.74rem; letter-spacing:.06em; color:var(--cyan); }
   tbody th { color:var(--muted); font-weight:500; width:22%; }
   tbody tr:last-child th, tbody tr:last-child td { border-bottom:0; }
 
-  .venue { display:inline-block; font-family:"JetBrains Mono",monospace; font-size:.72rem;
-    letter-spacing:.12em; color:var(--cyan); border:1px solid var(--line); border-radius:6px;
+  .venue { display:inline-block; font-family:"Space Grotesk",system-ui,sans-serif; font-size:.72rem;
+    letter-spacing:.06em; color:var(--cyan); border:1px solid var(--line); border-radius:6px;
     padding:2px 8px; }
   .pick { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin:16px 0; }
   .card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; }
@@ -90,9 +90,9 @@
   .step { position:relative; background:var(--panel); border:1px solid var(--line); border-top:3px solid var(--cyan);
     border-radius:12px; padding:14px 14px 12px; }
   .step b { display:inline-grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--cyan);
-    color:var(--navy); font-family:"JetBrains Mono",monospace; }
+    color:var(--navy); font-family:"Space Grotesk",system-ui,sans-serif; }
   .step h3 { margin:8px 0 4px; } .step p { margin:0 0 10px; color:var(--muted); font-size:.92rem; line-height:1.45; }
-  .step .eg { display:inline-block; font-family:"JetBrains Mono",monospace; font-size:.78rem; color:var(--amber);
+  .step .eg { display:inline-block; font-family:"Space Grotesk",system-ui,sans-serif; font-size:.78rem; color:var(--amber);
     border:1px solid rgba(255,179,71,.45); border-radius:6px; padding:3px 7px; }
   .step:not(:last-child)::after { content:"→"; position:absolute; right:-13px; top:44%; color:var(--cyan); font-size:1.1rem; }
   .pay { width:100%; max-width:480px; height:auto; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:8px 4px; }
@@ -104,13 +104,14 @@
   .gl a.card { display:block; color:inherit; text-decoration:none; transition:border-color .15s, box-shadow .15s; }
   .gl a.card:hover { border-color:var(--cyan); box-shadow:0 0 16px rgba(63,219,230,.15); }
   .gl .card h3 { color:var(--text); } .gl .go { display:inline-block; margin-top:10px; color:var(--cyan); font-weight:700; font-size:.9rem; }
-  .gl .kind { font-family:"JetBrains Mono",monospace; font-size:.7rem; letter-spacing:.14em; color:var(--amber); }
+  .gl .kind { font-family:"Space Grotesk",system-ui,sans-serif; font-size:.72rem; letter-spacing:.06em; color:var(--amber); }
 </style>
 <meta property="og:url" content="https://alphainteldesk.com/guides.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Alpha Intel Desk">
 <link rel="stylesheet" href="/nav.css">
 <script src="/nav.js" defer></script>
+<link rel="stylesheet" href="/site.css?v=1">
 </head>
 <body>
 
