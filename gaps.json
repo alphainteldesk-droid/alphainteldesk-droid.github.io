@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-22T12:29:16Z",
+ "updated": "2026-11-22T12:41:27Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -30,7 +30,7 @@
    },
    "volumes": {
     "polymarket": 37732,
-    "kalshi": 134271
+    "kalshi": 134276
    },
    "volumes24": {
     "polymarket": 191,
@@ -203,11 +203,11 @@
    },
    "volumes": {
     "polymarket": 153298,
-    "kalshi": 1083094
+    "kalshi": 1083157
    },
    "volumes24": {
-    "polymarket": 489,
-    "kalshi": 3638
+    "polymarket": 504,
+    "kalshi": 3644
    },
    "raw": 7.0,
    "fees": 1.7,
@@ -229,13 +229,11 @@
    "rate_high": 0.01,
    "category": "Politics",
    "fill": {
-    "usd": 1494,
-    "shares": 1551,
+    "usd": 1445,
+    "shares": 1500,
     "exec": 4.3
    },
-   "chg": {
-    "polymarket": 1.5
-   }
+   "chg": {}
   },
   {
    "title": "Anthropic announces a Millennium Prize solution by...?",
@@ -289,8 +287,8 @@
    "rate_high": 0.05,
    "category": "AI",
    "fill": {
-    "usd": 252,
-    "shares": 260,
+    "usd": 281,
+    "shares": 291,
     "exec": 3.6
    },
    "chg": {}
@@ -382,7 +380,7 @@
    },
    "volumes24": {
     "polymarket": 6846,
-    "kalshi": 2472
+    "kalshi": 2462
    },
    "raw": 5.5,
    "fees": 1.9,
@@ -410,59 +408,6 @@
     "shares": 812,
     "exec": 2.0
    },
-   "chg": {}
-  },
-  {
-   "title": "Which bills will become law in 2026?",
-   "outcome": "AI-chip export licensing",
-   "close": "2027-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 43.5,
-    "kalshi": 48.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 43.5,
-    "url": "https://polymarket.com/event/which-bills-will-become-law-in-2026"
-   },
-   "high": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 48.5,
-    "url": "https://kalshi.com/markets/kxbills"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/which-bills-will-become-law-in-2026",
-    "kalshi": "https://kalshi.com/markets/kxbills"
-   },
-   "volumes": {
-    "polymarket": 222647,
-    "kalshi": 713604
-   },
-   "volumes24": {
-    "polymarket": 1379,
-    "kalshi": 3045
-   },
-   "raw": 5.0,
-   "fees": 2.0,
-   "net": 3.0,
-   "all3": false,
-   "fee_low": 0.25,
-   "fee_high": 1.75,
-   "fair": 46.5,
-   "grade": "A",
-   "fine": {
-    "src": "match",
-    "srcs": [
-     "Congress"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.01,
-   "rate_high": 0.07,
-   "category": "Congress",
    "chg": {}
   },
   {
@@ -516,23 +461,74 @@
    "rate_low": 0.07,
    "rate_high": 0.01,
    "category": "Awards",
-   "chg": {
-    "kalshi": 0.5
-   }
+   "chg": {}
+  },
+  {
+   "title": "Strait of Hormuz traffic returns to normal by...?",
+   "outcome": "June 30, 2027",
+   "close": "2028-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 26.5,
+    "kalshi": 22.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 22.5,
+    "url": "https://kalshi.com/markets/kxhormuznorm"
+   },
+   "high": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 26.5,
+    "url": "https://polymarket.com/event/strait-of-hormuz-traffic-returns-to-normal-byptptpt"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/strait-of-hormuz-traffic-returns-to-normal-byptptpt",
+    "kalshi": "https://kalshi.com/markets/kxhormuznorm"
+   },
+   "volumes": {
+    "polymarket": 23727,
+    "kalshi": 9506365
+   },
+   "volumes24": {
+    "polymarket": 3395,
+    "kalshi": 24001
+   },
+   "raw": 4.0,
+   "fees": 1.4,
+   "net": 2.6,
+   "all3": false,
+   "fee_low": 1.22,
+   "fee_high": 0.19,
+   "fair": 22.5,
+   "grade": "A",
+   "fine": {
+    "src": "match",
+    "srcs": [
+     "IMF PortWatch"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.07,
+   "rate_high": 0.01,
+   "category": "Oil",
+   "chg": {}
   },
   {
    "title": "US announces end of Iranian blockade by...?",
    "outcome": "December 31, 2026",
    "close": "2027-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 13.8,
+    "polymarket": 13.7,
     "kalshi": null,
     "alpha": 16.8
    },
    "low": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 13.8,
+    "price": 13.7,
     "url": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
    },
    "high": {
@@ -553,13 +549,13 @@
     "alpha": 436,
     "polymarket": 80795
    },
-   "raw": 3.0,
+   "raw": 3.1,
    "fees": 1.0,
-   "net": 2.0,
+   "net": 2.1,
    "all3": false,
    "fee_low": 0.0,
    "fee_high": 0.98,
-   "fair": 13.8,
+   "fair": 13.7,
    "grade": "A",
    "fine": {
     "src": "match",
