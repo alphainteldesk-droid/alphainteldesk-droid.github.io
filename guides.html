@@ -111,7 +111,7 @@
 <meta property="og:site_name" content="Alpha Intel Desk">
 <link rel="stylesheet" href="/nav.css">
 <script src="/nav.js" defer></script>
-<link rel="stylesheet" href="/site.css?v=2">
+<link rel="stylesheet" href="/site.css?v=3">
 </head>
 <body>
 
@@ -123,9 +123,9 @@
       <a href="/gap-scanner.html">Gap Scanner</a>
       <a href="/expiry-returns.html">Danger Zone</a>
       <a href="/market-of-the-week.html">Market of the Week</a>
+      <a href="/dossier/">Dossier</a>
       <details class="nt"><summary>Tools</summary><div class="nt-m"><a href="/momentum-scanner.html">Momentum Scanner<small>Biggest odds moves, with the news</small></a><a href="/top-traders.html">Top Traders<small>This week's most profitable traders</small></a><a href="/rule-risk.html">Rule Risk<small>Where the same market has different rules</small></a><a href="/#calendar">Catalyst Calendar<small>Dates that move markets, next 2 weeks</small></a><a href="/conflict-radar.html">Conflict Radar<small>World conflict headlines + the markets they move</small></a></div></details>
       <a class="on" href="/guides.html">Guides</a>
-      <a href="/about.html">About</a>
       <a class="nav-tg" href="https://t.me/alphainteldesk" rel="noopener">Telegram</a>
     </nav>
   </div>
@@ -149,6 +149,10 @@
   <h2>Market of the Week deep dives</h2>
   <p class="note">One market a week, picked by formula. Both sides of the argument, with every point backed by two or more sources.</p>
   <div class="gl" id="mw-list"><p class="note">Loading&hellip;</p></div>
+
+  <h2>The Dossier <span style="font-size:.7rem;letter-spacing:.08em;color:#111;background:var(--amber);border-radius:4px;padding:2px 7px;vertical-align:4px">OPINION</span></h2>
+  <p class="note">Our view on the stories moving prediction markets, with the facts, live prices and one dated call. Every call is tracked in <a href="/dossier/#receipts">Receipts</a>.</p>
+  <div class="gl" id="dos-list"><p class="note">Loading&hellip;</p></div>
 
   <h2>How our tools work</h2>
   <div class="gl">
@@ -178,6 +182,14 @@ fetch('/motw.json?' + Date.now()).then(function (r) { return r.json(); }).then(f
       '</span><h3>' + e(x.title) + '</h3><p>' + e(hook) + '</p><span class="go">Read the deep dive &rarr;</span></a>'; }).join('')
     : '<p class="note">The first deep dive is on its way.</p>';
 }).catch(function () { document.getElementById('mw-list').innerHTML = '<p class="note"><a href="/market-of-the-week.html">See the Market of the Week &rarr;</a></p>'; });
+fetch('/dossier.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {   /* Nov 22: The Dossier */
+  var e = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (x) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[x]; }); };
+  var st = { pending: 'CALL PENDING', won: 'CALLED IT', lost: 'MISSED' };
+  document.getElementById('dos-list').innerHTML = (d.items || []).slice().sort(function (a, b) { return b.n - a.n; }).map(function (x) {
+    var when = new Date(x.published + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return '<a class="card" href="/dossier/' + e(x.slug) + '.html"><span class="kind">No. ' + x.n + ' · ' + e(when) + ' · ' + e(x.topic) + ' · ' + (st[x.status] || '') +
+      '</span><h3>' + e(x.title) + '</h3><p>' + e(x.dek) + '</p><span class="go">Read the dossier &rarr;</span></a>'; }).join('');
+}).catch(function () { document.getElementById('dos-list').innerHTML = '<p class="note"><a href="/dossier/">See The Dossier &rarr;</a></p>'; });
 </script>
 
 <footer>

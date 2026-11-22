@@ -1,0 +1,83 @@
+/* The Dossier (Nov 22, 2026): opinion reports with a dated call. Uses site.css for everything shared. */
+.dos { max-width: 860px; }
+.dos-eb { font-size: .76rem; font-weight: 600; letter-spacing: .06em; color: var(--amber); text-transform: uppercase; margin: 18px 0 6px; }
+.dos-eb a { color: var(--amber) !important; }
+.dos h1 { margin: 0 0 8px; }
+.dos-dek { font-size: 1.15rem; color: #c9d6e3; line-height: 1.5; margin: 0 0 18px; }
+.dos h2 { margin: 34px 0 12px; padding-top: 18px; border-top: 1px solid var(--line); }
+.dos .card { padding: 16px 18px; margin: 14px 0; }
+.dos .card > b:first-child, .dos-call > b { display: block; font-size: .74rem; letter-spacing: .06em; color: var(--cyan); margin-bottom: 6px; }
+.dos-quick { border-left: 3px solid var(--cyan) !important; }
+.dos-quick p, .dos-911 p { margin: 6px 0; }
+.dos-facts li, .dos-case li, .dos-watch li { margin: 7px 0; line-height: 1.55; }
+.dos-tl { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--line); }
+.dos-tl li { position: relative; padding: 0 0 14px 22px; }
+.dos-tl li::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--panel); border: 2px solid var(--cyan); }
+.dos-tl li.next::before { border-color: var(--amber); background: rgba(255, 179, 71, .25); }
+.dos-tl span { display: block; font-size: .8rem; font-weight: 700; color: var(--cyan); letter-spacing: .03em; }
+.dos-tl li.next span { color: var(--amber); }
+.dos-tl p { margin: 2px 0 0; }
+.dos-tbl { width: 100%; border-collapse: collapse; }
+.dos-tbl th, .dos-tbl td { padding: 9px 14px; border-bottom: 1px solid var(--line); text-align: right; }
+.dos-tbl th:first-child, .dos-tbl td:first-child { text-align: left; }
+.dos-tbl tr.hl td { background: rgba(255, 179, 71, .1); color: #ffd9a3; font-weight: 700; }
+.dos-fig { margin: 14px 0; }
+.dos-fig figcaption { color: var(--muted); font-size: .82rem; margin-top: 6px; }
+.chart { width: 100%; height: auto; display: block; }
+.chart .g { stroke: rgba(149, 168, 188, .16); }
+.chart .ax { fill: #95a8bc; font: 500 12px "Space Grotesk", system-ui, sans-serif; }
+.chart .lab { font: 700 12.5px "Space Grotesk", system-ui, sans-serif; }
+.chart .ev { stroke: rgba(149, 168, 188, .55); stroke-dasharray: 3 4; }
+.chart .evt { fill: #c9d6e3; font: 500 11.5px "Space Grotesk", system-ui, sans-serif; }
+.chart .call { stroke: var(--amber); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.chart .callt { fill: var(--amber); font: 700 12px "Space Grotesk", system-ui, sans-serif; }
+.chart .leg text { fill: #c9d6e3; font: 500 12px "Space Grotesk", system-ui, sans-serif; }
+.dos-note { border-left: 3px solid var(--amber) !important; }
+.dos-note > b:first-child { color: var(--amber) !important; }
+.dos-case { padding-left: 20px; }
+.dos-case.out li::marker { color: #ff8a8a; }
+.dos-case.in li::marker { color: #3ee88a; }
+.dos-take-h { color: var(--amber); }
+.dos-take { border: 1px solid rgba(255, 179, 71, .55) !important; background: linear-gradient(180deg, rgba(255, 179, 71, .07), var(--panel)) !important; }
+.dos-take p { font-size: 1.04rem; line-height: 1.65; }
+.dos-op { display: inline-block; font-size: .7rem; font-weight: 700; letter-spacing: .08em; color: #111; background: var(--amber); border-radius: 4px; padding: 2px 8px; }
+.dos-call { border: 2px solid var(--cyan) !important; }
+.dos-call-p { font-size: 1.3rem; font-weight: 700; margin: 4px 0 12px; }
+.dos-call-g { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.dos-call-g div { background: rgba(63, 219, 230, .06); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.dos-call-g small { display: block; color: var(--muted); font-size: .74rem; text-transform: uppercase; letter-spacing: .05em; }
+.dos-call-g span { font-weight: 600; }
+.dos-call-g .pend { color: var(--amber); }
+.dos-call-n { color: var(--muted); font-size: .86rem; margin: 10px 0 0; }
+.dos-src { font-size: .88rem; color: var(--muted); }
+.dos-src li { margin: 5px 0; max-width: none; }
+.dos-disc { margin-top: 28px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); font-size: .86rem; max-width: none; }
+/* index + receipts */
+.dos-list { display: grid; gap: 14px; }
+.rc { width: 100%; border-collapse: collapse; }
+.rc th, .rc td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.rc .st { font-weight: 700; white-space: nowrap; } .rc .st.p { color: var(--amber); } .rc .st.w { color: #3ee88a; } .rc .st.l { color: #ff8a8a; }
+@media (max-width: 640px) {
+  .dos-call-g { grid-template-columns: 1fr; }
+  .dos-dek { font-size: 1.02rem; }
+  .chart .ax, .chart .evt, .chart .leg text { font-size: 15px; }
+  .rc th:nth-child(4), .rc td:nth-child(4) { display: none; }
+}
+.dos .card p { color: var(--text); }
+.dos-grid { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 32px; align-items: start; }
+.dos-grid .dos { max-width: none; }
+.dos-side { position: sticky; top: 84px; margin-top: 96px; }
+.dos-side .card { padding: 16px; }
+.dos-side .card > b:first-child { display: block; font-size: .74rem; letter-spacing: .06em; color: var(--cyan); margin-bottom: 10px; }
+.dos-side small { display: block; color: var(--muted); font-size: .72rem; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 6px; }
+.sd-call { border: 1px solid rgba(63, 219, 230, .55); border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; }
+.sd-call span { display: block; font-weight: 700; font-size: 1rem; }
+.sd-call em { font-style: normal; color: var(--amber); font-size: .84rem; font-weight: 600; }
+.sd-row { padding: 10px 0; border-top: 1px solid var(--line); }
+.sd-p, .sd-d { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; padding: 3px 0; }
+.sd-p b { font-size: 1.05rem; }
+.sd-d b { color: var(--amber); white-space: nowrap; } .sd-d span { color: var(--text); text-align: right; }
+.sd-l { display: block; padding: 8px 0; border-top: 1px solid var(--line); font-weight: 600; color: var(--cyan) !important; }
+.sd-sh { display: block !important; text-align: center; margin-top: 10px; text-decoration: none !important; }
+@media (max-width: 1000px) { .dos-grid { grid-template-columns: minmax(0, 1fr); } .dos-side { display: none; } }
+.dos-op-eb { color: #111; background: var(--amber); border-radius: 4px; padding: 1px 7px; letter-spacing: .08em; }
