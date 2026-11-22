@@ -584,6 +584,15 @@
   .split .cal-dh, .split .cal-d.empty:not(.today) { display:none; }
   .split .cal-d { min-height:auto; flex:none; }
   .split .cal-d > * { flex:none; }
+  /* Nov 21 (James): easier to see at a glance which events belong to which day; today stands out */
+  .split .cal-d { border:1px solid rgba(63,219,230,.38); background:rgba(14,30,46,.88); }
+  .split .cal-d.wkend { background:rgba(10,22,36,.88); }
+  .split .cal-dn { padding-bottom:6px; border-bottom:1px solid rgba(63,219,230,.25); color:#dbe6f0; }
+  .split .cal-d.today { border:2px solid var(--cyan); background:linear-gradient(180deg, rgba(63,219,230,.28), rgba(63,219,230,.14));
+    box-shadow:0 0 22px rgba(63,219,230,.38), inset 0 0 18px rgba(63,219,230,.08); }
+  .split .cal-d.today .cal-dn { border-bottom-color:rgba(63,219,230,.65); }
+  .split .cal-d.today .cal-dn span { color:#fff; text-shadow:0 0 8px rgba(63,219,230,.7); }
+  .split .cal-d.today.empty::after { color:#9cc3cf; }
   .split .cal-h h2 { font-size:1.2rem; }
   /* Nov 21 (James): calendar fills down to the Danger Zone's bottom edge on desktop, with bigger day boxes + text */
   @media (min-width:1001px) {
