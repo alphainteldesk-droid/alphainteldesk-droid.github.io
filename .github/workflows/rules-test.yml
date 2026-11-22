@@ -1,0 +1,29 @@
+name: Rules fetch (branch only)
+on:
+  push:
+    branches: [dossier-rules]
+permissions:
+  contents: write
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          import json, urllib.request
+          H={"User-Agent":"AlphaIntelDesk/1.0","Accept":"application/json"}
+          g=lambda u: json.load(urllib.request.urlopen(urllib.request.Request(u,headers=H),timeout=30))
+          out={}
+          ev=g("https://gamma-api.polymarket.com/events?slug=howard-lutnick-out-as-secretary-of-commerce-by-december-31")
+          ev=ev[0] if isinstance(ev,list) else ev
+          out["poly_desc"]=ev.get("description")
+          out["poly_markets"]=[(m.get("groupItemTitle"),m.get("outcomePrices"),m.get("endDate"),m.get("volume")) for m in ev.get("markets",[])]
+          k=g("https://api.elections.kalshi.com/trade-api/v2/events/KXLUTNICKOUT?with_nested_markets=true")
+          out["kalshi_event"]={x:k.get("event",{}).get(x) for x in ("title","sub_title","category")}
+          out["kalshi_markets"]=[(m.get("ticker"),m.get("title"),m.get("rules_primary"),m.get("rules_secondary"),m.get("yes_bid_dollars"),m.get("yes_ask_dollars"),m.get("close_time")) for m in (k.get("event",{}).get("markets") or k.get("markets") or [])]
+          json.dump(out,open("lutnick_rules.json","w"),indent=1)
+          print(json.dumps(out)[:3000])
+          PY
+          git config user.name "github-actions[bot]"; git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add lutnick_rules.json; git commit -m "rules [skip ci]" && git push
