@@ -1,0 +1,17 @@
+name: Trade ticket test (branch only)
+on:
+  push:
+    branches: [trade-ticket]
+permissions:
+  contents: write
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: python3 make_gaps.py 2>&1 | grep -E "FILL|Fillable|Gaps:|net "
+      - run: |
+          git config user.name "github-actions[bot]"; git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add gaps.json; git commit -m "test output [skip ci]" && git push

@@ -136,6 +136,22 @@
   .gp-fill span { font-weight:500; letter-spacing:0; color:var(--muted); margin-left:6px; }
   .gp-fill.ok { color:#3ee88a; } .gp-fill.no { color:#ff7a7a; } .gp-fill.na { color:var(--muted); font-weight:600; }
   .gp.unfill { opacity:.6; }
+  /* Nov 22 (James): TRADE TICKET = which side on which site, cost, payout either way, and how far the gap holds as size grows */
+  .tk { margin-top:8px; border:1px solid rgba(62,232,138,.35); border-radius:8px; background:rgba(62,232,138,.05); }
+  .tk summary { cursor:pointer; list-style:none; padding:7px 12px; font:800 .74rem "JetBrains Mono",monospace; letter-spacing:.08em; color:#3ee88a; }
+  .tk summary::-webkit-details-marker { display:none; } .tk summary span { color:var(--muted); font-weight:500; letter-spacing:0; margin-left:6px; }
+  .tk summary:after { content:" ▾"; } .tk[open] summary:after { content:" ▴"; }
+  .tk-b { padding:2px 12px 12px; font-size:.88rem; }
+  .tk-s { display:grid; grid-template-columns:auto 1fr; gap:6px 10px; align-items:baseline; margin:4px 0 10px; }
+  .tk-s b.n { font:700 .7rem "JetBrains Mono",monospace; color:var(--muted); letter-spacing:.1em; }
+  .tk-s .y { color:#3ee88a; font-weight:700; } .tk-s .no { color:#ff8a8a; font-weight:700; } .tk-s a { color:var(--cyan); }
+  .tk-eq { font:600 .84rem/1.5 "JetBrains Mono",monospace; color:var(--text); padding:8px 10px; border-radius:6px; background:rgba(255,255,255,.04); }
+  .tk-eq b { color:#ffb347; }
+  .tk-l { width:100%; border-collapse:collapse; margin:10px 0 4px; font:500 .8rem "JetBrains Mono",monospace; }
+  .tk-l th { text-align:left; color:var(--muted); font-weight:600; font-size:.66rem; letter-spacing:.1em; padding:3px 8px 3px 0; }
+  .tk-l td { padding:3px 8px 3px 0; border-top:1px solid var(--line); } .tk-l td.g { color:#3ee88a; font-weight:700; } .tk-l td.x { color:#ff8a8a; }
+  .tk-l i { display:inline-block; height:6px; border-radius:3px; background:#3ee88a; vertical-align:middle; opacity:.7; }
+  .tk-n { color:var(--muted); font-size:.78rem; line-height:1.5; margin-top:8px; }
 </style>
 <meta property="og:url" content="https://alphainteldesk.com/gap-scanner.html">
 <meta property="og:type" content="website">
@@ -290,11 +306,35 @@
   function fillLine(g) {         // Nov 12: what the order books say right now
     var f = g.fill;
     if (!f) return '<div class="gp-fill na">FILLABLE <span>' + (g.low.site === 'alpha' || g.high.site === 'alpha' ?
-      'Alpha Arcade order book coming soon' : 'order book not read for this pair yet') + '</span></div>';
+'Alpha Arcade order book not read this run' : 'order book not read for this pair yet') + '</span></div>';
     if (!f.usd) return '<div class="gp-fill no">NOT FILLABLE NOW <span>at real buy and sell prices the gap is ' +
       esc((f.exec != null ? f.exec : 0).toFixed(1)) + '¢ after fees, so there\'s nothing to trade</span></div>';
     return '<div class="gp-fill ok">FILLABLE ≈ $' + esc(Math.round(f.usd).toLocaleString('en-US')) +
       ' <span>at real buy and sell prices · best real gap now ' + esc(f.exec.toFixed(1)) + '¢ after fees</span></div>';
+  }
+  var NM = { polymarket: 'Polymarket', kalshi: 'Kalshi', alpha: 'Alpha Arcade' };
+  var money = function (v) { return '$' + Math.round(v).toLocaleString('en-US'); };
+  function ticket(g) {           // Nov 22 (James): trade ticket with the size ladder
+    var f = g.fill; if (!f || !f.usd || !f.buy || !f.sell) return '';
+    var cost = f.buy.yes + f.buy.fee + f.sell.no + f.sell.fee, pct = f.exec / cost * 100;
+    var t = new Date(f.t * 1000).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    var lad = f.ladder || [], top = lad.length ? lad[0][1] : f.exec;
+    var rows = lad.map(function (r) { return '<tr><td>' + money(r[0]) + '</td><td class="g">' + r[1].toFixed(1) + '¢</td><td><i style="width:' +
+      Math.max(4, Math.round(r[1] / Math.max(top, 0.1) * 90)) + 'px"></i></td></tr>'; }).join('') +
+      '<tr><td>above ' + money(f.usd) + '</td><td class="x">gone</td><td style="color:var(--muted)">gap under 1¢ after fees</td></tr>';
+    var link = function (s) { var u = (g.urls || {})[s]; return u ? ' <a href="' + esc(u) + '" target="_blank" rel="noopener">open ↗</a>' : ''; };
+    return '<details class="tk"><summary>TRADE TICKET<span>which side where · cost · how far the gap holds as size grows</span></summary><div class="tk-b">' +
+      '<div class="tk-s"><b class="n">STEP 1</b><div>Buy <span class="y">YES</span> on <b>' + esc(NM[f.buy.site]) + '</b> at ' + f.buy.yes.toFixed(1) + '¢' +
+        (f.buy.fee >= 0.05 ? ' + ' + f.buy.fee.toFixed(1) + '¢ fee' : ' (no fee)') + link(f.buy.site) + '</div>' +
+      '<b class="n">STEP 2</b><div>Buy <span class="no">NO</span> on <b>' + esc(NM[f.sell.site]) + '</b> at ' + f.sell.no.toFixed(1) + '¢' +
+        (f.sell.fee >= 0.05 ? ' + ' + f.sell.fee.toFixed(1) + '¢ fee' : ' (no fee)') + link(f.sell.site) + '</div></div>' +
+      '<div class="tk-eq">One YES + one NO costs <b>' + cost.toFixed(1) + '¢</b> · one of them pays <b>$1.00</b> whichever way it settles · ' +
+        '<b>+' + f.exec.toFixed(1) + '¢</b> per pair (' + pct.toFixed(1) + '%) at the best prices</div>' +
+      '<table class="tk-l"><tr><th>PUT IN (BOTH SIDES)</th><th>AVG GAP AFTER FEES</th><th></th></tr>' + rows + '</table>' +
+      '<div class="tk-n">Order books at the ' + esc(t) + ' check; they change by the minute, so check both before you trade. Filling everything up to ' + money(f.usd) +
+        ' would lock in about ' + money(f.profit || 0) + ' if both sites settle the same way. That depends on the rules matching: see the GRADED line above. ' +
+        'Your money is tied up until it settles (' + esc(when(g.close)) + '). Kalshi rounds each order\'s fee up to the next cent, so very small orders pay a little more. Not financial advice.</div>' +
+      '</div></details>';
   }
   function feeMath(g) {          // "5.0¢ gap − 0.9¢ Polymarket fee − 1.7¢ Kalshi fee = 2.4¢ after fees"
     if (g.fee_low == null) return esc(g.raw.toFixed(1)) + '¢ price gap − ' + esc(g.fees.toFixed(1)) + '¢ est. fees';
@@ -347,7 +387,7 @@
         '<div class="gp-o">' + esc(g.outcome) + ' · ' + esc(g.category) + ' · closes ' + esc(when(g.close)) + '</div></div>' +
         '<div class="gp-net">' + esc(g.net.toFixed(1)) + '¢<small>GAP AFTER FEES</small>' + (g.fair != null ? '<a class="gp-fair" href="#fair" title="Our best guess at what this is really worth: the sites\' prices blended, trusting the busiest site the most. Click to learn more.">FAIR ≈ ' + esc(g.fair.toFixed(1)) + '¢</a>' : '') + '</div></div>' +
         '<div class="gp-px">' + px + '</div>' +
-        finePrint(g) + fillLine(g) + '<div class="gp-math">' + feeMath(g) + ' · lowest on ' +
+        finePrint(g) + fillLine(g) + ticket(g) + '<div class="gp-math">' + feeMath(g) + ' · lowest on ' +
         esc(g.low.name) + ', highest on ' + esc(g.high.name) +
         ' <button class="gp-sh" data-i="' + i + '">Share &#x2197;</button></div></div>';
     }).join('');
