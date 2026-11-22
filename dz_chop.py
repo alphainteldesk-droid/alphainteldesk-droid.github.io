@@ -21,7 +21,7 @@ HOURS = 48
 CHOPPY = 10.0            # cents, high - low over 48 h
 KEEP = 50 * 3600
 STEP = 2 * 3600          # mini-chart: one point every 2 h
-BUDGET = 60
+BUDGET = 75
 NOW = time.time()
 
 
@@ -66,7 +66,22 @@ def series(r, own):
     return list(own.get("%s|%s" % (r["id"], r["side"])) or []), "snap"
 
 
-def chop(r, own):
+ERRS = []
+
+
+def chop(r, own, tries=3):
+    """Kalshi rate-limits right after the exit step's ~250 order-book calls: retry with a pause."""
+    for i in range(tries):
+        try:
+            return _chop(r, own)
+        except Exception as e:
+            if i == tries - 1:
+                ERRS.append("%s %s: %s" % (r["site"], r["id"] if r["site"] != "polymarket" else "", e))
+                raise
+            time.sleep(2 + 3 * i)
+
+
+def _chop(r, own):
     pts, src = series(r, own)
     pts = sorted([t, v] for t, v in pts if NOW - t <= HOURS * 3600)   # history only: mixing in the live ask
     if len(pts) < 2:                                                  # (not the mid) would add a fake swing
@@ -92,7 +107,7 @@ def main(path="expiry.json"):
         print("Chop: Alpha record skipped (%s)" % e)
         own = {}
     done = fail = 0
-    ex = ThreadPoolExecutor(6)
+    ex = ThreadPoolExecutor(3)                         # gentle on Kalshi
     futs = {ex.submit(chop, r, own): r for r in rows if r.get("id")}
     try:
         for f in as_completed(futs, timeout=BUDGET):
@@ -108,6 +123,8 @@ def main(path="expiry.json"):
     except Exception:
         print("Chop: time budget (%ds) reached" % BUDGET)
     ex.shutdown(wait=False, cancel_futures=True)
+    for e in ERRS[:4]:
+        print("  Chop failed: " + str(e)[:160])
     choppy = [r for r in rows if (r.get("ch") or {}).get("sw", 0) >= CHOPPY]
     print("Chop: %d of %d rows have 48h history (%d failed) | %d choppy (>= %.0fc swing): %s"
           % (done, len(rows), fail, len(choppy), CHOPPY,
