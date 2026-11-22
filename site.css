@@ -130,3 +130,6 @@ footer .wrap { max-width: 1120px !important; }
 .follow h3{margin:0 0 4px}
 .follow p{margin:0;color:var(--muted);max-width:60ch}
 .follow-b{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Nov 22: boxes side by side in a grid stay the same size and line up (the "card + card" gap above is for stacked cards only) */
+:is(.grid, .gl, .pick, .cols) > .card { margin-top: 0 !important; }
