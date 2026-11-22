@@ -1,6 +1,7 @@
 """Market of the Week (Nov 19, 2026, James). Runs in every "Update markets" job.
 
-- Picks one market a week by formula (staged Mondays from 4 AM ET, live once James approves the write-up), from matches.json:
+- Picks one market a week by formula (Nov 21, James: staged SUNDAYS from 9 AM ET so he can approve on Sunday;
+  an approved pick goes live Monday 4 AM ET, or right away if approved later), from matches.json:
   on 2+ sites (Alpha first, all three best), a real debate (30-70c), settles in 14-60 days,
   busy (24h volume), clear rules (A/B), no sports or daily price markets, not picked in the last 8 weeks.
 - VERIFIED TWICE (James's rule): a new pick only goes live after two separate readings at least
@@ -121,9 +122,16 @@ def agree(a, b):
 
 
 def pick_time():
-    """True from Monday 4 AM ET on: a new week's pick is due (staged, then approved)."""
+    """Nov 21 (James): True from Sunday 9 AM ET through Monday: next week's pick can be staged (then approved)."""
     d = datetime.fromtimestamp(NOW, ET)
-    return d.weekday() == 0 and d.hour >= 4
+    return (d.weekday() == 6 and d.hour >= 9) or d.weekday() == 0
+
+
+def live_time():
+    """When a pick staged now goes live: the coming Monday 4 AM ET (this Monday's, if today is Monday)."""
+    d = datetime.fromtimestamp(NOW, ET)
+    m = (d + timedelta(days=(7 - d.weekday()) % 7)).replace(hour=4, minute=0, second=0, microsecond=0)
+    return m.timestamp()
 
 
 def week_start():
@@ -232,19 +240,19 @@ def main():
         print("Market of the Week: no matches.json, nothing changed")
         return
 
-    # 1) Nov 19 (James): Monday's pick is STAGED first (from 4 AM ET), then goes live only once James approves it.
-    #    A scheduled task writes Both Sides at 5:47 AM ET and sends it to him; his OK sets "approved": true for that
-    #    market in motw_story.json. Until then last week's pick stays live. (A pick made mid-week, like the first one
-    #    on a Thursday, runs through the following Monday: 6+ days old.)
+    # 1) Nov 21 (James): next week's pick is STAGED on Sunday (from 9 AM ET), a scheduled task writes Both Sides on
+    #    Sunday afternoon and sends it to him; his OK sets "approved": true for that market in motw_story.json.
+    #    An approved pick goes live Monday 4 AM ET (live_at), or at once if approved after that. Until then last
+    #    week's pick stays live. The live pick must be 6+ days old by go-live time (pick #1, a Thursday, runs to Nov 30).
     nxt = st.get("next")
-    due = nxt is None and (cur is None or (pick_time() and cur["picked"] < week_start() and NOW - cur["picked"] >= 6 * 86400))
+    due = nxt is None and (cur is None or (pick_time() and live_time() - cur["picked"] >= 6 * 86400))
     if due:
         cands = candidates(matches, arch + ([cur] if cur else []))
         top = cands[0] if cands else None
         if not top:
             print("Market of the Week: no market passes the formula this run")
         elif pend and pend["key"] == top["key"] and NOW - pend["seen"] >= CONFIRM_GAP and agree(pend["prices"], top["prices"]):
-            nxt = dict(top, staged=round(NOW))
+            nxt = dict(top, staged=round(NOW), live_at=round(live_time()))
             pend = None
             print("Market of the Week: next pick STAGED (verified twice), waiting for James's OK: %s %s" % (nxt["title"], nxt["prices"]))
         else:
@@ -252,20 +260,34 @@ def main():
                 pend = {"key": top["key"], "prices": top["prices"], "seen": round(NOW)}
             print("Market of the Week: candidate %s %s, waiting for a second matching reading" % (top["title"], top["prices"]))
     if nxt:
-        if (load("motw_story.json", {}).get(nxt["key"]) or {}).get("approved") is True:
-            row = find(matches, nxt["key"])
-            ps = snapshot(row) if row else {}
-            if not (ps and agree(nxt["prices"], ps)):
-                ps = nxt["prices"]                                      # keep the verified staged prices
+        ok = (load("motw_story.json", {}).get(nxt["key"]) or {}).get("approved") is True
+        row = find(matches, nxt["key"]) if ok and NOW >= nxt.get("live_at", 0) else None
+        ps = snapshot(row) if row else {}
+        fresh = None
+        if ok and NOW >= nxt.get("live_at", 0):
+            if not ps or agree(nxt["prices"], ps):
+                fresh = ps or nxt["prices"]                             # staged prices still hold (or market not found)
+            elif nxt.get("recheck") and NOW - nxt["recheck"]["t"] >= CONFIRM_GAP and agree(nxt["recheck"]["p"], ps):
+                fresh = ps                                              # moved since Sunday: two new readings agree
+            else:
+                if not (nxt.get("recheck") and agree(nxt["recheck"]["p"], ps)):
+                    nxt["recheck"] = {"p": ps, "t": round(NOW)}         # moved since Sunday: wait for a 2nd reading
+                print("Market of the Week: approved, prices moved since staging, waiting for a 2nd reading %s" % ps)
+        if fresh is not None:
+            ps = fresh
             if cur:                                                     # archive last week's pick
                 cur["ended"] = round(NOW)
                 arch.insert(0, cur)
             cur = dict(nxt, prices=ps, picked=round(NOW), picked_prices=ps, confirmed=ps, last_read=ps,
                        series=[[round(NOW)] + [ps.get(s) for s in SITES]], n=len(arch) + 1, slug=slugify(nxt["title"]))
-            cur.pop("staged", None)
+            for k in ("staged", "live_at", "recheck"):
+                cur.pop(k, None)
             nxt = None
             print("Market of the Week: NEW PICK LIVE (approved): %s %s" % (cur["title"], ps))
-        else:
+        elif ok and NOW < nxt.get("live_at", 0):
+            print("Market of the Week: next pick %s APPROVED, goes live %s" % (
+                nxt["title"], datetime.fromtimestamp(nxt["live_at"], ET).strftime("%a %b %d %I:%M %p ET")))
+        elif not ok:
             print("Market of the Week: next pick %s staged, waiting for approval in motw_story.json" % nxt["title"])
 
     # 2) update the live pick: prices shown only when two readings agree
