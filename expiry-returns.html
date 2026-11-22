@@ -186,9 +186,9 @@
   .eg.a i { background:#3ddc84; } .eg.b i { background:var(--cyan); } .eg.c i { background:var(--amber); } .eg.d i { background:#ff6b6b; }
   .chp { display:inline-flex; align-items:center; gap:7px; font:600 .7rem "JetBrains Mono",monospace; color:var(--amber); cursor:help;
          border:1px solid rgba(255,179,71,.45); background:rgba(255,179,71,.08); border-radius:4px; padding:1px 7px 1px 5px; }
-  .chp svg { display:block; } .chp small { color:var(--muted); font-weight:500; }
+  .chp svg { display:block; } .chp small { color:var(--muted); font-weight:500; } .chp, .eg { white-space:nowrap; } .xm .dz-sh { margin:0; }
   .gkey .chp { cursor:default; margin-right:4px; }
-  @media (max-width:640px) { .eg .eg-b { width:52px; } .eg .eg-k, .eg .eg-5 { display:none; } }
+  @media (max-width:640px) { .eg .eg-b { width:44px; } .eg .eg-k, .eg .eg-5, .chp .c-in, .chp .c-w { display:none; } .chp { gap:4px; padding:1px 5px; } .chp svg { width:40px; } .eg .eg-b { width:36px; } .xm { gap:6px 8px; } }
   .xt .mcl { display:none; } @media (max-width:640px) { .xt .mcl { display:block; } }
   .foot { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
   footer { border-top:1px solid var(--line); margin-top:48px; padding:24px 0 40px; color:var(--muted); font-size:.85rem; }
@@ -375,7 +375,7 @@
       '" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="' + end[0] + '" cy="' + end[1] + '" r="2" fill="currentColor"/></svg>'; }
   function chopTag(x) { var c = x.ch; if (!c || c.sw < CHOPPY) return '';
     return '<span class="chp" title="The ' + x.side.toUpperCase() + ' price ranged ' + c.lo.toFixed(1) + '¢–' + c.hi.toFixed(1) + '¢ over the last ' + hrs(c) +
-      (x.site === 'alpha' ? ' (Alpha: last-trade prices; thin markets can jump on one small trade)' : '') + '.">⚡ CHOPPY ' + spark(c) + '<small>' + c.sw.toFixed(1) + '¢ in ' + hrs(c) + '</small></span>'; }
+      (x.site === 'alpha' ? ' (Alpha: last-trade prices; thin markets can jump on one small trade)' : '') + '.">⚡<span class="c-w"> CHOPPY</span> ' + spark(c) + '<small>' + c.sw.toFixed(1) + '¢<span class="c-in"> in ' + hrs(c) + '</span></small></span>'; }
   /* Nov 15 (James): DZ Grade = Liquidity (buy orders on the books) + Rules (how the result is decided), averaged and
      rounded toward the weaker one. Tap the grade to open both halves. */
   var LQ = { A: 4, B: 3, C: 2, D: 1 }, RL = { clear: 4, mixed: 3, none: 2, judgement: 1 }, LET = ['', 'D', 'C', 'B', 'A'];
@@ -407,7 +407,7 @@
     var yn = x.side === 'No' ? '<b class="not">NO</b>' : '<b class="yes">YES</b>';
     var lo = (x.outcome || '').toLowerCase();
     if (x.q && x.q !== x.title && (/^will\b/i.test(x.q) || (/\?\s*$/.test(x.q) && (lo === 'yes' || x.q.toLowerCase().indexOf(lo) >= 0))))
-      return '<span class="o">You get $1 if the answer is ' + yn + ': <i>' + esc(x.q) + '</i></span>';
+      return '<span class="o">You get $1 if the answer is ' + yn + ': <i>' + esc(x.q.replace(/\*\*/g, '')) + '</i></span>';
     var o = x.outcome && x.outcome.toLowerCase() !== 'yes' && x.outcome !== x.title ? x.outcome : '';
     if (!o) return '<span class="o">You get $1 if the answer is ' + yn + '</span>';
     o = o.replace(/^(Above|Below|Before|After|Between|Under|Over|At least|At most|More than|Less than|Fewer than|Exactly)\b/, function (w) { return w.toLowerCase(); });
@@ -434,7 +434,7 @@
       var cd = new Date(x.close), yr2 = cd.getFullYear() !== new Date().getFullYear();
       var day = cd.toLocaleDateString('en-US', yr2 ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' });
       var mt = gauge(x) + chopTag(x);
-      var what = pays(x) + (mt ? '<span class="xm">' + mt + '</span>' : '') + '<button class="dz-sh" data-i="' + i + '" title="Share a link to this contract on Alpha Intel Desk">↗ Share</button>' +
+      var what = pays(x) + '<span class="xm">' + mt + '<button class="dz-sh" data-i="' + i + '" title="Share a link to this contract on Alpha Intel Desk">↗ Share</button></span>' +
         '<span class="o mcl">Closes ' + day + ' · in ' + left(x.close) + '</span>';   /* phones: the close date moves under the market */
       return '<tr id="c-' + ckey(x) + '"><td><span class="v">' + NAMES[x.site] + '</span><a href="' + esc(x.url) + '" rel="noopener">' + esc(x.title) + '</a>' + what + '</td>' +
         '<td><span class="sd ' + (x.side === 'Yes' ? 'y' : 'n') + '">' + x.side.toUpperCase() + '</span></td>' +
