@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-22T00:41:33Z",
+ "updated": "2026-11-22T01:20:48Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "items": [
   {
@@ -31,10 +31,10 @@
     "polymarket": {
      "title": "Core PCE YoY - October 2026",
      "outcome": "3.2%",
-     "price": 62.5,
+     "price": 61.5,
      "url": "https://polymarket.com/event/core-pce-yoy-october-2026",
      "end": "2026-11-25T13:30:00Z",
-     "volume": 39912
+     "volume": 40428
     },
     "kalshi": {
      "title": "How much will core PCE increase in Oct 2026?",
@@ -142,7 +142,7 @@
     "title": "Israel x Iran ceasefire continues through...?",
     "outcome": "November 30",
     "prices": {
-     "polymarket": 82.5,
+     "polymarket": 83.5,
      "kalshi": null,
      "alpha": 83.5
     },
@@ -208,7 +208,7 @@
     "title": "What technical failure caused the FAA's nationwide ground stop?",
     "outcome": "Software or configuration error",
     "prices": {
-     "polymarket": 73.5,
+     "polymarket": 74.0,
      "kalshi": 81.5,
      "alpha": null
     },
@@ -274,7 +274,7 @@
     "title": "What price will Hyperliquid hit in November?",
     "outcome": "\u2193 52",
     "prices": {
-     "polymarket": 30.0,
+     "polymarket": 29.5,
      "kalshi": null,
      "alpha": null
     },
@@ -296,7 +296,7 @@
     "title": "What price will BNB hit in November?",
     "outcome": "\u2193 500",
     "prices": {
-     "polymarket": 43.0,
+     "polymarket": 40.0,
      "kalshi": null,
      "alpha": null
     },
@@ -310,15 +310,52 @@
   },
   {
    "date": "2026-12-01T12:00:00Z",
-   "name": "Georgia runoff (if needed)",
+   "name": "Georgia runoffs (state House District 151, local)",
    "source": "",
    "kind": "scheduled",
    "cat": "politics",
-   "note": "Any Georgia race where nobody passed 50% on Nov 3 is decided today.",
+   "note": "Small runoffs only: Georgia House District 151 and a Savannah-Chatham school board seat. No statewide or congressional race.",
    "end": null,
    "allday": true,
    "est": false,
-   "impact": 2,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-02T14:00:00Z",
+   "name": "Spotify Wrapped 2026",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "fyi",
+   "note": "Spotify's year-end lists drop, usually on a Wednesday in early December. Top-album and top-artist markets settle on them.",
+   "end": null,
+   "allday": true,
+   "est": true,
+   "impact": 1,
+   "links": {
+    "kalshi": {
+     "title": "When will Spotify release 2026 Wrapped?",
+     "outcome": "Before Dec 3, 2026",
+     "price": 76.5,
+     "url": "https://kalshi.com/markets/kxspotifywrappedrelease",
+     "end": "2026-12-04T15:00:00Z",
+     "volume": 16292
+    }
+   },
+   "market": null
+  },
+  {
+   "date": "2026-12-03T14:00:00Z",
+   "name": "Google Year in Search 2026",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "fyi",
+   "note": "Google's list of the year's top trending searches, usually out in the first week of December. Settles the most-searched-person markets.",
+   "end": null,
+   "allday": true,
+   "est": true,
+   "impact": 1,
    "links": null,
    "market": null
   },
@@ -340,7 +377,7 @@
      "price": 23.0,
      "url": "https://polymarket.com/event/november-2026-unemployment-rate-canada",
      "end": "2026-12-04T13:30:00Z",
-     "volume": 22677
+     "volume": 22697
     },
     "kalshi": {
      "title": "Jobs numbers in Nov 2026?",
@@ -363,7 +400,7 @@
     "title": "November Unemployment Rate",
     "outcome": "4.1%",
     "prices": {
-     "polymarket": 33.5,
+     "polymarket": 35.5,
      "kalshi": null,
      "alpha": null
     },
@@ -398,6 +435,29 @@
    }
   },
   {
+   "date": "2026-12-07T13:00:00Z",
+   "name": "Golden Globe nominations",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "fyi",
+   "note": "Nominations for the 84th Golden Globes are announced at 5 AM PT. The awards follow on Jan 10, 2027; winner markets move on today's list.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 2,
+   "links": {
+    "kalshi": {
+     "title": "Golden Globe Nominations:  Best Television Series - Drama",
+     "outcome": "Furious",
+     "price": 59.5,
+     "url": "https://kalshi.com/markets/kxggnom",
+     "end": "2026-12-09T15:00:00Z",
+     "volume": 36893
+    }
+   },
+   "market": null
+  },
+  {
    "date": "2026-12-09T19:00:00Z",
    "name": "Fed rate decision",
    "source": "Federal Reserve",
@@ -423,7 +483,7 @@
      "price": 89.5,
      "url": "https://polymarket.com/event/fed-decision-in-december-20260729232808632",
      "end": "2026-12-09T23:59:00Z",
-     "volume": 49294651
+     "volume": 49306154
     },
     "kalshi": {
      "title": "Fed decision in Dec 2026?",
@@ -431,10 +491,38 @@
      "price": 89.5,
      "url": "https://kalshi.com/markets/kxfeddecision",
      "end": "2026-12-09T19:05:00Z",
-     "volume": 20614223
+     "volume": 20624211
     }
    },
    "market": null
+  },
+  {
+   "date": "2026-12-10T12:00:00Z",
+   "name": "TIME Person of the Year",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "fyi",
+   "note": "TIME names its Person of the Year, usually on a Thursday in the second week of December (Dec 11 last year). One of the busiest culture markets of the year.",
+   "end": null,
+   "allday": true,
+   "est": true,
+   "impact": 2,
+   "links": null,
+   "market": {
+    "title": "TIME Person of the Year 2026",
+    "outcome": "James Talarico",
+    "prices": {
+     "polymarket": 23.9,
+     "kalshi": 24.5,
+     "alpha": null
+    },
+    "urls": {
+     "polymarket": "https://polymarket.com/event/time-person-of-the-year-2026",
+     "kalshi": "https://kalshi.com/markets/kxtime"
+    },
+    "label": "SAME",
+    "coiled": false
+   }
   },
   {
    "date": "2026-12-10T13:30:00Z",
@@ -451,10 +539,10 @@
     "polymarket": {
      "title": "November Inflation US - Monthly",
      "outcome": "-0.1%",
-     "price": 39.0,
+     "price": 39.5,
      "url": "https://polymarket.com/event/november-inflation-us-monthly",
      "end": "2026-12-11T04:59:00Z",
-     "volume": 11750
+     "volume": 11756
     },
     "kalshi": {
      "title": "CPI in November",
@@ -462,7 +550,7 @@
      "price": 35.5,
      "url": "https://kalshi.com/markets/kxcpi",
      "end": "2026-12-10T14:56:00Z",
-     "volume": 668977
+     "volume": 668979
     }
    },
    "market": null
@@ -493,23 +581,40 @@
      "price": 27.5,
      "url": "https://kalshi.com/markets/kxgovtshutdown",
      "end": "2026-12-13T15:00:00Z",
-     "volume": 500289
+     "volume": 500727
     }
    },
    "market": null
   },
   {
    "date": "2026-12-12T12:00:00Z",
-   "name": "Louisiana general runoff",
+   "name": "Louisiana runoffs: US House districts 5 and 6",
    "source": "",
    "kind": "scheduled",
    "cat": "politics",
-   "note": "Louisiana's December runoff for races with no majority on Nov 3.",
+   "note": "Two US House seats with no majority on Nov 3 are decided today, under the new map drawn after the Supreme Court's April ruling.",
    "end": null,
    "allday": true,
    "est": false,
    "impact": 2,
-   "links": null,
+   "links": {
+    "polymarket": {
+     "title": "LA-06 House Runoff Margin of Victory",
+     "outcome": "Miguez (R) 4-8%",
+     "price": 16.0,
+     "url": "https://polymarket.com/event/la-06-house-runoff-margin-of-victory-2026",
+     "end": "2026-12-13T04:59:00Z",
+     "volume": 1233
+    },
+    "kalshi": {
+     "title": "LA-06 House winner?",
+     "outcome": "Chauna Banks",
+     "price": 6.3,
+     "url": "https://kalshi.com/markets/kxhouserace",
+     "end": "2027-01-04T17:00:00Z",
+     "volume": 235173
+    }
+   },
    "market": null
   },
   {
@@ -559,6 +664,37 @@
    "market": null
   },
   {
+   "date": "2026-12-18T14:00:00Z",
+   "name": "Avengers: Doomsday and Dune: Part Three open",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "fyi",
+   "note": "Two of the year's biggest films open the same day. 'Delayed?' and box-office markets settle around today.",
+   "end": null,
+   "allday": true,
+   "est": false,
+   "impact": 1,
+   "links": {
+    "polymarket": {
+     "title": "\"Avengers: Doomsday\" Opening Weekend Box Office",
+     "outcome": "400m+",
+     "price": 69.0,
+     "url": "https://polymarket.com/event/avengers-doomsday-opening-weekend-box-office",
+     "end": "2026-12-20T12:00:00Z",
+     "volume": 238483
+    },
+    "kalshi": {
+     "title": "Avengers: Doomsday: Rotten Tomatoes score",
+     "outcome": "Above 80",
+     "price": 56.5,
+     "url": "https://kalshi.com/markets/kxrt",
+     "end": "2026-12-21T15:00:00Z",
+     "volume": 1433820
+    }
+   },
+   "market": null
+  },
+  {
    "date": "2026-12-18T20:00:00Z",
    "name": "Quad witching",
    "source": "",
@@ -601,10 +737,10 @@
    "source": "",
    "kind": "scheduled",
    "cat": "politics",
-   "note": "The 120th Congress, elected Nov 3, takes over.",
+   "note": "The 120th Congress, elected Nov 3, takes over. Jan 3 is a Sunday, so the first session could be set for another day.",
    "end": null,
    "allday": true,
-   "est": false,
+   "est": true,
    "impact": 2,
    "links": null,
    "market": null
