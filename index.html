@@ -896,7 +896,7 @@
 <link rel="stylesheet" href="/nav.css">
 <script src="/nav.js" defer></script>
 <script src="/gapchart.js" defer></script>
-<link rel="stylesheet" href="/site.css?v=1">
+<link rel="stylesheet" href="/site.css?v=2">
 </head>
 <body>
 
@@ -1347,7 +1347,7 @@
     function dzg(x) {   /* Nov 15: same DZ Grade as the Danger Zone page = Liquidity + Rules, averaged, rounded toward the weaker */
       var L = { A: 4, B: 3, C: 2, D: 1 }, R = { clear: 4, mixed: 3, none: 2, judgement: 1 }, G = ['', 'D', 'C', 'B', 'A'];
       var l = x.ex ? (x.ex.usd ? L[x.ex.g] : 1) : 0, r = x.st ? R[x.st.g] : 0;
-      if (!l || !r) return '<span class="dzg n" title="' + (x.site === 'alpha' ? 'Alpha Arcade grades coming soon' : 'Not graded yet') + '">–</span>';
+      if (!l || !r) return '<span class="dzg n" title="' + 'Not graded yet' + '">–</span>';
       var g = G[Math.floor((l + r) / 2)];
       return '<span class="dzg ' + g.toLowerCase() + '" title="DZ Grade ' + g + ': Liquidity ' + G[l] + ' + Rules ' + G[r] + '. Details on the Danger Zone page.">' + g + '</span>'; }
     function expRow(x) {   // Nov 15 (James): just the side, the price now, the return if right, and the close date

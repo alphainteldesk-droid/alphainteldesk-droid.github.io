@@ -108,3 +108,16 @@ main .card p, main .card li, main .gp p, main td p, main .xdd p { max-width: non
   .gapbox .gb-cols, .gapbox .gb-cols * { font-size: 10.5px !important; letter-spacing: .02em !important; }
   .gapbox .gb-r small, .gapbox .gb-r i, .gapbox .gb-r em { font-size: 10px !important; letter-spacing: 0 !important; }
 }
+
+/* ---- Callouts: one style (panel + 3px left accent). Cyan = info, amber = worked example / warning ---- */
+.q1, .bl, .short, .note-box { background: var(--panel) !important; border: 1px solid var(--line) !important;
+  border-left: 3px solid var(--cyan) !important; border-radius: var(--radius) !important; }
+.step { border-top: 1px solid var(--line) !important; }
+a.card { transition: border-color .15s, box-shadow .15s; }
+a.card:hover, .gl a.card:hover { border-color: rgba(63, 219, 230, .55) !important; box-shadow: 0 8px 24px rgba(0, 0, 0, .3) !important; }
+
+/* ---- Market of the Week tabs: same button family as everywhere else ---- */
+.tabs a { font: 600 .8rem/1.2 "Space Grotesk", system-ui, sans-serif !important; letter-spacing: .04em !important; text-transform: uppercase;
+  border-radius: 8px !important; padding: 7px 12px !important; border: 1px solid var(--btn-bd) !important; background: var(--btn-bg) !important;
+  color: #cdeff2 !important; box-shadow: none !important; }
+.tabs a.on { border-color: var(--amber) !important; color: var(--amber) !important; background: rgba(255, 179, 71, .12) !important; }
