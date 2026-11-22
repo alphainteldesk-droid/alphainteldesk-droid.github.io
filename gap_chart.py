@@ -1,4 +1,5 @@
-"""Nov 21 (James): Live Gap Chart. Real price history for TODAY'S BIGGEST GAP (gaps.json[0]).
+"""Nov 21 (James): Live Gap Chart. Real price history for every gap on the Gap Scanner (gaps.json order;
+[0] = today's biggest, shown on the homepage first screen and the top of the Gap Scanner page).
 
 Writes gap_chart.json for the animated chart on the Gap Scanner page:
   - Polymarket: CLOB prices-history for the gap's outcome token (hourly, last 7 days)
@@ -84,7 +85,25 @@ def main():
     hist = {k: v for k, v in hist.items() if v}
     json.dump(hist, open("gap_chart_hist.json", "w"), separators=(",", ":"))
 
-    g = gaps[0]
+    alive = {}
+    try:
+        al = load("alpha_live.json", {}).get("markets") or []
+        alive = {m.get("slug"): m["id"] for m in al if m.get("id")}
+    except Exception:
+        pass
+    ahist = load("alpha_hist.json", [])
+    out_gaps = []
+    for g in gaps:
+        if time.time() - NOW > 90:                                  # never hold up the update run
+            print("  Gap chart: time budget used, %d of %d gaps charted" % (len(out_gaps), len(gaps)))
+            break
+        out_gaps.append(chart_one(g, rows, hist, alive, ahist))
+    out = {"updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "days": DAYS, "gaps": out_gaps}
+    json.dump(out, open("gap_chart.json", "w"), separators=(",", ":"))
+    print("Gap chart: %d gaps charted | top: %s | %s" % (len(out_gaps), gaps[0]["title"][:50], gaps[0]["outcome"][:20]))
+
+
+def chart_one(g, rows, hist, alive, ahist):
     row = rows.get((g["title"], g.get("close"))) or {}
     sites = row.get("sites") or {}
     series = {}
@@ -101,14 +120,14 @@ def main():
                 pts = kalshi_hist(tk) if tk else []
             else:
                 slug = (sites.get(s, {}).get("url") or "").rstrip("/").split("/")[-1]
-                ids = [m["id"] for m in load("alpha_live.json", {}).get("markets") or [] if m.get("slug") == slug]
-                if ids:
-                    for h in load("alpha_hist.json", []):
-                        v = (h.get("p", {}).get(ids[0]) or {}).get(g["outcome"])
+                aid = alive.get(slug)
+                if aid:
+                    for h in ahist:
+                        v = (h.get("p", {}).get(aid) or {}).get(g["outcome"])
                         if v is not None:
                             pts.append([int(h["t"]), round(float(v), 2)])
         except Exception as err:
-            print("  Gap chart: %s history failed | %s" % (s, err))
+            print("  Gap chart: %s history failed | %s | %s" % (s, g["title"][:40], err))
         i = ("polymarket", "kalshi", "alpha").index(s)          # + the Gap Scanner's own checks (Alpha = book mid)
         own = [[p[0], p[1 + i]] for p in hist.get(key(g), []) if p[1 + i] is not None]
         if s == "alpha" or len(pts) < 2:
@@ -120,16 +139,11 @@ def main():
         else:
             pts[-1][1] = g["prices"][s]
         series[s] = pts
-        print("  Gap chart: %s %d points (%s)" % (s, len(pts), "API" if s != "alpha" else "our snapshots"))
-
-    out = {"updated": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "days": DAYS,
-           "title": g["title"], "outcome": g["outcome"], "close": g.get("close"),
-           "prices": g["prices"], "low": g["low"], "high": g["high"],
-           "raw": g.get("raw"), "fees": g.get("fees"), "net": g.get("net"), "grade": g.get("grade"),
-           "all3": g.get("all3"), "series": series}
-    json.dump(out, open("gap_chart.json", "w"), separators=(",", ":"))
-    print("Gap chart: %s | %s | net %s¢ | lines: %s" % (g["title"][:50], g["outcome"][:20], g.get("net"),
-                                                       ", ".join("%s %d" % (k, len(v)) for k, v in series.items())))
+    print("  Gap chart: %s | %s | %s" % (g["title"][:40], g["outcome"][:16], ", ".join("%s %d" % (k, len(v)) for k, v in series.items())))
+    return {"title": g["title"], "outcome": g["outcome"], "close": g.get("close"),
+            "prices": g["prices"], "low": g["low"], "high": g["high"],
+            "raw": g.get("raw"), "fees": g.get("fees"), "net": g.get("net"), "grade": g.get("grade"),
+            "all3": g.get("all3"), "series": series}
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ name: Gap chart test (throwaway branch)
 on:
   push:
     branches: [gapchart-test]
-    paths: [gap_chart.py, gapchart.js, tools/gapchart_shot.py, .github/workflows/gapchart-test.yml]
+    paths: [gap_chart.py, gapchart.js, index.html, gap-scanner.html, tools/gapchart_shot.py, .github/workflows/gapchart-test.yml]
 permissions:
   contents: write
 jobs:
