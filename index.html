@@ -115,14 +115,18 @@
     .glb-arc path { fill:none; vector-effect:non-scaling-stroke; }
     .glb-arc .g1 { stroke:rgba(63,219,230,.55); stroke-width:1.5; }
     .glb-arc .g2 { stroke:rgba(63,219,230,.16); stroke-width:1; stroke-dasharray:3 5; }
-    .livestrip .glb-c { position:relative; height:136px; display:block; }
+    .livestrip .glb-c { position:relative; height:150px; display:block; }
     .glb-c .ck { position:absolute; transform:translateX(-50%); }
-    .glb-c .ck:nth-child(1) { left:8%;  top:39px; } .glb-c .ck:nth-child(2) { left:25%; top:21px; }
-    .glb-c .ck:nth-child(3) { left:41%; top:12px; } .glb-c .ck:nth-child(4) { left:59%; top:12px; }
-    .glb-c .ck:nth-child(5) { left:75%; top:21px; } .glb-c .ck:nth-child(6) { left:92%; top:39px; }
+    .glb-c .ck:nth-child(1) { left:5%; top:43px; } .glb-c .ck:nth-child(2) { left:15%; top:30px; } .glb-c .ck:nth-child(3) { left:25%; top:21px; } .glb-c .ck:nth-child(4) { left:35%; top:14px; } .glb-c .ck:nth-child(5) { left:45%; top:11px; } .glb-c .ck:nth-child(6) { left:55%; top:11px; } .glb-c .ck:nth-child(7) { left:65%; top:14px; } .glb-c .ck:nth-child(8) { left:75%; top:21px; } .glb-c .ck:nth-child(9) { left:85%; top:30px; } .glb-c .ck:nth-child(10) { left:95%; top:43px; } 
     .livestrip.glb .hwire { max-width:820px; margin:-4px auto 0; }
   }
-  @media (max-width:820px) { .glb-arc { display:none; } .livestrip .glb-c { flex-wrap:wrap; justify-content:center; gap:8px 12px; max-width:340px; margin:0 auto; } .glb-c .ck { width:92px; } }
+  @media (max-width:820px) { .glb-arc { display:none; } .livestrip .glb-c { flex-wrap:nowrap; justify-content:flex-start; gap:4px; overflow-x:auto; max-width:100%; flex:1 1 100%; scrollbar-width:none; padding-bottom:2px; } .glb-c::-webkit-scrollbar { display:none; } .glb-c .ck { flex:none; width:84px; } .glb-key { display:none; } }
+  .ck > span { white-space:nowrap; }
+  @media (max-width:820px) { .livestrip .glb-key { display:none; } }
+  .ck .mo { display:none; width:7px; height:7px; border-radius:50%; margin-right:5px; vertical-align:1px; background:#4a5b6e; }
+  .ck .mo.on { display:inline-block; } .ck .mo.up { background:#3ddc84; box-shadow:0 0 6px rgba(61,220,132,.8); }
+  .glb-key { display:inline-flex; align-items:center; gap:5px; flex:none; font-size:.72rem; color:var(--muted); letter-spacing:.04em; white-space:nowrap; }
+  .glb-key i { width:7px; height:7px; border-radius:50%; background:#3ddc84; box-shadow:0 0 6px rgba(61,220,132,.8); }
   .ck .wx { font-style:normal; font-weight:600; font-size:.72rem; color:#c9d6e3; white-space:nowrap; min-height:1em; letter-spacing:.02em; }
   .ck { display:flex; flex-direction:column; align-items:center; gap:2px; font:600 .72rem "Space Grotesk",system-ui,sans-serif; letter-spacing:.06em; color:var(--muted); }
   .ck svg { width:38px; height:38px; }
@@ -991,14 +995,19 @@
     <path class="g2" d="M250,40 Q200,80 190,120"/><path class="g2" d="M500,30 L500,120"/><path class="g2" d="M750,40 Q800,80 810,120"/>
   </svg>
   <div class="hclocks glb-c" aria-label="World market clocks, west to east">
-    <div class="ck" data-tz="America/New_York"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>NEW YORK</span><b>--:--</b><em class="wx"></em></div>
-    <div class="ck" data-tz="Europe/London"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>LONDON</span><b>--:--</b><em class="wx"></em></div>
-    <div class="ck" data-tz="Europe/Rome"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>ROME</span><b>--:--</b><em class="wx"></em></div>
-    <div class="ck" data-tz="Europe/Moscow"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>MOSCOW</span><b>--:--</b><em class="wx"></em></div>
-    <div class="ck" data-tz="Asia/Tokyo"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>TOKYO</span><b>--:--</b><em class="wx"></em></div>
-    <div class="ck" data-tz="Australia/Sydney"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>SYDNEY</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="America/Los_Angeles" data-w="los angeles"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>LOS ANGELES</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="America/New_York" data-w="st. pete"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>ST. PETE</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="America/New_York" data-w="new york" data-ex="nyse" data-exn="NYSE"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>NEW YORK</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Europe/London" data-w="london" data-ex="lse" data-exn="LSE"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>LONDON</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Europe/Rome" data-w="rome" data-ex="mil" data-exn="Borsa Italiana"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>ROME</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Europe/Moscow" data-w="moscow" data-ex="moex" data-exn="MOEX"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>MOSCOW</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Asia/Dubai" data-w="dubai" data-ex="dfm" data-exn="DFM"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>DUBAI</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Asia/Hong_Kong" data-w="hong kong" data-ex="hkex" data-exn="HKEX"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>HONG KONG</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Asia/Tokyo" data-w="tokyo" data-ex="tse" data-exn="TSE"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>TOKYO</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Australia/Sydney" data-w="sydney" data-ex="asx" data-exn="ASX"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>SYDNEY</span><b>--:--</b><em class="wx"></em></div>
   </div>
   <div class="hwire" aria-live="off">
+    <span class="glb-key"><i></i>Market open</span>
     <span class="hw-tag" id="hw-tag"><i></i>DESK PULSE</span>
     <a class="hw-line" id="hw-a" href="/gap-scanner.html"><span id="hw-txt"></span><span class="hw-cta" id="hw-cta"></span></a>
   </div>
@@ -2034,6 +2043,28 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
     });
   }
   clocks(); setInterval(clocks, 20000);
+  /* Nov 22: green dot = that city's main stock exchange is open now (regular hours; NYSE holidays listed, others not) */
+  var EX = { nyse: [[570, 960]], lse: [[480, 990]], mil: [[540, 1050]], moex: [[600, 1130]], dfm: [[600, 900]],
+             hkex: [[570, 720], [780, 960]], tse: [[540, 690], [750, 930]], asx: [[600, 960]] };
+  var NYSE_OFF = { '2026-11-26': 1, '2026-12-25': 1, '2027-01-01': 1, '2027-01-18': 1, '2027-02-15': 1, '2027-03-26': 1 },
+      NYSE_HALF = { '2026-11-27': 780, '2026-12-24': 780 };
+  function exOpen(code, tz) {
+    var now = new Date(), p = {};
+    new Intl.DateTimeFormat('en-CA', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', weekday: 'short', hour12: false })
+      .formatToParts(now).forEach(function (x) { p[x.type] = x.value; });
+    if (p.weekday === 'Sat' || p.weekday === 'Sun') return false;
+    var day = p.year + '-' + p.month + '-' + p.day, m = (+p.hour % 24) * 60 + +p.minute;
+    if (code === 'nyse' && NYSE_OFF[day]) return false;
+    return EX[code].some(function (r) { var end = code === 'nyse' && NYSE_HALF[day] ? Math.min(r[1], NYSE_HALF[day]) : r[1]; return m >= r[0] && m < end; });
+  }
+  function markets() {
+    [].forEach.call(document.querySelectorAll('.ck[data-ex]'), function (c) {
+      var open = exOpen(c.getAttribute('data-ex'), c.getAttribute('data-tz')), d = c.querySelector('.mo');
+      d.className = 'mo on' + (open ? ' up' : '');
+      c.title = c.getAttribute('data-exn') + (open ? ' is open now' : ' is closed now');
+    });
+  }
+  markets(); setInterval(markets, 60000);
   /* Nov 22: weather under each clock, from weather.json (MET Norway, refreshed by the update job) */
   function wxIcon(s) {
     var n = /_night/.test(s);
@@ -2051,7 +2082,7 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
   fetch('/weather.json?t=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     if (!d || !d.w || Date.now() / 1000 - d.t > 6 * 3600) return;           // hide if older than 6 hours
     [].forEach.call(document.querySelectorAll('.ck'), function (c) {
-      var w = d.w[c.getAttribute('data-tz')], el = c.querySelector('.wx');
+      var w = d.w[c.getAttribute('data-w')], el = c.querySelector('.wx');
       if (!w || !el) return;
       el.textContent = (wxIcon(w.s) + ' ' + w.f + '\u00B0F').trim();
       el.title = w.c + '\u00B0C \u00B7 weather: MET Norway';
