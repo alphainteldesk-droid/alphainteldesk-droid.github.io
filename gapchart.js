@@ -59,13 +59,13 @@
   }
   Chart.prototype.size = function () {
     var dpr = window.devicePixelRatio || 1, W = this.cv.clientWidth || this.cv.parentNode.clientWidth;
-    this.W = W; this.H = this.mode === 'big' ? (W < 600 ? 250 : 330) : this.mode === 'row' ? (W < 500 ? 130 : 150) : 62;
+    this.W = W; this.H = this.mode === 'big' ? (W < 600 ? 250 : 330) : this.mode === 'row' ? (W < 500 ? 130 : 150) : 80;
     this.cv.style.height = this.H + 'px'; this.cv.width = W * dpr; this.cv.height = this.H * dpr; this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   };
   Chart.prototype.draw = function (now) {
     var ctx = this.ctx, g = this.g, W = this.W, H = this.H, m = this.mode, big = m === 'big', mini = m === 'mini', small = W < 600;
     var t = (now - this.t0) / 1000, me = this;
-    var PL = mini ? 6 : small ? 36 : 50, PR = mini ? 22 : small ? 88 : big ? 150 : 120, PT = mini ? 8 : 14, PB = mini ? 8 : 26;
+    var PL = mini ? 6 : small ? 36 : 50, PR = mini ? 22 : small ? 88 : big ? 150 : 120, PT = mini ? 8 : 14, PB = mini ? 20 : 26;
     var CW = W - PL - PR, CH = H - PT - PB;
     var X = function (ts) { return PL + CW * (ts - me.tmin) / Math.max(1, me.tmax - me.tmin); };
     var Y = function (v) { return PT + CH * (1 - (v - me.lo) / (me.hi - me.lo)); };
@@ -76,13 +76,14 @@
       ctx.beginPath(); ctx.moveTo(PL, y); ctx.lineTo(PL + CW, y); ctx.stroke();
       if (!mini) { ctx.fillStyle = 'rgba(143,163,184,.75)'; ctx.fillText(v + '¢', 4, y); }
     }
-    if (!mini) {
-      ctx.textAlign = 'center';
+    {                                                                   // day labels (mini: short names, Nov 21 James)
+      ctx.textAlign = 'center'; if (mini) ctx.font = '600 9px ' + MONO;
       for (var day = new Date(this.tmin * 1000); day.getTime() / 1000 <= this.tmax; day.setDate(day.getDate() + 1)) {
         day.setHours(0, 0, 0, 0); var ts = day.getTime() / 1000; if (ts < this.tmin) continue;
         var x = X(ts); ctx.strokeStyle = 'rgba(63,219,230,.06)'; ctx.beginPath(); ctx.moveTo(x, PT); ctx.lineTo(x, PT + CH); ctx.stroke();
         ctx.fillStyle = 'rgba(143,163,184,.7)';
-        ctx.fillText(small ? day.toLocaleDateString('en-US', { weekday: 'narrow' }) : day.toLocaleDateString('en-US', { weekday: 'short' }) + ' ' + day.getDate(), x, H - 11);
+        ctx.fillText(mini ? day.toLocaleDateString('en-US', { weekday: W < 220 ? 'narrow' : 'short' })
+          : small ? day.toLocaleDateString('en-US', { weekday: 'narrow' }) : day.toLocaleDateString('en-US', { weekday: 'short' }) + ' ' + day.getDate(), x, H - (mini ? 8 : 11));
       }
     }
     if (!calm && m !== 'row') {                                       // scan beam
