@@ -44,8 +44,8 @@
   nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; }
   nav a { color:var(--muted); }
   nav a:hover, nav a.on { color:var(--text); text-decoration:none; }
-  .tag { font-family:"JetBrains Mono",monospace; font-size:.75rem;
-    letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
+  .tag { font-family:"Space Grotesk",system-ui,sans-serif; font-size:.75rem;
+    letter-spacing:.06em; color:var(--amber); text-transform:uppercase; }
   h1 { font-size:clamp(1.6rem,4vw,2.3rem); margin:8px 0 12px; line-height:1.2; }
   h2 { font-size:1.25rem; margin:36px 0 10px; }
   .lead { color:var(--muted); font-size:1.08rem; }
@@ -53,32 +53,32 @@
     border-radius:12px; padding:18px 20px; margin:12px 0; }
   .card h3 { margin:0 0 4px; font-size:1.02rem; }
   .card p { margin:0; color:var(--muted); }
-  .soon { font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--amber);
-    letter-spacing:.1em; margin-left:6px; }
+  .soon { font-family:"Space Grotesk",system-ui,sans-serif; font-size:.72rem; color:var(--amber);
+    letter-spacing:.06em; margin-left:6px; }
   .board { margin:22px 0 8px; }
   .gp { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:10px 0; }
   .gp-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
   .gp-t { font-weight:700; color:var(--text); }
   .gp-o { color:var(--muted); font-size:.92rem; }
-  .gp-net { flex:none; text-align:right; font-family:"JetBrains Mono",monospace; color:var(--amber);
+  .gp-net { flex:none; text-align:right; font-family:"Space Grotesk",system-ui,sans-serif; color:var(--amber);
     font-size:1.35rem; font-weight:500; line-height:1.1; }
-  .gp-net small { display:block; font-size:.62rem; letter-spacing:.12em; color:var(--muted); }
+  .gp-net small { display:block; font-size:.72rem; letter-spacing:.06em; color:var(--muted); }
   .gp-px { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
   .px { border:1px solid var(--line); border-radius:8px; padding:6px 8px; text-align:center; color:var(--text); }
-  .px b { display:block; font-family:"JetBrains Mono",monospace; font-size:.62rem; letter-spacing:.1em; color:var(--muted); font-weight:500; }
+  .px b { display:block; font-family:"Space Grotesk",system-ui,sans-serif; font-size:.72rem; letter-spacing:.06em; color:var(--muted); font-weight:500; }
   .px span { font-size:1.1rem; font-weight:700; }
   /* .px.aa: Alpha Arcade box now styled like the others (James, Nov 10) */
   .px.lo span { color:#3ee88a; } .px.hi span { color:#ff7a7a; }
   .px.none span { color:var(--muted); font-weight:500; font-size:.9rem; }
   .gp-sec { display:flex; align-items:center; gap:10px; margin:22px 0 10px; font-size:1.15rem; }
-  .gp-sec span { background:var(--amber); color:#111; font:800 .7rem "JetBrains Mono",monospace; letter-spacing:.1em; padding:3px 7px; border-radius:3px; }
+  .gp-sec span { background:var(--amber); color:#111; font:800 .72rem "Space Grotesk",system-ui,sans-serif; letter-spacing:.06em; padding:3px 7px; border-radius:3px; }
   .gp.g3 { border-color:rgba(255,179,71,.55); box-shadow:0 0 16px rgba(255,179,71,.1); }
-  .px .ch { font-style:normal; font-size:.7rem; font-family:"JetBrains Mono",monospace; }
+  .px .ch { font-style:normal; font-size:.72rem; font-family:"Space Grotesk",system-ui,sans-serif; }
   .px .ch.up { color:#3ee88a; } .px .ch.dn { color:#ff7a7a; }
-  .px small { display:block; margin-top:2px; font-family:"JetBrains Mono",monospace; font-size:.62rem; color:var(--muted); line-height:1.35; }
+  .px small { display:block; margin-top:2px; font-family:"Space Grotesk",system-ui,sans-serif; font-size:.72rem; color:var(--muted); line-height:1.35; }
   .px small i { font-style:normal; color:#c4d2e0; }
   a.px:hover { text-decoration:none; border-color:var(--cyan); }
-  .gp-math { margin-top:8px; font-family:"JetBrains Mono",monospace; font-size:.72rem; color:var(--muted); }
+  .gp-math { margin-top:8px; font-family:"Space Grotesk",system-ui,sans-serif; font-size:.72rem; color:var(--muted); }
   .note { color:var(--muted); font-size:.86rem; }
   .live { display:inline-flex; align-items:center; gap:7px; }
   .live i { width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:p 1.6s infinite; }
@@ -93,29 +93,29 @@
     .bar { flex-direction:column; align-items:flex-start; }
   }
   .gp-sh { margin-left:8px; background:none; border:1px solid rgba(63,219,230,.45); color:#3fdbe6;
-    font:700 .78rem "JetBrains Mono",monospace; border-radius:3px; padding:3px 8px; cursor:pointer; }
+    font:700 .78rem "Space Grotesk",system-ui,sans-serif; border-radius:3px; padding:3px 8px; cursor:pointer; }
   .gp-sh:hover { background:rgba(63,219,230,.15); }
-  .fx { font-family:"JetBrains Mono",monospace; font-size:1.05rem; color:var(--amber,#ffb347); background:var(--panel);
+  .fx { font-family:"Space Grotesk",system-ui,sans-serif; font-size:1.05rem; color:var(--amber,#ffb347); background:var(--panel);
     border:1px solid var(--line); border-radius:10px; padding:12px 16px; display:inline-block; }
   .fee-tbl { border:1px solid var(--line); border-radius:10px; overflow:hidden; margin:12px 0; }
   .fr { display:grid; grid-template-columns:2fr 1fr 1.3fr; gap:8px; padding:9px 14px; border-top:1px solid var(--line); font-size:.92rem; }
   .fr:first-child { border-top:0; } .fh { background:var(--panel); color:var(--muted); font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; }
   .sub { font-size:1.02rem; margin:22px 0 6px; }
   .steps { padding-left:22px; } .steps li { margin:4px 0; }
-  .amber { color:#ffb347; } .gp-how { font-size:.7rem; margin-left:4px; }
+  .amber { color:#ffb347; } .gp-how { font-size:.72rem; margin-left:4px; }
   @media (max-width:640px) { .fr { grid-template-columns:1.6fr .8fr 1fr; font-size:.82rem; padding:8px 10px; } }
   .how-link { display:inline-block; vertical-align:middle; margin-left:12px; padding:5px 12px; border:1px solid var(--cyan,#3fdbe6);
-    border-radius:999px; font:600 .82rem/1.2 "JetBrains Mono",monospace; letter-spacing:.04em; color:var(--cyan,#3fdbe6); }
+    border-radius:999px; font:600 .82rem/1.2 "Space Grotesk",system-ui,sans-serif; letter-spacing:.04em; color:var(--cyan,#3fdbe6); }
   .how-link:hover { background:rgba(63,219,230,.12); }
   html { scroll-behavior:smooth; } #fees, #board { scroll-margin-top:80px; }
-  .gp-fine { margin-top:8px; font:500 .74rem/1.6 "JetBrains Mono",monospace; color:var(--muted); }
+  .gp-fine { margin-top:8px; font:500 .74rem/1.6 "Space Grotesk",system-ui,sans-serif; color:var(--muted); }
   .gp-fine i { font-style:normal; font-weight:800; margin:0 3px 0 8px; } .gp-fine .ok { color:#3ee88a; } .gp-fine .q { color:#ffb347; }
-  .gr { display:inline-block; font:800 .7rem/1 "JetBrains Mono",monospace; letter-spacing:.08em; padding:4px 7px; border-radius:4px; text-decoration:none; }
+  .gr { display:inline-block; font:800 .72rem/1 "Space Grotesk",system-ui,sans-serif; letter-spacing:.08em; padding:4px 7px; border-radius:4px; text-decoration:none; }
   .gr-A { color:#0b1420; background:#3ee88a; } .gr-B { color:#0b1420; background:#ffb347; }
   .fr.fg { grid-template-columns:150px 1fr; align-items:center; }
   #grades { scroll-margin-top:80px; }
-  .vf { display:block; font:600 .66rem/1.3 "JetBrains Mono",monospace; font-style:normal; color:var(--muted); margin-top:2px; }
-  .gp-fair { display:block; margin-top:6px; font:700 .72rem/1 "JetBrains Mono",monospace; letter-spacing:.06em; color:var(--cyan,#3fdbe6); }
+  .vf { display:block; font:600 .72rem/1.3 "Space Grotesk",system-ui,sans-serif; font-style:normal; color:var(--muted); margin-top:2px; }
+  .gp-fair { display:block; margin-top:6px; font:700 .72rem/1 "Space Grotesk",system-ui,sans-serif; letter-spacing:.06em; color:var(--cyan,#3fdbe6); }
   #fair { scroll-margin-top:80px; }
   .bl { background:rgba(63,219,230,.07); border-left:3px solid var(--cyan,#3fdbe6); padding:10px 14px; border-radius:6px; }
   .chips { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 4px; }
@@ -125,17 +125,17 @@
   .mv { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:10px 0; }
   .mv-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
   .mv-t { font-weight:700; } .mv-sub { color:var(--muted); font-size:.9rem; }
-  .mv-ch { flex:none; text-align:right; font:500 1.3rem/1.1 "JetBrains Mono",monospace; }
-  .mv-ch small { display:block; font-size:.6rem; letter-spacing:.12em; color:var(--muted); }
+  .mv-ch { flex:none; text-align:right; font:500 1.3rem/1.1 "Space Grotesk",system-ui,sans-serif; }
+  .mv-ch small { display:block; font-size:.72rem; letter-spacing:.06em; color:var(--muted); }
   .mv-ch.up, .mv-bar .up { color:#3ee88a; } .mv-ch.dn, .mv-bar .dn { color:#ff7a7a; }
   .mv-bar { height:4px; background:rgba(143,163,184,.12); border-radius:4px; margin:10px 0; overflow:hidden; }
   .mv-bar i { display:block; height:100%; background:currentColor; border-radius:4px; }
-  .mv-px { display:flex; flex-wrap:wrap; gap:8px; font:500 .82rem/1.4 "JetBrains Mono",monospace; }
+  .mv-px { display:flex; flex-wrap:wrap; gap:8px; font:500 .82rem/1.4 "Space Grotesk",system-ui,sans-serif; }
   .mv-px > * { border:1px solid var(--line); border-radius:8px; padding:6px 10px; color:var(--muted); }
   .mv-px b { color:var(--text); font-weight:700; } .mv-site { border-color:rgba(63,219,230,.5) !important; color:var(--text) !important; }
   .mv-site strong { color:var(--cyan); } .mv-o small { font-size:.72rem; }
   .mv-act { display:flex; gap:10px; align-items:center; margin-top:10px; }
-  .mv-why { font:700 .74rem/1 "JetBrains Mono",monospace; border:1px solid rgba(63,219,230,.5); border-radius:4px; padding:6px 9px; }
+  .mv-why { font:700 .74rem/1 "Space Grotesk",system-ui,sans-serif; border:1px solid rgba(63,219,230,.5); border-radius:4px; padding:6px 9px; }
   #how { scroll-margin-top:80px; }
 </style>
 <meta property="og:url" content="https://alphainteldesk.com/momentum-scanner.html">
@@ -143,6 +143,7 @@
 <meta property="og:site_name" content="Alpha Intel Desk">
 <link rel="stylesheet" href="/nav.css">
 <script src="/nav.js" defer></script>
+<link rel="stylesheet" href="/site.css?v=1">
 </head>
 <body>
 
@@ -296,8 +297,8 @@
     '.shm a,.shm button{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:0;border-radius:5px;background:none;' +
     'color:#e8eef5;font:inherit;text-align:left;cursor:pointer;text-decoration:none}' +
     '.shm a:hover,.shm button:hover{background:rgba(63,219,230,.12);text-decoration:none}' +
-    '.shm i{font-style:normal;width:22px;text-align:center;font:800 13px "JetBrains Mono",monospace;color:#3fdbe6}' +
-    '.shm .t{font:700 10px "JetBrains Mono",monospace;letter-spacing:.14em;color:#8fa3b8;padding:4px 10px 6px}';
+    '.shm i{font-style:normal;width:22px;text-align:center;font:800 13px "Space Grotesk",system-ui,sans-serif;color:#3fdbe6}' +
+    '.shm .t{font:700 12px "Space Grotesk",system-ui,sans-serif;letter-spacing:.06em;color:#8fa3b8;padding:4px 10px 6px}';
   document.head.appendChild(css);
   var menu = null;
   function close() { if (menu) { menu.remove(); menu = null; } }

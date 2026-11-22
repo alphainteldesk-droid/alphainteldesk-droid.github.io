@@ -43,8 +43,8 @@
   nav { display:flex; gap:20px; flex-wrap:wrap; font-size:.95rem; }
   nav a { color:var(--muted); }
   nav a:hover, nav a.on { color:var(--text); text-decoration:none; }
-  .tag { font-family:"JetBrains Mono",monospace; font-size:.75rem;
-    letter-spacing:.2em; color:var(--amber); text-transform:uppercase; }
+  .tag { font-family:"Space Grotesk",system-ui,sans-serif; font-size:.75rem;
+    letter-spacing:.06em; color:var(--amber); text-transform:uppercase; }
   h1 { font-size:clamp(1.6rem,4vw,2.3rem); margin:8px 0 12px; line-height:1.2; }
   h2 { font-size:1.25rem; margin:36px 0 10px; }
   .lead { color:var(--muted); font-size:1.08rem; }
@@ -52,40 +52,40 @@
     border-radius:12px; padding:18px 20px; margin:12px 0; }
   .card h3 { margin:0 0 4px; font-size:1.02rem; }
   .card p { margin:0; color:var(--muted); }
-  .soon { font-family:"JetBrains Mono",monospace; font-size:.7rem; color:var(--amber);
-    letter-spacing:.1em; margin-left:6px; }
+  .soon { font-family:"Space Grotesk",system-ui,sans-serif; font-size:.72rem; color:var(--amber);
+    letter-spacing:.06em; margin-left:6px; }
   .board { margin:22px 0 8px; }
   .gp { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin:10px 0; }
   .gp-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
   .gp-t { font-weight:700; color:var(--text); }
   .gp-o { color:var(--muted); font-size:.92rem; }
-  .gp-net { flex:none; text-align:right; font-family:"JetBrains Mono",monospace; color:var(--amber);
+  .gp-net { flex:none; text-align:right; font-family:"Space Grotesk",system-ui,sans-serif; color:var(--amber);
     font-size:1.35rem; font-weight:500; line-height:1.1; }
-  .gp-net small { display:block; font-size:.62rem; letter-spacing:.12em; color:var(--muted); }
+  .gp-net small { display:block; font-size:.72rem; letter-spacing:.06em; color:var(--muted); }
   .gp-px { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
   .px { border:1px solid var(--line); border-radius:8px; padding:6px 8px; text-align:center; color:var(--text); }
-  .px b { display:block; font-family:"JetBrains Mono",monospace; font-size:.62rem; letter-spacing:.1em; color:var(--muted); font-weight:500; }
+  .px b { display:block; font-family:"Space Grotesk",system-ui,sans-serif; font-size:.72rem; letter-spacing:.06em; color:var(--muted); font-weight:500; }
   .px span { font-size:1.1rem; font-weight:700; }
   .px.aa { border-color:var(--amber); background:rgba(255,179,71,.08); } .px.aa b { color:var(--amber); }
   .px.lo span { color:#3ee88a; } .px.hi span { color:#ff7a7a; }
   .px.none span { color:var(--muted); font-weight:500; font-size:.9rem; }
   a.px:hover { text-decoration:none; border-color:var(--cyan); }
-  .gp-math { margin-top:8px; font-family:"JetBrains Mono",monospace; font-size:.72rem; color:var(--muted); }
+  .gp-math { margin-top:8px; font-family:"Space Grotesk",system-ui,sans-serif; font-size:.72rem; color:var(--muted); }
   .note { color:var(--muted); font-size:.86rem; }
   .live { display:inline-flex; align-items:center; gap:7px; }
   .live i { width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:p 1.6s infinite; }
   @keyframes p { 50% { opacity:.3; } }
   .filters { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 6px; }
   .filters button { background:var(--panel); color:var(--muted); border:1px solid var(--line); border-radius:999px;
-    padding:5px 12px; font:500 .8rem "JetBrains Mono",monospace; letter-spacing:.08em; cursor:pointer; }
+    padding:5px 12px; font:500 .8rem "Space Grotesk",system-ui,sans-serif; letter-spacing:.08em; cursor:pointer; }
   .filters button.on, .filters button:hover { color:#fff; border-color:#ff7a7a; }
   .hl { display:flex; gap:10px; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--line); }
-  .hl .rg { flex:none; min-width:52px; text-align:center; font:700 .68rem "JetBrains Mono",monospace; letter-spacing:.08em;
+  .hl .rg { flex:none; min-width:52px; text-align:center; font:700 .72rem "Space Grotesk",system-ui,sans-serif; letter-spacing:.08em;
     color:#ffb0b0; background:rgba(255,92,92,.18); border-radius:4px; padding:3px 4px; margin-top:3px; }
   .hl a { color:var(--text); font-weight:500; } .hl small { display:block; color:var(--muted); font-size:.8rem; }
   .mk { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin:10px 0; }
   .mk-t { font-weight:700; } .mk-o { color:var(--muted); font-size:.88rem; }
-  .badge { font:600 .62rem "JetBrains Mono",monospace; letter-spacing:.1em; padding:2px 6px; border-radius:4px; margin-left:6px; }
+  .badge { font:600 .72rem "Space Grotesk",system-ui,sans-serif; letter-spacing:.06em; padding:2px 6px; border-radius:4px; margin-left:6px; }
   .badge.same { background:rgba(62,232,138,.15); color:#3ee88a; } .badge.sim { background:rgba(255,179,71,.15); color:var(--amber); }
   main { padding:40px 0 8px; }
   footer { margin-top:48px; border-top:1px solid var(--line);
@@ -102,6 +102,7 @@
 <meta property="og:site_name" content="Alpha Intel Desk">
 <link rel="stylesheet" href="/nav.css">
 <script src="/nav.js" defer></script>
+<link rel="stylesheet" href="/site.css?v=1">
 </head>
 <body>
 
