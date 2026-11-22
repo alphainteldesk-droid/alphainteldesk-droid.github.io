@@ -106,8 +106,24 @@
   .livestrip { display:flex; align-items:center; justify-content:center; gap:16px; padding:6px 20px; max-width:1400px; margin:0 auto; border-bottom:1px solid var(--line); background:rgba(8,14,24,.55); }
   .livestrip .hwire { margin:0; flex:1 1 auto; min-width:0; max-width:none; }
   .livestrip .hw-line { flex:1 1 auto; justify-content:space-between; }
-  .livestrip .hclocks { flex:none; gap:18px; }
+  .livestrip .hclocks { flex:none; gap:14px; }
   @media (max-width:820px) { .livestrip { flex-wrap:wrap; gap:8px 28px; padding:8px 12px; } .livestrip .hwire { order:3; flex:1 1 100%; } }
+  /* Nov 22: globe strip: six clocks west to east sit on a curved horizon, DESK PULSE underneath (desktop) */
+  @media (min-width:821px) {
+    .livestrip.glb { position:relative; display:block; padding:0 20px 10px; }
+    .glb-arc { position:absolute; left:20px; right:20px; top:0; width:calc(100% - 40px); height:120px; overflow:visible; pointer-events:none; }
+    .glb-arc path { fill:none; vector-effect:non-scaling-stroke; }
+    .glb-arc .g1 { stroke:rgba(63,219,230,.55); stroke-width:1.5; }
+    .glb-arc .g2 { stroke:rgba(63,219,230,.16); stroke-width:1; stroke-dasharray:3 5; }
+    .livestrip .glb-c { position:relative; height:136px; display:block; }
+    .glb-c .ck { position:absolute; transform:translateX(-50%); }
+    .glb-c .ck:nth-child(1) { left:8%;  top:39px; } .glb-c .ck:nth-child(2) { left:25%; top:21px; }
+    .glb-c .ck:nth-child(3) { left:41%; top:12px; } .glb-c .ck:nth-child(4) { left:59%; top:12px; }
+    .glb-c .ck:nth-child(5) { left:75%; top:21px; } .glb-c .ck:nth-child(6) { left:92%; top:39px; }
+    .livestrip.glb .hwire { max-width:820px; margin:-4px auto 0; }
+  }
+  @media (max-width:820px) { .glb-arc { display:none; } .livestrip .glb-c { flex-wrap:wrap; justify-content:center; gap:8px 12px; max-width:340px; margin:0 auto; } .glb-c .ck { width:92px; } }
+  .ck .wx { font-style:normal; font-weight:600; font-size:.72rem; color:#c9d6e3; white-space:nowrap; min-height:1em; letter-spacing:.02em; }
   .ck { display:flex; flex-direction:column; align-items:center; gap:2px; font:600 .72rem "Space Grotesk",system-ui,sans-serif; letter-spacing:.06em; color:var(--muted); }
   .ck svg { width:38px; height:38px; }
   .ck svg > circle:first-child { fill:rgba(11,20,32,.7); stroke:rgba(63,219,230,.55); stroke-width:1.5; }
@@ -965,19 +981,26 @@
   }).catch(function () {});
 })();
 </script>
+<!-- Nov 22: globe strip, six clocks west to east on a curved horizon, DESK PULSE underneath -->
 <!-- Nov 14: live strip moved here from the hero: clocks, then DESK PULSE, then the ticker, so all three are in view together -->
-<section class="livestrip" aria-label="World clocks and desk pulse">
-  <div class="hclocks hc-l" aria-label="World market clocks">
-    <div class="ck" data-tz="America/New_York"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>NEW YORK</span><b>--:--</b></div>
-    <div class="ck" data-tz="Europe/London"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>LONDON</span><b>--:--</b></div>
+<section class="livestrip glb" aria-label="World clocks and desk pulse">
+  <svg class="glb-arc" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true">
+    <path class="g1" d="M0,82 Q500,-12 1000,82"/>
+    <path class="g2" d="M70,120 Q500,40 930,120"/>
+    <path class="g2" d="M180,120 Q500,85 820,120"/>
+    <path class="g2" d="M250,40 Q200,80 190,120"/><path class="g2" d="M500,30 L500,120"/><path class="g2" d="M750,40 Q800,80 810,120"/>
+  </svg>
+  <div class="hclocks glb-c" aria-label="World market clocks, west to east">
+    <div class="ck" data-tz="America/New_York"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>NEW YORK</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Europe/London"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>LONDON</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Europe/Rome"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>ROME</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Europe/Moscow"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>MOSCOW</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Asia/Tokyo"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>TOKYO</span><b>--:--</b><em class="wx"></em></div>
+    <div class="ck" data-tz="Australia/Sydney"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>SYDNEY</span><b>--:--</b><em class="wx"></em></div>
   </div>
   <div class="hwire" aria-live="off">
     <span class="hw-tag" id="hw-tag"><i></i>DESK PULSE</span>
     <a class="hw-line" id="hw-a" href="/gap-scanner.html"><span id="hw-txt"></span><span class="hw-cta" id="hw-cta"></span></a>
-  </div>
-  <div class="hclocks hc-r" aria-label="World market clocks">
-    <div class="ck" data-tz="Europe/Rome"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>ROME</span><b>--:--</b></div>
-    <div class="ck" data-tz="Asia/Tokyo"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span>TOKYO</span><b>--:--</b></div>
   </div>
 </section>
 <!-- Live tape (TradingView, free widget; CFD prices move in real time) -->
@@ -2011,6 +2034,29 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
     });
   }
   clocks(); setInterval(clocks, 20000);
+  /* Nov 22: weather under each clock, from weather.json (MET Norway, refreshed by the update job) */
+  function wxIcon(s) {
+    var n = /_night/.test(s);
+    if (/thunder/.test(s)) return '\u26C8\uFE0F';
+    if (/snow/.test(s)) return '\u2744\uFE0F';
+    if (/sleet/.test(s)) return '\uD83C\uDF28\uFE0F';
+    if (/rain/.test(s)) return /showers_day/.test(s) ? '\uD83C\uDF26\uFE0F' : '\uD83C\uDF27\uFE0F';
+    if (/fog/.test(s)) return '\uD83C\uDF2B\uFE0F';
+    if (/^cloudy/.test(s)) return '\u2601\uFE0F';
+    if (/partlycloudy/.test(s)) return n ? '\u2601\uFE0F' : '\u26C5';
+    if (/fair/.test(s)) return n ? '\uD83C\uDF19' : '\uD83C\uDF24\uFE0F';
+    if (/clearsky/.test(s)) return n ? '\uD83C\uDF19' : '\u2600\uFE0F';
+    return '';
+  }
+  fetch('/weather.json?t=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    if (!d || !d.w || Date.now() / 1000 - d.t > 6 * 3600) return;           // hide if older than 6 hours
+    [].forEach.call(document.querySelectorAll('.ck'), function (c) {
+      var w = d.w[c.getAttribute('data-tz')], el = c.querySelector('.wx');
+      if (!w || !el) return;
+      el.textContent = (wxIcon(w.s) + ' ' + w.f + '\u00B0F').trim();
+      el.title = w.c + '\u00B0C \u00B7 weather: MET Norway';
+    });
+  }).catch(function () {});
   var J = function (u) { return fetch(u + '?v=' + Date.now()).then(function (r) { return r.json(); }).catch(function () { return {}; }); };
   var ago = function (s) { var m = Math.max(1, Math.round((Date.now() - new Date(s)) / 60000)); return m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago'; };
   /* Nov 14: visitors in the last 30 days, from GoatCounter's public counter; stays hidden if it isn't available */

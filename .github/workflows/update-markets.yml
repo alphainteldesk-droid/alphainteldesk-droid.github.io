@@ -28,6 +28,8 @@ jobs:
         continue-on-error: true
       - run: python3 exit_grade.py   # Nov 15: Danger Zone Exit grade (live order-book depth, 2-min cap)
         continue-on-error: true
+      - run: python3 weather.py   # Nov 22: weather for the homepage clocks (MET Norway)
+        continue-on-error: true
       - run: python3 dz_chop.py   # Nov 22: Danger Zone Chop (48h price swing + mini-chart points, 1-min cap)
         continue-on-error: true
       - run: python3 make_gaps.py
@@ -88,6 +90,7 @@ jobs:
           [ -f fresh.json ] && git add fresh.json fresh_state.json
           [ -f expiry.json ] && git add expiry.json
           [ -f dz_alpha_hist.json ] && git add dz_alpha_hist.json
+          [ -f weather.json ] && git add weather.json
           [ -f track.json ] && git add track.json
           [ -f rules.json ] && git add rules.json
           [ -f motw.json ] && git add motw.json sitemap.xml
