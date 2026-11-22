@@ -36,6 +36,27 @@ def poly_hist(token):
     return [[int(x["t"]), round(float(x["p"]) * 100, 2)] for x in d.get("history") or []]
 
 
+def _norm(x):
+    return "".join(ch for ch in (x or "").lower() if ch.isalnum())
+
+
+def poly_token(url, outcome):
+    """Polymarket only stores one outcome's token in matches.json: find the others from the event page's markets."""
+    slug = (url or "").rstrip("/").split("?")[0].split("/")[-1]
+    if not slug:
+        return None
+    ev = get("https://gamma-api.polymarket.com/events?slug=" + slug)
+    ev = ev[0] if isinstance(ev, list) and ev else ev
+    want = _norm(outcome)
+    for m in (ev or {}).get("markets") or []:
+        names = [m.get("groupItemTitle"), m.get("question")]
+        if any(_norm(n) == want for n in names if n) or (len(ev.get("markets")) == 1 and want == "yes"):
+            ids = m.get("clobTokenIds")
+            ids = json.loads(ids) if isinstance(ids, str) else ids
+            return ids[0] if ids else None
+    return None
+
+
 def _c(o, key):
     """Kalshi candle value in cents: newer API gives *_dollars strings, older gives cents."""
     if not isinstance(o, dict):
@@ -113,7 +134,8 @@ def chart_one(g, rows, hist, alive, ahist):
         pts = []
         try:
             if s == "polymarket":
-                tok = (sites.get(s, {}).get("book") or {}).get(g["outcome"])
+                tok = (sites.get(s, {}).get("book") or {}).get(g["outcome"]) or \
+                    poly_token((g.get("urls") or {}).get(s) or sites.get(s, {}).get("url"), g["outcome"])
                 pts = poly_hist(tok) if tok else []
             elif s == "kalshi":
                 tk = (sites.get(s, {}).get("book") or {}).get(g["outcome"])
