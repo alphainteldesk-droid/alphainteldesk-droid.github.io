@@ -1,0 +1,54 @@
+name: Weekly recap
+# Nov 22, 2026 (James): every Sunday ~5 PM ET, "This week on the desk" (recap.py).
+#   Telegram: posted automatically.  X: GitHub opens an issue with the ready-to-paste post (GitHub pushes it to
+#   James's phone/email); last week's recap issue is closed.  Reddit: not for now.
+# Manual run ("Run workflow"): preview only (see the run's Summary page) unless "post" is ticked.
+on:
+  schedule:
+    - cron: "0 22 * * 0"          # 5:00 PM ET in winter (EST). When clocks go forward in March: change to "0 21 * * 0"
+  workflow_dispatch:
+    inputs:
+      post:
+        description: "Post to Telegram and send the X draft? (unticked = preview only)"
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  issues: write
+jobs:
+  recap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Build the recap (and post it to Telegram)
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: |
+          rm -f recap_x.md
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.post }}" = "true" ]; then
+            python3 recap.py --post
+          else
+            python3 recap.py
+          fi
+      - name: Preview on the run's Summary page
+        run: |
+          [ -f recap_x.md ] && cat recap_x.md >> "$GITHUB_STEP_SUMMARY" || echo "No recap this time (see the log)." >> "$GITHUB_STEP_SUMMARY"
+      - name: Send James the X draft (GitHub issue = phone/email alert)
+        if: github.event_name == 'schedule' || inputs.post
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          [ -f recap_x.md ] || exit 0
+          gh label create weekly-recap --color 3FDBE6 --description "Weekly recap: X draft" --force
+          for n in $(gh issue list --label weekly-recap --state open --json number -q '.[].number'); do gh issue close "$n"; done
+          gh issue create --title "📣 Weekly recap ready for X ($(TZ=America/New_York date '+%a %b %-d'))" --label weekly-recap --body-file recap_x.md
+      - name: Save the week's baseline
+        if: github.event_name == 'schedule' || inputs.post
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add recap_state.json
+          git commit -q -m "Weekly recap posted" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 15; done
