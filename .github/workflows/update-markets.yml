@@ -32,6 +32,8 @@ jobs:
         continue-on-error: true
       - run: python3 gap_chart.py   # Nov 21: Live Gap Chart (real 7-day price history for every gap)
         continue-on-error: true
+      - run: python3 make_ics.py   # Nov 21: "Add to my calendar" feed (catalyst-calendar.ics) from calendar.json
+        continue-on-error: true
       - run: python3 track_record.py   # Nov 15: Danger Zone track record (did listed contracts pay out?)
         continue-on-error: true
       - run: python3 motw.py   # Nov 19: Market of the Week (formula pick, verified twice, hourly price, archive)
@@ -68,6 +70,7 @@ jobs:
           [ -f gaps.json ] && git add gaps.json
           [ -f gap_chart.json ] && git add gap_chart.json gap_chart_hist.json
           [ -f calendar.json ] && git add calendar.json
+          [ -f catalyst-calendar.ics ] && git add catalyst-calendar.ics
           [ -f movers.json ] && git add movers.json
           [ -f card_state.json ] && git add card.jpg card-gaps.jpg card_state.json index.html gap-scanner.html
           [ -f alpha_hist.json ] && git add alpha_hist.json

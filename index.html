@@ -451,6 +451,20 @@
     background:rgba(5,12,20,.7); color:var(--c, var(--muted)); border:1px solid rgba(143,163,184,.25); cursor:pointer; transition:.15s; }
   .cal-f button:hover { border-color:var(--c, var(--amber)); box-shadow:0 0 8px color-mix(in srgb, var(--c, #ffb347) 40%, transparent); }
   .cal-f button.on { color:#111; background:var(--c, var(--amber)); border-color:var(--c, var(--amber)); box-shadow:0 0 10px color-mix(in srgb, var(--c, #ffb347) 50%, transparent); }
+  /* Nov 21: "Add to my calendar" (subscribe to catalyst-calendar.ics) */
+  .cal-sub { position:relative; flex:none; }
+  .cal-sub summary { list-style:none; display:inline-flex; align-items:center; gap:7px; cursor:pointer; font:800 .72rem "JetBrains Mono",monospace;
+    letter-spacing:.1em; color:#06222a; background:var(--cyan); border-radius:4px; padding:7px 11px; box-shadow:0 0 14px rgba(63,219,230,.45); }
+  .cal-sub summary::-webkit-details-marker { display:none; }
+  .cal-sub summary svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; }
+  .cal-sub summary:hover { box-shadow:0 0 22px rgba(63,219,230,.7); }
+  .cal-sub-m { position:absolute; left:0; top:calc(100% + 6px); z-index:30; width:250px; display:flex; flex-direction:column; gap:2px; padding:8px;
+    background:rgba(5,12,20,.97); border:1px solid rgba(63,219,230,.5); border-radius:6px; box-shadow:0 10px 30px rgba(0,0,0,.6); }
+  .cal-sub-m a, .cal-sub-m button { display:block; text-align:left; padding:8px 10px; border-radius:4px; color:var(--text) !important; font-family:inherit; font-size:.9rem; font-weight:600; white-space:normal;
+    background:none; border:0; cursor:pointer; text-decoration:none !important; }
+  .cal-sub-m a:hover, .cal-sub-m button:hover { background:rgba(63,219,230,.12); }
+  .cal-sub-m small { display:block; white-space:normal; padding:6px 10px 2px; color:var(--muted); font-size:.74rem; line-height:1.35; }
+  @media (max-width:640px) { .cal-sub { flex:1 1 100%; min-width:0; } .cal-sub-m { position:static; width:auto; max-width:100%; margin-top:6px; } }
   /* NEXT UP countdown */
   .cal-next { display:flex; align-items:center; gap:14px 22px; flex-wrap:wrap; margin:4px 0 14px; padding:12px 16px; cursor:pointer;
     border:1px solid rgba(255,179,71,.55); border-radius:6px; background:linear-gradient(90deg, rgba(255,179,71,.13), rgba(5,12,20,.85) 55%);
@@ -1125,7 +1139,17 @@
       <button data-f="earnings" style="--c:#b18cff">EARNINGS</button><button data-f="politics" style="--c:#ff7a7a">POLITICS</button>
       <button data-f="world" style="--c:#3ee88a">WORLD</button><button data-f="markets" style="--c:#5aa9ff">MARKET HOURS</button>
       <button data-f="fyi" style="--c:#ff9ad5">WORTH KNOWING</button><button data-f="resolves" style="--c:#e8eef5">SETTLING</button>
-    </div></div>
+    </div>
+    <details class="cal-sub">   <!-- Nov 21 (James): subscribe to the calendar (catalyst-calendar.ics, built by make_ics.py) -->
+      <summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg>ADD TO MY CALENDAR</summary>
+      <div class="cal-sub-m">
+        <a href="https://calendar.google.com/calendar/render?cid=webcal%3A%2F%2Falphainteldesk.com%2Fcatalyst-calendar.ics" target="_blank" rel="noopener" data-goatcounter-click="cal-sub-google">Google Calendar</a>
+        <a href="webcal://alphainteldesk.com/catalyst-calendar.ics" data-goatcounter-click="cal-sub-apple">Apple Calendar (iPhone, Mac)</a>
+        <a href="https://outlook.live.com/calendar/0/addfromweb?url=https%3A%2F%2Falphainteldesk.com%2Fcatalyst-calendar.ics&amp;name=Alpha%20Intel%20Desk%20Catalyst%20Calendar" target="_blank" rel="noopener" data-goatcounter-click="cal-sub-outlook">Outlook</a>
+        <button type="button" id="cal-sub-copy" data-goatcounter-click="cal-sub-copy">Copy the calendar link</button>
+        <small>Free. Every date on this calendar, in your own calendar app. It updates by itself.</small>
+      </div>
+    </details></div>
   <div class="cal-next" id="cal-next" hidden></div>
   <div class="cal-g" id="cal-g"><p class="cal-none">Loading the calendar&hellip;</p></div>
   <button class="phmore" type="button" data-t="cal-g" data-more="Show the full 2 weeks ▾" data-less="Show less ▴">Show the full 2 weeks ▾</button>
@@ -1760,6 +1784,10 @@
     var o = odds(x.market);
     return o ? { site: o.site, v: o.v, url: ((x.market || {}).urls || {})[o.key], label: x.kind === 'resolves' ? x.market.outcome : x.market.title.replace(/\?$/, '') + ' · ' + x.market.outcome } : '';
   }
+  (function () { var b = document.getElementById('cal-sub-copy'); if (!b) return;    /* Nov 21: copy the calendar feed link */
+    b.addEventListener('click', function () { var u = 'https://alphainteldesk.com/catalyst-calendar.ics';
+      (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(function () { b.textContent = 'Link copied ✓'; },
+        function () { window.prompt('Copy this link and add it to your calendar app:', u); }); }); })();
   function odds(m) {                                       // one headline price: Alpha first (our edge), then Polymarket, then Kalshi
     if (!m) return '';
     var order = [['alpha', 'Alpha'], ['polymarket', 'Poly'], ['kalshi', 'Kalshi']];
