@@ -1763,7 +1763,9 @@
   function odds(m) {                                       // one headline price: Alpha first (our edge), then Polymarket, then Kalshi
     if (!m) return '';
     var order = [['alpha', 'Alpha'], ['polymarket', 'Poly'], ['kalshi', 'Kalshi']];
-    for (var i = 0; i < 3; i++) { var v = m.prices[order[i][0]]; if (v != null) return { site: order[i][1], v: v, key: order[i][0] }; }
+    var big = [m.prices.polymarket, m.prices.kalshi].filter(function (v) { return v != null; });   /* Nov 21: an Alpha price 10¢+ away from */
+    var avg = big.length ? big.reduce(function (a, b) { return a + b; }, 0) / big.length : null;    /* both big sites is likely stale: skip */
+    for (var i = 0; i < 3; i++) { var v = m.prices[order[i][0]]; if (v != null && !(i === 0 && avg != null && Math.abs(v - avg) > 10)) return { site: order[i][1], v: v, key: order[i][0] }; }
     return '';
   }
   function bars(n) { var h = '<span class="cal-imp" title="Expected impact: ' + ['', 'low', 'medium', 'high'][n || 1] + '">';
