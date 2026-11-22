@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-22T22:26:53Z",
+ "updated": "2026-11-22T22:38:50Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -34,7 +34,7 @@
    },
    "volumes24": {
     "polymarket": 382,
-    "kalshi": 5716
+    "kalshi": 5688
    },
    "raw": 11.0,
    "fees": 1.8,
@@ -56,44 +56,38 @@
    "rate_high": 0.01,
    "category": "Politics",
    "fill": {
-    "usd": 1232,
-    "shares": 1303,
-    "exec": 7.2,
-    "t": 1795386414,
+    "usd": 862,
+    "shares": 904,
+    "exec": 5.3,
+    "t": 1795387131,
     "buy": {
      "site": "kalshi",
-     "yes": 65.0,
-     "fee": 1.59
+     "yes": 67.0,
+     "fee": 1.55
     },
     "sell": {
      "site": "polymarket",
      "no": 26.0,
      "fee": 0.19
     },
-    "avg": 3.7,
-    "profit": 48,
+    "avg": 3.0,
+    "profit": 27,
     "ladder": [
      [
       100,
-      6.0
+      4.6
      ],
      [
       250,
-      5.4
+      4.1
      ],
      [
       500,
-      4.8
-     ],
-     [
-      1000,
-      4.1
+      3.4
      ]
     ]
    },
-   "chg": {
-    "kalshi": -2.0
-   }
+   "chg": {}
   },
   {
    "title": "Who will be the next to leave the Trump Cabinet?",
@@ -122,11 +116,11 @@
    },
    "volumes": {
     "polymarket": 37874,
-    "kalshi": 136581
+    "kalshi": 136653
    },
    "volumes24": {
     "polymarket": 333,
-    "kalshi": 3556
+    "kalshi": 3628
    },
    "raw": 8.3,
    "fees": 0.7,
@@ -152,7 +146,7 @@
     "usd": 50,
     "shares": 54,
     "exec": 7.0,
-    "t": 1795386414,
+    "t": 1795387131,
     "buy": {
      "site": "kalshi",
      "yes": 9.3,
@@ -224,7 +218,7 @@
     "usd": 10,
     "shares": 10,
     "exec": 5.0,
-    "t": 1795386415,
+    "t": 1795387132,
     "buy": {
      "site": "polymarket",
      "yes": 10.0,
@@ -295,10 +289,10 @@
    "rate_high": 0.07,
    "category": "Politics",
    "fill": {
-    "usd": 1649,
-    "shares": 1735,
+    "usd": 1646,
+    "shares": 1728,
     "exec": 5.0,
-    "t": 1795386415,
+    "t": 1795387132,
     "buy": {
      "site": "polymarket",
      "yes": 38.0,
@@ -309,8 +303,8 @@
      "no": 55.0,
      "fee": 1.73
     },
-    "avg": 3.0,
-    "profit": 52,
+    "avg": 2.8,
+    "profit": 49,
     "ladder": [
      [
       100,
@@ -326,7 +320,7 @@
      ],
      [
       1000,
-      3.6
+      3.4
      ]
     ]
    },
@@ -387,10 +381,10 @@
    "rate_high": 0.07,
    "category": "Trump",
    "fill": {
-    "usd": 69,
-    "shares": 72,
+    "usd": 50,
+    "shares": 52,
     "exec": 3.2,
-    "t": 1795386415,
+    "t": 1795387132,
     "buy": {
      "site": "polymarket",
      "yes": 32.0,
@@ -401,7 +395,80 @@
      "no": 63.0,
      "fee": 1.63
     },
-    "avg": 1.9,
+    "avg": 2.2,
+    "profit": 1,
+    "ladder": []
+   },
+   "chg": {}
+  },
+  {
+   "title": "Iowa Republican Presidential Caucus Winner 2028",
+   "outcome": "Ron DeSantis",
+   "close": "2028-11-08T04:59:00Z",
+   "prices": {
+    "polymarket": 8.0,
+    "kalshi": 14.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 8.0,
+    "url": "https://polymarket.com/event/iowa-presidential-republican-caucus-winner-202610282"
+   },
+   "high": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 14.5,
+    "url": "https://kalshi.com/markets/kxrpresprimary"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/iowa-presidential-republican-caucus-winner-202610282",
+    "kalshi": "https://kalshi.com/markets/kxrpresprimary"
+   },
+   "volumes": {
+    "polymarket": 10157,
+    "kalshi": 15821
+   },
+   "volumes24": {
+    "polymarket": 317,
+    "kalshi": 163
+   },
+   "raw": 6.5,
+   "fees": 1.2,
+   "net": 5.3,
+   "all3": false,
+   "fee_low": 0.37,
+   "fee_high": 0.87,
+   "fair": 9.2,
+   "grade": "B",
+   "fine": {
+    "src": "similar",
+    "srcs": [
+     "Credible reporting",
+     "Republican Party"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.05,
+   "rate_high": 0.07,
+   "category": "Politics",
+   "fill": {
+    "usd": 63,
+    "shares": 65,
+    "exec": 2.7,
+    "t": 1795387132,
+    "buy": {
+     "site": "polymarket",
+     "yes": 10.0,
+     "fee": 0.45
+    },
+    "sell": {
+     "site": "kalshi",
+     "no": 86.0,
+     "fee": 0.84
+    },
+    "avg": 2.3,
     "profit": 1,
     "ladder": []
    },
@@ -434,11 +501,11 @@
    },
    "volumes": {
     "polymarket": 26977,
-    "kalshi": 9526658
+    "kalshi": 9526665
    },
    "volumes24": {
     "polymarket": 6423,
-    "kalshi": 35466
+    "kalshi": 35473
    },
    "raw": 6.5,
    "fees": 1.3,
@@ -459,10 +526,10 @@
    "rate_high": 0.01,
    "category": "Oil",
    "fill": {
-    "usd": 4541,
-    "shares": 4756,
+    "usd": 4590,
+    "shares": 4806,
     "exec": 3.6,
-    "t": 1795386416,
+    "t": 1795387132,
     "buy": {
      "site": "kalshi",
      "yes": 21.0,
@@ -473,8 +540,8 @@
      "no": 74.0,
      "fee": 0.19
     },
-    "avg": 3.2,
-    "profit": 150,
+    "avg": 3.1,
+    "profit": 151,
     "ladder": [
      [
       100,
@@ -501,91 +568,18 @@
    "chg": {}
   },
   {
-   "title": "Iowa Republican Presidential Caucus Winner 2028",
-   "outcome": "J.D. Vance",
-   "close": "2028-11-08T04:59:00Z",
-   "prices": {
-    "polymarket": 22.5,
-    "kalshi": 29.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 22.5,
-    "url": "https://polymarket.com/event/iowa-presidential-republican-caucus-winner-202610282"
-   },
-   "high": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 29.5,
-    "url": "https://kalshi.com/markets/kxrpresprimary"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/iowa-presidential-republican-caucus-winner-202610282",
-    "kalshi": "https://kalshi.com/markets/kxrpresprimary"
-   },
-   "volumes": {
-    "polymarket": 10157,
-    "kalshi": 15821
-   },
-   "volumes24": {
-    "polymarket": 317,
-    "kalshi": 163
-   },
-   "raw": 7.0,
-   "fees": 2.3,
-   "net": 4.7,
-   "all3": false,
-   "fee_low": 0.87,
-   "fee_high": 1.46,
-   "fair": 24.7,
-   "grade": "B",
-   "fine": {
-    "src": "similar",
-    "srcs": [
-     "Credible reporting",
-     "Republican Party"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.05,
-   "rate_high": 0.07,
-   "category": "Politics",
-   "fill": {
-    "usd": 31,
-    "shares": 32,
-    "exec": 1.6,
-    "t": 1795386416,
-    "buy": {
-     "site": "polymarket",
-     "yes": 25.0,
-     "fee": 0.94
-    },
-    "sell": {
-     "site": "kalshi",
-     "no": 71.0,
-     "fee": 1.44
-    },
-    "avg": 1.6,
-    "profit": 1,
-    "ladder": []
-   },
-   "chg": {}
-  },
-  {
    "title": "Anthropic announces a Millennium Prize solution by...?",
    "outcome": "December 31, 2027",
    "close": "2028-01-01T04:59:00Z",
    "prices": {
     "polymarket": 88.5,
-    "kalshi": 82.5,
+    "kalshi": 82.0,
     "alpha": null
    },
    "low": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 82.5,
+    "price": 82.0,
     "url": "https://kalshi.com/markets/kxanthropicmillennium"
    },
    "high": {
@@ -606,13 +600,13 @@
     "polymarket": 7871,
     "kalshi": 2636
    },
-   "raw": 6.0,
+   "raw": 6.5,
    "fees": 1.5,
-   "net": 4.5,
+   "net": 5.0,
    "all3": false,
-   "fee_low": 1.01,
+   "fee_low": 1.03,
    "fee_high": 0.51,
-   "fair": 86.3,
+   "fair": 86.1,
    "grade": "A",
    "fine": {
     "src": "match",
@@ -625,10 +619,10 @@
    "rate_high": 0.05,
    "category": "AI",
    "fill": {
-    "usd": 1009,
-    "shares": 1043,
+    "usd": 890,
+    "shares": 920,
     "exec": 3.5,
-    "t": 1795386416,
+    "t": 1795387133,
     "buy": {
      "site": "kalshi",
      "yes": 83.0,
@@ -640,22 +634,104 @@
      "fee": 0.53
     },
     "avg": 1.8,
-    "profit": 18,
+    "profit": 16,
     "ladder": [
      [
       100,
-      3.4
+      3.3
      ],
      [
       250,
-      2.6
+      2.5
      ],
      [
       500,
       2.0
+     ]
+    ]
+   },
+   "chg": {
+    "kalshi": -0.5
+   }
+  },
+  {
+   "title": "Pete Hegseth impeached by...?",
+   "outcome": "June 30, 2027",
+   "close": "2027-07-01T03:59:00Z",
+   "prices": {
+    "polymarket": 52.5,
+    "kalshi": 58.0,
+    "alpha": null
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 52.5,
+    "url": "https://polymarket.com/event/pete-hegseth-impeached-by-june-30"
+   },
+   "high": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 58.0,
+    "url": "https://kalshi.com/markets/kxhegsethimpeach"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/pete-hegseth-impeached-by-june-30",
+    "kalshi": "https://kalshi.com/markets/kxhegsethimpeach"
+   },
+   "volumes": {
+    "polymarket": 958971,
+    "kalshi": 679579
+   },
+   "volumes24": {
+    "polymarket": 979,
+    "kalshi": 2279
+   },
+   "raw": 5.5,
+   "fees": 2.0,
+   "net": 3.5,
+   "all3": false,
+   "fee_low": 0.25,
+   "fee_high": 1.71,
+   "fair": 54.1,
+   "grade": "B",
+   "fine": {
+    "src": "similar",
+    "srcs": [
+     "AP",
+     "Credible reporting",
+     "New York Times",
+     "Reuters"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.01,
+   "rate_high": 0.07,
+   "category": "Post Election",
+   "fill": {
+    "usd": 368,
+    "shares": 381,
+    "exec": 2.0,
+    "t": 1795387133,
+    "buy": {
+     "site": "polymarket",
+     "yes": 53.0,
+     "fee": 0.25
+    },
+    "sell": {
+     "site": "kalshi",
+     "no": 43.0,
+     "fee": 1.72
+    },
+    "avg": 1.5,
+    "profit": 6,
+    "ladder": [
+     [
+      100,
+      2.0
      ],
      [
-      1000,
+      250,
       1.8
      ]
     ]
@@ -692,7 +768,7 @@
     "polymarket": 54608701
    },
    "volumes24": {
-    "alpha": 396,
+    "alpha": 196,
     "polymarket": 89676
    },
    "raw": 3.5,
@@ -716,7 +792,7 @@
     "usd": 5,
     "shares": 6,
     "exec": 5.9,
-    "t": 1795386417,
+    "t": 1795387133,
     "buy": {
      "site": "polymarket",
      "yes": 13.1,
@@ -730,75 +806,6 @@
     "avg": 5.8,
     "profit": 0,
     "ladder": []
-   },
-   "chg": {}
-  },
-  {
-   "title": "Which bills will become law in 2026?",
-   "outcome": "AI-chip export licensing",
-   "close": "2027-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 37.0,
-    "kalshi": 45.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 37.0,
-    "url": "https://polymarket.com/event/which-bills-will-become-law-in-2026"
-   },
-   "high": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 45.5,
-    "url": "https://kalshi.com/markets/kxbills"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/which-bills-will-become-law-in-2026",
-    "kalshi": "https://kalshi.com/markets/kxbills"
-   },
-   "volumes": {
-    "polymarket": 223409,
-    "kalshi": 717032
-   },
-   "volumes24": {
-    "polymarket": 1357,
-    "kalshi": 3509
-   },
-   "raw": 8.5,
-   "fees": 2.0,
-   "net": 6.5,
-   "all3": false,
-   "fee_low": 0.23,
-   "fee_high": 1.74,
-   "fair": 42.0,
-   "grade": "A",
-   "fine": {
-    "src": "match",
-    "srcs": [
-     "Congress"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.01,
-   "rate_high": 0.07,
-   "category": "Congress",
-   "fill": {
-    "usd": 0,
-    "shares": 0,
-    "exec": -1.0,
-    "t": 1795386415,
-    "buy": {
-     "site": "polymarket",
-     "yes": 43.0,
-     "fee": 0.25
-    },
-    "sell": {
-     "site": "kalshi",
-     "no": 56.0,
-     "fee": 1.72
-    }
    },
    "chg": {}
   }
