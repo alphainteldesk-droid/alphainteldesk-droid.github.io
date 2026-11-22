@@ -117,10 +117,15 @@
     .glb-arc .g2 { stroke:rgba(63,219,230,.16); stroke-width:1; stroke-dasharray:3 5; }
     .livestrip .glb-c { position:relative; height:150px; display:block; }
     .glb-c .ck { position:absolute; transform:translateX(-50%); }
-    .glb-c .ck:nth-child(1) { left:5%; top:43px; } .glb-c .ck:nth-child(2) { left:15%; top:30px; } .glb-c .ck:nth-child(3) { left:25%; top:21px; } .glb-c .ck:nth-child(4) { left:35%; top:14px; } .glb-c .ck:nth-child(5) { left:45%; top:11px; } .glb-c .ck:nth-child(6) { left:55%; top:11px; } .glb-c .ck:nth-child(7) { left:65%; top:14px; } .glb-c .ck:nth-child(8) { left:75%; top:21px; } .glb-c .ck:nth-child(9) { left:85%; top:30px; } .glb-c .ck:nth-child(10) { left:95%; top:43px; } 
+    .livestrip.glb { padding-top:26px; } .glb-arc { top:26px !important; }
+    .sky { position:absolute; z-index:2; width:22px; height:22px; margin-left:-11px; font-size:17px; line-height:22px; text-align:center; transition:left 1s, top 1s; cursor:default; }
+    #sky-sun { filter:drop-shadow(0 0 6px rgba(255,190,60,.9)); }
+    #sky-moon { filter:drop-shadow(0 0 5px rgba(200,220,255,.6)); }
+
+    .glb-c .ck:nth-of-type(1) { left:5%; top:43px; } .glb-c .ck:nth-of-type(2) { left:15%; top:30px; } .glb-c .ck:nth-of-type(3) { left:25%; top:21px; } .glb-c .ck:nth-of-type(4) { left:35%; top:14px; } .glb-c .ck:nth-of-type(5) { left:45%; top:11px; } .glb-c .ck:nth-of-type(6) { left:55%; top:11px; } .glb-c .ck:nth-of-type(7) { left:65%; top:14px; } .glb-c .ck:nth-of-type(8) { left:75%; top:21px; } .glb-c .ck:nth-of-type(9) { left:85%; top:30px; } .glb-c .ck:nth-of-type(10) { left:95%; top:43px; } 
     .livestrip.glb .hwire { max-width:820px; margin:-4px auto 0; }
   }
-  @media (max-width:820px) { .glb-arc { display:none; } .livestrip .glb-c { flex-wrap:nowrap; justify-content:flex-start; gap:4px; overflow-x:auto; max-width:100%; flex:1 1 100%; scrollbar-width:none; padding-bottom:2px; } .glb-c::-webkit-scrollbar { display:none; } .glb-c .ck { flex:none; width:84px; } .glb-key { display:none; } }
+  @media (max-width:820px) { .glb-arc, .sky { display:none; } .livestrip .glb-c { flex-wrap:nowrap; justify-content:flex-start; gap:4px; overflow-x:auto; max-width:100%; flex:1 1 100%; scrollbar-width:none; padding-bottom:2px; } .glb-c::-webkit-scrollbar { display:none; } .glb-c .ck { flex:none; width:84px; } .glb-key { display:none; } }
   .ck > span { white-space:nowrap; }
   @media (max-width:820px) { .livestrip .glb-key { display:none; } }
   .ck .mo { display:none; width:7px; height:7px; border-radius:50%; margin-right:5px; vertical-align:1px; background:#4a5b6e; }
@@ -995,6 +1000,7 @@
     <path class="g2" d="M250,40 Q200,80 190,120"/><path class="g2" d="M500,30 L500,120"/><path class="g2" d="M750,40 Q800,80 810,120"/>
   </svg>
   <div class="hclocks glb-c" aria-label="World market clocks, west to east">
+    <span class="sky" id="sky-sun" aria-hidden="true">☀️</span><span class="sky" id="sky-moon" aria-hidden="true"></span>
     <div class="ck" data-tz="America/Los_Angeles" data-w="los angeles"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>LOS ANGELES</span><b>--:--</b><em class="wx"></em></div>
     <div class="ck" data-tz="America/New_York" data-w="st. pete"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>ST. PETE</span><b>--:--</b><em class="wx"></em></div>
     <div class="ck" data-tz="America/New_York" data-w="new york" data-ex="nyse" data-exn="NYSE"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>NEW YORK</span><b>--:--</b><em class="wx"></em></div>
@@ -2043,6 +2049,38 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
     });
   }
   clocks(); setInterval(clocks, 20000);
+  /* Nov 22: sun + moon ride above the clock curve: sun over the place where it's noon now, moon over the place
+     where it's overhead (approx.: sun longitude minus the moon's phase angle), moon icon shows the real phase */
+  var LON = [-118.24, -82.64, -74.01, -0.13, 12.5, 37.62, 55.27, 114.17, 139.69, 151.21];
+  function lonX(lon) {                                     // longitude -> 0..1 across the strip, clocks at 5%..95%
+    lon = ((lon + 540) % 360) - 180;
+    if (lon >= LON[0] && lon <= LON[9]) {
+      for (var i = 0; i < 9; i++) if (lon <= LON[i + 1]) return 0.05 + 0.1 * (i + (lon - LON[i]) / (LON[i + 1] - LON[i]));
+    }
+    var past = lon > LON[9] ? lon - LON[9] : lon + 360 - LON[9], gap = 360 - (LON[9] - LON[0]);   // Pacific wraps around
+    var f = past / gap;
+    return f < 0.5 ? 0.95 + 0.1 * f : 0.1 * (f - 0.5);
+  }
+  function sky() {
+    var box = document.querySelector('.glb-c'), sun = document.getElementById('sky-sun'), moon = document.getElementById('sky-moon');
+    if (!box || !sun || getComputedStyle(sun).display === 'none') return;
+    var now = new Date(), utcH = now.getUTCHours() + now.getUTCMinutes() / 60;
+    var sunLon = (12 - utcH) * 15;
+    var age = ((now - Date.UTC(2000, 0, 6, 18, 14)) / 86400000) % 29.530589, ph = age / 29.530589;
+    var moonLon = sunLon - ph * 360;
+    var icons = ['\uD83C\uDF11', '\uD83C\uDF12', '\uD83C\uDF13', '\uD83C\uDF14', '\uD83C\uDF15', '\uD83C\uDF16', '\uD83C\uDF17', '\uD83C\uDF18'];
+    var names = ['New moon', 'Waxing crescent', 'First quarter', 'Waxing gibbous', 'Full moon', 'Waning gibbous', 'Last quarter', 'Waning crescent'];
+    var k = Math.round(ph * 8) % 8, lit = Math.round((1 - Math.cos(2 * Math.PI * ph)) / 2 * 100);
+    moon.textContent = icons[k];
+    var w = box.clientWidth;
+    [[sun, sunLon], [moon, moonLon]].forEach(function (s) {
+      var x = lonX(s[1]), y = 82 - 188 * x * (1 - x);
+      s[0].style.left = (x * w) + 'px'; s[0].style.top = (y - 58) + 'px';
+    });
+    sun.title = 'Sun: noon right under here now';
+    moon.title = 'Moon: ' + names[k] + ', ' + lit + '% lit';
+  }
+  sky(); setInterval(sky, 60000); window.addEventListener('resize', sky);
   /* Nov 22: green dot = that city's main stock exchange is open now (regular hours; NYSE holidays listed, others not) */
   var EX = { nyse: [[570, 960]], lse: [[480, 990]], mil: [[540, 1050]], moex: [[600, 1130]], dfm: [[600, 900]],
              hkex: [[570, 720], [780, 960]], tse: [[540, 690], [750, 930]], asx: [[600, 960]] };
