@@ -176,6 +176,19 @@
   @media (max-width:380px) { .xt .xe small { display:none; } .xt td { font-size:.8rem; } .xt td:first-child { overflow-wrap:anywhere; } }   /* small phones: just the grade letter */
   @media (max-width:640px) { .xt .hide { display:none; } .xt td, .xt th { padding:8px 5px; }
     .xt th:last-child, .xt td.cl { display:none; } .xt th { font-size:.6rem; letter-spacing:.06em; white-space:normal; } .xt td { font-size:.85rem; } }
+  /* Nov 22 (James): exit gauge (how much you could sell now) + Chop flag (48h swing of 10c+) with a mini-chart */
+  .xm { display:flex; flex-wrap:wrap; align-items:center; gap:6px 14px; margin-top:6px; }
+  .eg { display:inline-flex; align-items:center; gap:7px; font:500 .72rem "JetBrains Mono",monospace; color:var(--muted); cursor:help; }
+  .eg .eg-k { letter-spacing:.12em; font-size:.62rem; }
+  .eg .eg-b { position:relative; width:74px; height:7px; border-radius:4px; background:rgba(255,255,255,.07); overflow:hidden; }
+  .eg .eg-b i { position:absolute; left:0; top:0; bottom:0; border-radius:4px; }
+  .eg .eg-b i.f5 { opacity:.35; } .eg b { color:var(--text); font-weight:600; }
+  .eg.a i { background:#3ddc84; } .eg.b i { background:var(--cyan); } .eg.c i { background:var(--amber); } .eg.d i { background:#ff6b6b; }
+  .chp { display:inline-flex; align-items:center; gap:7px; font:600 .7rem "JetBrains Mono",monospace; color:var(--amber); cursor:help;
+         border:1px solid rgba(255,179,71,.45); background:rgba(255,179,71,.08); border-radius:4px; padding:1px 7px 1px 5px; }
+  .chp svg { display:block; } .chp small { color:var(--muted); font-weight:500; }
+  .gkey .chp { cursor:default; margin-right:4px; }
+  @media (max-width:640px) { .eg .eg-b { width:52px; } .eg .eg-k, .eg .eg-5 { display:none; } }
   .xt .mcl { display:none; } @media (max-width:640px) { .xt .mcl { display:block; } }
   .foot { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
   footer { border-top:1px solid var(--line); margin-top:48px; padding:24px 0 40px; color:var(--muted); font-size:.85rem; }
@@ -239,6 +252,8 @@
     <span><span class="xg d">D</span>risky</span>
     <span class="gk-why">= <b>Liquidity</b> (buy orders on the books: A $10K+, B $2K+, C $300+) + <b>Rules</b> (A clear source … D judgement call). Tap any grade for details.</span>
     <a href="#exit-qa">How it works</a></div>
+  <div class="gkey"><b>ON EACH ROW</b>
+    <span class="gk-why"><b>EXIT bar</b> = how much you could sell back right now, giving up 2¢ or less (bright) and 5¢ or less (faint). <span class="chp">⚡ CHOPPY</span> = the price swung 10¢ or more in the last 48 hours (mini-chart shows the swing). Chop isn't part of the grade yet. <a href="#chop-qa" style="margin:0">More</a></span></div>
   <div class="tw" id="x-tw"><table class="xt"><thead><tr><th>MARKET</th><th>SIDE</th><th>PRICE NOW</th><th title="After fees, if it resolves this way">RETURN IF RIGHT <span class="th-sub">after fees</span></th><th title="Liquidity + Rules, combined. Tap a grade for details.">DZ GRADE <span class="th-sub">tap for details</span></th><th>CLOSES</th></tr></thead>
     <tbody id="x-rows"><tr><td colspan="6">Loading…</td></tr></tbody></table></div>
   <div class="x-more" id="x-more" hidden><button type="button" aria-expanded="false"></button></div>
@@ -276,6 +291,7 @@
   <div class="qa"><b>What is "Price now"?</b><span>The price you can actually buy at right now: the best ask for Yes, or 100¢ minus the best bid for No. Never the midpoint. We skip any contract whose bid and ask are more than 4¢ apart.</span></div>
   <div class="qa"><b>How is the return worked out?</b><span>(100¢ − price − fee) ÷ (price + fee). The fee is the trading fee each site publishes for that exact market, read fresh every update. If a site doesn't publish one, we estimate it and mark it "est". Holding to settlement has no second fee. Kalshi rounds each order's fee up to the next cent, so a very small order (a few contracts) pays a little more than shown.</span></div>
   <div class="qa" id="exit-qa"><b>What is the DZ Grade?</b><span>One letter for how clean a contract is to hold. It combines two things. <b>Liquidity</b>: how many dollars of buy orders sit on the order book within 2¢ of the best bid for your side, i.e. how much you could sell right now if you change your mind (A = $10,000+, B = $2,000+, C = $300+, D = less. D contracts aren't listed, except Alpha Arcade's 10 busiest: Alpha's order books are usually thin, so plan to hold those until they settle). <b>Rules</b>: how the result gets decided. A = a clear named source (like the BLS, the Federal Reserve or Rotten Tomatoes), B = a named source with "credible reporting" as a backup, C = no source named, D = a judgement call based on "credible reporting". The DZ Grade is the average of the two, rounded toward the weaker one. It does not tell you whether the contract will pay out. Alpha Arcade's order book is read straight from the Algorand blockchain.</span></div>
+  <div class="qa" id="chop-qa"><b>What are the EXIT bar and ⚡ CHOPPY?</b><span><b>EXIT</b>: the dollars of buy orders on the order book for your side, i.e. how much you could sell back right now if you need to get out. The bright part counts orders within 2¢ of the best bid, the faint part within 5¢; the bar is on a log scale up to $50K. Order books change by the minute, so treat it as a snapshot from the last update. <b>⚡ CHOPPY</b>: the price for your side moved 10¢ or more (highest minus lowest) in the last 48 hours. A contract at 88¢ that was 75¢ yesterday is a lot less settled than one that has sat at 88¢ all week. Polymarket and Kalshi use their own hourly price history; Alpha Arcade has none, so we use the last-trade prices our desk records every hour, and thin Alpha markets can jump on one small trade. Chop is not part of the DZ Grade yet: the track record logs it, and once there are 30+ results we'll check whether choppy contracts really miss more often.</span></div>
   <div class="qa"><b>How often are the rules checked?</b><span>Polymarket and Kalshi rules are read fresh on every update, roughly every hour. Alpha Arcade rules are read once, when a market first appears on the site. All checks are automatic and can miss things. Rule clarifications and changes are rare, but they do happen, so always read the final rules on the market's own page before you trade.</span></div>
   <div class="qa"><b>How does the track record work?</b><span>Every contract (Polymarket, Kalshi and Alpha Arcade) is logged the first time it appears on this page, at the price we first listed it. When it settles we record whether it paid out. Each contract counts once. One change so far: on Nov 21, 2026 we stopped listing weekly and daily crypto price contracts (a Bitcoin price on a single day is a coin flip on one week's swing) and took their results out of the record; the exact number removed is shown under the track record. Monthly and longer crypto markets still count. "If you'd bought $1 of each" is the average return after fees: a contract that pays out adds its return, one that doesn't loses the whole $1. Daily crypto and price markets are counted separately because they settle within days and would swamp the rest. Contracts a site cancels or settles 50-50 aren't counted. Past results don't predict future ones.</span></div>
   <div class="qa"><b>How do you keep the numbers right?</b><span>Every update recomputes every row from scratch and throws out anything that doesn't add up. A watchdog checks the page after every update and alerts us if prices go stale, if a site stops publishing its fees, or if a fee rate changes. If prices are more than 2 hours old, this page tells you so.</span></div>
@@ -342,6 +358,24 @@
   function left(iso) { var h = (Date.parse(iso) - Date.now()) / 3600000;
     return h <= 0 ? 'now' : h < 48 ? Math.max(1, Math.round(h)) + ' h' : Math.round(h / 24) + ' d'; }
   function usd(v) { return v >= 1000 ? '$' + (v >= 9950 ? Math.round(v / 1000) : (v / 1000).toFixed(1)) + 'K' : '$' + v; }
+  /* Nov 22 (James): exit gauge + Chop flag */
+  var CHOPPY = 10;
+  function gpos(v) { return v > 0 ? Math.max(4, Math.min(100, (Math.log(v) / Math.LN10 - 1) / (Math.log(50000) / Math.LN10 - 1) * 100)) : 0; }   /* $10 .. $50K, log */
+  function gauge(x) { var e = x.ex; if (!e) return '';
+    var g = (e.usd ? e.g : 'D').toLowerCase(), u5 = e.u5 != null ? e.u5 : e.usd;
+    var tip = e.usd ? 'You could sell about ' + usd(e.usd) + ' back right now giving up 2¢ or less' + (e.u5 != null ? ', ' + usd(u5) + ' giving up 5¢ or less' : '') + '. Order books change fast.' : 'No buy orders on the books for this side right now: plan to hold until it settles.';
+    return '<span class="eg ' + g + '" title="' + tip + '"><span class="eg-k">EXIT</span><span class="eg-b"><i class="f5" style="width:' + gpos(u5) + '%"></i><i style="width:' + gpos(e.usd) + '%"></i></span>' +
+      (e.usd ? '<span><b>' + usd(e.usd) + '</b> ≤2¢' + (e.u5 != null && u5 > e.usd ? '<span class="eg-5"> · ' + usd(u5) + ' ≤5¢</span>' : '') + '</span>' : '<span><b>$0</b> no bids</span>') + '</span>'; }
+  function hrs(c) { return c.h >= 46 ? '48h' : c.h + 'h'; }
+  function spark(c) { var p = c.pts || []; if (p.length < 2) return '';
+    var w = 64, h = 18, lo = Math.min.apply(null, p), hi = Math.max.apply(null, p), rg = hi - lo || 1;
+    var xy = p.map(function (v, i) { return (i * w / (p.length - 1)).toFixed(1) + ',' + (h - 2 - (v - lo) / rg * (h - 4)).toFixed(1); });
+    var end = xy[xy.length - 1].split(',');
+    return '<svg width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '" aria-hidden="true"><polyline points="' + xy.join(' ') +
+      '" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="' + end[0] + '" cy="' + end[1] + '" r="2" fill="currentColor"/></svg>'; }
+  function chopTag(x) { var c = x.ch; if (!c || c.sw < CHOPPY) return '';
+    return '<span class="chp" title="The ' + x.side.toUpperCase() + ' price ranged ' + c.lo.toFixed(1) + '¢–' + c.hi.toFixed(1) + '¢ over the last ' + hrs(c) +
+      (x.site === 'alpha' ? ' (Alpha: last-trade prices; thin markets can jump on one small trade)' : '') + '.">⚡ CHOPPY ' + spark(c) + '<small>' + c.sw.toFixed(1) + '¢ in ' + hrs(c) + '</small></span>'; }
   /* Nov 15 (James): DZ Grade = Liquidity (buy orders on the books) + Rules (how the result is decided), averaged and
      rounded toward the weaker one. Tap the grade to open both halves. */
   var LQ = { A: 4, B: 3, C: 2, D: 1 }, RL = { clear: 4, mixed: 3, none: 2, judgement: 1 }, LET = ['', 'D', 'C', 'B', 'A'];
@@ -366,6 +400,8 @@
       '<p><span class="xg ' + g.toLowerCase() + '">' + g + '</span> <b>DZ Grade</b>: how clean this contract is to hold. Can you get out, and how is the result decided? It doesn\'t tell you whether you\'re right.</p>' +
       '<p><span class="xg ' + l.g.toLowerCase() + '">' + l.g + '</span> <b>Liquidity</b> · ' + l.t + '.</p>' +
       '<p><span class="xg ' + r.g.toLowerCase() + '">' + r.g + '</span> <b>Rules</b> · ' + r.t + '.</p>' +
+      (x.ex && x.ex.usd ? '<p><b>Exit</b> · sell about ' + usd(x.ex.usd) + ' within 2¢ of the ' + x.ex.bid.toFixed(1) + '¢ best bid' + (x.ex.u5 != null ? ', ' + usd(x.ex.u5) + ' within 5¢' : '') + ' (at the last update; books change fast).</p>' : '') +
+      (x.ch ? '<p><b>Chop</b> · ' + x.side.toUpperCase() + ' ranged ' + x.ch.lo.toFixed(1) + '¢–' + x.ch.hi.toFixed(1) + '¢ over the last ' + hrs(x.ch) + ' (' + x.ch.sw.toFixed(1) + '¢ swing' + (x.ch.sw >= CHOPPY ? ', choppy' : ', steady') + '). Not part of the grade yet.' + (x.site === 'alpha' ? ' Alpha: last-trade prices recorded by our desk.' : '') + '</p>' : '') +
       '<p class="xh">How it\'s combined: the average of the two, rounded toward the weaker one, so one bad half always pulls the grade down. <a href="#exit-qa">More</a></p></div></td></tr>'; }
   function pays(x) {   /* Nov 15 (James): one plain sentence saying what has to happen for you to get $1 */
     var yn = x.side === 'No' ? '<b class="not">NO</b>' : '<b class="yes">YES</b>';
@@ -397,7 +433,8 @@
     document.getElementById('x-rows').innerHTML = r.length ? shown.slice(0, more ? shown.length : FIRST).map(function (x, i) {
       var cd = new Date(x.close), yr2 = cd.getFullYear() !== new Date().getFullYear();
       var day = cd.toLocaleDateString('en-US', yr2 ? { month: 'short', day: 'numeric', year: 'numeric' } : { month: 'short', day: 'numeric' });
-      var what = pays(x) + '<button class="dz-sh" data-i="' + i + '" title="Share a link to this contract on Alpha Intel Desk">↗ Share</button>' +
+      var mt = gauge(x) + chopTag(x);
+      var what = pays(x) + (mt ? '<span class="xm">' + mt + '</span>' : '') + '<button class="dz-sh" data-i="' + i + '" title="Share a link to this contract on Alpha Intel Desk">↗ Share</button>' +
         '<span class="o mcl">Closes ' + day + ' · in ' + left(x.close) + '</span>';   /* phones: the close date moves under the market */
       return '<tr id="c-' + ckey(x) + '"><td><span class="v">' + NAMES[x.site] + '</span><a href="' + esc(x.url) + '" rel="noopener">' + esc(x.title) + '</a>' + what + '</td>' +
         '<td><span class="sd ' + (x.side === 'Yes' ? 'y' : 'n') + '">' + x.side.toUpperCase() + '</span></td>' +

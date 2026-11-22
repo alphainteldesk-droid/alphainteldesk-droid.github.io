@@ -1,0 +1,27 @@
+name: DZ chop test (branch only)
+on:
+  push:
+    branches: [dz-chop-test]
+permissions:
+  contents: write
+jobs:
+  t:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: |
+          python3 -c "
+          import json; d=json.load(open('expiry.json')); d['rows']=d['all']
+          [r.pop('ex',None) for r in d['rows']]; json.dump(d,open('expiry.json','w'))"
+          python3 exit_grade.py
+          python3 dz_chop.py
+          cp track.json /tmp/t.json; python3 track_record.py || true
+          python3 -c "
+          import json; t=json.load(open('track.json')); o=t['open']
+          print('open with chop', sum('cm' in v for v in o.values()), 'of', len(o)); print('by_chop', t['summary'].get('by_chop'))"
+          cp /tmp/t.json track.json
+      - run: |
+          git config user.name "github-actions[bot]"; git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add expiry.json dz_alpha_hist.json; git commit -m "test output" && git push

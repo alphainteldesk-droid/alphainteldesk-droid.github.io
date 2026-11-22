@@ -16,6 +16,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from fillable import _poly, _kalshi, _alpha
 
 WITHIN = 0.02            # count bids down to 2 cents under the best bid
+WITHIN5 = 0.05           # Nov 22 (James): exit gauge also shows how much you could sell giving up 5 cents or less
 BUDGET = 120             # seconds; whatever isn't read by then gets no grade this run
 WORKERS = 8
 GRADES = ((10000, "A"), (2000, "B"), (300, "C"), (0, "D"))   # $ depth -> grade. Set Nov 15 from 529 live books: p25 $430, median $2.2K, p75 $7.5K, p90 $29K
@@ -50,7 +51,8 @@ def _depth(site, row):
         return None
     best = held[0][0]
     lv = [(p, q) for p, q in held if p >= best - WITHIN - 1e-9]
-    return sum(p * q for p, q in lv), lv[-1][0], best
+    u5 = sum(p * q for p, q in held if p >= best - WITHIN5 - 1e-9)
+    return sum(p * q for p, q in lv), lv[-1][0], best, u5
 
 
 def grade(usd):
@@ -144,10 +146,10 @@ def main(path="expiry.json"):
                 continue
             if got is None:
                 empty += 1
-                r["ex"] = {"usd": 0, "px": None, "bid": None, "g": "D"}
+                r["ex"] = {"usd": 0, "u5": 0, "px": None, "bid": None, "g": "D"}
             else:
-                usd, px, best = got
-                r["ex"] = {"usd": round(usd), "px": round(px * 100, 1), "bid": round(best * 100, 1), "g": grade(usd)}
+                usd, px, best, u5 = got
+                r["ex"] = {"usd": round(usd), "u5": round(u5), "px": round(px * 100, 1), "bid": round(best * 100, 1), "g": grade(usd)}
             done += 1
     except Exception:
         print("Exit grade: time budget (%ds) reached" % BUDGET)
