@@ -4,7 +4,7 @@ import json, time, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 CITIES = {"los angeles": (34.05, -118.24), "st. pete": (27.77, -82.64), "new york": (40.71, -74.01),
-          "london": (51.51, -0.13), "rome": (41.9, 12.5), "moscow": (55.76, 37.62), "dubai": (25.2, 55.27),
+          "london": (51.51, -0.13), "rome": (41.9, 12.5), "dubai": (25.2, 55.27), "mumbai": (19.08, 72.88),
           "hong kong": (22.32, 114.17), "tokyo": (35.68, 139.69), "sydney": (-33.87, 151.21)}   # keys = data-w on the clocks
 UA = "AlphaIntelDesk/1.0 https://alphainteldesk.com (alphainteldesk-droid@users.noreply.github.com)"
 
