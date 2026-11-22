@@ -30,7 +30,7 @@
     '.gc-nt{padding:0 18px 14px;margin-top:-6px;color:#6f8399;font-size:.78rem}' +
     '.gc-row{margin:10px 0 4px;border:1px solid rgba(63,219,230,.2);border-radius:8px;background:linear-gradient(rgba(63,219,230,.035) 1px,transparent 1px) 0 0/24px 24px,rgba(5,12,20,.55);overflow:hidden}' +
     '.gc-row p{margin:0;padding:0 10px 6px;font:700 .64rem ' + MONO + ';letter-spacing:.08em;color:#6f8399}' +
-    '.hx-chart{display:block !important;margin:2px 0 10px;border:1px solid rgba(63,219,230,.25);border-radius:6px;background:rgba(0,0,0,.3);overflow:hidden}' +
+    '.hx-chart{display:block !important;flex:1 1 0;min-width:0;align-self:stretch;border:1px solid rgba(63,219,230,.25);border-radius:6px;background:rgba(0,0,0,.3);overflow:hidden}' +
     '.hx-chart:empty{display:none !important}' +
     '@media(max-width:640px){.gc-h{padding:12px 12px 2px}.gc-t{font-size:1rem}.gc-n b{font-size:1.6rem}.gc-f{padding:2px 12px 12px}.gc-f a{margin-left:0}.gc-nt{padding:0 12px 12px}}';
   document.head.appendChild(css);
@@ -59,13 +59,13 @@
   }
   Chart.prototype.size = function () {
     var dpr = window.devicePixelRatio || 1, W = this.cv.clientWidth || this.cv.parentNode.clientWidth;
-    this.W = W; this.H = this.mode === 'big' ? (W < 600 ? 250 : 330) : this.mode === 'row' ? (W < 500 ? 130 : 150) : (W < 400 ? 96 : 110);
+    this.W = W; this.H = this.mode === 'big' ? (W < 600 ? 250 : 330) : this.mode === 'row' ? (W < 500 ? 130 : 150) : 62;
     this.cv.style.height = this.H + 'px'; this.cv.width = W * dpr; this.cv.height = this.H * dpr; this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   };
   Chart.prototype.draw = function (now) {
     var ctx = this.ctx, g = this.g, W = this.W, H = this.H, m = this.mode, big = m === 'big', mini = m === 'mini', small = W < 600;
     var t = (now - this.t0) / 1000, me = this;
-    var PL = mini ? 8 : small ? 36 : 50, PR = mini ? 92 : small ? 88 : big ? 150 : 120, PT = mini ? 10 : 14, PB = mini ? 10 : 26;
+    var PL = mini ? 6 : small ? 36 : 50, PR = mini ? 22 : small ? 88 : big ? 150 : 120, PT = mini ? 8 : 14, PB = mini ? 8 : 26;
     var CW = W - PL - PR, CH = H - PT - PB;
     var X = function (ts) { return PL + CW * (ts - me.tmin) / Math.max(1, me.tmax - me.tmin); };
     var Y = function (v) { return PT + CH * (1 - (v - me.lo) / (me.hi - me.lo)); };
@@ -112,6 +112,7 @@
       ctx.beginPath(); ctx.moveTo(bx - 7, top); ctx.lineTo(bx, top); ctx.lineTo(bx, bot); ctx.lineTo(bx - 7, bot); ctx.stroke(); ctx.shadowBlur = 0;
       ctx.setLineDash([3, 4]); ctx.strokeStyle = 'rgba(255,179,71,.45)'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(PL + CW + 6, top); ctx.lineTo(bx - 8, top); ctx.moveTo(PL + CW + 6, bot); ctx.lineTo(bx - 8, bot); ctx.stroke(); ctx.setLineDash([]);
+      if (mini) { this.done = calm; return; }                      // mini: the big number sits right next to it
       var my = Math.min(Math.max((top + bot) / 2, PT + 16), PT + CH - 16);
       ctx.textAlign = 'left'; ctx.fillStyle = '#ffb347'; ctx.globalAlpha = 0.8 + 0.2 * pulse;
       ctx.font = '800 ' + (big ? (small ? 15 : 20) : 14) + 'px ' + MONO; ctx.fillText(c1(g.net) + '¢', bx + 7, my - 8); ctx.globalAlpha = 1;
@@ -183,8 +184,12 @@
           new Chart(w.querySelector('canvas'), g, d.days, 'row');
         });
       };
-      addRows();
-      new MutationObserver(addRows).observe(board, { childList: true });
+      var jump = function () {                                         // a #g= link (homepage card, shared links) lands on its row
+        var m = /#g=([0-9a-z]+)/.exec(location.hash), el = m && document.getElementById('g-' + m[1]);
+        if (el) el.scrollIntoView({ block: 'center' });
+      };
+      addRows(); setTimeout(jump, 200);
+      new MutationObserver(function () { addRows(); setTimeout(jump, 200); }).observe(board, { childList: true });
     }
   }).catch(function () {});
 })();
