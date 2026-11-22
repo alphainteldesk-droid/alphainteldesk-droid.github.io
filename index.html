@@ -123,8 +123,14 @@
     #sky-moon { filter:drop-shadow(0 0 5px rgba(200,220,255,.6)); }
 
     .glb-c .ck:nth-of-type(1) { left:5%; top:43px; } .glb-c .ck:nth-of-type(2) { left:15%; top:30px; } .glb-c .ck:nth-of-type(3) { left:25%; top:21px; } .glb-c .ck:nth-of-type(4) { left:35%; top:14px; } .glb-c .ck:nth-of-type(5) { left:45%; top:11px; } .glb-c .ck:nth-of-type(6) { left:55%; top:11px; } .glb-c .ck:nth-of-type(7) { left:65%; top:14px; } .glb-c .ck:nth-of-type(8) { left:75%; top:21px; } .glb-c .ck:nth-of-type(9) { left:85%; top:30px; } .glb-c .ck:nth-of-type(10) { left:95%; top:43px; } 
-    .livestrip.glb .hwire { max-width:820px; margin:-4px auto 0; }
+    .livestrip.glb .hwire { max-width:1120px; margin:4px auto 0; font-size:clamp(1rem,1.35vw,1.22rem); gap:16px; }
+    /* Nov 22: DESK PULSE made bigger so it holds its own under the clocks */
+    .livestrip.glb .hw-line { padding:8px 16px; }
+    .livestrip.glb .hw-tag { padding:5px 11px; font-size:.78em; }
+    .livestrip.glb .hw-tag i { width:9px; height:9px; }
+    .livestrip.glb .glb-key { font-size:.8rem; }
   }
+  @media (max-width:820px) { .livestrip.glb .hwire { font-size:1rem; } .livestrip.glb .hw-line { padding:6px 12px; } }
   @media (max-width:820px) { .glb-arc, .sky { display:none; } .livestrip .glb-c { flex-wrap:nowrap; justify-content:flex-start; gap:4px; overflow-x:auto; max-width:100%; flex:1 1 100%; scrollbar-width:none; padding-bottom:2px; } .glb-c::-webkit-scrollbar { display:none; } .glb-c .ck { flex:none; width:84px; } .glb-key { display:none; } }
   .ck > span { white-space:nowrap; }
   @media (max-width:820px) { .livestrip .glb-key { display:none; } }
