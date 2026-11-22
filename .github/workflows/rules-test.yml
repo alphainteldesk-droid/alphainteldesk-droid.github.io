@@ -19,7 +19,7 @@ jobs:
           ev=ev[0] if isinstance(ev,list) else ev
           out["poly_desc"]=ev.get("description")
           out["poly_markets"]=[(m.get("groupItemTitle"),m.get("outcomePrices"),m.get("endDate"),m.get("volume")) for m in ev.get("markets",[])]
-          k=g("https://api.elections.kalshi.com/trade-api/v2/markets?event_ticker=KXLUTNICKOUT&limit=50")
+          k=g("https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXLUTNICKOUT&limit=50&status=open")
           out["kalshi_event"]={x:k.get("event",{}).get(x) for x in ("title","sub_title","category")}
           out["kalshi_markets"]=[(m.get("ticker"),m.get("title"),m.get("rules_primary"),m.get("rules_secondary"),m.get("yes_bid_dollars"),m.get("yes_ask_dollars"),m.get("close_time")) for m in (k.get("markets") or [])]
           json.dump(out,open("lutnick_rules.json","w"),indent=1)
