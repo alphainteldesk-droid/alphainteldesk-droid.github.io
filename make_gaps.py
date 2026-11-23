@@ -50,14 +50,19 @@ def fee_rate(site, row):
     if site == "alpha":
         fb = row["sites"]["alpha"].get("fee")
         return (fb / 1e6) if fb else 0.07          # feeBasePercent 70000 -> 0.07 (estimate)
-    cats = " ".join(row.get("categories") or []).lower()  # Polymarket Fee Structure V2 by category
+    cats = " ".join(row.get("categories") or []).lower()  # Polymarket fees from Nov 20, 2026: 0.01 or 0.05 by category
     if "geopolitic" in cats:
         return 0.0
-    if "crypto" in cats:
-        return 0.07
-    if any(k in cats for k in ("politic", "election", "tech", "finance", "business")):
-        return 0.04
-    return 0.05
+    if "combo" in cats or "parlay" in cats:
+        return 0.05
+    if "crypto" in cats:                           # BTC 5/15-min up/down 0.05, all other crypto 0.01
+        t = row.get("title", "").lower()
+        return 0.05 if "up or down" in t and any(k in t for k in ("5 min", "15 min", "5m", "15m")) else 0.01
+    if any(k in cats for k in ("sport", "election", "primar")):
+        return 0.05
+    if any(k in cats for k in ("politic", "econom", "culture", "weather", "mention")):
+        return 0.01
+    return 0.05                                    # finance, tech, other/general
 
 
 def fee_pts(r, price_pct):
