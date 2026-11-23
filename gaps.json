@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-23T19:42:01Z",
+ "updated": "2026-11-23T19:47:23Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -9,7 +9,7 @@
    "close": "2027-04-01T03:59:00Z",
    "prices": {
     "polymarket": 25.5,
-    "kalshi": 35.5,
+    "kalshi": 36.0,
     "alpha": null
    },
    "low": {
@@ -21,7 +21,7 @@
    "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 35.5,
+    "price": 36.0,
     "url": "https://kalshi.com/markets/kxlutnickout"
    },
    "urls": {
@@ -34,15 +34,15 @@
    },
    "volumes24": {
     "polymarket": 80477,
-    "kalshi": 34179
+    "kalshi": 32760
    },
-   "raw": 10.0,
+   "raw": 10.5,
    "fees": 1.8,
-   "net": 8.2,
+   "net": 8.7,
    "all3": false,
    "fee_low": 0.19,
-   "fee_high": 1.6,
-   "fair": 27.4,
+   "fee_high": 1.61,
+   "fair": 27.6,
    "grade": "B",
    "fine": {
     "src": "similar",
@@ -57,10 +57,10 @@
    "rate_high": 0.07,
    "category": "Politics",
    "fill": {
-    "usd": 1372,
-    "shares": 1428,
+    "usd": 1477,
+    "shares": 1535,
     "exec": 6.2,
-    "t": 1795462923,
+    "t": 1795463244,
     "buy": {
      "site": "polymarket",
      "yes": 26.0,
@@ -71,16 +71,16 @@
      "no": 66.0,
      "fee": 1.57
     },
-    "avg": 2.3,
+    "avg": 2.1,
     "profit": 32,
     "ladder": [
      [
       100,
-      4.7
+      4.9
      ],
      [
       250,
-      4.4
+      4.5
      ],
      [
       500,
@@ -88,12 +88,12 @@
      ],
      [
       1000,
-      2.6
+      2.5
      ]
     ]
    },
    "chg": {
-    "kalshi": -7.0
+    "kalshi": 0.5
    }
   },
   {
@@ -123,11 +123,11 @@
    },
    "volumes": {
     "polymarket": 39959,
-    "kalshi": 143606
+    "kalshi": 143607
    },
    "volumes24": {
     "polymarket": 2085,
-    "kalshi": 9149
+    "kalshi": 9150
    },
    "raw": 8.1,
    "fees": 0.7,
@@ -149,6 +149,25 @@
    "rate_low": 0.07,
    "rate_high": 0.01,
    "category": "Trump",
+   "fill": {
+    "usd": 50,
+    "shares": 54,
+    "exec": 6.8,
+    "t": 1795463245,
+    "buy": {
+     "site": "kalshi",
+     "yes": 9.5,
+     "fee": 0.6
+    },
+    "sell": {
+     "site": "polymarket",
+     "no": 83.0,
+     "fee": 0.14
+    },
+    "avg": 6.7,
+    "profit": 4,
+    "ladder": []
+   },
    "chg": {}
   },
   {
@@ -206,7 +225,7 @@
     "usd": 10,
     "shares": 10,
     "exec": 5.0,
-    "t": 1795462924,
+    "t": 1795463245,
     "buy": {
      "site": "polymarket",
      "yes": 10.0,
@@ -222,6 +241,81 @@
     "ladder": []
    },
    "chg": {}
+  },
+  {
+   "title": "Anthropic announces a Millennium Prize solution by...?",
+   "outcome": "December 31, 2026",
+   "close": "2028-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 61.9,
+    "kalshi": 52.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 52.5,
+    "url": "https://kalshi.com/markets/kxanthropicmillennium"
+   },
+   "high": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 61.9,
+    "url": "https://polymarket.com/event/anthropic-announces-a-millennium-prize-solution-byptptpt"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/anthropic-announces-a-millennium-prize-solution-byptptpt",
+    "kalshi": "https://kalshi.com/markets/kxanthropicmillennium"
+   },
+   "volumes": {
+    "polymarket": 124871,
+    "kalshi": 87603
+   },
+   "volumes24": {
+    "polymarket": 9418,
+    "kalshi": 6880
+   },
+   "raw": 9.4,
+   "fees": 2.9,
+   "net": 6.5,
+   "all3": false,
+   "fee_low": 1.75,
+   "fee_high": 1.18,
+   "fair": 59.4,
+   "grade": "A",
+   "fine": {
+    "src": "match",
+    "srcs": [
+     "Anthropic"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.07,
+   "rate_high": 0.05,
+   "category": "AI",
+   "fill": {
+    "usd": 2,
+    "shares": 2,
+    "exec": 1.1,
+    "t": 1795463245,
+    "buy": {
+     "site": "kalshi",
+     "yes": 56.0,
+     "fee": 1.72
+    },
+    "sell": {
+     "site": "polymarket",
+     "no": 40.0,
+     "fee": 1.2
+    },
+    "avg": 1.1,
+    "profit": 0,
+    "ladder": []
+   },
+   "chg": {
+    "polymarket": 2.7,
+    "kalshi": 1.5
+   }
   },
   {
    "title": "Iowa Republican Presidential Caucus Winner 2028",
@@ -276,10 +370,10 @@
    "rate_high": 0.07,
    "category": "Politics",
    "fill": {
-    "usd": 703,
-    "shares": 726,
+    "usd": 684,
+    "shares": 706,
     "exec": 2.7,
-    "t": 1795462925,
+    "t": 1795463245,
     "buy": {
      "site": "polymarket",
      "yes": 10.0,
@@ -291,7 +385,7 @@
      "fee": 0.84
     },
     "avg": 1.9,
-    "profit": 14,
+    "profit": 13,
     "ladder": [
      [
       100,
@@ -299,11 +393,11 @@
      ],
      [
       250,
-      2.3
+      2.2
      ],
      [
       500,
-      2.0
+      1.9
      ]
     ]
    },
@@ -339,7 +433,7 @@
     "kalshi": 9536170
    },
    "volumes24": {
-    "polymarket": 18486,
+    "polymarket": 15751,
     "kalshi": 23650
    },
    "raw": 5.0,
@@ -364,7 +458,7 @@
     "usd": 3137,
     "shares": 3268,
     "exec": 2.7,
-    "t": 1795462926,
+    "t": 1795463246,
     "buy": {
      "site": "kalshi",
      "yes": 21.0,
@@ -403,6 +497,83 @@
    "chg": {}
   },
   {
+   "title": "OpenAI IPO by...?",
+   "outcome": "June 30, 2027",
+   "close": "2027-07-01T03:59:00Z",
+   "prices": {
+    "polymarket": 39.0,
+    "kalshi": 45.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 39.0,
+    "url": "https://polymarket.com/event/openai-ipo-by"
+   },
+   "high": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 45.5,
+    "url": "https://kalshi.com/markets/kxipoopenai"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/openai-ipo-by",
+    "kalshi": "https://kalshi.com/markets/kxipoopenai"
+   },
+   "volumes": {
+    "polymarket": 3156013,
+    "kalshi": 451976
+   },
+   "volumes24": {
+    "polymarket": 4464,
+    "kalshi": 393
+   },
+   "raw": 6.5,
+   "fees": 2.9,
+   "net": 3.6,
+   "all3": false,
+   "fee_low": 1.19,
+   "fee_high": 1.74,
+   "fair": 39.4,
+   "grade": "B",
+   "fine": {
+    "src": "similar",
+    "srcs": [
+     "BBC",
+     "Bloomberg",
+     "Credible reporting",
+     "New York Times"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.05,
+   "rate_high": 0.07,
+   "category": "OpenAI IPO",
+   "fill": {
+    "usd": 5,
+    "shares": 5,
+    "exec": 1.1,
+    "t": 1795463246,
+    "buy": {
+     "site": "polymarket",
+     "yes": 40.0,
+     "fee": 1.2
+    },
+    "sell": {
+     "site": "kalshi",
+     "no": 56.0,
+     "fee": 1.72
+    },
+    "avg": 1.1,
+    "profit": 0,
+    "ladder": []
+   },
+   "chg": {
+    "kalshi": 0.5
+   }
+  },
+  {
    "title": "Pete Hegseth impeached by...?",
    "outcome": "June 30, 2027",
    "close": "2027-07-01T03:59:00Z",
@@ -433,7 +604,7 @@
    },
    "volumes24": {
     "polymarket": 2230,
-    "kalshi": 2313
+    "kalshi": 2310
    },
    "raw": 5.0,
    "fees": 2.0,
@@ -460,7 +631,7 @@
     "usd": 97,
     "shares": 100,
     "exec": 1.0,
-    "t": 1795462926,
+    "t": 1795463246,
     "buy": {
      "site": "polymarket",
      "yes": 54.0,
@@ -476,77 +647,6 @@
     "ladder": []
    },
    "chg": {}
-  },
-  {
-   "title": "Anthropic announces a Millennium Prize solution by...?",
-   "outcome": "December 31, 2026",
-   "close": "2028-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 59.2,
-    "kalshi": 51.0,
-    "alpha": null
-   },
-   "low": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 51.0,
-    "url": "https://kalshi.com/markets/kxanthropicmillennium"
-   },
-   "high": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 59.2,
-    "url": "https://polymarket.com/event/anthropic-announces-a-millennium-prize-solution-byptptpt"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/anthropic-announces-a-millennium-prize-solution-byptptpt",
-    "kalshi": "https://kalshi.com/markets/kxanthropicmillennium"
-   },
-   "volumes": {
-    "polymarket": 124871,
-    "kalshi": 87490
-   },
-   "volumes24": {
-    "polymarket": 9418,
-    "kalshi": 6879
-   },
-   "raw": 8.2,
-   "fees": 3.0,
-   "net": 5.2,
-   "all3": false,
-   "fee_low": 1.75,
-   "fee_high": 1.21,
-   "fair": 57.0,
-   "grade": "A",
-   "fine": {
-    "src": "match",
-    "srcs": [
-     "Anthropic"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.07,
-   "rate_high": 0.05,
-   "category": "AI",
-   "fill": {
-    "usd": 0,
-    "shares": 0,
-    "exec": 0.0,
-    "t": 1795462924,
-    "buy": {
-     "site": "kalshi",
-     "yes": 54.0,
-     "fee": 1.74
-    },
-    "sell": {
-     "site": "polymarket",
-     "no": 43.0,
-     "fee": 1.23
-    }
-   },
-   "chg": {
-    "polymarket": -1.6
-   }
   },
   {
    "title": "Who will a Senate committee vote to subpoena before 2028?",
@@ -578,7 +678,7 @@
     "kalshi": 16325
    },
    "volumes24": {
-    "polymarket": 2282,
+    "polymarket": 2209,
     "kalshi": 1618
    },
    "raw": 6.0,
@@ -606,7 +706,7 @@
     "usd": 0,
     "shares": 0,
     "exec": 0.2,
-    "t": 1795462925,
+    "t": 1795463246,
     "buy": {
      "site": "kalshi",
      "yes": 34.0,
@@ -625,20 +725,20 @@
    "outcome": "Yes",
    "close": "2027-04-01T03:59:00Z",
    "prices": {
-    "polymarket": 66.5,
-    "kalshi": 60.5,
+    "polymarket": 67.0,
+    "kalshi": 61.0,
     "alpha": null
    },
    "low": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 60.5,
+    "price": 61.0,
     "url": "https://kalshi.com/markets/kxcisaed"
    },
    "high": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 66.5,
+    "price": 67.0,
     "url": "https://polymarket.com/event/cisa-issues-emergency-directive-byptptpt"
    },
    "urls": {
@@ -659,7 +759,7 @@
    "all3": false,
    "fee_low": 1.67,
    "fee_high": 1.11,
-   "fair": 65.4,
+   "fair": 65.9,
    "grade": "B",
    "fine": {
     "src": "unknown",
@@ -674,8 +774,8 @@
    "fill": {
     "usd": 0,
     "shares": 0,
-    "exec": -2.8,
-    "t": 1795462926,
+    "exec": -1.8,
+    "t": 1795463246,
     "buy": {
      "site": "kalshi",
      "yes": 64.0,
@@ -683,84 +783,13 @@
     },
     "sell": {
      "site": "polymarket",
-     "no": 36.0,
-     "fee": 1.15
-    }
-   },
-   "chg": {}
-  },
-  {
-   "title": "OpenAI IPO by...?",
-   "outcome": "June 30, 2027",
-   "close": "2027-07-01T03:59:00Z",
-   "prices": {
-    "polymarket": 39.0,
-    "kalshi": 45.0,
-    "alpha": null
-   },
-   "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 39.0,
-    "url": "https://polymarket.com/event/openai-ipo-by"
-   },
-   "high": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 45.0,
-    "url": "https://kalshi.com/markets/kxipoopenai"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/openai-ipo-by",
-    "kalshi": "https://kalshi.com/markets/kxipoopenai"
-   },
-   "volumes": {
-    "polymarket": 3156013,
-    "kalshi": 451976
-   },
-   "volumes24": {
-    "polymarket": 4464,
-    "kalshi": 393
-   },
-   "raw": 6.0,
-   "fees": 2.9,
-   "net": 3.1,
-   "all3": false,
-   "fee_low": 1.19,
-   "fee_high": 1.73,
-   "fair": 39.4,
-   "grade": "B",
-   "fine": {
-    "src": "similar",
-    "srcs": [
-     "BBC",
-     "Bloomberg",
-     "Credible reporting",
-     "New York Times"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.05,
-   "rate_high": 0.07,
-   "category": "OpenAI IPO",
-   "fill": {
-    "usd": 0,
-    "shares": 0,
-    "exec": 0.1,
-    "t": 1795462926,
-    "buy": {
-     "site": "polymarket",
-     "yes": 40.0,
-     "fee": 1.2
-    },
-    "sell": {
-     "site": "kalshi",
-     "no": 57.0,
-     "fee": 1.72
+     "no": 35.0,
+     "fee": 1.14
     }
    },
    "chg": {
-    "kalshi": -0.5
+    "polymarket": 0.5,
+    "kalshi": 0.5
    }
   }
  ]
