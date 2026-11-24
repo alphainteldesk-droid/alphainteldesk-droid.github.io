@@ -928,9 +928,9 @@
   .wr-t { font:800 1.15cqw "Space Grotesk",system-ui,sans-serif; letter-spacing:.08em; color:#ff6b6b; text-shadow:0 0 8px rgba(255,92,92,.5); white-space:nowrap; }
   .wr-live { font-style:normal; font-size:.62cqw; margin-left:.35cqw; vertical-align:.12cqw; animation:wrbl 1.4s infinite; }
   @keyframes wrbl { 50% { opacity:.25; } }
-  .wr-tabs { display:flex; gap:.3cqw; flex:1; }
-  .wr-tabs button { background:none; border:1px solid rgba(143,163,184,.3); color:#8fa3b8; font:800 .64cqw "Space Grotesk",system-ui,sans-serif;
-    letter-spacing:.06em; padding:.25cqw .45cqw; border-radius:3px; cursor:pointer; white-space:nowrap; }
+  .wr-hd { flex-wrap:wrap; row-gap:.35cqw; } .wr-tabs { display:flex; gap:.35cqw; flex:1 1 100%; order:3; } .wr-tabs button { flex:1 1 auto; }
+  .wr-tabs button { background:none; border:1px solid rgba(143,163,184,.35); color:#a9bccf; font:800 .76cqw "Space Grotesk",system-ui,sans-serif;
+    letter-spacing:.02em; padding:.3cqw .4cqw; border-radius:3px; cursor:pointer; white-space:nowrap; }
   .wr-tabs button:hover { color:#e8eef5; } .wr-tabs button.on { color:#ff8a8a; border-color:#ff6b6b; }
   .wr-upd { display:none; font:700 .6cqw "Space Grotesk",system-ui,sans-serif; color:#7f93a8; letter-spacing:.05em; white-space:nowrap; }
   .wr-body { flex:1; min-height:0; margin-top:.4cqw; position:relative; }
@@ -967,7 +967,7 @@
   .wr-dot { cursor:pointer; } .wr-dot:hover circle:nth-child(3) { stroke:#fff; stroke-width:1.5; } .wr-r { cursor:pointer; border-radius:4px; } .wr-r:hover { background:rgba(255,255,255,.04); }
   .wr-c { font-size:.56cqw; color:#7f93a8; margin-top:.15cqw; line-height:1.3; } .wr-c b { color:#e8eef5; font-weight:700; }
   .wr-det { position:absolute; inset:0; z-index:5; background:rgba(5,12,20,.97); border:1px solid rgba(255,92,92,.45); border-radius:4px; padding:.6cqw .8cqw; overflow-y:auto; }
-  .wr-det .lb, .wr-fuel .lb, #wr-fuel .lb { font:800 .6cqw "Space Grotesk",sans-serif; letter-spacing:.07em; color:#3fdbe6; margin:.55cqw 0 .25cqw; }
+  .wr-det .lb, #wr-ship .lb, #wr-fuel .lb { font:800 .6cqw "Space Grotesk",sans-serif; letter-spacing:.07em; color:#3fdbe6; margin:.55cqw 0 .25cqw; }
   .wr-x { position:sticky; float:right; top:0; background:none; border:1px solid rgba(143,163,184,.35); color:#e8eef5; border-radius:3px; font-size:1cqw; line-height:1; padding:.1cqw .45cqw; cursor:pointer; }
   .wr-dh { display:flex; gap:.6cqw; align-items:center; } .wr-dh > b { flex:none; width:2.4cqw; height:2.4cqw; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#111; font:800 1cqw "Space Grotesk",sans-serif; }
   .wr-bar { display:grid; grid-template-columns:7.5cqw 1fr 2cqw; gap:.4cqw; align-items:center; font-size:.66cqw; margin:.12cqw 0; }
@@ -979,6 +979,23 @@
   .wr-mk em { font-style:normal; color:var(--amber); font-weight:700; white-space:nowrap; } .wr-mk small { font-weight:600; } .up { color:#3ee88a; } .dn { color:#ff7a7a; }
   .wr-mk .s { font:800 .52cqw "Space Grotesk",sans-serif; letter-spacing:.05em; padding:.08cqw .3cqw; border-radius:2px; color:#111; background:#3fdbe6; }
   .wr-mk .s.polymarket { background:#8fa8ff; } .wr-mk .s.kalshi { background:#3ee88a; } .wr-mk .s.alpha { background:var(--amber); }
+  /* heat scale: a strip under the map (Nov 24, James) */
+  .wr-scale { display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:.7cqw; align-items:center; padding:.15cqw .2cqw 0; }
+  .wr-sc-t { font:800 .62cqw "Space Grotesk",sans-serif; letter-spacing:.08em; color:#a9bccf; grid-row:1 / 3; }
+  .wr-sc-b { position:relative; height:.55cqw; margin-top:1.8cqw; border-radius:.3cqw; background:linear-gradient(90deg,#3fdbe6 0%,#3fdbe6 22%,#ffb347 30%,#ff8a3d 55%,#ff3b3b 80%,#b3001b 100%); }
+  .wr-sc-b i { position:absolute; top:-.3cqw; width:2px; height:1.15cqw; margin-left:-1px; background:#fff; box-shadow:0 0 3px #000; }
+  .wr-sc-b i em { position:absolute; bottom:calc(1.2cqw + var(--r, 0) * .75cqw); left:50%; transform:translateX(-50%); font:700 .6cqw "Space Grotesk",sans-serif; font-style:normal; color:#e8eef5; white-space:nowrap; }
+  .wr-sc-l { display:flex; justify-content:space-between; margin-top:.25cqw; font:600 .56cqw "Space Grotesk",sans-serif; color:#8fa3b8; }
+  .wr-sc-l br { display:none; } .wr-sc-l span::after { content:""; }
+  @media (max-width: 760px) { .wr-scale { grid-template-columns:1fr; padding:4px 2px 0; } .wr-sc-t { grid-row:auto; font-size:10px; } .wr-sc-b { height:8px; margin-top:30px; border-radius:4px; }
+    .wr-sc-b i { top:-4px; height:16px; } .wr-sc-b i em { font-size:10px; bottom:calc(17px + var(--r, 0) * 12px); } .wr-sc-l { font-size:10px; margin-top:4px; } .wr-sc-l br { display:inline; } }
+  .wr-sh { display:grid; grid-template-columns:8.5cqw minmax(0,1fr) 4cqw 6.5cqw; gap:.5cqw; align-items:center; padding:.3cqw 0; border-bottom:1px solid rgba(143,163,184,.12); font-size:.72cqw; }
+  .wr-sh b { font-weight:700; } .wr-sh span { text-align:right; font-weight:700; color:#fff; } .wr-sh em { font-style:normal; text-align:right; font-weight:700; color:#a9bccf; }
+  .wr-sp { width:100%; height:1.6cqw; display:block; } .wr-shm { grid-column:1 / -1; font-size:.66cqw; color:var(--amber); }
+  @media (max-width: 760px) { .wr-sh { grid-template-columns:110px minmax(0,1fr) 54px 92px; font-size:12px; gap:6px; } .wr-sp { height:22px; } .wr-shm { font-size:12px; } }
+  #wr-ship .wr-sh { grid-template-columns:11cqw minmax(0,1fr) 4.5cqw 7cqw; padding:.55cqw 0; font-size:.85cqw; }
+  #wr-ship .wr-sh b small { display:block; font-weight:500; font-size:.62cqw; color:#8fa3b8; } #wr-ship .wr-sp { height:2.6cqw; } #wr-ship .wr-shm { font-size:.75cqw; }
+  @media (max-width: 760px) { #wr-ship .wr-sh { grid-template-columns:120px minmax(0,1fr) 56px 92px; font-size:13px; padding:8px 0; } #wr-ship .wr-sh b small { font-size:11px; } #wr-ship .wr-sp { height:30px; } #wr-ship .wr-shm { font-size:12px; } }
   .wr-fl { display:grid; grid-template-columns:1.15fr 1fr; gap:.7cqw; align-items:center; } .wr-us { width:100%; display:block; }
   .wr-ul { font:700 15px "Space Grotesk",sans-serif; fill:#e8eef5; text-anchor:middle; paint-order:stroke; stroke:#071522; stroke-width:4px; letter-spacing:.05em; }
   .wr-up { font:800 24px "Space Grotesk",sans-serif; fill:#fff; text-anchor:middle; paint-order:stroke; stroke:#071522; stroke-width:5px; }
@@ -987,7 +1004,7 @@
   .wr-pp b { font-size:1cqw; margin-right:.3cqw; } .wr-pp.up b { color:#ff7a7a; } .wr-pp.down b { color:#3ee88a; }
   @media (max-width: 760px) {
     .wr-c { font-size:11px; } .wr-det { position:fixed; inset:8% 4% auto; max-height:80vh; padding:12px; } .wr-det .lb, #wr-fuel .lb { font-size:11px; margin:10px 0 4px; }
-    .wr-x { font-size:20px; padding:2px 9px; } .wr-dh > b { width:34px; height:34px; font-size:14px; } .wr-bar { grid-template-columns:110px 1fr 30px; font-size:12px; gap:6px; } .wr-bar i { height:6px; }
+    #wr-ship .lb { font-size:11px; margin:10px 0 4px; } .wr-x { font-size:20px; padding:2px 9px; } .wr-dh > b { width:34px; height:34px; font-size:14px; } .wr-bar { grid-template-columns:110px 1fr 30px; font-size:12px; gap:6px; } .wr-bar i { height:6px; }
     .wr-ev { font-size:13px; padding-left:16px; } .wr-mk { font-size:13px; gap:6px; padding:6px 0; } .wr-mk .s { font-size:10px; padding:1px 4px; }
     .wr-fl { grid-template-columns:1fr; } .wr-big span { font-size:10px; } .wr-big b { font-size:22px; } .wr-big small { font-size:12px; } .wr-pp b { font-size:16px; }
   }
@@ -1249,16 +1266,20 @@
 </div>
 <section class="wrp" id="warroom" aria-label="War Room: where conflict signals are adding up">   <!-- Nov 24 (James) -->
   <div class="wr-hd"><span class="wr-t">WAR ROOM <i class="wr-live">&#9679; LIVE</i></span>
-    <span class="wr-tabs" role="tablist"><button class="on" data-w="map">HEAT MAP</button><button data-w="news">HEADLINES</button><button data-w="trend">TRENDING</button><button data-w="fuel">GAS</button><button data-w="hist">THIS WEEK IN HISTORY</button></span>
+    <span class="wr-tabs" role="tablist"><button class="on" data-w="map">HEAT MAP</button><button data-w="news">HEADLINES</button><button data-w="trend">TRENDING</button><button data-w="fuel">GAS PRICES</button><button data-w="ship">SHIPPING TRAFFIC</button><button data-w="hist">THIS WEEK IN HISTORY</button></span>
     <span class="wr-upd" id="wr-upd"></span></div>
   <div class="wr-body" id="wr-body">
     <div class="wr-pane on" data-w="map"><svg class="wr-map" viewBox="0 40 1000 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Heat map of watched regions">
       <image href="/world-land.svg" x="0" y="0" width="1000" height="383"/><g id="wr-dots"></g></svg>
+      <div class="wr-scale" aria-label="Heat scale from 0 (calm) to 100 (major conflict under way)"><div class="wr-sc-t">HEAT SCALE</div>
+        <div class="wr-sc-b" id="wr-sc-b"></div>
+        <div class="wr-sc-l"><span>0 Calm</span><span>25 Active</span><span>50 Elevated</span><span>75 Hot</span><span>100 Major conflict</span></div></div>
       <div class="wr-top" id="wr-top"><div class="wr-w">Reading the signals&hellip;</div></div>
-      <div class="wr-gs" id="wr-gs"></div></div>
+</div>
     <div class="wr-pane" data-w="news"><div class="wr-list" id="wr-news"></div></div>
     <div class="wr-pane" data-w="trend"><div class="wr-list" id="wr-trend"></div></div>
     <div class="wr-pane" data-w="hist"><div class="wr-list" id="wr-hist"></div></div>
+    <div class="wr-pane" data-w="ship"><div class="wr-list" id="wr-ship"><div class="wr-li"><small>Loading shipping traffic&hellip;</small></div></div></div>
     <div class="wr-pane" data-w="fuel"><div class="wr-list" id="wr-fuel"><div class="wr-li"><small>Loading gas prices&hellip;</small></div></div></div>
     <div class="wr-det" id="wr-det" hidden></div>
   </div>
@@ -1450,6 +1471,13 @@
     [].forEach.call(box.querySelectorAll('.wr-tabs button'), function (x) { x.classList.toggle('on', x === b); });
     [].forEach.call(box.querySelectorAll('.wr-pane'), function (x) { x.classList.toggle('on', x.getAttribute('data-w') === b.getAttribute('data-w')); });
   });
+  var HASH = { 'gas-prices': 'fuel', 'gas': 'fuel', 'shipping-traffic': 'ship', 'shipping': 'ship', 'war-room': 'map' };
+  function fromHash() {
+    var w = HASH[(location.hash || '').slice(1).toLowerCase()]; if (!w) return;
+    var b = box.querySelector('.wr-tabs button[data-w="' + w + '"]'); if (b) b.click();
+    box.scrollIntoView({ block: 'center' });
+  }
+  addEventListener('hashchange', fromHash); setTimeout(fromHash, 300);
   var when = function (d) { return d === 0 ? 'today' : d > 0 ? 'in ' + d + ' day' + (d > 1 ? 's' : '') : -d + ' day' + (d < -1 ? 's' : '') + ' ago'; };
   var lk = function (u, t) { return u ? '<a href="' + E(u) + '" target="_blank" rel="noopener">' + t + '</a>' : t; };
   function chips(h) {
@@ -1481,15 +1509,20 @@
   function draw(w) {
     W = w; ALL = (w.hotspots || []).concat(w.emerging || []);
     var hs = ALL.slice().sort(function (a, b) { return a.score - b.score; });   // hottest drawn last (on top)
+    var TOP3 = ALL.slice().sort(function (a, b) { return b.score - a.score; }).slice(0, 3).map(function (h) { return h.id; });   // the 3 cards always get a number on the map
     document.getElementById('wr-dots').innerHTML = hs.map(function (h) {
       var c = COL[h.level] || COL.CALM, x = X(h.lon).toFixed(0), y = Y(h.lat).toFixed(0), em = h.level === 'EMERGING';
       return '<g class="wr-dot" data-h="' + E(h.id) + '" tabindex="0" role="button"><title>' + E(h.name + ': ' + h.score + '/100 ' + h.level + ' (click for details)') + '</title>' +
         '<circle cx="' + x + '" cy="' + y + '" r="' + (9 + h.score * .5).toFixed(0) + '" fill="' + c + '" opacity=".22" class="wr-pulse"/>' +
         '<circle cx="' + x + '" cy="' + y + '" r="' + (3.5 + h.score * .12).toFixed(1) + '" fill="' + (em ? '#071522' : c) + '"' + (em ? ' stroke="#e8eef5" stroke-width="2.5"' : '') + '/>' +
         '<circle cx="' + x + '" cy="' + y + '" r="16" fill="transparent"/>' +
-        (h.score >= 20 || em ? '<text class="wr-lab" x="' + (+x + 9 + h.score * .12).toFixed(0) + '" y="' + (+y + 5) + '">' + (em ? 'NEW ' : '') + h.score + '</text>' : '') + '</g>';
+        (h.score >= 20 || em || TOP3.indexOf(h.id) >= 0 ? '<text class="wr-lab" x="' + (+x + 9 + h.score * .12).toFixed(0) + '" y="' + (+y + 5) + '">' + (em ? 'NEW ' : '') + h.score + '</text>' : '') + '</g>';
     }).join('');
     var top = ALL.slice().sort(function (a, b) { return b.score - a.score; }).slice(0, 3);
+    var lastAt = [-99, -99];   // stack a label one row up when two scores sit close together
+    document.getElementById('wr-sc-b').innerHTML = top.slice().sort(function (a, b) { return a.score - b.score; }).map(function (h) {   // where the 3 hottest sit on the 0-100 scale
+      var r = h.score - lastAt[0] >= 14 ? 0 : h.score - lastAt[1] >= 14 ? 1 : 0; lastAt[r] = h.score;
+      return '<i style="left:' + Math.min(100, h.score) + '%;--r:' + r + '" title="' + E(h.name + ': ' + h.score) + '"><em>' + E(h.name.split(/[ ,&]/)[0]) + ' ' + h.score + '</em></i>'; }).join('');
     document.getElementById('wr-top').innerHTML = top.map(function (h) {
       var c = COL[h.level] || COL.CALM;
       return '<div class="wr-r" data-h="' + E(h.id) + '" role="button" tabindex="0"><b style="background:' + c + '">' + h.score + '</b><div style="min-width:0"><div class="wr-n">' + E(h.name) +
@@ -1509,7 +1542,7 @@
     tw.forEach(function (x) { if (!x.hotspot) near.push({ days: x.days, what: x.what + ' (' + x.year + ')' }); });
     near.sort(function (a, b) { return Math.abs(a.days) - Math.abs(b.days); });
     if (near.length) g.push('<div class="wr-g"><span>THIS WEEK IN HISTORY</span>' + near.slice(0, 2).map(function (x) { return E(x.what.replace(/^Anniversary: /, '')) + ', ' + when(x.days); }).join(' &middot; ') + '</div>');
-    document.getElementById('wr-gs').innerHTML = g.join('');
+    SHIP(); fuelDraw();
     var hist = near.map(function (x) { return '<div class="wr-li"><span class="rg h">' + (x.days === 0 ? 'TODAY' : x.days > 0 ? 'IN ' + x.days + 'D' : -x.days + 'D AGO') + '</span>' + E(x.what) + '</div>'; });
     document.getElementById('wr-hist').innerHTML = hist.length ? hist.join('') + '<div class="wr-li"><small>Anniversaries and past shocks near today. They add a little heat only to a region that is already active. Full list on the calendar under HISTORY.</small></div>'
       : '<div class="wr-li"><small>No anniversaries or past shocks this week.</small></div>';
@@ -1530,8 +1563,27 @@
   }
   var REG = null, RN = { east: 'East Coast', midwest: 'Midwest', gulf: 'Gulf Coast', rockies: 'Rockies', west: 'West Coast' };
   var LAB = { east: [560, 175], midwest: [440, 120], gulf: [395, 285], rockies: [220, 120], west: [85, 170] };
-  function fuel(g) {
-    var e = g.eia || {}, now = e.now || {}, wk = e.week_ago || {}, ks = Object.keys(RN).filter(function (k) { return now[k] != null; });
+  var G = null, SHIPHTML = '';
+  var WHY = { 'Strait of Hormuz': 'About a fifth of the world\'s oil', 'Bab el-Mandeb Strait': 'Red Sea gateway to Suez',
+             'Suez Canal': 'Europe&ndash;Asia shortcut', 'Panama Canal': 'Atlantic&ndash;Pacific link' };
+  function SHIP() {   // Nov 24 (James): shipping chokepoints live on the GAS & SHIPPING tab
+    var ch = (W && W.chokepoints) || {}, hm = (W && W.hormuz_markets || [])[0], ks = Object.keys(ch);
+    if (!ks.length) { SHIPHTML = ''; return; }
+    SHIPHTML = '<p class="lb">SHIPPING TRAFFIC THROUGH THE WORLD\'S CHOKEPOINTS &middot; SHIPS A DAY (7-DAY AVERAGE, IMF PORTWATCH)</p>' + ks.map(function (k) {
+      var c = ch[k], pts = (c.series || []).map(function (x) { return x[2]; }).filter(function (v) { return v != null; }),
+          mx = Math.max.apply(null, pts.concat([c.normal90 || 1])), pct = c.normal90 ? Math.round((c.ma7 / c.normal90 - 1) * 100) : null;
+      var sp = pts.length > 1 ? '<svg class="wr-sp" viewBox="0 0 100 24" preserveAspectRatio="none"><line x1="0" x2="100" y1="' + (24 - c.normal90 / mx * 22).toFixed(1) + '" y2="' + (24 - c.normal90 / mx * 22).toFixed(1) +
+        '" stroke="#7f93a8" stroke-dasharray="2 2" stroke-width=".8"/><polyline fill="none" stroke="' + (pct != null && pct <= -25 ? '#ff7a7a' : '#3fdbe6') + '" stroke-width="1.6" points="' +
+        pts.map(function (v, i) { return (i / (pts.length - 1) * 100).toFixed(1) + ',' + (24 - v / mx * 22).toFixed(1); }).join(' ') + '"/></svg>' : '';
+      var mk = k === 'Strait of Hormuz' && hm ? '<a class="wr-shm" href="' + E(hm.url) + '" target="_blank" rel="noopener">Alpha market: back to ' + hm.target + '/day? Yes ' + Math.round((hm.options || {}).Yes || 0) + '&cent; &rarr;</a>' : '';
+      return '<div class="wr-sh"><b>' + E(k) + '<small>' + (WHY[k] || '') + '</small></b>' + sp + '<span>' + c.ma7 + '/day</span><em class="' + (pct <= -25 ? 'dn' : pct >= 25 ? 'up' : '') + '">' +
+        (pct == null ? '' : (pct > 0 ? '+' : '') + pct + '% vs normal') + '</em>' + mk + '</div>'; }).join('') +
+      '<div class="wr-li"><small>Dashed line = 90-day normal. Data runs about 2 days behind.</small></div>';
+  }
+  function fuel(g) { G = g; fuelDraw(); }
+  function fuelDraw() {
+    var g = G || {}, e = g.eia || {}, now = e.now || {}, wk = e.week_ago || {}, ks = Object.keys(RN).filter(function (k) { return now[k] != null; });
+    if (SHIPHTML) document.getElementById('wr-ship').innerHTML = SHIPHTML;
     if (!ks.length || !REG) return;
     var lo = Math.min.apply(null, ks.map(function (k) { return now[k]; })), hi = Math.max.apply(null, ks.map(function (k) { return now[k]; }));
     var col = function (v) { var t = hi > lo ? (v - lo) / (hi - lo) : 0; return 'hsl(' + (130 - 130 * t).toFixed(0) + ',70%,' + (34 + 8 * t).toFixed(0) + '%)'; };
