@@ -525,7 +525,26 @@ def main():
         was = old.get((x["title"], x["outcome"])) or {}
         x["chg"] = {s: round(p - was[s], 1) for s, p in x["prices"].items()
                     if p is not None and was.get(s) is not None and abs(p - was[s]) >= 0.5}
-    json.dump({"updated": n.strftime(f), "note": NOTE, "alpha_fresh": alpha_fresh, "gaps": g},
+    # Nov 24 (James): Alpha Arcade markets traded in the last 24 h that the other sites also price, gap or not,
+    # so the Alpha column isn't empty. Only markets with real Alpha trading today (an untraded Alpha price is often a placeholder).
+    shown = set(x["title"] for x in g if x["prices"].get("alpha") is not None)
+    side = []
+    for r in mj["matches"]:
+        a = r["sites"].get("alpha") or {}
+        ps = r.get("prices") or {}
+        if (not a or is_sports(r.get("categories") or []) or COMBO.search(r.get("title") or "") or r["title"] in shown
+                or (a.get("volume24h") or 0) < 1 or ps.get("alpha") is None or len([v for v in ps.values() if v is not None]) < 2):
+            continue
+        diff = max(abs(ps["alpha"] - v) for k, v in ps.items() if k != "alpha" and v is not None)
+        if diff > 15:
+            continue                                  # a gap this big on a no-gap list = a placeholder price or a bad match
+        side.append({"title": r["title"], "outcome": r.get("outcome"), "close": r.get("close"),
+                     "prices": {s_: ps.get(s_) for s_ in ("polymarket", "kalshi", "alpha")},
+                     "urls": {s_: x["url"] for s_, x in r["sites"].items()},
+                     "diff": round(max(abs(ps["alpha"] - v) for k, v in ps.items() if k != "alpha" and v is not None), 1),
+                     "vol24": a.get("volume24h") or 0})
+    side = sorted(side, key=lambda r: -r["vol24"])[:10]
+    json.dump({"updated": n.strftime(f), "note": NOTE, "alpha_fresh": alpha_fresh, "gaps": g, "alpha_side": side},
               open("gaps.json", "w"), indent=1)
     cal = calendar(mj["matches"])
     json.dump({"updated": n.strftime(f), "note": NOTE, "items": cal}, open("calendar.json", "w"), indent=1)

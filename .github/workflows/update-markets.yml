@@ -34,6 +34,8 @@ jobs:
         continue-on-error: true
       - run: python3 make_gaps.py
         continue-on-error: true
+      - run: timeout 240 python3 most_traded.py   # Nov 24: most traded today on Polymarket + Kalshi (hourly)
+        continue-on-error: true
       - run: |                    # Nov 24: Gas Watch (EIA regions weekly, AAA daily, gasoline futures, gas-price markets)
           python3 -m pip install --quiet --break-system-packages xlrd || python3 -m pip install --quiet xlrd
           timeout 120 python3 gas.py
@@ -91,6 +93,7 @@ jobs:
           [ -f movers.json ] && git add movers.json
           [ -f warroom.json ] && git add warroom.json warroom_hist.json
           [ -f gas.json ] && git add gas.json
+          [ -f most_traded.json ] && git add most_traded.json
           [ -f card_state.json ] && git add card.jpg card-gaps.jpg card_state.json index.html gap-scanner.html
           [ -f alpha_hist.json ] && git add alpha_hist.json
           [ -f indexnow_state.json ] && git add indexnow_state.json
