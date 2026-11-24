@@ -105,9 +105,23 @@ mk = []
 for series in ("KXAAAGASW", "KXAAAGASM", "KXAAAGASD"):
     d = get("https://api.elections.kalshi.com/trade-api/v2/markets?status=open&limit=60&series_ticker=" + series)
     for m in (d or {}).get("markets") or []:
-        yes = m.get("last_price") or m.get("yes_bid")
-        mk.append({"site": "kalshi", "title": m.get("title"), "sub": m.get("yes_sub_title") or m.get("subtitle"),
-                   "price": yes, "vol": m.get("volume_24h") or 0, "close": m.get("close_time"),
+        yes = None
+        for k in ("last_price_dollars", "yes_bid_dollars"):          # Kalshi now sends prices as dollar strings
+            try:
+                yes = round(float(m[k]) * 100, 1) if m.get(k) not in (None, "") and float(m[k]) > 0 else yes
+            except (TypeError, ValueError):
+                pass
+            if yes:
+                break
+        if yes is None and isinstance(m.get("last_price"), (int, float)) and m["last_price"] > 0:
+            yes = m["last_price"]
+        try:
+            vol = round(float(m.get("volume_24h_fp") or m.get("volume_24h") or 0))
+        except (TypeError, ValueError):
+            vol = 0
+        mk.append({"site": "kalshi", "title": {"KXAAAGASW": "US gas price (AAA) at the end of this week", "KXAAAGASM": "US gas price (AAA) at the end of the month",
+                                               "KXAAAGASD": "US gas price (AAA) tomorrow"}[series], "sub": m.get("yes_sub_title") or m.get("subtitle"),
+                   "price": yes, "vol": vol, "close": m.get("close_time"),
                    "url": "https://kalshi.com/markets/" + series.lower() + "/" + (m.get("event_ticker") or "").lower()})
 d = get("https://gamma-api.polymarket.com/public-search?" + urllib.parse.urlencode({"q": "gas prices", "limit_per_type": 10}))
 for ev in (d or {}).get("events") or []:
@@ -133,9 +147,25 @@ try:
                        "url": "https://www.alphaarcade.com/market/" + (m.get("slug") or "")})
 except Exception as e:
     print("  GAS alpha failed:", str(e)[:80])
-if mk:
-    mk.sort(key=lambda x: (-(x["vol"] or 0)))
-    out["markets"] = mk[:40]
+# one row per market (event): its most likely outcome, closing soonest first
+ev = {}
+for x in mk:
+    e = ev.setdefault(x["url"], {"site": x["site"], "title": x["title"], "close": x["close"], "url": x["url"], "n": 0, "vol": 0, "opts": []})
+    e["n"] += 1; e["vol"] += x["vol"] or 0
+    if x["price"] is not None:
+        e["opts"].append((x["sub"], x["price"]))
+for e in ev.values():
+    th = [(float(re.search(r"[\d.]+", o[0]).group()), o[1]) for o in e["opts"] if o[0] and re.match(r"Above", o[0]) and re.search(r"[\d.]+", o[0])]
+    if th:                                            # Kalshi ladder "Above $X": the market's expected level = highest X still at 50¢+
+        th.sort(); yes50 = [t for t in th if t[1] >= 50]
+        t = yes50[-1] if yes50 else th[0]
+        e["lead"] = {"sub": "Above $%.2f" % t[0], "price": t[1]}
+    elif e["opts"]:
+        o = max(e["opts"], key=lambda o: o[1]); e["lead"] = {"sub": o[0], "price": o[1]}
+    del e["opts"]
+evs = sorted(ev.values(), key=lambda e: (e["close"] or "9999", -e["vol"]))
+if evs:
+    out["markets"] = evs[:12]
 print("GAS markets:", {s: sum(1 for x in mk if x["site"] == s) for s in ("kalshi", "polymarket", "alpha")})
 
 out["updated"] = datetime.fromtimestamp(NOW, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
