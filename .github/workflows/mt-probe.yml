@@ -1,0 +1,8 @@
+name: mt probe
+on: push
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: rm -f most_traded.json; python3 most_traded.py; echo "MTJSON $(cat most_traded.json)"
