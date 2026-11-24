@@ -49,7 +49,17 @@ _ex = json.load(open(os.path.join(SITE, "expiry.json")))
 _ok = lambda r: 7 <= r["days"] <= 14 and not PX.search(r["title"] + " " + (r.get("cat") or "")) and r["ask"] >= 80 and r["ret"] >= 5   # James: 5%+ only
 rows = [r for r in _ex["rows"] if _ok(r)] or [r for r in _ex.get("all") or [] if _ok(r)]   # Nov 15: the top-50 list first, else the full list
 dk = lambda r: "dz|%s|%s|%s" % (r["title"], r["outcome"], r["side"])
-pool = [r for r in rows if dk(r) not in seen] or rows
+# Nov 24 (James): never feature the same Danger Zone contract twice in a row. Most days only one top-50 contract
+# fits 7-14 days, so look wider before repeating: top-50 -> full list -> settling in 7-21 days -> (last resort) repeat.
+dseen = {k for k, t in st["seen"].items() if k.startswith("dz|") and now - t < 7 * 86400}
+_ok21 = lambda r: 7 <= r["days"] <= 21 and not PX.search(r["title"] + " " + (r.get("cat") or "")) and r["ask"] >= 80 and r["ret"] >= 5
+pool = []
+for cand in ([r for r in _ex["rows"] if _ok(r)], [r for r in _ex.get("all") or [] if _ok(r)],
+             [r for r in _ex["rows"] if _ok21(r)], [r for r in _ex.get("all") or [] if _ok21(r)]):
+    pool = [r for r in cand if dk(r) not in dseen]
+    if pool:
+        break
+pool = pool or rows
 score = lambda r: min(r["ret"], 20) * min(1, math.log10(max(r["volume"], 10)) / 5.3)   # good return AND a busy market
 d = max(pool, key=score)
 D_DAY = datetime.strptime(d["close"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).astimezone(ET)
