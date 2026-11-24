@@ -413,6 +413,8 @@
     .wire-tag { font-size:.72rem; letter-spacing:.06em; padding:6px 10px; line-height:1.25; }
     .wire-tag .wt { white-space:normal; } .wire-tag .wt2 { display:block; }
   }
+  .glb-key2 { position:absolute; right:22px; bottom:8px; }   /* the clocks' green-dot key, now in the corner */
+  .wi b.p { background:var(--cyan); color:#04121c; } .wi u { text-decoration:none; color:var(--cyan); font-weight:700; }   /* desk pulse facts in the wire */
   .wire-tag i { width:7px; height:7px; border-radius:50%; background:var(--navy); animation:blink 1.4s infinite; }
   @keyframes blink { 50% { opacity:.25; } }
   .wire-view { flex:1; overflow:hidden; white-space:nowrap; padding:9px 0;
@@ -1139,11 +1141,7 @@
     <div class="ck" data-tz="Asia/Tokyo" data-w="tokyo" data-ex="tse" data-exn="TSE"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>TOKYO</span><b>--:--</b><em class="wx"></em></div>
     <div class="ck" data-tz="Australia/Sydney" data-w="sydney" data-ex="asx" data-exn="ASX"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18"/><g class="tk"></g><line class="hh" x1="20" y1="20" x2="20" y2="11"/><line class="mh" x1="20" y1="20" x2="20" y2="6"/><circle class="pin" cx="20" cy="20" r="1.6"/></svg><span><i class="mo"></i>SYDNEY</span><b>--:--</b><em class="wx"></em></div>
   </div>
-  <div class="hwire" aria-live="off">
-    <span class="glb-key"><i></i>Market open</span>
-    <span class="hw-tag" id="hw-tag"><i></i>DESK PULSE</span>
-    <a class="hw-line" id="hw-a" href="/gap-scanner.html"><span id="hw-txt"></span><span class="hw-cta" id="hw-cta"></span></a>
-  </div>
+  <span class="glb-key glb-key2"><i></i>Exchange open</span>   <!-- Nov 24 (James): DESK PULSE moved into the Desk Wire -->
 </section>
 <!-- Live tape (TradingView, free widget; CFD prices move in real time) -->
 <div class="tvtape" aria-label="Live market tape">
@@ -1832,6 +1830,16 @@
       if (hubTab === 'soon') drawHub();
     }).catch(function () {});
 
+    window.wireBuild = function () {   // Nov 24 (James): market items + desk pulse facts in one wire
+      var a = window.wireItems || [], p = window.wirePulse || [], out = [], k = 0;
+      for (var i = 0; i < a.length; i++) { if (i % 4 === 0 && p.length) out.push(p[k++ % p.length]); out.push(a[i]); }
+      if (!a.length) out = p.slice();
+      while (k < p.length && a.length) out.push(p[k++]);
+      if (!out.length) return;
+      var track = document.getElementById('wire');
+      track.innerHTML = out.join('') + out.join('');
+      track.style.animationDuration = Math.max(30, out.length * 7) + 's';
+    };
     // Desk Wire: closing-soon and new markets from every venue, mixed together
     var odds = function (site, m) {   // multi-outcome Alpha Arcade markets: show the leader
       return site === 'alpha' && m.market ? esc(m.market) + ' ' + esc(m.yes) + '%' : esc(m.yes) + '% Yes'; };
@@ -1851,10 +1859,8 @@
     for (var i = 0; i < Math.max(lists[0].length, lists[1].length, lists[2].length); i++) {
       lists.forEach(function (l) { if (l[i]) items.push(l[i]); });
     }
-    if (!items.length) return;
-    var track = document.getElementById('wire');
-    track.innerHTML = items.join('') + items.join('');
-    track.style.animationDuration = Math.max(30, items.length * 7) + 's';
+    window.wireItems = items;
+    window.wireBuild();
   }).catch(function () {});
 })();
 </script>
@@ -2419,7 +2425,7 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
 <script>
 /* Nov 13: "ON THE WIRE" - facts built only from our own live data files, typed out one at a time */
 (function () {
-  var el = document.getElementById('hw-txt'); if (!el) return;
+  var el = true;
   var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   [].forEach.call(document.querySelectorAll('.ck .tk'), function (g) {      // 12 tick marks per clock face
     var h = ''; for (var t = 0; t < 12; t++) { var a = t * Math.PI / 6, r1 = t % 3 ? 15.5 : 14, r2 = 17;
@@ -2540,17 +2546,10 @@ fetch('health.json?v=' + Date.now()).then(function (r) { return r.json(); }).the
       lines.push({ t: 'Next on the calendar · ' + d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + ': ' + c.name,
                    u: '#calendar', c: 'OPEN CALENDAR ↓' }); }
     if (!lines.length) lines.push({ t: 'The desk is open: real-time intelligence for prediction markets', u: '/gap-scanner.html', c: 'OPEN GAP SCANNER →' });
-    var i = 0, tag = document.getElementById('hw-tag');
-    function next() {                                   // each pulse brings in the next fact
-      var x = lines[i % lines.length]; i++;
-      el.textContent = x.t; document.getElementById('hw-a').href = x.u; document.getElementById('hw-cta').textContent = x.c;
-      if (!still) {
-        el.classList.remove('in'); tag.classList.remove('beat'); void el.offsetWidth;
-        el.classList.add('in'); tag.classList.add('beat');
-      }
-      setTimeout(next, 8000);
-    }
-    next();
+    var E = function (t) { return String(t).replace(/[&<>"]/g, function (x) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[x]; }); };
+    window.wirePulse = lines.map(function (x) {          // Nov 24 (James): the pulse facts ride in the Desk Wire
+      return '<a class="wi" href="' + E(x.u) + '"><b class="p">PULSE</b>' + E(x.t) + ' &middot; <u>' + E(x.c) + '</u></a>'; });
+    if (window.wireBuild) window.wireBuild();
   });
 })();
 </script>
