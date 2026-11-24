@@ -176,26 +176,28 @@ for h in HOTSPOTS:
 
 # ---------------------------------------------------------------- 2. news surge (GDELT, hourly)
 news = prev.get("news_raw") or {}
-if SLOW:
-    for h in HOTSPOTS:
-        q = h["gdelt"] + " " + GDELT_CONFLICT + " sourcelang:english"
-        if time.time() - NOW > 170:                         # keep the job quick: the rest keep last hour's values
-            break
-        d = get("https://api.gdeltproject.org/api/v2/doc/doc?" + urllib.parse.urlencode(
-            {"query": q, "mode": "timelinevolraw", "format": "json", "timespan": "30d"}), 45, tries=2, wait=20)
-        time.sleep(10)                                    # GDELT asks for one request every 5 s; leave room
-        try:
-            pts = [p["value"] for p in d["timeline"][0]["data"]]
-        except Exception:
-            continue
-        if len(pts) < 8:
-            continue
-        # last full day + today so far (scaled to a full day) vs the 4 weeks before
-        frac = max(0.25, (NOW % 86400) / 86400)
-        last = max(pts[-2], pts[-1] / frac)
-        base = sorted(pts[:-2])[len(pts[:-2]) // 2]
-        news[h["id"]] = {"day": round(last), "normal": base, "series": pts[-14:]}
-    print("WR news:", {k: (v["day"], v["normal"]) for k, v in news.items()})
+# GDELT limits shared servers hard, so each run refreshes ONE hotspot (the stalest); its data is daily anyway.
+todo = sorted(HOTSPOTS, key=lambda h: (news.get(h["id"]) or {}).get("at", 0))[:1 if "--all" not in sys.argv else 8]
+for h in todo:
+    if (news.get(h["id"]) or {}).get("at", 0) > NOW - 40 * 60:
+        continue
+    q = h["gdelt"] + " " + GDELT_CONFLICT + " sourcelang:english"
+    d = get("https://api.gdeltproject.org/api/v2/doc/doc?" + urllib.parse.urlencode(
+        {"query": q, "mode": "timelinevolraw", "format": "json", "timespan": "30d"}), 45, tries=2, wait=25)
+    try:
+        pts = [p["value"] for p in d["timeline"][0]["data"]]
+    except Exception:
+        continue
+    if len(pts) < 8:
+        continue
+    frac = max(0.25, (NOW % 86400) / 86400)               # last full day, or today so far scaled to a full day
+    last = max(pts[-2], pts[-1] / frac)
+    base = sorted(pts[:-2])[len(pts[:-2]) // 2]           # median day of the 4 weeks before
+    news[h["id"]] = {"day": round(last), "normal": base, "series": pts[-14:], "at": NOW}
+    if "--all" in sys.argv:
+        time.sleep(12)
+news = {k: v for k, v in news.items() if NOW - v.get("at", NOW) < 2 * 86400}     # drop stale readings
+print("WR news:", {k: (v["day"], v["normal"]) for k, v in news.items()})
 
 # ---------------------------------------------------------------- 3. Google Trends (hourly)
 trends = prev.get("trends_raw") or {}
@@ -299,10 +301,12 @@ if SLOW:
             print("  WR PortWatch", nm, str(d)[:200])
             continue
         try:
-            rows = sorted(({"d": time.strftime("%Y-%m-%d", time.gmtime(f["attributes"]["date"] / 1000)),
+            day = lambda v: v[:10].replace("/", "-") if isinstance(v, str) else time.strftime("%Y-%m-%d", time.gmtime(v / 1000))
+            rows = sorted(({"d": day(f["attributes"]["date"]),
                             "n": f["attributes"]["n_total"], "tk": f["attributes"].get("n_tanker")} for f in d["features"]),
                           key=lambda r: r["d"])
-        except Exception:
+        except Exception as e:
+            print("  WR PortWatch parse", nm, e, str(d["features"][:1])[:200])
             continue
         if not rows:
             continue
@@ -312,6 +316,50 @@ if SLOW:
         choke[nm] = {"latest": rows[-1]["d"], "day": rows[-1]["n"], "ma7": ma7[-1], "normal30": n30[len(n30) // 2],
                      "normal90": n90[len(n90) // 2], "series": [[r["d"], r["n"], m] for r, m in zip(rows[-60:], ma7[-60:])]}
     print("WR chokepoints:", {k: (v["latest"], v["ma7"]) for k, v in choke.items()})
+
+# ---------------------------------------------------------------- 6b. live ships (aisstream.io, hourly, needs AISSTREAM_KEY)
+# Counts the ships inside each chokepoint box during a ~70 s listen: a live "how busy is it right now" reading,
+# days ahead of PortWatch. Coverage depends on shore receivers, so it's compared only with its own history.
+LIVE_BOXES = {"Strait of Hormuz": [[25.85, 55.9], [26.95, 57.1]], "Persian Gulf (waiting area)": [[24.0, 48.5], [29.8, 55.8]],
+              "Bab el-Mandeb Strait": [[12.35, 43.05], [13.05, 43.65]], "Suez Canal": [[29.85, 32.2], [31.35, 32.65]],
+              "Panama Canal": [[8.85, -79.98], [9.42, -79.48]]}
+live = prev.get("live_ships") or {}
+KEY = os.environ.get("AISSTREAM_KEY")
+if SLOW and KEY:
+    try:
+        import asyncio, websockets
+
+        async def listen(secs=70):
+            seen = {k: {} for k in LIVE_BOXES}
+            names = list(LIVE_BOXES)
+            async with websockets.connect("wss://stream.aisstream.io/v0/stream", open_timeout=20) as ws:
+                await ws.send(json.dumps({"APIKey": KEY, "BoundingBoxes": [LIVE_BOXES[n] for n in names],
+                                          "FilterMessageTypes": ["PositionReport"]}))
+                end = time.time() + secs
+                while time.time() < end:
+                    try:
+                        msg = json.loads(await asyncio.wait_for(ws.recv(), timeout=max(1, end - time.time())))
+                    except asyncio.TimeoutError:
+                        break
+                    md = msg.get("MetaData") or {}
+                    pr = (msg.get("Message") or {}).get("PositionReport") or {}
+                    la, lo = md.get("latitude", pr.get("Latitude")), md.get("longitude", pr.get("Longitude"))
+                    if la is None or lo is None:
+                        continue
+                    for n in names:
+                        (a1, o1), (a2, o2) = LIVE_BOXES[n]
+                        if a1 <= la <= a2 and o1 <= lo <= o2:
+                            seen[n][md.get("MMSI")] = pr.get("Sog") or 0
+            return seen
+
+        seen = asyncio.run(listen())
+        for n, ships in seen.items():
+            moving = sum(1 for v in ships.values() if (v or 0) >= 3)
+            remember("ships:" + n, len(ships), keep_days=60)
+            live[n] = {"now": len(ships), "moving": moving, "normal": normal("ships:" + n, min_points=24), "at": NOW}
+        print("WR live ships:", {k: (v["now"], v["moving"], v["normal"]) for k, v in live.items()})
+    except Exception as e:
+        print("  WR live ships failed:", str(e)[:120])
 
 # Alpha's Hormuz market: settles on the PortWatch 7-day average reaching the target
 hormuz_mkts = []
@@ -406,6 +454,9 @@ for h in HOTSPOTS:
         why.append({"k": "markets", "t": "Market move: “%s” %+.0f¢ in 24 h (%s)" % (b["title"], b["move"],
                     {"alpha": "Alpha Arcade", "polymarket": "Polymarket", "kalshi": "Kalshi"}[b["site"]])})
     for n in h["choke"]:
+        lv = live.get(n)
+        if lv and lv.get("normal") is not None:
+            why.append({"k": "ships", "t": "Live: %d ships in the %s right now (normally ~%d)" % (lv["now"], n, lv["normal"])})
         if n in choke:
             ch = choke[n]
             why.append({"k": "ships", "t": "%s: %s ships/day (7-day avg) vs %s normal, data through %s" % (
@@ -418,7 +469,7 @@ hot.sort(key=lambda x: -x["score"])
 
 out = {"updated": datetime.fromtimestamp(NOW, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
        "slow_at": NOW if SLOW else prev.get("slow_at"),
-       "hotspots": hot, "chokepoints": choke, "hormuz_markets": hormuz_mkts, "usdc": usdc,
+       "hotspots": hot, "chokepoints": choke, "live_ships": live, "hormuz_markets": hormuz_mkts, "usdc": usdc,
        "news_raw": news, "trends_raw": trends, "aircraft": len(ac),
        "sources": "Military aircraft: adsb.lol + adsb.fi (open data, ODbL) · News: GDELT Project · Searches: Google Trends · "
                   "Shipping: IMF PortWatch · USDC: Algorand blockchain · Markets: Alpha Arcade, Polymarket, Kalshi"}
