@@ -85,9 +85,10 @@ def build_index():
         % (x["slug"], x["n"], when(x["published"]), html.escape(x["topic"]), html.escape(x["title"]), html.escape(x["dek"])) for x in items)
     st = {"pending": ("p", "⏳ Pending"), "won": ("w", "✓ Called it"), "lost": ("l", "✗ Missed")}
     rows = "".join(
-        '<tr><td>%s</td><td><a href="/dossier/%s.html">%s</a></td><td>%s<br><small>Market: &ldquo;%s&rdquo; &rarr; %s</small></td><td>%s</td><td class="st %s">%s</td></tr>'
-        % (when(x["published"]), x["slug"], html.escape(x["title"]), html.escape(x["call"]), html.escape(x["market"]), x["side"],
-           " · ".join("%s %s¢" % ({"polymarket": "Polymarket", "kalshi": "Kalshi", "alpha": "Alpha Arcade"}[k], v) for k, v in x["price_on_publish"].items()),
+        '<tr><td>%s</td><td><a href="/dossier/%s.html">%s</a></td><td>%s<br><small>%s</small></td><td>%s</td><td class="st %s">%s</td></tr>'
+        % (when(x["published"]), x["slug"], html.escape(x["title"]), html.escape(x["call"]),
+           ("Market: &ldquo;%s&rdquo; &rarr; %s" % (html.escape(x["market"]), x["side"])) if x.get("market") else "Scored against official statements",
+           " · ".join("%s %s¢" % ({"polymarket": "Polymarket", "kalshi": "Kalshi", "alpha": "Alpha Arcade"}[k], v) for k, v in x["price_on_publish"].items()) or "No market",
            st[x["status"]][0], st[x["status"]][1] + ("" if x["status"] != "pending" else "<br><small>checks %s</small>" % when(x["check"])))
         for x in items)
     won = sum(x["status"] == "won" for x in items); lost = sum(x["status"] == "lost" for x in items)
