@@ -922,8 +922,8 @@
   /* Nov 24 (James): WAR ROOM on the photo's dark wall (where Conflict Radar, Trending and the scanners were) */
   .glass[data-screen="gap"], .glass[data-screen="trend"] { display:none !important; }   /* their feeds now live in the War Room tabs */
   /* same left edge and width as the scanners box below (.split: max 1400px, 16px padding, 18px gap) */
-  .wrp { position:absolute; left:calc((100% - min(100%, 1400px)) / 2 + 16px); top:2.4%; width:calc((min(100%, 1400px) - 50px) / 2); height:95.2%; container-type:inline-size; box-sizing:border-box; z-index:3; display:flex; flex-direction:column;
-    background:rgba(5,12,20,.93); border:1px solid rgba(255,92,92,.55); border-radius:6px; box-shadow:0 0 24px rgba(255,92,92,.14), inset 0 0 22px rgba(255,92,92,.04);
+  .wrp { position:absolute; left:calc((100% - min(100%, 1400px)) / 2 + 16px); top:0; width:calc((min(100%, 1400px) - 50px) / 2); height:100%; container-type:inline-size;   /* James: flush with the tickers above and below */ box-sizing:border-box; z-index:3; display:flex; flex-direction:column;
+    background:rgba(5,12,20,.93); border:1px solid rgba(255,92,92,.55); border-width:0 1px; border-radius:0; box-shadow:0 0 24px rgba(255,92,92,.14), inset 0 0 22px rgba(255,92,92,.04);
     padding:9px 12px; color:#e8eef5; font:500 13px/1.3 "Space Grotesk",system-ui,sans-serif; }
   .wr-hd { display:flex; align-items:center; gap:1.575cqw; }
   .wr-t { font:800 2.587cqw "Space Grotesk",system-ui,sans-serif; letter-spacing:.08em; color:#ff6b6b; text-shadow:0 0 8px rgba(255,92,92,.5); white-space:nowrap; }
