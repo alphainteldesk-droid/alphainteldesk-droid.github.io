@@ -11,7 +11,8 @@ jobs:
       - run: pip install -q websockets
       - run: python3 warroom.py --all
         env:
-          AISSTREAM_KEY: ${{ secrets.AISSTREAM_KEY }} && python3 -c "import json;d=json.load(open('warroom.json'));print(json.dumps({k:d[k] for k in ('hotspots','chokepoints','hormuz_markets','usdc')},ensure_ascii=False)[:20000])"
+          AISSTREAM_KEY: ${{ secrets.AISSTREAM_KEY }}
+      - run: python3 -c "import json;d=json.load(open('warroom.json'));print(json.dumps({k:d[k] for k in ('chokepoints','live_ships','hormuz_markets','usdc')},ensure_ascii=False)[:6000])"
       - uses: actions/upload-artifact@v4
         with:
           name: warroom
