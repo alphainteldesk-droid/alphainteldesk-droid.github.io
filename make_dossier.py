@@ -20,11 +20,10 @@ FOLLOW = '''<section class="follow" aria-label="Follow Alpha Intel Desk">
 
 COMMENTS = '''<section class="cmt" id="comments" data-kind="dossier" aria-label="Comments">
   <h3>What do you think?</h3>
-  <p>Leave your take below. No sign-up needed. Comments are checked before they appear, so keep it civil and on topic (no spam or promo links).</p>
-  <div id="cusdis_thread"></div>
+  <p>Join the conversation on X. Reply to our post, or share your own take and tag @alphainteldesk.</p>
 </section>
 '''
-COMMENTS_JS = '<script src="/comments.js?v=1" defer></script>\n'
+COMMENTS_JS = '<script src="/comments.js?v=2" defer></script>\n'
 
 
 def shell():

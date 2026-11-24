@@ -1,38 +1,46 @@
-/* Comments (Nov 24, 2026): Cusdis comment box on Market of the Week and Dossier pages.
-   Every comment waits for James's approval before it shows.
-   One thread per market / per Dossier: /market-of-the-week.html and /motw/<slug>.html share the same thread.
-   The box stays hidden until APP (the Cusdis "App ID") is filled in. */
+/* Comments (Nov 24, 2026, James): the conversation lives on X instead of an on-site comment box.
+   On Market of the Week and Dossier pages: "Reply on X" (to our own X post about the piece, once its link is in
+   x_posts.json), "Post your take on X" (pre-filled post with the page link, via @alphainteldesk) and
+   "See what people are saying" (X search for posts linking the page).
+   x_posts.json: {"dossier-<slug>": "https://x.com/alphainteldesk/status/<id>", "motw-<slug>": "..."} */
 (function () {
-  var APP = "";
   var box = document.getElementById("comments");
   if (!box) return;
-  if (!APP) { box.hidden = true; return; }
   var SITE = "https://alphainteldesk.com";
-  function go(id, url, title) {
-    var d = document.getElementById("cusdis_thread");
-    d.setAttribute("data-host", "https://cusdis.com");
-    d.setAttribute("data-app-id", APP);
-    d.setAttribute("data-page-id", id);
-    d.setAttribute("data-page-url", url);
-    d.setAttribute("data-page-title", title);
-    d.setAttribute("data-theme", "dark");
-    var s = document.createElement("script");
-    s.async = true; s.defer = true;
-    s.src = "https://cusdis.com/js/cusdis.es.js";
-    document.body.appendChild(s);
+  function show(id, path, title) {
+    var page = SITE + path;
+    var e = encodeURIComponent;
+    var take = "https://x.com/intent/post?text=" + e("My take on “" + title + "”:") +
+      "&url=" + e(page + "?utm_source=x&utm_medium=comment") + "&via=alphainteldesk";
+    var see = "https://x.com/search?f=live&q=" + e("url:alphainteldesk.com" + path + " OR (@alphainteldesk \"" + title + "\")");
+    box.innerHTML = '<h3>What do you think?</h3>' +
+      '<p>Join the conversation on X. Reply to our post, or share your own take and tag <a href="https://x.com/alphainteldesk" target="_blank" rel="noopener">@alphainteldesk</a>.</p>' +
+      '<div class="cmt-x">' +
+      '<a class="chip" id="cmt-reply" hidden target="_blank" rel="noopener">Reply on X</a>' +
+      '<a class="chip" href="' + take + '" target="_blank" rel="noopener">Post your take on X</a>' +
+      '<a class="chip" href="' + see + '" target="_blank" rel="noopener">See what people are saying</a>' +
+      '</div>';
+    fetch("/x_posts.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (m) {
+      var u = m[id], k = u && u.match(/status\/(\d+)/);
+      if (!k) return;
+      var a = document.getElementById("cmt-reply");
+      a.href = "https://x.com/intent/post?in_reply_to=" + k[1];
+      a.hidden = false;
+    }).catch(function () {});
+    box.hidden = false;
   }
   function pageTitle() { return document.title.split(" | ")[0]; }
   if (box.getAttribute("data-kind") === "dossier") {
     var slug = location.pathname.replace(/^.*\//, "").replace(/\.html$/, "");
-    if (!slug) { box.hidden = true; return; }
-    go("dossier-" + slug, SITE + "/dossier/" + slug + ".html", pageTitle());
+    if (!slug || slug === "index") { box.hidden = true; return; }
+    show("dossier-" + slug, "/dossier/" + slug + ".html", pageTitle());
     return;
   }
   var mslug = document.body.getAttribute("data-slug");
-  if (mslug) { go("motw-" + mslug, SITE + "/motw/" + mslug + ".html", pageTitle()); return; }
+  if (mslug) { show("motw-" + mslug, "/motw/" + mslug + ".html", pageTitle()); return; }
+  box.hidden = true;
   fetch("/motw.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
     var c = j.current;
-    if (!c || !c.slug) { box.hidden = true; return; }
-    go("motw-" + c.slug, SITE + "/motw/" + c.slug + ".html", c.title);
-  }).catch(function () { box.hidden = true; });
+    if (c && c.slug) show("motw-" + c.slug, "/motw/" + c.slug + ".html", c.title);
+  }).catch(function () {});
 })();
