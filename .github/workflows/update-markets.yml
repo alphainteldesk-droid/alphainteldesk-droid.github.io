@@ -34,6 +34,10 @@ jobs:
         continue-on-error: true
       - run: python3 make_gaps.py
         continue-on-error: true
+      - run: |                    # Nov 24: Gas Watch (EIA regions weekly, AAA daily, gasoline futures, gas-price markets)
+          python3 -m pip install --quiet --break-system-packages xlrd || python3 -m pip install --quiet xlrd
+          timeout 120 python3 gas.py
+        continue-on-error: true
       - run: |                    # Nov 24: War Room heat map (flights, news, searches, radar, markets, ships, oil, VIX, gold, dates)
           python3 -m pip install --quiet --break-system-packages websockets || python3 -m pip install --quiet websockets
           timeout 300 python3 warroom.py
@@ -86,6 +90,7 @@ jobs:
           [ -f week_gaps.json ] && git add week_gaps.json
           [ -f movers.json ] && git add movers.json
           [ -f warroom.json ] && git add warroom.json warroom_hist.json
+          [ -f gas.json ] && git add gas.json
           [ -f card_state.json ] && git add card.jpg card-gaps.jpg card_state.json index.html gap-scanner.html
           [ -f alpha_hist.json ] && git add alpha_hist.json
           [ -f indexnow_state.json ] && git add indexnow_state.json

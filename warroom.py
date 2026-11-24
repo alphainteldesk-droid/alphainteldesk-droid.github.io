@@ -120,6 +120,35 @@ for h in HOTSPOTS:
     h["oil"] = x.get("oil", h.get("oil", OIL_LINK.get(h["id"], 0)))
     h.setdefault("choke", []); h.setdefault("geos", []); h.setdefault("boxes", [])
 CONFLICT_WORDS += CFG.get("add_conflict_words") or []
+# Nov 24 (James): dots appear wherever signals converge, not only on the 8 watched hotspots. Places outside them
+# (lat, lon, words); warroom_config.json "places" adds more. Iran, Israel, Ukraine etc. stay with their hotspots.
+PLACES = [
+    ("Sudan", 15.5, 32.5, "sudan, sudanese, khartoum, darfur, el fasher, rapid support forces"),
+    ("DR Congo", -2, 28, "congo, congolese, kinshasa, goma, m23, drc"),
+    ("The Sahel", 15, 0, "mali, bamako, niger, niamey, burkina faso, sahel, jnim"),
+    ("Nigeria", 9, 8, "nigeria, nigerian, abuja, boko haram"),
+    ("Somalia", 5, 46, "somalia, somali, mogadishu, al-shabaab, puntland"),
+    ("Ethiopia & Eritrea", 12, 39, "ethiopia, ethiopian, eritrea, eritrean, tigray, amhara"),
+    ("Libya", 27, 17, "libya, libyan, tripoli, benghazi"),
+    ("Egypt & Sinai", 28, 31, "egypt, egyptian, cairo, sinai"),
+    ("Syria", 35, 38.5, "syria, syrian, damascus, aleppo, idlib"),
+    ("Iraq", 33, 43.5, "iraq, iraqi, baghdad, erbil, kurdistan"),
+    ("Turkey", 39, 35, "turkey, turkish, ankara, erdogan, pkk"),
+    ("Caucasus", 40.5, 45.5, "armenia, armenian, azerbaijan, azerbaijani, karabakh, baku, yerevan, georgia's"),
+    ("The Baltics", 57, 24, "estonia, estonian, latvia, latvian, lithuania, lithuanian, baltic, kaliningrad"),
+    ("Belarus", 53.5, 28, "belarus, belarusian, minsk, lukashenko"),
+    ("Moldova", 47, 28.8, "moldova, moldovan, transnistria"),
+    ("The Balkans", 43.5, 20.5, "serbia, serbian, kosovo, bosnia, republika srpska"),
+    ("Greenland & the Arctic", 72, -40, "greenland, nuuk, arctic"),
+    ("Afghanistan", 34, 66, "afghanistan, afghan, taliban, kabul"),
+    ("Myanmar", 21, 96, "myanmar, burma, burmese"),
+    ("Philippines", 13, 122, "philippines, philippine, filipino, manila, scarborough shoal, second thomas shoal"),
+    ("Japan", 36, 138, "japan, japanese, senkaku, okinawa"),
+    ("Thailand & Cambodia", 13.5, 103, "thailand, thai, cambodia, cambodian"),
+    ("Haiti", 19, -72.5, "haiti, haitian, port-au-prince"),
+    ("Mexico", 23, -102, "mexico, mexican, cartel, cartels, sinaloa, cjng"),
+    ("Colombia & Ecuador", 2, -76, "colombia, colombian, ecuador, ecuadorian, farc"),
+] + [tuple(x) for x in CFG.get("places") or []]
 IGNORE = CFG.get("ignore", "")
 WEIGHTS = dict({"flights": 1, "news": 1, "trends": 1, "radar": 1, "markets": 1, "ships": 1, "oil": 1}, **(CFG.get("weights") or {}))
 
@@ -440,6 +469,10 @@ if gold:
     ng = normal("g:gold", 12); remember("g:gold", gold)
     p_ = 0.5 * clamp((qv("gold", "change") or 0) / 2.5) + 0.5 * (clamp((gold / ng - 1) / 0.05) if ng else 0)   # +2.5% day / +5% vs normal = 1
     macro["gold"] = {"price": gold, "change": qv("gold", "change"), "normal": ng, "part": round(100 * p_)}; fear.append(p_)
+gasj = load("gas.json", {}) or {}
+if (gasj.get("rbob") or {}).get("chg5d") is not None:      # gasoline futures up 10¢+ in 5 days = full marks (a fall counts as calm)
+    p_ = clamp(gasj["rbob"]["chg5d"] / 10)
+    macro["gasoline"] = {"price": gasj["rbob"]["price"], "chg5d": gasj["rbob"]["chg5d"], "part": round(100 * p_)}; fear.append(p_)
 stress = sum(fear) / len(fear) if fear else 0
 macro["fear"] = round(100 * stress)
 print("WR macro:", {k: (v.get("part") if isinstance(v, dict) else v) for k, v in macro.items()}, "oil", oilchg)
@@ -538,19 +571,21 @@ for h in HOTSPOTS:
     f = flights[i]
     if f["n"]:
         nt = ", ".join("%d %s%s" % (v, k, "s" if v > 1 else "") for k, v in sorted(f["notable"].items(), key=lambda kv: -kv[1]))
-        why.append({"k": "flights", "t": "%d military aircraft broadcasting near the region%s" % (f["n"], (" incl. " + nt) if nt else "")})
+        why.append({"k": "flights", "t": "%d military aircraft broadcasting near the region%s" % (f["n"], (" incl. " + nt) if nt else ""),
+                    "u": "https://globe.adsb.lol/?lat=%s&lon=%s&zoom=5&mil=1" % (h["lat"], h["lon"])})
     if i in news:
         r = (news[i]["day"] + 5) / (news[i]["normal"] + 5)
         why.append({"k": "news", "t": "%s conflict stories in the last day, %s" % (format(news[i]["day"], ","),
                     ("%.1f× normal" % r) if r >= 1.3 else ("about normal" if r > 0.77 else "below normal"))})
     if trends.get(i):
-        why.append({"k": "trends", "t": "Trending searches: " + " · ".join("“%s” (%s)" % (t["q"], t["geo"]) for t in trends[i][:3])})
+        why.append({"k": "trends", "t": "Trending searches: " + " · ".join("“%s” (%s)" % (t["q"], t["geo"]) for t in trends[i][:3]),
+                    "u": "https://trends.google.com/trending?geo=" + trends[i][0]["geo"]})
     if radar[i]:
-        why.append({"k": "radar", "t": "%d of our latest Conflict Radar headlines: “%s”" % (len(radar[i]), radar[i][0]["title"])})
+        why.append({"k": "radar", "t": "%d of our latest Conflict Radar headlines: “%s”" % (len(radar[i]), radar[i][0]["title"]), "u": radar[i][0].get("url")})
     if mk[i]["big"]:
         b = mk[i]["big"]
         why.append({"k": "markets", "t": "Market move: “%s” %+.0f¢ in 24 h (%s)" % (b["title"], b["move"],
-                    {"alpha": "Alpha Arcade", "polymarket": "Polymarket", "kalshi": "Kalshi"}[b["site"]])})
+                    {"alpha": "Alpha Arcade", "polymarket": "Polymarket", "kalshi": "Kalshi"}[b["site"]]), "u": b.get("url")})
     for n in h["choke"]:
         lv = live.get(n)
         if lv and lv.get("normal") is not None:
@@ -558,7 +593,7 @@ for h in HOTSPOTS:
         if n in choke:
             ch = choke[n]
             why.append({"k": "ships", "t": "%s: %s ships/day (7-day avg) vs %s normal, data through %s" % (
-                n, ch["ma7"], ch["normal90"], datetime.strptime(ch["latest"], "%Y-%m-%d").strftime("%b %-d"))})
+                n, ch["ma7"], ch["normal90"], datetime.strptime(ch["latest"], "%Y-%m-%d").strftime("%b %-d")), "u": "https://portwatch.imf.org/"})
     if "oil" in c:
         why.append({"k": "oil", "t": "Oil %+.1f%% today (Brent $%s)" % (oilchg, qv("brent"))})
     if lift_fear:
@@ -572,12 +607,69 @@ for h in HOTSPOTS:
                 "radar": radar[i][:3], "dates": dates[i], "lift": {"fear": lift_fear, "date": lift_date}})
 hot.sort(key=lambda x: -x["score"])
 
+# ---------------------------------------------------------------- 9. emerging dots: signals converging outside the hotspots
+def in_hotspot(lat, lon):
+    return any(b[0] <= lat <= b[1] and b[2] <= lon <= b[3] for h in HOTSPOTS for b in h["boxes"])
+cells = {}
+for a in ac:                                            # military aircraft in 5° squares outside the hotspots
+    if not in_hotspot(a["lat"], a["lon"]):
+        k = (int(a["lat"] // 5), int(a["lon"] // 5))
+        cells[k] = cells.get(k, 0) + 1 + 2 * (a.get("t") in NOTABLE)
+air = {}
+for (cy, cx), v in cells.items():
+    key = "cell:%d:%d" % (cy, cx)
+    u = unusual(v, normal(key), floor=2)
+    remember(key, v)
+    if u and v >= 4:
+        lat, lon = cy * 5 + 2.5, cx * 5 + 2.5
+        near = min(PLACES, key=lambda p: (p[1] - lat) ** 2 + (p[2] - lon) ** 2)
+        if (near[1] - lat) ** 2 + (near[2] - lon) ** 2 <= 100:
+            air[near[0]] = max(air.get(near[0], 0), u)
+em_trends = prev.get("em_trends") or {}
+if SLOW and "per" in dir():
+    em_trends = {}
+    for p_ in PLACES:
+        em_trends[p_[0]] = [{"geo": g, "q": t} for g in ("US", "GB") for t, nt in per.get(g, [])
+                            if matches(t + " " + nt, p_[3]) and is_conflict(t + " " + nt)][:3]
+emerging = []
+for name, lat, lon, terms in PLACES:
+    if matches(name, IGNORE):
+        continue
+    rad = [c for c in radar_items if matches(c.get("title"), terms) and not matches(c.get("title"), IGNORE)]
+    mks = [x for x in movers if matches(x.get("title"), terms) and abs(x.get("change") or 0) >= 5 and x.get("site") in ("polymarket", "kalshi")]
+    mks += [{"site": "alpha", "title": m["title"], "change": alpha_move(m.get("id"))[0] or 0, "url": "https://www.alphaarcade.com/market/" + (m.get("slug") or "")}
+            for m in alpha if not m.get("hidden") and matches(m.get("title"), terms)]
+    mks = [x for x in mks if abs(x.get("change") or 0) >= 5] + [x for x in mks if abs(x.get("change") or 0) < 5 and x.get("site") == "alpha"]
+    tr = em_trends.get(name) or []
+    parts = {"radar": min(1, len(rad) / 3), "markets": min(1, max([abs(x.get("change") or 0) for x in mks] + [0]) / 15),
+             "trends": min(1, len(tr) / 2), "flights": air.get(name, 0)}
+    kinds = [k for k, v in parts.items() if v > 0]
+    score = round(100 * sum(parts.values()) / 2.5)
+    if len(kinds) < 2 or score < 20:                     # a dot needs at least two independent signals agreeing
+        continue
+    why = []
+    if rad:
+        why.append({"k": "radar", "t": "%d Conflict Radar headline%s: “%s”" % (len(rad), "s" * (len(rad) > 1), rad[0]["title"]), "u": rad[0].get("url")})
+    if air.get(name):
+        why.append({"k": "flights", "t": "Unusual military air activity nearby", "u": "https://globe.adsb.lol/?lat=%s&lon=%s&zoom=5&mil=1" % (lat, lon)})
+    if tr:
+        why.append({"k": "trends", "t": "Trending searches: " + " · ".join("“%s” (%s)" % (t["q"], t["geo"]) for t in tr), "u": "https://trends.google.com/trending?geo=" + tr[0]["geo"]})
+    big = max(mks, key=lambda x: abs(x.get("change") or 0), default=None)
+    if big and abs(big.get("change") or 0) >= 5:
+        why.append({"k": "markets", "t": "Market move: “%s” %+.0f¢" % (big["title"], big["change"]), "u": big.get("url")})
+    emerging.append({"id": "em-" + re.sub(r"\W+", "-", name.lower()), "name": name, "lat": lat, "lon": lon, "score": min(100, score),
+                     "level": "EMERGING", "parts": {k: round(100 * v) for k, v in parts.items()}, "why": why,
+                     "markets": [{"site": x["site"], "title": x["title"], "url": x.get("url"), "move": round(x.get("change") or 0, 1)} for x in mks[:5]]})
+    remember("em:" + name, score)
+emerging.sort(key=lambda x: -x["score"])
+print("WR emerging:", [(x["name"], x["score"]) for x in emerging])
+
 out = {"updated": datetime.fromtimestamp(NOW, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
        "slow_at": NOW if SLOW else prev.get("slow_at"),
-       "hotspots": hot, "chokepoints": choke, "live_ships": live, "hormuz_markets": hormuz_mkts, "usdc": usdc, "macro": macro, "this_week": this_week,
+       "hotspots": hot, "chokepoints": choke, "live_ships": live, "hormuz_markets": hormuz_mkts, "usdc": usdc, "macro": macro, "this_week": this_week, "emerging": emerging, "em_trends": em_trends,
        "news_raw": news, "trends_raw": trends, "aircraft": len(ac),
        "sources": "Military aircraft: adsb.lol + adsb.fi (open data, ODbL) · News: GDELT Project · Searches: Google Trends · "
-                  "Shipping: IMF PortWatch · Oil, VIX, gold: Yahoo Finance (delayed) · USDC: Algorand blockchain · Markets: Alpha Arcade, Polymarket, Kalshi"}
+                  "Shipping: IMF PortWatch · Oil, VIX, gold, gasoline futures: Yahoo Finance (delayed) · USDC: Algorand blockchain · Markets: Alpha Arcade, Polymarket, Kalshi"}
 json.dump(out, open(OUT, "w"), ensure_ascii=False, separators=(",", ":"))
 json.dump(hist, open(HIST, "w"), separators=(",", ":"))
 print("WR heat:", [(x["id"], x["score"], x["level"]) for x in hot])
