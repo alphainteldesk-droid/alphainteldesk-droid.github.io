@@ -919,6 +919,75 @@
   .glass[data-screen="gap"] .gh, .glass[data-screen="trend"] .gh { font-size:12px; margin-bottom:6px; }
   .glass[data-screen="trend"] .trend { margin-bottom:3px; }
   .glass[data-screen="gap"] { font-size:12px; line-height:1.45; }
+  /* Nov 24 (James): WAR ROOM on the photo's dark wall (where Conflict Radar, Trending and the scanners were) */
+  .glass[data-screen="gap"], .glass[data-screen="trend"] { display:none !important; }   /* their feeds now live in the War Room tabs */
+  .wrp { position:absolute; left:.7%; top:2.4%; width:44.4%; height:95.2%; box-sizing:border-box; z-index:3; display:flex; flex-direction:column;
+    background:rgba(5,12,20,.93); border:1px solid rgba(255,92,92,.55); border-radius:6px; box-shadow:0 0 24px rgba(255,92,92,.14), inset 0 0 22px rgba(255,92,92,.04);
+    padding:.6cqw .8cqw; color:#e8eef5; font:500 .9cqw/1.3 "Space Grotesk",system-ui,sans-serif; }
+  .wr-hd { display:flex; align-items:center; gap:.7cqw; }
+  .wr-t { font:800 1.15cqw "Space Grotesk",system-ui,sans-serif; letter-spacing:.08em; color:#ff6b6b; text-shadow:0 0 8px rgba(255,92,92,.5); white-space:nowrap; }
+  .wr-live { font-style:normal; font-size:.62cqw; margin-left:.35cqw; vertical-align:.12cqw; animation:wrbl 1.4s infinite; }
+  @keyframes wrbl { 50% { opacity:.25; } }
+  .wr-tabs { display:flex; gap:.3cqw; flex:1; }
+  .wr-tabs button { background:none; border:1px solid rgba(143,163,184,.3); color:#8fa3b8; font:800 .64cqw "Space Grotesk",system-ui,sans-serif;
+    letter-spacing:.06em; padding:.25cqw .45cqw; border-radius:3px; cursor:pointer; white-space:nowrap; }
+  .wr-tabs button:hover { color:#e8eef5; } .wr-tabs button.on { color:#ff8a8a; border-color:#ff6b6b; }
+  .wr-upd { font:700 .6cqw "Space Grotesk",system-ui,sans-serif; color:#7f93a8; letter-spacing:.05em; white-space:nowrap; }
+  .wr-body { flex:1; min-height:0; margin-top:.4cqw; position:relative; }
+  .wr-pane { display:none; position:absolute; inset:0; } .wr-pane.on { display:flex; flex-direction:column; gap:.4cqw; }
+  .wr-map { width:100%; flex:1; min-height:0; background:#071522; border-radius:4px; display:block; }
+  .wr-pulse { animation:wrpu 2.2s infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes wrpu { 50% { transform:scale(1.55); opacity:.04; } }
+  .wr-lab { font:700 15px "Space Grotesk",sans-serif; fill:#e8eef5; paint-order:stroke; stroke:#071522; stroke-width:4px; }
+  .wr-top { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.6cqw; }
+  .wr-r { display:flex; gap:.45cqw; align-items:flex-start; min-width:0; }
+  .wr-r > b { flex:none; width:2cqw; height:2cqw; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#111; font:800 .85cqw "Space Grotesk",sans-serif; }
+  .wr-n { font-weight:700; font-size:.88cqw; line-height:1.2; } .wr-n span { font-size:.58cqw; letter-spacing:.06em; margin-left:.2cqw; }
+  .wr-w { font-size:.66cqw; color:#a9bccf; line-height:1.28; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .wr-gs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.6cqw; }
+  .wr-g { position:relative; border:1px solid rgba(63,219,230,.22); border-radius:3px; padding:.22cqw .45cqw .35cqw; font-size:.62cqw; line-height:1.3; overflow:hidden; min-width:0; }
+  .wr-g span { display:block; color:#3fdbe6; font-weight:800; letter-spacing:.06em; font-size:.56cqw; }
+  .wr-g a { color:inherit; } .wr-g i { position:absolute; left:0; bottom:0; height:2px; background:var(--amber); }
+  .wr-list { overflow-y:auto; height:100%; padding-right:.3cqw; }
+  .wr-li { display:block; padding:.4cqw 0; border-bottom:1px solid rgba(143,163,184,.14); font-size:.85cqw; color:#e8eef5; text-decoration:none; }
+  .wr-li:hover { color:#fff; text-decoration:none; } .wr-li small { display:block; color:#8fa3b8; font-size:.62cqw; margin-top:.1cqw; }
+  .wr-li .rg { display:inline-block; background:#d93a3a; color:#fff; font:800 .58cqw "Space Grotesk",sans-serif; letter-spacing:.05em; padding:.05cqw .3cqw; border-radius:2px; margin-right:.4cqw; vertical-align:.08cqw; }
+  .wr-li .rg.c { background:#1f8a96; } .wr-li .rg.h { background:#a07a2c; }
+  .wr-ft { font-size:.55cqw; color:#7f93a8; margin-top:.35cqw; }
+  @media (max-width: 760px) {
+    .wrp { position:static; width:auto; height:auto; margin:10px; padding:12px; font-size:13px; }
+    .wr-hd { flex-wrap:wrap; gap:6px; } .wr-t { font-size:15px; } .wr-live { font-size:10px; } .wr-upd { font-size:11px; }
+    .wr-tabs { order:3; flex-basis:100%; overflow-x:auto; } .wr-tabs button { font-size:11px; padding:5px 8px; flex:none; }
+    .wr-body { margin-top:8px; } .wr-pane { position:static; } .wr-pane.on { gap:8px; } .wr-map { height:190px; flex:none; }
+    .wr-top, .wr-gs { grid-template-columns:1fr; gap:8px; } .wr-r > b { width:30px; height:30px; font-size:13px; }
+    .wr-n { font-size:14px; } .wr-n span { font-size:10px; } .wr-w { font-size:12px; } .wr-g { font-size:12px; padding:5px 8px; } .wr-g span { font-size:10px; }
+    .wr-list { max-height:360px; } .wr-li { font-size:14px; padding:8px 0; } .wr-li small { font-size:12px; } .wr-li .rg { font-size:10px; padding:1px 5px; }
+    .wr-ft { font-size:11px; }
+  }
+  /* Nov 24: scanners box beside the Danger Zone. The scanner styles size themselves off the photo's width (cqw), so the
+     inner wrapper is made 225% wide (44.4% of it = the column) to keep the same text sizes; Alpha Arcade's busiest markets fill the rest */
+  .gbw { display:flex; flex-direction:column; overflow:hidden; border-radius:6px; background:rgba(5,12,20,.9); border:1px solid rgba(255,179,71,.5);
+    box-shadow:0 0 22px rgba(255,179,71,.12), inset 0 0 22px rgba(63,219,230,.05); }
+  .gbc { container-type:inline-size; width:225.2%; }
+  .gbw .gapbox { position:static; width:44.4%; height:auto; border:none; box-shadow:none; background:none; }
+  .alx { flex:1; margin:4px 14px 0; padding:10px 0 12px; border-top:1px solid rgba(255,179,71,.3); font-family:"Space Grotesk",system-ui,sans-serif; }
+  .alx-h { display:flex; justify-content:space-between; align-items:center; gap:10px; font:800 .8rem "Space Grotesk",system-ui,sans-serif; letter-spacing:.08em; color:var(--cyan); margin-bottom:4px; }
+  .alx-h a { color:var(--amber); font-size:.72rem; white-space:nowrap; }
+  .alx-r { display:grid; grid-template-columns:minmax(0,1fr) auto 92px; gap:10px; padding:7px 0; border-bottom:1px solid rgba(143,163,184,.12); align-items:center; color:#e8eef5; text-decoration:none; }
+  .alx-r:hover { text-decoration:none; background:rgba(63,219,230,.05); }
+  .alx-r b { font-weight:600; font-size:.92rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .alx-r span { text-align:right; color:var(--amber); font-weight:700; font-size:.88rem; white-space:nowrap; }
+  .alx-r em { text-align:right; font-style:normal; color:#8fa3b8; font-size:.78rem; }
+  .alx-f { font-size:.72rem; color:#7f93a8; margin-top:6px; }
+  @media (max-width: 760px) { .gbc { width:auto; } .gbw .gapbox { width:auto; margin:0; } .alx { margin:4px 12px 0; } .alx-r { grid-template-columns:minmax(0,1fr) auto; } .alx-r em { display:none; } }
+  /* Nov 24: Market of the Week + The Dossier side by side */
+  .mwrow > .calsec { margin:0; max-width:none; }
+  .mwrow .mw-g { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } .mwrow .mw-g > .mw-p:last-child { grid-column:1 / -1; }
+  .dos .cal-h h2 { color:var(--cyan); } .dos-p { margin-bottom:12px; }
+  .dos-call { font:700 .82rem "Space Grotesk",system-ui,sans-serif; color:var(--amber); letter-spacing:.03em; margin:0; }
+  .dos-prev a { display:block; padding:9px 0; border-bottom:1px solid rgba(143,163,184,.14); color:#e8eef5; font-weight:600; }
+  .dos-prev a small { display:block; color:#8fa3b8; font-weight:500; font-size:.8rem; margin-top:2px; }
+  @media (max-width: 900px) { .mwrow { grid-template-columns:1fr; } .mwrow .mw-g { grid-template-columns:1fr; } }
 </style>
 <link rel="canonical" href="https://alphainteldesk.com/">
 <meta property="og:url" content="https://alphainteldesk.com/">
@@ -1151,6 +1220,32 @@
     <div class="stamp" id="st-trends">UPDATED EVERY 20 MIN</div>
   </div>
 </div>
+<section class="wrp" id="warroom" aria-label="War Room: where conflict signals are adding up">   <!-- Nov 24 (James) -->
+  <div class="wr-hd"><span class="wr-t">WAR ROOM <i class="wr-live">&#9679; LIVE</i></span>
+    <span class="wr-tabs" role="tablist"><button class="on" data-w="map">HEAT MAP</button><button data-w="news">HEADLINES</button><button data-w="trend">TRENDING</button><button data-w="hist">THIS WEEK IN HISTORY</button></span>
+    <span class="wr-upd" id="wr-upd"></span></div>
+  <div class="wr-body" id="wr-body">
+    <div class="wr-pane on" data-w="map"><svg class="wr-map" viewBox="0 40 1000 250" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Heat map of watched regions">
+      <image href="/world-land.svg" x="0" y="0" width="1000" height="383"/><g id="wr-dots"></g></svg>
+      <div class="wr-top" id="wr-top"><div class="wr-w">Reading the signals&hellip;</div></div>
+      <div class="wr-gs" id="wr-gs"></div></div>
+    <div class="wr-pane" data-w="news"><div class="wr-list" id="wr-news"></div></div>
+    <div class="wr-pane" data-w="trend"><div class="wr-list" id="wr-trend"></div></div>
+    <div class="wr-pane" data-w="hist"><div class="wr-list" id="wr-hist"></div></div>
+  </div>
+  <div class="wr-ft" id="wr-ft">Signals: military flights, conflict news, searches, Conflict Radar, market moves, shipping, oil, VIX, gold and key dates. Not financial advice.</div>
+</section>
+</div>
+<div class="strip" id="strip"></div>
+<div class="wire" id="wire-bar" aria-label="Prediction Market Desk Wire: incoming market intel">
+  <div class="wire-tag"><i></i><span class="wt">PREDICTION MARKET <span class="wt2">DESK WIRE</span></span></div>
+  <div class="wire-view"><div class="wire-track" id="wire"></div></div>
+</div>
+
+
+<div class="split">   <!-- Nov 15: Calendar (left half) + Expiry Hub (right half), James -->
+<div class="gbw">   <!-- Nov 24 (James): scanners next to the Danger Zone, Alpha Arcade's busiest markets below -->
+<div class="gbc">
 <section class="gapbox" id="gapbox" aria-label="Gap Scanner, Momentum Scanner and Top Traders">
   <div class="gb-h"><div class="gb-tabs" role="tablist">
       <button class="gb-tab on" data-t="gaps" role="tab" data-tip="The same question priced differently across Polymarket, Kalshi and Alpha Arcade, after estimated fees. Markets on all three sites come first. More gaps on the full Gap Scanner page. Checked every 20 minutes."><i class="ldot"></i>GAP SCANNER</button>
@@ -1165,43 +1260,9 @@
     <a class="gb-go" id="gb-go" href="/gap-scanner.html">OPEN GAP SCANNER &rarr;</a></div>
 </section>
 </div>
-<div class="strip" id="strip"></div>
-<div class="wire" id="wire-bar" aria-label="Prediction Market Desk Wire: incoming market intel">
-  <div class="wire-tag"><i></i><span class="wt">PREDICTION MARKET <span class="wt2">DESK WIRE</span></span></div>
-  <div class="wire-view"><div class="wire-track" id="wire"></div></div>
+<div class="alx" id="alx" hidden><div class="alx-h"><span>ALPHA ARCADE &middot; MOST TRADED TODAY</span><a href="https://www.alphaarcade.com/?utm_source=alphainteldesk&amp;utm_medium=homepage" target="_blank" rel="noopener">TRADE ON ALPHA ARCADE &rarr;</a></div>
+  <div id="alx-rows"></div><div class="alx-f">No sports &middot; money traded on Alpha Arcade in the last 24 h &middot; referral links may earn us a commission</div></div>
 </div>
-
-
-<div class="split">   <!-- Nov 15: Calendar (left half) + Expiry Hub (right half), James -->
-<section class="calsec" id="calendar" aria-label="Catalyst Calendar: the next two weeks">
-  <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
-  <div class="cal-h"><div><h2><span class="cal-rad" aria-hidden="true"></span>CATALYST CALENDAR<span class="cur" aria-hidden="true"></span></h2>
-    <p>The next 2 weeks of dates that move markets: economic data, the Fed, earnings, politics, world events and more.
-      Times in US Eastern. Bars show expected impact; prices show the related market's odds. <span id="cal-upd"></span></p></div>
-    <div class="cal-f">
-      <button class="on" data-f="all">ALL</button>
-      <button data-f="econ" style="--c:#3fdbe6">ECONOMY</button><button data-f="fed" style="--c:#ffb347">FED</button>
-      <button data-f="earnings" style="--c:#b18cff">EARNINGS</button><button data-f="politics" style="--c:#ff7a7a">POLITICS</button>
-      <button data-f="world" style="--c:#3ee88a">WORLD</button><button data-f="markets" style="--c:#5aa9ff">MARKET HOURS</button>
-      <button data-f="fyi" style="--c:#ff9ad5">WORTH KNOWING</button><button data-f="resolves" style="--c:#e8eef5">SETTLING</button><button data-f="history" style="--c:#d4b06a">HISTORY</button>
-    </div>
-    <details class="cal-sub">   <!-- Nov 21 (James): subscribe to the calendar (catalyst-calendar.ics, built by make_ics.py) -->
-      <summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg>ADD TO MY CALENDAR</summary>
-      <div class="cal-sub-m">
-        <a href="https://calendar.google.com/calendar/render?cid=webcal%3A%2F%2Falphainteldesk.com%2Fcatalyst-calendar.ics" target="_blank" rel="noopener" data-goatcounter-click="cal-sub-google">Google Calendar</a>
-        <a href="webcal://alphainteldesk.com/catalyst-calendar.ics" data-goatcounter-click="cal-sub-apple">Apple Calendar (iPhone, Mac)</a>
-        <a href="https://outlook.live.com/calendar/0/addfromweb?url=https%3A%2F%2Falphainteldesk.com%2Fcatalyst-calendar.ics&amp;name=Alpha%20Intel%20Desk%20Catalyst%20Calendar" target="_blank" rel="noopener" data-goatcounter-click="cal-sub-outlook">Outlook</a>
-        <button type="button" id="cal-sub-copy" data-goatcounter-click="cal-sub-copy">Copy the calendar link</button>
-        <small>Free. Every date on this calendar, in your own calendar app. It updates by itself.</small>
-      </div>
-    </details></div>
-  <div class="cal-next" id="cal-next" hidden></div>
-  <div class="cal-g" id="cal-g"><p class="cal-none">Loading the calendar&hellip;</p></div>
-  <button class="phmore" type="button" data-t="cal-g" data-more="Show the full 2 weeks ▾" data-less="Show less ▴">Show the full 2 weeks ▾</button>
-  <div class="cal-x" id="cal-x" hidden></div>
-  <p class="cal-foot">Tap any event for details and related prices on Polymarket, Kalshi and Alpha Arcade. Dates come from official
-    schedules (BLS, BEA, Census, the Fed, company investor pages); an "expected date" is not yet confirmed. Not financial advice.</p>
-</section>
 <section class="calsec hub" id="closing-soon" aria-label="The Danger Zone: contracts settling within 6 months">
   <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
   <span id="expiry-hub"></span>
@@ -1240,6 +1301,37 @@
 </div>
 
 
+<section class="calsec" id="calendar" aria-label="Catalyst Calendar: the next two weeks">
+  <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
+  <div class="cal-h"><div><h2><span class="cal-rad" aria-hidden="true"></span>CATALYST CALENDAR<span class="cur" aria-hidden="true"></span></h2>
+    <p>The next 2 weeks of dates that move markets: economic data, the Fed, earnings, politics, world events and more.
+      Times in US Eastern. Bars show expected impact; prices show the related market's odds. <span id="cal-upd"></span></p></div>
+    <div class="cal-f">
+      <button class="on" data-f="all">ALL</button>
+      <button data-f="econ" style="--c:#3fdbe6">ECONOMY</button><button data-f="fed" style="--c:#ffb347">FED</button>
+      <button data-f="earnings" style="--c:#b18cff">EARNINGS</button><button data-f="politics" style="--c:#ff7a7a">POLITICS</button>
+      <button data-f="world" style="--c:#3ee88a">WORLD</button><button data-f="markets" style="--c:#5aa9ff">MARKET HOURS</button>
+      <button data-f="fyi" style="--c:#ff9ad5">WORTH KNOWING</button><button data-f="resolves" style="--c:#e8eef5">SETTLING</button><button data-f="history" style="--c:#d4b06a">HISTORY</button>
+    </div>
+    <details class="cal-sub">   <!-- Nov 21 (James): subscribe to the calendar (catalyst-calendar.ics, built by make_ics.py) -->
+      <summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg>ADD TO MY CALENDAR</summary>
+      <div class="cal-sub-m">
+        <a href="https://calendar.google.com/calendar/render?cid=webcal%3A%2F%2Falphainteldesk.com%2Fcatalyst-calendar.ics" target="_blank" rel="noopener" data-goatcounter-click="cal-sub-google">Google Calendar</a>
+        <a href="webcal://alphainteldesk.com/catalyst-calendar.ics" data-goatcounter-click="cal-sub-apple">Apple Calendar (iPhone, Mac)</a>
+        <a href="https://outlook.live.com/calendar/0/addfromweb?url=https%3A%2F%2Falphainteldesk.com%2Fcatalyst-calendar.ics&amp;name=Alpha%20Intel%20Desk%20Catalyst%20Calendar" target="_blank" rel="noopener" data-goatcounter-click="cal-sub-outlook">Outlook</a>
+        <button type="button" id="cal-sub-copy" data-goatcounter-click="cal-sub-copy">Copy the calendar link</button>
+        <small>Free. Every date on this calendar, in your own calendar app. It updates by itself.</small>
+      </div>
+    </details></div>
+  <div class="cal-next" id="cal-next" hidden></div>
+  <div class="cal-g" id="cal-g"><p class="cal-none">Loading the calendar&hellip;</p></div>
+  <button class="phmore" type="button" data-t="cal-g" data-more="Show the full 2 weeks ▾" data-less="Show less ▴">Show the full 2 weeks ▾</button>
+  <div class="cal-x" id="cal-x" hidden></div>
+  <p class="cal-foot">Tap any event for details and related prices on Polymarket, Kalshi and Alpha Arcade. Dates come from official
+    schedules (BLS, BEA, Census, the Fed, company investor pages); an "expected date" is not yet confirmed. Not financial advice.</p>
+</section>
+
+<div class="split mwrow">
 <section class="calsec mw" id="market-of-the-week" aria-label="Market of the Week">
   <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
   <div class="cal-h"><div><h2><span class="mw-tgt" aria-hidden="true"></span>MARKET OF THE WEEK <span class="mw-n" id="mw-n">#1</span><span class="cur" aria-hidden="true"></span></h2>
@@ -1257,6 +1349,17 @@
     <a class="ghost" href="/market-of-the-week.html#previous">PREVIOUS PICKS</a></div>
   <p class="cal-foot">Every price is read twice and every point has 2+ independent sources. Always verify the rules yourself before you trade. Not financial advice.</p>
 </section>
+<section class="calsec dos" id="dossier" aria-label="The Dossier">   <!-- Nov 24 (James) -->
+  <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
+  <div class="cal-h"><div><h2>THE DOSSIER <span class="mw-n" id="dos-n"></span></h2>
+    <p>Deep dives on the stories moving prediction markets: what the data shows, what we think, and how every call ends.</p></div></div>
+  <div class="mw-p dos-p"><p class="lb">LATEST</p><p class="mw-t"><a id="dos-title" href="/dossier/">Loading&hellip;</a></p>
+    <p class="mw-hook" id="dos-dek"></p><p class="dos-call" id="dos-call"></p></div>
+  <div class="dos-prev" id="dos-prev"></div>
+  <div class="mw-cta"><a class="go" id="dos-go" href="/dossier/">READ THE DOSSIER &rarr;</a>
+    <a class="ghost" href="/dossier/">ALL DOSSIERS</a></div>
+</section>
+</div>
 <script>   /* Nov 19 (James): live Market of the Week; Nov 21: full desk block */
 (function () {
   var e = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (x) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[x]; }); };
@@ -1299,6 +1402,102 @@
     document.getElementById('mw-dates').innerHTML = cl2.length ? cl2.map(function (x) {
       return '<li class="' + e(x.s) + '"><b>' + e(x.d) + '</b><span>' + e(x.t) + '</span></li>'; }).join('')
       : '<li><b>' + cl.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + '</b><span>Market closes</span></li>';
+  }).catch(function () {});
+})();
+</script>
+
+<script>
+(function () {   /* Nov 24 (James): War Room — reads warroom.json (warroom.py) and desk.json; refreshes every 5 minutes */
+  var E = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (x) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[x]; }); };
+  var COL = { HOT: '#ff3b3b', ELEVATED: '#ff8a3d', ACTIVE: '#ffb347', CALM: '#3fdbe6' };
+  var X = function (lon) { return (lon + 180) / 360 * 1000; }, Y = function (lat) { return (80 - lat) / 138 * 383; };
+  var box = document.getElementById('warroom'); if (!box) return;
+  box.querySelector('.wr-tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    [].forEach.call(box.querySelectorAll('.wr-tabs button'), function (x) { x.classList.toggle('on', x === b); });
+    [].forEach.call(box.querySelectorAll('.wr-pane'), function (x) { x.classList.toggle('on', x.getAttribute('data-w') === b.getAttribute('data-w')); });
+  });
+  var when = function (d) { return d === 0 ? 'today' : d > 0 ? 'in ' + d + ' day' + (d > 1 ? 's' : '') : -d + ' day' + (d < -1 ? 's' : '') + ' ago'; };
+  function draw(w) {
+    var hs = (w.hotspots || []).slice().sort(function (a, b) { return a.score - b.score; });   // hottest drawn last (on top)
+    document.getElementById('wr-dots').innerHTML = hs.map(function (h) {
+      var c = COL[h.level] || COL.CALM, x = X(h.lon).toFixed(0), y = Y(h.lat).toFixed(0);
+      return '<g><title>' + E(h.name + ': ' + h.score + '/100 ' + h.level) + '</title><circle cx="' + x + '" cy="' + y + '" r="' + (9 + h.score * .5).toFixed(0) +
+        '" fill="' + c + '" opacity=".22" class="wr-pulse"/><circle cx="' + x + '" cy="' + y + '" r="' + (3.5 + h.score * .12).toFixed(1) + '" fill="' + c + '"/>' +
+        (h.score >= 20 ? '<text class="wr-lab" x="' + (+x + 9 + h.score * .12).toFixed(0) + '" y="' + (+y + 5) + '">' + h.score + '</text>' : '') + '</g>';
+    }).join('');
+    var top = (w.hotspots || []).slice(0, 3);
+    document.getElementById('wr-top').innerHTML = top.map(function (h) {
+      var c = COL[h.level] || COL.CALM, why = (h.why || []).slice(0, 2).map(function (x) { return E(x.t); }).join(' &middot; ');
+      return '<div class="wr-r"><b style="background:' + c + '">' + h.score + '</b><div style="min-width:0"><div class="wr-n">' + E(h.name) +
+        ' <span style="color:' + c + '">' + h.level + '</span></div><div class="wr-w">' + (why || 'Quiet so far') + '</div></div></div>';
+    }).join('');
+    var g = [], m = w.macro || {}, ch = (w.chokepoints || {})['Strait of Hormuz'], hm = (w.hormuz_markets || [])[0], tw = w.this_week || [];
+    if (m.fear != null) g.push('<div class="wr-g"><span>FEAR GAUGE ' + m.fear + '/100</span>' +
+      [m.vix && m.vix.price ? 'VIX ' + (+m.vix.price).toFixed(1) : '', m.gold && m.gold.change != null ? 'Gold ' + (m.gold.change > 0 ? '+' : '') + m.gold.change.toFixed(1) + '%' : '',
+       m.oil && m.oil.change != null ? 'Oil ' + (m.oil.change > 0 ? '+' : '') + m.oil.change.toFixed(1) + '%' : ''].filter(Boolean).join(' &middot; ') +
+      '<i style="width:' + m.fear + '%"></i></div>');
+    if (ch) { var tgt = (hm && hm.target) || 60;
+      g.push('<div class="wr-g"><span>STRAIT OF HORMUZ</span>' + (hm ? '<a href="' + E(hm.url) + '" target="_blank" rel="noopener">' : '') + ch.ma7 + ' ships/day (7-day avg) vs ' + tgt +
+        ' the Alpha market needs' + (hm ? '</a>' : '') + '<i style="width:' + Math.min(100, ch.ma7 / tgt * 100).toFixed(1) + '%;background:#ff5c5c"></i></div>'); }
+    var near = [];
+    (w.hotspots || []).forEach(function (h) { (h.dates || []).forEach(function (d) { if (d.kind !== 'scheduled') near.push({ days: d.days, what: d.what }); }); });
+    tw.forEach(function (x) { if (!x.hotspot) near.push({ days: x.days, what: x.what + ' (' + x.year + ')' }); });
+    near.sort(function (a, b) { return Math.abs(a.days) - Math.abs(b.days); });
+    if (near.length) g.push('<div class="wr-g"><span>THIS WEEK IN HISTORY</span>' + near.slice(0, 2).map(function (x) { return E(x.what.replace(/^Anniversary: /, '')) + ', ' + when(x.days); }).join(' &middot; ') + '</div>');
+    document.getElementById('wr-gs').innerHTML = g.join('');
+    var hist = near.map(function (x) { return '<div class="wr-li"><span class="rg h">' + (x.days === 0 ? 'TODAY' : x.days > 0 ? 'IN ' + x.days + 'D' : -x.days + 'D AGO') + '</span>' + E(x.what) + '</div>'; });
+    document.getElementById('wr-hist').innerHTML = hist.length ? hist.join('') + '<div class="wr-li"><small>Anniversaries and past shocks near today. They add a little heat only to a region that is already active. Full list on the calendar under HISTORY.</small></div>'
+      : '<div class="wr-li"><small>No anniversaries or past shocks this week.</small></div>';
+    document.getElementById('wr-upd').textContent = w.updated ? 'UPDATED ' + new Date(w.updated).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
+    var cal = (w.hotspots || []).some(function (h) { return (h.calibrating || []).length; });
+    document.getElementById('wr-ft').innerHTML = (cal ? '<b style="color:#ffb347">Calibrating:</b> scores sharpen as the War Room learns what normal looks like (about a week). ' : '') +
+      'Signals: military flights, conflict news, searches, Conflict Radar, market moves, shipping, oil, VIX, gold and key dates. Not financial advice.';
+  }
+  function feeds(d) {
+    var cf = (d.conflict || []).slice(0, 10), tr = (d.trends || []).slice(0, 10);
+    document.getElementById('wr-news').innerHTML = cf.length ? cf.map(function (x) {
+      return '<a class="wr-li" href="' + E(x.url) + '" target="_blank" rel="noopener"><span class="rg">' + E((x.region || 'WORLD').replace(/[^A-Z]/g, '')) + '</span>' + E(x.title) + '<small>' + E(x.source || '') + '</small></a>'; }).join('')
+      + '<a class="wr-li" href="/conflict-radar.html"><small>OPEN CONFLICT RADAR &rarr;</small></a>' : '<div class="wr-li"><small>Loading headlines&hellip;</small></div>';
+    var seen = {};
+    document.getElementById('wr-trend').innerHTML = tr.filter(function (x) { var k = (x.title || '').toLowerCase(); if (!k || seen[k]) return false; return seen[k] = 1; }).map(function (x) {
+      return '<a class="wr-li" href="https://trends.google.com/trending?geo=' + (x.geo === 'UK' ? 'GB' : 'US') + '" target="_blank" rel="noopener"><span class="rg c">' + (x.geo === 'UK' ? 'UK' : 'US') + '</span>' + E(x.title) + '</a>'; }).join('')
+      || '<div class="wr-li"><small>Loading trends&hellip;</small></div>';
+  }
+  function load() {
+    fetch('warroom.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(draw).catch(function () {
+      document.getElementById('wr-top').innerHTML = '<div class="wr-w" style="grid-column:1/-1">The War Room is warming up: first readings arrive within the hour.</div>'; });
+    fetch('desk.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(feeds).catch(function () {});
+  }
+  load(); setInterval(load, 5 * 60000);
+})();
+(function () {   /* Nov 24: Alpha Arcade's most traded markets today (no sports), under the scanners */
+  var E = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (x) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[x]; }); };
+  var SP = /^(NFL|NBA|NHL|MLB|WNBA|UFC|NCAA[A-Z]*|EPL|MLS)\b|\bvs\.?\b|\bbeat the\b|\bwin the (super bowl|world series|stanley cup)/i;
+  fetch('alpha_live.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    var ms = (d.markets || []).filter(function (m) { return String(m.hidden) !== 'true' && m.hidden !== true && !SP.test(m.title) && +m.twentyFourHrVolume >= 1; });
+    ms.sort(function (a, b) { return b.twentyFourHrVolume - a.twentyFourHrVolume; });
+    if (!ms.length) return;
+    document.getElementById('alx-rows').innerHTML = ms.slice(0, 10).map(function (m) {
+      var o = (m.options || []).filter(function (x) { return isFinite(x.yesProb); }).sort(function (a, b) { return b.yesProb - a.yesProb; })[0], px = '';
+      if (o) px = (m.options.length > 1 ? E(String(o.label).replace(/^(\w{3})\w*( \d+), \d{4}$/, '$1$2').slice(0, 16)) + ' ' : 'Yes ') + Math.round(o.yesProb / 1e4) + '&cent;';
+      return '<a class="alx-r" href="https://www.alphaarcade.com/market/' + encodeURIComponent(m.slug) + '?utm_source=alphainteldesk&amp;utm_medium=homepage" target="_blank" rel="noopener"><b>' +
+        E(m.title) + '</b><span>' + px + '</span><em>$' + Math.round(m.twentyFourHrVolume).toLocaleString() + ' today</em></a>';
+    }).join('');
+    document.getElementById('alx').hidden = false;
+  }).catch(function () {});
+})();
+(function () {   /* Nov 24: The Dossier card beside Market of the Week (dossier.json) */
+  var E = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (x) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[x]; }); };
+  fetch('dossier.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    var it = (d.items || []).slice().sort(function (a, b) { return b.n - a.n; }); if (!it.length) return;
+    var x = it[0], u = '/dossier/' + x.slug + '.html';
+    document.getElementById('dos-n').textContent = 'No. ' + x.n;
+    var t = document.getElementById('dos-title'); t.textContent = x.title; t.href = u; document.getElementById('dos-go').href = u;
+    document.getElementById('dos-dek').textContent = x.dek || '';
+    document.getElementById('dos-call').innerHTML = x.call ? 'OUR CALL: ' + E(x.call) : '';
+    document.getElementById('dos-prev').innerHTML = it.slice(1, 4).map(function (y) {
+      return '<a href="/dossier/' + E(y.slug) + '.html">No. ' + y.n + ': ' + E(y.title) + '<small>' + E(y.call ? 'Our call: ' + y.call : y.dek || '') + '</small></a>'; }).join('');
   }).catch(function () {});
 })();
 </script>
@@ -1418,7 +1617,7 @@
       hub.classList.toggle('soonv', hubTab === 'soon');
       if (hubTab === 'soon') {
         hubCols.innerHTML = '<span>MARKET</span><span>SITE</span><span>YES</span><span>CLOSES</span>';
-        hubRows.innerHTML = soonList.length ? soonList.slice(0, 16).map(soonRow).join('') : '<p class="cal-none">No markets closing in the next few days.</p>';
+        hubRows.innerHTML = soonList.length ? soonList.slice(0, 10).map(soonRow).join('') : '<p class="cal-none">No markets closing in the next few days.</p>';
         return;
       }
       hubCols.innerHTML = '<span>CONTRACT</span><span>SIDE</span><span>PRICE</span><span title="After fees, if it resolves this way">RETURN</span><span title="DZ Grade: Liquidity + Rules" class="dzh">DZ<br>GRADE</span><span>CLOSES</span>';
@@ -1429,7 +1628,7 @@
       // 1-6 months: steadiest first (most traded), then the return; under 1 month: soonest first
       list.sort(long ? function (a, b) { return b.volume - a.volume; } : function (a, b) { return new Date(a.close) - new Date(b.close); });
       var seen = {};
-      list = list.filter(function (x) { if (seen[x.title]) return false; seen[x.title] = 1; return true; }).slice(0, 16);
+      list = list.filter(function (x) { if (seen[x.title]) return false; seen[x.title] = 1; return true; }).slice(0, 10);
       hubRows.innerHTML = list.length ? list.map(expRow).join('') : '<p class="cal-none">Nothing fits right now. Checked every 20 minutes.</p>';
     }
     document.getElementById('hub-f').addEventListener('click', function (e) {
@@ -1747,7 +1946,7 @@
       var g3 = (d.gaps || []).filter(function (g) { return g.all3; }), g2 = (d.gaps || []).filter(function (g) { return !g.all3; });
       var real = function (g) { return !(g.fill && !g.fill.usd); };   // Nov 12: never show a gap the order books say isn't there
       g3 = g3.filter(real); g2 = g2.filter(real);
-      list = g3.concat(g2).slice(0, 3);                   // all-three-site gaps first; two-site gaps fill any empty row
+      list = g3.concat(g2).slice(0, 8);                   // all-three-site gaps first; two-site gaps fill any empty row
       var al = g3.concat(g2).filter(function (g) { return g.prices.alpha != null; })[0];
       if (al && list.indexOf(al) < 0 && list.length) list[list.length - 1] = al;   // keep one Alpha Arcade row when there is one
       box.innerHTML = (list.length ? list.map(gapRow).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
@@ -1756,11 +1955,11 @@
     }
     if (t === 'traders') {
       list = ['polymarket', 'kalshi', 'alpha'].filter(function (k) { return (d[k] || []).length; });
-      box.innerHTML = (list.length ? list.map(function (k) { return traderRow(k, d[k][0]); }).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
+      box.innerHTML = (list.length ? list.map(function (k) { return d[k].slice(0, 3).map(function (x) { return traderRow(k, x); }).join(''); }).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
         '<a class="gb-more" href="/top-traders.html">Top 20 on each site, by subject <span>OPEN TOP TRADERS &rarr;</span></a>';
       return;
     }
-    list = (d.movers || []).slice(0, 3);                 // Nov 10: 3 rows + a link to the full Momentum Scanner page (renamed from Movers Nov 12), like the gaps tab
+    list = (d.movers || []).slice(0, 8);                 // Nov 10: 3 rows + a link to the full Momentum Scanner page (renamed from Movers Nov 12), like the gaps tab
     box.innerHTML = (list.length ? list.map(moverRow).join('') : '<div class="gb-empty">' + T.empty + '</div>') +
       '<a class="gb-more" href="/momentum-scanner.html">Click here for more big moves <span>OPEN MOMENTUM SCANNER &rarr;</span></a>';
   }
