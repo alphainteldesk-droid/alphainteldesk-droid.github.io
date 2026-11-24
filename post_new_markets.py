@@ -9,6 +9,7 @@ from topics import topic
 
 CHANNEL = "@alphainteldesk"
 SITE = "https://alphainteldesk.com"
+from utm import tag as utm_tag
 ET = ZoneInfo("America/New_York")
 QUIET = (23, 7)   # no posts from 11 PM to 7 AM Eastern (the 7 AM digest covers the night)
 MAX_POSTS = 3     # at most this many markets per hourly post
@@ -53,7 +54,7 @@ else:
             name += " (" + escape(mk) + ")"
         lines.append(f'\n{topic(m["event"] + " " + mk, m.get("url", ""))} <a href="{escape(m["url"])}">{name}</a>'
                      f'\n   <b>{m["yes"]}% Yes</b> · {label} · ✨ new')
-    lines.append(f'\n📡 More on the live board: <a href="{SITE}">alphainteldesk.com</a>')
+    lines.append(f'\n📡 More on the live board: <a href="{utm_tag(SITE, "telegram", "new_markets")}">alphainteldesk.com</a>')
     body = json.dumps({"chat_id": CHANNEL, "text": "\n".join(lines), "parse_mode": "HTML",
                        "link_preview_options": {"is_disabled": True}}).encode()
     try:

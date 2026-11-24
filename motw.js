@@ -127,7 +127,7 @@
   function wireShare(root) {
     root.querySelectorAll('[data-share]').forEach(function (b) {
       b.onclick = function (ev) {
-        ev.preventDefault(); var u = 'https://alphainteldesk.com' + b.getAttribute('data-share'), t = 'Market of the Week: ' + b.getAttribute('data-title') + ' Both sides + live prices';
+        ev.preventDefault(); var u = 'https://alphainteldesk.com' + b.getAttribute('data-share') + '?utm_medium=share&utm_source=' + (navigator.share ? 'share_sheet' : 'copy'), t = 'Market of the Week: ' + b.getAttribute('data-title') + ' Both sides + live prices';
         if (navigator.share) navigator.share({ title: t, url: u }).catch(function () {});
         else if (navigator.clipboard) navigator.clipboard.writeText(t + ' ' + u).then(function () { b.textContent = 'Link copied'; });
       };

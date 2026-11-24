@@ -8,7 +8,10 @@ video = sys.argv[1]
 txt = open(video.rsplit(".", 1)[0] + ".txt").read()
 title = txt.split("TITLE\n", 1)[1].split("\n", 1)[0].strip()
 desc = txt.split("DESCRIPTION\n", 1)[1].split("\n\nHASHTAGS", 1)[0].strip()
-link = txt.split("LINK\n", 1)[1].split("\n", 1)[0].strip() if "LINK\n" in txt else "https://alphainteldesk.com"   # Nov 17: the contract's own row
+link = txt.split("LINK\n", 1)[1].split("\n", 1)[0].strip() if "LINK\n" in txt else "https://alphainteldesk.com"
+from utm import tag as utm_tag
+link = utm_tag(link, "telegram", "short")   # Nov 24: tagged for analytics
+# Nov 17: the contract's own row
 desc = desc.split("\nSee it on Alpha Intel Desk:", 1)[0].replace("Not financial advice. https://alphainteldesk.com", "").strip()
 esc = lambda s: s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 caption = ("🎬 <b>%s</b>\n\n%s\n\n👉 <a href=\"%s\">See this contract on Alpha Intel Desk</a> · free, no sign-up\n"

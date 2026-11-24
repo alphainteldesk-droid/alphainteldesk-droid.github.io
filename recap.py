@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo
 
 ET = ZoneInfo("America/New_York")
 SITE = "https://alphainteldesk.com"
+from utm import tag as utm_tag
 CHANNEL = "@alphainteldesk"
 WEEK = 7 * 86400
 POST = "--post" in sys.argv
@@ -129,7 +130,7 @@ if ahead:
         d = et(t)
         when = d.strftime("%a %b %-d") + ("" if i.get("allday") else d.strftime(", %-I:%M %p ET").replace(":00 ", " "))
         tg.append(f"• {when}: {escape(i['name'])}" + (" (expected)" if i.get("est") else ""))
-tg.append(f'\n📡 Free, no sign-up: <a href="{SITE}">alphainteldesk.com</a>')
+tg.append(f'\n📡 Free, no sign-up: <a href="{utm_tag(SITE, "telegram", "recap")}">alphainteldesk.com</a>')
 tg.append("<i>Not financial advice.</i>")
 tg_text = "\n".join(tg)
 
@@ -167,7 +168,7 @@ if ahead:
         xl.append(f"• {d:%a %b %-d}: {i['name']}" + (" (expected)" if i.get("est") else ""))
 xl.append("\nFull board in the reply 👇")
 x_text = "\n".join(xl)
-x_reply = f"Free gap scanner, Danger Zone and calendar for Polymarket, Kalshi and Alpha Arcade: {SITE}\nNot financial advice."
+x_reply = f"Free gap scanner, Danger Zone and calendar for Polymarket, Kalshi and Alpha Arcade: {utm_tag(SITE, 'x', 'recap')}\nNot financial advice."
 
 md = (f"Weekly recap for X ({label}). Copy each box into X: the post first, then the reply under it.\n\n"
       f"**Post** ({xlen(x_text)} characters; X Premium)\n\n```\n{x_text}\n```\n\n**Reply (with the link)**\n\n```\n{x_reply}\n```\n\n"

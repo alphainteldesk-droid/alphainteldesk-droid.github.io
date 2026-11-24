@@ -8,6 +8,7 @@ from topics import topic
 
 CHANNEL = "@alphainteldesk"
 SITE = "https://alphainteldesk.com"
+from utm import tag as utm_tag
 ET = ZoneInfo("America/New_York")
 
 def when(s):
@@ -47,11 +48,11 @@ try:   # Nov 17 (James): one Danger Zone contract, linking to its highlighted ro
         x = max(pool, key=exit_grade.score)
         nm = x["title"] + ("" if x["outcome"] in ("Yes", x["title"]) else " — " + x["outcome"])
         parts.append("\n🚨 <b>Danger Zone pick</b>")
-        parts.append(f'<a href="{escape(dz_link.url(x, top))}">{escape(nm)}</a>\n   <b>{x["side"].upper()} at {x["ask"]:.0f}¢</b> · '
+        parts.append(f'<a href="{escape(utm_tag(dz_link.url(x, top), "telegram", "digest"))}">{escape(nm)}</a>\n   <b>{x["side"].upper()} at {x["ask"]:.0f}¢</b> · '
                      f'+{x["ret"]:.1f}% after fees if right · closes {when(x["close"])}')
 except Exception as err:
     print("Danger Zone pick skipped:", err)
-parts.append(f'\n📡 Live board, updated hourly: <a href="{SITE}">alphainteldesk.com</a>')
+parts.append(f'\n📡 Live board, updated hourly: <a href="{utm_tag(SITE, "telegram", "digest")}">alphainteldesk.com</a>')
 parts.append("<i>Not financial advice.</i>")
 
 body = json.dumps({"chat_id": CHANNEL, "text": "\n".join(parts), "parse_mode": "HTML",

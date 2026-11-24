@@ -3,6 +3,7 @@
 # A phone-size screen recording of the real site: a mouse cursor moves to and clicks each link, captions say what
 # you're looking at, with music + click sounds. Numbers come from today's gaps.json / expiry.json.
 # Usage: python3 make_short.py <site folder> <output.mp4> [state.json]   (writes <output>.txt with title/description/tags)
+from utm import tag as utm_tag   # Nov 24: YouTube description link tagged utm_source=youtube
 import asyncio, json, math, os, shutil, subprocess, sys, time, wave
 import numpy as np
 from playwright.async_api import async_playwright
@@ -208,7 +209,7 @@ async def main():
     json.dump(st, open(STATE, "w"), separators=(",", ":"))
     title = "Your Daily Gap: %.1f¢ + a Potential +%d%% Expiring Market Alert 🚨" % (g["net"], int(d["ret"]))   # James, Nov 15
     desc = ("Today's biggest prediction market price gap after fees: %s. Plus a Danger Zone contract that closes %s: %s, %s at %.0f¢.\n"
-            "See it on Alpha Intel Desk: %s\nNot financial advice." % (G_TITLE, D_WHEN, D_TITLE, d["side"].upper(), d["ask"], D_LINK))
+            "See it on Alpha Intel Desk: %s\nNot financial advice." % (G_TITLE, D_WHEN, D_TITLE, d["side"].upper(), d["ask"], utm_tag(D_LINK, "youtube", "short")))
     tags = "#predictionmarkets #polymarket #kalshi #alphaarcade #algorand #trading #markets #shorts"
     open(OUT.rsplit(".", 1)[0] + ".txt", "w").write("TITLE\n%s\n\nDESCRIPTION\n%s\n\nHASHTAGS\n%s\n\nLINK\n%s\n" % (title, desc, tags, D_LINK))
     print("Short: %s (%.1f s) | gap: %s | danger zone: %s (%s)" % (OUT, total, G_TITLE, D_TITLE, D_WHEN))

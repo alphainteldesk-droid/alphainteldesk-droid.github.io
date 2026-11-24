@@ -450,13 +450,15 @@
   window.aidShare = function (text, url, anchor) {
     close();
     var e = encodeURIComponent, full = text + ' ' + url;
+    var u = function (s) { var h = url.indexOf('#'), b = h < 0 ? url : url.slice(0, h), f = h < 0 ? '' : url.slice(h); return b + (b.indexOf('?') < 0 ? '?' : '&') + 'utm_source=' + s + '&utm_medium=share' + f; };
+    full = text + ' ' + u('copy');
     var items = [
-      ['𝕏', 'Post on X', 'https://x.com/intent/post?text=' + e(text) + '&url=' + e(url)],
-      ['✈', 'Telegram', 'https://t.me/share/url?url=' + e(url) + '&text=' + e(text)],
-      ['☎', 'WhatsApp', 'https://wa.me/?text=' + e(full)],
-      ['f', 'Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + e(url)],
-      ['r/', 'Reddit', 'https://www.reddit.com/submit?url=' + e(url) + '&title=' + e(text)],
-      ['in', 'LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + e(url)]
+      ['𝕏', 'Post on X', 'https://x.com/intent/post?text=' + e(text) + '&url=' + e(u('x'))],
+      ['✈', 'Telegram', 'https://t.me/share/url?url=' + e(u('telegram')) + '&text=' + e(text)],
+      ['☎', 'WhatsApp', 'https://wa.me/?text=' + e(text + ' ' + u('whatsapp'))],
+      ['f', 'Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' + e(u('facebook'))],
+      ['r/', 'Reddit', 'https://www.reddit.com/submit?url=' + e(u('reddit')) + '&title=' + e(text)],
+      ['in', 'LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' + e(u('linkedin'))]
     ];
     menu = document.createElement('div'); menu.className = 'shm'; menu.setAttribute('role', 'menu');
     menu.innerHTML = '<div class="t">SHARE</div>' + items.map(function (it) {
@@ -476,7 +478,7 @@
         }).catch(function () { prompt('Copy this:', full); close(); });
         return;
       }
-      if (b && b.getAttribute('data-a') === 'more') { navigator.share({ text: text, url: url }).catch(function () {}); }
+      if (b && b.getAttribute('data-a') === 'more') { navigator.share({ text: text, url: u('share_sheet') }).catch(function () {}); }
       setTimeout(close, 50);
     });
   };

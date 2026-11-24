@@ -11,6 +11,7 @@ import json, hashlib
 from datetime import datetime, timedelta, timezone
 
 SITE = "https://alphainteldesk.com"
+CAL = SITE + "/?utm_source=calendar&utm_medium=ics#calendar"   # Nov 24: tagged so calendar clicks show in analytics
 OUT = "catalyst-calendar.ics"
 CATS = {"econ": "Economy", "fed": "Fed", "earnings": "Earnings", "politics": "Politics", "world": "World",
         "markets": "Market hours", "fyi": "Worth knowing"}
@@ -44,7 +45,7 @@ def main():
     L = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Alpha Intel Desk//Catalyst Calendar//EN", "CALSCALE:GREGORIAN",
          "METHOD:PUBLISH", "X-WR-CALNAME:Alpha Intel Desk: Catalyst Calendar",
          "X-WR-CALDESC:" + esc("Dates that move prediction markets: economic data, the Fed, politics, world events "
-                               "and more. Live odds on Polymarket, Kalshi and Alpha Arcade at " + SITE + "/#calendar"),
+                               "and more. Live odds on Polymarket, Kalshi and Alpha Arcade at " + CAL),
          "X-WR-TIMEZONE:America/New_York", "REFRESH-INTERVAL;VALUE=DURATION:PT6H", "X-PUBLISHED-TTL:PT6H"]
     n = 0
     for x in items:
@@ -61,7 +62,7 @@ def main():
         m = x.get("market")
         if m and m.get("title"):
             desc.append("Related market: %s (%s)" % (m["title"], m.get("outcome") or "Yes"))
-        desc += ["Live odds on Polymarket, Kalshi and Alpha Arcade: " + SITE + "/#calendar",
+        desc += ["Live odds on Polymarket, Kalshi and Alpha Arcade: " + CAL,
                  "Not financial advice. Always check each site's rules."]
         L += ["BEGIN:VEVENT", "UID:" + uid, "DTSTAMP:" + now]
         if x.get("allday"):
@@ -73,7 +74,7 @@ def main():
             L += ["DTSTART:" + start.strftime("%Y%m%dT%H%M%SZ"),
                   "DTEND:" + (end or start + timedelta(minutes=30)).strftime("%Y%m%dT%H%M%SZ"), "TRANSP:TRANSPARENT"]
         L += ["SUMMARY:" + esc(name), "DESCRIPTION:" + esc("\n\n".join(d for d in desc if d)),
-              "URL:" + SITE + "/#calendar", "CATEGORIES:" + esc(CATS.get(x.get("cat"), "Catalyst")), "END:VEVENT"]
+              "URL:" + CAL, "CATEGORIES:" + esc(CATS.get(x.get("cat"), "Catalyst")), "END:VEVENT"]
         n += 1
     L.append("END:VCALENDAR")
     if n == 0:
