@@ -29,8 +29,24 @@ if NOW - prev.get("at", 0) < 50 * 60:
 out = {"at": NOW, "polymarket": prev.get("polymarket") or [], "kalshi": prev.get("kalshi") or []}
 
 # Polymarket: events sorted by 24 h volume (sports tags and titles left out)
-d = get("https://gamma-api.polymarket.com/events?" + urllib.parse.urlencode(
-    {"active": "true", "closed": "false", "order": "volume24hr", "ascending": "false", "limit": 80}))
+d = None
+for q in ({"active": "true", "closed": "false", "order": "volume24hr", "ascending": "false", "limit": 80},
+          {"closed": "false", "order": "volume24hr", "ascending": "false", "limit": 80},
+          {"closed": "false", "order": "volume24hr", "limit": 80}):
+    d = get("https://gamma-api.polymarket.com/events?" + urllib.parse.urlencode(q))
+    if d:
+        break
+if not d:                                          # fallback: busiest markets, grouped into their events
+    ms = get("https://gamma-api.polymarket.com/markets?" + urllib.parse.urlencode(
+        {"closed": "false", "order": "volume24hr", "ascending": "false", "limit": 200})) or []
+    by = {}
+    for m in ms:
+        ev = (m.get("events") or [{}])[0]
+        e = by.setdefault(ev.get("slug") or m.get("slug"), {"title": ev.get("title") or m.get("question"), "slug": ev.get("slug") or m.get("slug"),
+                                                            "tags": ev.get("tags") or [], "volume24hr": 0, "markets": []})
+        e["volume24hr"] += float(m.get("volume24hr") or 0); e["markets"].append(m)
+    d = sorted(by.values(), key=lambda e: -e["volume24hr"]) or None
+    print("  Polymarket via markets fallback:", len(by))
 if d:
     rows = []
     for ev in d:
@@ -60,7 +76,7 @@ if d:
 
 # Kalshi: open events with their markets, grouped, non-sports categories, by 24 h volume
 evs, cur = [], None
-for _ in range(25):
+for _ in range(70):
     q = {"status": "open", "with_nested_markets": "true", "limit": 200}
     if cur:
         q["cursor"] = cur
