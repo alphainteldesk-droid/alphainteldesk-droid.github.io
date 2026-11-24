@@ -18,6 +18,15 @@ FOLLOW = '''<section class="follow" aria-label="Follow Alpha Intel Desk">
 '''
 
 
+COMMENTS = '''<section class="cmt" id="comments" data-kind="dossier" aria-label="Comments">
+  <h3>What do you think?</h3>
+  <p>Leave your take below. No sign-up needed. Comments are checked before they appear, so keep it civil and on topic (no spam or promo links).</p>
+  <div id="cusdis_thread"></div>
+</section>
+'''
+COMMENTS_JS = '<script src="/comments.js?v=1" defer></script>\n'
+
+
 def shell():
     g = open("guides.html").read()
     head = g[:g.index("<title>")]
@@ -41,7 +50,7 @@ def page(title, desc, url, body, og_type="article", img=SITE + "/banner.png"):
             % (html.escape(title), html.escape(desc), url, html.escape(title), html.escape(desc), img, url, og_type))
     tail = head_tail.replace('href="/site.css', 'href="/site.css')
     return (head + meta + fonts + style + "\n" + tail + '<link rel="stylesheet" href="/dossier.css?v=1">\n</head>\n<body>\n\n'
-            + header.replace('src="logo.svg"', 'src="/logo.svg"') + '\n\n<main class="wrap">\n' + body + '\n' + FOLLOW + '</main>\n\n' + footer)
+            + header.replace('src="logo.svg"', 'src="/logo.svg"') + '\n\n<main class="wrap">\n' + body + '\n' + FOLLOW + COMMENTS + '</main>\n' + COMMENTS_JS + '\n' + footer)
 
 
 def build_one(slug, body_path, charts_path):

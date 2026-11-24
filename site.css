@@ -133,3 +133,11 @@ footer .wrap { max-width: 1120px !important; }
 
 /* Nov 22: boxes side by side in a grid stay the same size and line up (the "card + card" gap above is for stacked cards only) */
 :is(.grid, .gl, .pick, .cols) > .card { margin-top: 0 !important; }
+
+/* Comments box (Cusdis) on Market of the Week + Dossier, Nov 24, 2026 */
+.cmt{margin:18px 0 8px;padding:18px 20px;background:var(--panel,#0f1b29);border:1px solid var(--line);border-radius:12px}
+.cmt h3{margin:0 0 4px}
+.cmt p{margin:0 0 12px;color:var(--muted);max-width:70ch}
+.cmt-w{max-width:1120px !important;padding-top:0 !important}
+#cusdis_thread{min-height:120px}
+#cusdis_thread iframe{width:100%;border:0;color-scheme:dark}
