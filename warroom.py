@@ -51,35 +51,35 @@ HOTSPOTS = [
     {"id": "gulf", "name": "Iran & the Gulf", "lat": 27.5, "lon": 54,
      "boxes": [(22, 39, 44, 63)], "geos": ["IR", "AE", "SA", "IL"],
      "gdelt": '(Iran OR Tehran OR Hormuz OR "Persian Gulf" OR IRGC)',
-     "terms": "iran iranian tehran hormuz persian gulf irgc khamenei blockade", "choke": ["Strait of Hormuz"]},
+     "terms": "iran, iranian, tehran, hormuz, persian gulf, irgc, khamenei, iranian blockade", "choke": ["Strait of Hormuz"]},
     {"id": "levant", "name": "Israel, Gaza & Lebanon", "lat": 32, "lon": 35.2,
      "boxes": [(29, 34.8, 33, 37)], "geos": ["IL", "LB"],
      "gdelt": '(Israel OR Gaza OR Hezbollah OR Lebanon OR "West Bank")',
-     "terms": "israel israeli gaza hamas hezbollah lebanon lebanese netanyahu west bank idf", "choke": []},
+     "terms": "israel, israeli, gaza, hamas, hezbollah, lebanon, lebanese, netanyahu, west bank, idf", "choke": []},
     {"id": "redsea", "name": "Red Sea & Yemen", "lat": 15, "lon": 43,
      "boxes": [(10, 22, 36, 52)], "geos": ["YE", "SA"],
      "gdelt": '(Houthi OR Houthis OR Yemen OR "Red Sea" OR "Bab el-Mandeb")',
-     "terms": "houthi houthis yemen yemeni red sea bab el-mandeb", "choke": ["Bab el-Mandeb Strait", "Suez Canal"]},
+     "terms": "houthi, houthis, yemen, yemeni, red sea, bab el-mandeb", "choke": ["Bab el-Mandeb Strait", "Suez Canal"]},
     {"id": "ukraine", "name": "Ukraine & Russia", "lat": 49, "lon": 34,
      "boxes": [(44, 57, 22, 45), (53.5, 60, 18, 30)], "geos": ["UA", "RU", "PL"],
      "gdelt": '(Ukraine OR Kyiv OR Kremlin OR Crimea OR Donbas)',
-     "terms": "ukraine ukrainian kyiv russia russian kremlin putin zelensky crimea donbas nato", "choke": []},
+     "terms": "ukraine, ukrainian, kyiv, russia, russian, kremlin, putin, zelensky, crimea, donbas", "choke": []},
     {"id": "taiwan", "name": "Taiwan Strait & South China Sea", "lat": 22, "lon": 119,
      "boxes": [(5, 28, 105, 125)], "geos": ["TW", "PH", "JP"],
      "gdelt": '(Taiwan OR "South China Sea" OR "Taiwan Strait" OR PLA)',
-     "terms": "taiwan taiwanese south china sea pla beijing china invade", "choke": []},
+     "terms": "taiwan, taiwanese, south china sea, pla, china invade, invade taiwan", "choke": []},
     {"id": "korea", "name": "Korean Peninsula", "lat": 38.5, "lon": 127.5,
      "boxes": [(33, 43, 124, 132)], "geos": ["KR", "JP"],
      "gdelt": '("North Korea" OR Pyongyang OR "Kim Jong Un")',
-     "terms": "north korea pyongyang kim jong", "choke": []},
+     "terms": "north korea, north korean, pyongyang, kim jong", "choke": []},
     {"id": "southasia", "name": "India & Pakistan", "lat": 31, "lon": 72,
      "boxes": [(23, 37, 66, 80)], "geos": ["IN", "PK"],
      "gdelt": '(Kashmir OR "India Pakistan" OR "Pakistan India" OR "Line of Control")',
-     "terms": "kashmir pakistan india pakistani line of control", "choke": []},
+     "terms": "kashmir, pakistan, pakistani, india pakistan, line of control", "choke": []},
     {"id": "caribbean", "name": "Venezuela & the Caribbean", "lat": 12, "lon": -68,
      "boxes": [(5, 27, -85, -58)], "geos": ["VE", "CO"],
      "gdelt": '(Venezuela OR Maduro OR Caracas OR Cuba)',
-     "terms": "venezuela venezuelan maduro caracas cuba cuban", "choke": ["Panama Canal"]},
+     "terms": "venezuela, venezuelan, maduro, caracas, cuba, cuban", "choke": ["Panama Canal"]},
 ]
 GDELT_CONFLICT = "(military OR strike OR missile OR attack OR troops OR drone OR warship OR invasion OR airstrike OR ceasefire)"
 # conflict words in the languages of the watched countries (Trends titles come in local scripts)
@@ -107,13 +107,30 @@ NOTABLE = {  # aircraft types that matter to analysts (weight 3), ICAO type code
 
 
 def matches(text, terms):
+    """terms = comma-separated words or phrases, matched as whole words."""
     low = " " + (text or "").lower() + " "
-    return any(re.search(r"(?<![a-z])" + re.escape(w) + r"(?![a-z])", low) for w in terms.split())
+    return any(re.search(r"(?<![a-z])" + re.escape(w.strip()) + r"(?![a-z])", low) for w in terms.split(",") if w.strip())
+
+
+CJK = re.compile(r"[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]")
 
 
 def is_conflict(text):
+    """Latin words: whole words. Chinese/Japanese/Korean: substring (no spaces). Other scripts (Hebrew, Arabic,
+    Persian, Cyrillic, Devanagari): whole tokens, or a token starting with the word when the word is 4+ letters
+    (so Persian "مین" (mine) no longer matches inside the name "امین")."""
     low = (text or "").lower()
-    return any((w in low) if not w.isascii() else re.search(r"(?<![a-z])" + re.escape(w) + r"(?![a-z])", low) for w in CONFLICT_WORDS)
+    toks = re.findall(r"[^\s\-\u2013\u2014.,:;!?()\"'\u00ab\u00bb]+", low)
+    for w in CONFLICT_WORDS:
+        if w.isascii():
+            if re.search(r"(?<![a-z])" + re.escape(w) + r"(?![a-z])", low):
+                return True
+        elif CJK.search(w):
+            if w in low:
+                return True
+        elif any(t == w or (len(w) >= 4 and t.startswith(w)) for t in toks):
+            return True
+    return False
 
 
 def remember(key, value, keep_days=35):
@@ -162,9 +179,11 @@ news = prev.get("news_raw") or {}
 if SLOW:
     for h in HOTSPOTS:
         q = h["gdelt"] + " " + GDELT_CONFLICT + " sourcelang:english"
+        if time.time() - NOW > 170:                         # keep the job quick: the rest keep last hour's values
+            break
         d = get("https://api.gdeltproject.org/api/v2/doc/doc?" + urllib.parse.urlencode(
-            {"query": q, "mode": "timelinevolraw", "format": "json", "timespan": "30d"}), 45, tries=2, wait=7)
-        time.sleep(5.5)                                   # GDELT asks for one request every 5 s
+            {"query": q, "mode": "timelinevolraw", "format": "json", "timespan": "30d"}), 45, tries=2, wait=20)
+        time.sleep(10)                                    # GDELT asks for one request every 5 s; leave room
         try:
             pts = [p["value"] for p in d["timeline"][0]["data"]]
         except Exception:
@@ -274,8 +293,11 @@ choke = prev.get("chokepoints") or {}
 if SLOW:
     base = "https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Chokepoints_Data/FeatureServer/0/query?"
     for nm in ("Strait of Hormuz", "Bab el-Mandeb Strait", "Suez Canal", "Panama Canal"):
-        d = get(base + urllib.parse.urlencode({"where": "portname='%s'" % nm, "outFields": "date,n_total,n_tanker",
-                                               "orderByFields": "date DESC", "resultRecordCount": 120, "f": "json"}), 60)
+        d = get(base + urllib.parse.urlencode({"where": "portname='%s'" % nm, "outFields": "date,portid,portname,n_total,n_tanker",
+                                               "orderByFields": "date DESC", "resultRecordCount": 100, "f": "json"}), 60)
+        if not d or "features" not in d:
+            print("  WR PortWatch", nm, str(d)[:200])
+            continue
         try:
             rows = sorted(({"d": time.strftime("%Y-%m-%d", time.gmtime(f["attributes"]["date"] / 1000)),
                             "n": f["attributes"]["n_total"], "tk": f["attributes"].get("n_tanker")} for f in d["features"]),
@@ -346,7 +368,8 @@ for h in HOTSPOTS:
         remember(i + ":" + k, c[k])
 
 hot = []
-maxv = {k: max([cur[i].get(k, 0) for i in cur] + [1]) for k in SIG}
+FLOOR = {"flights": 12, "news": 300, "trends": 4, "radar": 4, "markets": 15, "ships": 60}   # "a lot" for each signal
+maxv = {k: max([cur[i].get(k, 0) for i in cur] + [FLOOR[k]]) for k in SIG}
 for h in HOTSPOTS:
     i, c = h["id"], cur[h["id"]]
     parts, why, calib = {}, [], []
