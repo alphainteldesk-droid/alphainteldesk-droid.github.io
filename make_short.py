@@ -103,6 +103,18 @@ async def rect(pg, sel):
                              "return [b.x+b.width/2,b.y+b.height/2,b.y+window.scrollY,b.height]}", sel)
 
 
+CTA_HTML = """<!doctype html><meta charset=utf-8><style>
+  body{margin:0;height:100vh;background:radial-gradient(circle at 50% 38%,#12324a 0,#0b1420 60%);color:#e8eef5;
+       display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Space Grotesk",sans-serif;text-align:center}
+  h1{font-size:34px;margin:0 0 6px} p{font-size:18px;color:#95a8bc;margin:0 0 8px}
+  .u{font:800 24px "JetBrains Mono",monospace;color:#3fdbe6;margin:4px 0 26px}
+  .b{width:250px;padding:14px 0;border-radius:40px;font-weight:700;font-size:24px;margin:7px 0}
+  .l{border:3px solid #e8eef5;background:#1e2c3e} .s{background:#cc0000;border:3px solid #ff2020;color:#fff;letter-spacing:.04em}
+  .h{font-size:17px;color:#95a8bc;margin-top:12px}
+  </style><h1>Like what you see?</h1><p>Want more intel like this?</p><div class=u>alphainteldesk.com</div>
+  <div class="b l">Hit LIKE</div><div class="b s">SUBSCRIBE</div><div class=h>@alphainteldesk</div>"""
+
+
 async def main():
     shutil.rmtree(FR, ignore_errors=True); os.makedirs(FR)
     srv = subprocess.Popen(["python3", "-m", "http.server", str(PORT)], cwd=SITE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -199,6 +211,14 @@ async def main():
         await go("_short_end.html")
         await shoot(2.2, lambda t, s: [-99, -99, 1, 0, 0, 0, "", 0, 0, None])
         os.remove(end)
+
+        # ---- 5. like + subscribe card (James, Nov 24, 2026: at the end of every YouTube video)
+        swooshes.append(n[0] / FPS)
+        cta = os.path.join(SITE, "_short_cta.html")
+        open(cta, "w").write(CTA_HTML)
+        await go("_short_cta.html")
+        await shoot(2.6, lambda t, s: [-99, -99, 1, 0, 0, 0, "", 0, 0, None])
+        os.remove(cta)
         await b.close()
     srv.terminate()
     total = n[0] / FPS
