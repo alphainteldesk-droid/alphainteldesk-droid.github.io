@@ -1,0 +1,18 @@
+name: Huang probe (throwaway)
+on:
+  push:
+    branches: [huang-probe]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 huang_probe.py
+        env:
+          TRADERS_EXCLUDE: ${{ secrets.TRADERS_EXCLUDE }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: huang
+          path: /tmp/huang_out.json
