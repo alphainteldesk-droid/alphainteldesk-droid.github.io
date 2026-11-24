@@ -288,6 +288,36 @@ def gaps(matches, alpha_fresh):
     return three + keep
 
 
+def history_dates():
+    """Anniversaries and past black swans from warroom_config.json (the same dates the War Room scores), placed
+    on their next date in the calendar window as all-day HISTORY events."""
+    try:
+        cfg = json.load(open("warroom_config.json"))
+    except Exception:
+        return []
+    NAMES = {"gulf": "Iran & the Gulf", "levant": "Israel, Gaza & Lebanon", "redsea": "Red Sea & Yemen", "ukraine": "Ukraine & Russia",
+             "taiwan": "Taiwan Strait", "korea": "Korean Peninsula", "southasia": "India & Pakistan", "caribbean": "Venezuela & the Caribbean"}
+    rows = [(x["md"], "Anniversary: " + x["what"], hid, "Anniversary in the War Room's %s region. Dates like this can bring "
+             "protests, speeches, drills or attacks; the War Room adds a little heat to the region around it." % NAMES.get(hid, hid), 1)
+            for hid, xs in (cfg.get("dates") or {}).items() for x in xs]
+    rows += [(x["md"], "Black swan on this date, %s: %s" % (x["year"], x["what"]), x.get("hotspot"),
+              "A past market or world shock on this date. History doesn't repeat on schedule, but traders remember."
+              + (" Counts toward the War Room's %s score." % NAMES.get(x["hotspot"], x["hotspot"]) if x.get("hotspot") else ""), 2)
+             for x in cfg.get("black_swans") or []]
+    out = []
+    for md, name, hid, note, imp in rows:
+        mo, dd = map(int, md.split("-"))
+        for y in (n.year, n.year + 1):
+            try:
+                when = datetime(y, mo, dd, 5, tzinfo=timezone.utc)          # midnight US Eastern
+            except ValueError:
+                continue
+            if n - timedelta(hours=19) <= when <= n + timedelta(days=45):
+                out.append({"date": when.strftime(f), "name": name, "source": "", "kind": "scheduled", "cat": "history",
+                            "note": note, "end": None, "allday": True, "est": False, "impact": imp, "links": None, "market": None})
+    return out
+
+
 def calendar(matches):
     """Scheduled catalysts (catalysts.json) + big non-sports markets resolving in the next 14 days."""
     try:
@@ -336,6 +366,7 @@ def calendar(matches):
                       "allday": bool(c.get("allday")), "est": bool(c.get("est")), "impact": int(c.get("impact", 1)),
                       "links": direct.get(c["date"] + "|" + c["name"]),
                       "market": None if direct.get(c["date"] + "|" + c["name"]) else (market_card(linked[0]) if linked else None)})
+    items += history_dates()                         # Nov 24 (James): every War Room date + black swan on the calendar
     res = []
     for m in pool:                                   # markets that resolve in the next 2 weeks, on 2+ sites
         try:

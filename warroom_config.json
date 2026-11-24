@@ -1,0 +1,381 @@
+{
+ "_help": "Edit to teach the War Room. hotspots.<id>.add_terms: extra comma-separated words or phrases that tie a story, search or market to the region. exclude: words that stop a match there (e.g. a sports team). oil: 0-1, how much oil prices speak for the region. ignore: words that never count anywhere. add_conflict_words: extra words that make a headline or search 'conflict'. weights: signal weights (default 1). floor: what counts as 'a lot' for a signal. new_hotspots: whole new regions (same fields as warroom.py). dates: regional anniversaries (md = MM-DD, window = days either side). black_swans: past market or world shocks; with a hotspot they nudge that region's score, without one they only show in 'This week in history'.",
+ "hotspots": {
+  "gulf": {
+   "add_terms": "",
+   "exclude": ""
+  },
+  "levant": {
+   "add_terms": "",
+   "exclude": ""
+  },
+  "redsea": {
+   "add_terms": "",
+   "exclude": ""
+  },
+  "ukraine": {
+   "add_terms": "",
+   "exclude": ""
+  },
+  "taiwan": {
+   "add_terms": "",
+   "exclude": ""
+  },
+  "korea": {
+   "add_terms": "",
+   "exclude": ""
+  },
+  "southasia": {
+   "add_terms": "",
+   "exclude": ""
+  },
+  "caribbean": {
+   "add_terms": "",
+   "exclude": ""
+  }
+ },
+ "ignore": "",
+ "add_conflict_words": [],
+ "weights": {},
+ "floor": {},
+ "new_hotspots": [],
+ "dates": {
+  "gulf": [
+   {
+    "md": "02-11",
+    "what": "Iranian Revolution anniversary (1979)",
+    "window": 3
+   },
+   {
+    "md": "11-04",
+    "what": "US embassy seizure anniversary rallies in Tehran (1979)",
+    "window": 2
+   },
+   {
+    "md": "01-03",
+    "what": "Soleimani killed by a US strike (2020)",
+    "window": 3
+   },
+   {
+    "md": "04-13",
+    "what": "Iran's first direct strike on Israel (2024)",
+    "window": 2
+   },
+   {
+    "md": "10-01",
+    "what": "Iran's second missile strike on Israel (2024)",
+    "window": 2
+   },
+   {
+    "md": "06-13",
+    "what": "Israel's strikes on Iran start the 12-day war (2025)",
+    "window": 3
+   },
+   {
+    "md": "06-22",
+    "what": "US strikes on Iran's nuclear sites (2025)",
+    "window": 3
+   }
+  ],
+  "levant": [
+   {
+    "md": "10-07",
+    "what": "Hamas attack on Israel (2023)",
+    "window": 3
+   },
+   {
+    "md": "05-15",
+    "what": "Nakba Day",
+    "window": 2
+   },
+   {
+    "md": "09-17",
+    "what": "Hezbollah pager blasts (2024)",
+    "window": 2
+   },
+   {
+    "md": "09-27",
+    "what": "Hezbollah leader Nasrallah killed (2024)",
+    "window": 2
+   }
+  ],
+  "redsea": [
+   {
+    "md": "11-19",
+    "what": "Houthis seize the Galaxy Leader ship (2023)",
+    "window": 2
+   },
+   {
+    "md": "01-12",
+    "what": "US and UK strikes on the Houthis begin (2024)",
+    "window": 2
+   },
+   {
+    "md": "09-21",
+    "what": "Houthis take Sanaa (2014)",
+    "window": 2
+   }
+  ],
+  "ukraine": [
+   {
+    "md": "02-24",
+    "what": "Russia's full-scale invasion (2022)",
+    "window": 3
+   },
+   {
+    "md": "08-24",
+    "what": "Ukraine Independence Day",
+    "window": 2
+   },
+   {
+    "md": "05-09",
+    "what": "Russia's Victory Day parade",
+    "window": 2
+   },
+   {
+    "md": "03-18",
+    "what": "Russia annexes Crimea (2014)",
+    "window": 2
+   },
+   {
+    "md": "08-06",
+    "what": "Ukraine's Kursk incursion (2024)",
+    "window": 2
+   }
+  ],
+  "taiwan": [
+   {
+    "md": "10-10",
+    "what": "Taiwan National Day",
+    "window": 3
+   },
+   {
+    "md": "10-01",
+    "what": "China's National Day",
+    "window": 2
+   },
+   {
+    "md": "08-01",
+    "what": "PLA founding day",
+    "window": 2
+   },
+   {
+    "md": "05-20",
+    "what": "Taiwan presidential inauguration anniversary",
+    "window": 3
+   },
+   {
+    "md": "08-04",
+    "what": "China's live-fire drills after Pelosi's visit (2022)",
+    "window": 2
+   }
+  ],
+  "korea": [
+   {
+    "md": "09-09",
+    "what": "North Korea founding day",
+    "window": 2
+   },
+   {
+    "md": "10-10",
+    "what": "Workers' Party founding day",
+    "window": 2
+   },
+   {
+    "md": "04-15",
+    "what": "Kim Il Sung's birthday",
+    "window": 3
+   },
+   {
+    "md": "02-08",
+    "what": "Korean People's Army founding day",
+    "window": 2
+   },
+   {
+    "md": "07-27",
+    "what": "Korean War armistice day",
+    "window": 2
+   },
+   {
+    "md": "06-25",
+    "what": "Korean War began (1950)",
+    "window": 2
+   }
+  ],
+  "southasia": [
+   {
+    "md": "02-14",
+    "what": "Pulwama attack (2019)",
+    "window": 2
+   },
+   {
+    "md": "02-26",
+    "what": "Balakot airstrike (2019)",
+    "window": 2
+   },
+   {
+    "md": "08-05",
+    "what": "Kashmir's special status revoked (2019)",
+    "window": 2
+   },
+   {
+    "md": "04-22",
+    "what": "Pahalgam attack (2025)",
+    "window": 2
+   },
+   {
+    "md": "05-07",
+    "what": "Operation Sindoor strikes on Pakistan (2025)",
+    "window": 3
+   },
+   {
+    "md": "11-26",
+    "what": "Mumbai attacks (2008)",
+    "window": 3
+   }
+  ],
+  "caribbean": [
+   {
+    "md": "07-28",
+    "what": "Disputed Venezuelan election (2024)",
+    "window": 2
+   },
+   {
+    "md": "01-10",
+    "what": "Maduro's third-term inauguration (2025)",
+    "window": 2
+   },
+   {
+    "md": "09-02",
+    "what": "First US strike on an alleged drug boat from Venezuela (2025)",
+    "window": 2
+   }
+  ]
+ },
+ "black_swans": [
+  {
+   "md": "10-19",
+   "year": 1987,
+   "what": "Black Monday: the Dow falls 22.6% in one day"
+  },
+  {
+   "md": "09-11",
+   "year": 2001,
+   "what": "9/11 attacks; US markets close for four days"
+  },
+  {
+   "md": "09-15",
+   "year": 2008,
+   "what": "Lehman Brothers collapses"
+  },
+  {
+   "md": "03-16",
+   "year": 2020,
+   "what": "Covid crash: the Dow falls about 13% in a day"
+  },
+  {
+   "md": "04-20",
+   "year": 2020,
+   "what": "US oil futures go below zero"
+  },
+  {
+   "md": "05-06",
+   "year": 2010,
+   "what": "Flash Crash"
+  },
+  {
+   "md": "06-24",
+   "year": 2016,
+   "what": "Brexit vote result shocks markets"
+  },
+  {
+   "md": "01-15",
+   "year": 2015,
+   "what": "Switzerland drops the franc's cap"
+  },
+  {
+   "md": "03-10",
+   "year": 2023,
+   "what": "Silicon Valley Bank fails"
+  },
+  {
+   "md": "08-05",
+   "year": 2024,
+   "what": "Yen carry-trade crash: Japan's Nikkei falls 12%"
+  },
+  {
+   "md": "04-03",
+   "year": 2025,
+   "what": "\"Liberation Day\" tariff sell-off"
+  },
+  {
+   "md": "08-17",
+   "year": 1998,
+   "what": "Russia defaults; the LTCM crisis follows"
+  },
+  {
+   "md": "08-24",
+   "year": 2015,
+   "what": "China devaluation sell-off"
+  },
+  {
+   "md": "01-27",
+   "year": 2025,
+   "what": "DeepSeek sell-off: Nvidia falls 17%"
+  },
+  {
+   "md": "11-26",
+   "year": 2021,
+   "what": "Omicron variant sell-off"
+  },
+  {
+   "md": "03-11",
+   "year": 2011,
+   "what": "Japan earthquake and Fukushima"
+  },
+  {
+   "md": "11-13",
+   "year": 2015,
+   "what": "Paris attacks"
+  },
+  {
+   "md": "12-07",
+   "year": 1941,
+   "what": "Pearl Harbor"
+  },
+  {
+   "md": "02-24",
+   "year": 2022,
+   "what": "Russia invades Ukraine"
+  },
+  {
+   "md": "10-07",
+   "year": 2023,
+   "what": "Hamas attack on Israel"
+  },
+  {
+   "md": "08-02",
+   "year": 1990,
+   "what": "Iraq invades Kuwait; oil spikes",
+   "hotspot": "gulf"
+  },
+  {
+   "md": "10-17",
+   "year": 1973,
+   "what": "Arab oil embargo begins",
+   "hotspot": "gulf"
+  },
+  {
+   "md": "09-14",
+   "year": 2019,
+   "what": "Drone attack on Saudi Abqaiq halves Saudi oil output",
+   "hotspot": "gulf"
+  },
+  {
+   "md": "10-06",
+   "year": 1973,
+   "what": "Yom Kippur War begins",
+   "hotspot": "levant"
+  }
+ ]
+}

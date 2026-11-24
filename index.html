@@ -1183,7 +1183,7 @@
       <button data-f="econ" style="--c:#3fdbe6">ECONOMY</button><button data-f="fed" style="--c:#ffb347">FED</button>
       <button data-f="earnings" style="--c:#b18cff">EARNINGS</button><button data-f="politics" style="--c:#ff7a7a">POLITICS</button>
       <button data-f="world" style="--c:#3ee88a">WORLD</button><button data-f="markets" style="--c:#5aa9ff">MARKET HOURS</button>
-      <button data-f="fyi" style="--c:#ff9ad5">WORTH KNOWING</button><button data-f="resolves" style="--c:#e8eef5">SETTLING</button>
+      <button data-f="fyi" style="--c:#ff9ad5">WORTH KNOWING</button><button data-f="resolves" style="--c:#e8eef5">SETTLING</button><button data-f="history" style="--c:#d4b06a">HISTORY</button>
     </div>
     <details class="cal-sub">   <!-- Nov 21 (James): subscribe to the calendar (catalyst-calendar.ics, built by make_ics.py) -->
       <summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg>ADD TO MY CALENDAR</summary>
@@ -1793,7 +1793,7 @@
   var shortD = function (d) { return lng(d).replace(/^\w+, /, ''); };
   var CATS = { econ: ['ECONOMY', '#3fdbe6'], fed: ['FED', '#ffb347'], earnings: ['EARNINGS', '#b18cff'],
     politics: ['POLITICS', '#ff7a7a'], world: ['WORLD', '#3ee88a'], markets: ['MARKET HOURS', '#5aa9ff'],
-    fyi: ['WORTH KNOWING', '#ff9ad5'], resolves: ['SETTLING', '#e8eef5'] };
+    fyi: ['WORTH KNOWING', '#ff9ad5'], resolves: ['SETTLING', '#e8eef5'], history: ['HISTORY', '#d4b06a'] };
   var items = [], filt = 'all', sel = -1, open = {}, nextI = -1, first = true;
   var grid = document.getElementById('cal-g'), det = document.getElementById('cal-x'), nx = document.getElementById('cal-next');
 

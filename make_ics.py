@@ -14,7 +14,7 @@ SITE = "https://alphainteldesk.com"
 CAL = SITE + "/?utm_source=calendar&utm_medium=ics#calendar"   # Nov 24: tagged so calendar clicks show in analytics
 OUT = "catalyst-calendar.ics"
 CATS = {"econ": "Economy", "fed": "Fed", "earnings": "Earnings", "politics": "Politics", "world": "World",
-        "markets": "Market hours", "fyi": "Worth knowing"}
+        "markets": "Market hours", "fyi": "Worth knowing", "history": "History"}
 F = "%Y-%m-%dT%H:%M:%SZ"
 
 

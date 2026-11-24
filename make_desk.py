@@ -15,7 +15,7 @@ def get(url, raw=False):
 
 # name shown on the desk -> Yahoo Finance symbol
 QUOTES = [("dow", "^DJI"), ("sp500", "^GSPC"), ("nasdaq", "^IXIC"), ("vix", "^VIX"), ("brent", "BZ=F"),
-          ("wti", "CL=F"), ("dxy", "DX-Y.NYB"), ("tnx", "^TNX")]
+          ("wti", "CL=F"), ("dxy", "DX-Y.NYB"), ("tnx", "^TNX"), ("gold", "GC=F")]
 
 def quote(sym):
     s = urllib.request.quote(sym)
