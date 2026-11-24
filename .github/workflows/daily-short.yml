@@ -5,7 +5,7 @@ name: Daily Short
 # James uploads it to YouTube by hand (YouTube keeps API uploads from unaudited apps private).
 on:
   schedule:
-    - cron: "43 14 * * *"         # 9:43 AM ET in winter (EST). When clocks go forward in March: change to "43 13 * * *"
+    - cron: "13 10 * * *"         # 5:13 AM ET in winter (EST), so it is ready for the 7:30 AM delivery to James even when GitHub starts it ~2 h late. When clocks go forward in March: change to "13 9 * * *"
   workflow_dispatch:
     inputs:
       telegram:
