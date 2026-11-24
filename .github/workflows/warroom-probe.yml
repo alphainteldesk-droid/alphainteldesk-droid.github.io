@@ -8,4 +8,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - run: python3 wr_probe.py
+      - run: python3 warroom.py --all && python3 -c "import json;d=json.load(open('warroom.json'));print(json.dumps({k:d[k] for k in ('hotspots','chokepoints','hormuz_markets','usdc')},ensure_ascii=False)[:20000])"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: warroom
+          path: warroom.json
