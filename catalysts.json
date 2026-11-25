@@ -2,306 +2,6 @@
  "about": "Hand-kept list of dated events for the 2-week Catalyst Calendar. Times in UTC (8:30 AM ET = 13:30 UTC, 2:00 PM ET = 19:00 UTC in winter). allday = no set time. end = last day of a multi-day event. est = date expected, not yet confirmed. impact: 1 low, 2 medium, 3 high. cat: econ, fed, earnings, politics, world, markets, fyi. find = word-sets that pick each site's own market for the event (a title must hold every word of one set; the market settling closest to the event wins). not = words that rule a market out. keys = words that link an event to prediction markets (empty = no market link). Sources: BLS, BEA, Census, federalreserve.gov, company IR pages, UNFCCC, APEC, OPEC, state election offices. Add new events monthly.",
  "events": [
   {
-   "date": "2026-11-09T07:00:00Z",
-   "allday": true,
-   "end": "2026-11-20",
-   "cat": "world",
-   "name": "COP31 climate summit, Antalya",
-   "note": "UN climate talks in Turkey, Nov 9-20. World leaders attend Nov 11-12.",
-   "keys": [
-    "climate",
-    "cop31"
-   ],
-   "impact": 2,
-   "find": [
-    [
-     "cop31"
-    ],
-    [
-     "cop 31"
-    ]
-   ]
-  },
-  {
-   "date": "2026-11-09T15:00:00Z",
-   "allday": true,
-   "cat": "politics",
-   "name": "Congress returns for the lame-duck session",
-   "note": "First week back after the midterms. Top job: funding the government before the Dec 11 deadline.",
-   "keys": [
-    "shutdown",
-    "government funding"
-   ],
-   "impact": 2,
-   "find": [
-    [
-     "government shutdown"
-    ]
-   ]
-  },
-  {
-   "date": "2026-11-10T13:30:00Z",
-   "cat": "econ",
-   "name": "CPI inflation report (Oct)",
-   "source": "BLS",
-   "note": "The headline inflation number. A surprise either way moves Fed and inflation markets.",
-   "keys": [
-    "cpi",
-    "inflation"
-   ],
-   "impact": 3,
-   "find": [
-    [
-     "inflation us",
-     "monthly",
-     "oct"
-    ],
-    [
-     "cpi in",
-     "oct"
-    ],
-    [
-     "cpi",
-     "oct"
-    ],
-    [
-     "inflation",
-     "oct"
-    ]
-   ],
-   "not": [
-    "core",
-    "china",
-    "uk ",
-    "yoy",
-    "annual",
-    "canada"
-   ]
-  },
-  {
-   "date": "2026-11-11T14:00:00Z",
-   "allday": true,
-   "cat": "markets",
-   "name": "Veterans Day: bond market closed",
-   "note": "Stocks trade, but the bond market and banks are closed. Expect thinner trading.",
-   "keys": [],
-   "impact": 1
-  },
-  {
-   "date": "2026-11-13T13:30:00Z",
-   "cat": "econ",
-   "name": "Producer prices, PPI (Oct)",
-   "source": "BLS",
-   "note": "Wholesale inflation, three days after CPI. Feeds the Fed's preferred measure.",
-   "keys": [
-    "ppi"
-   ],
-   "impact": 2,
-   "find": [
-    [
-     "ppi mom",
-     "oct"
-    ],
-    [
-     "ppi",
-     "oct"
-    ],
-    [
-     "producer price",
-     "oct"
-    ]
-   ],
-   "not": [
-    "china",
-    "core"
-   ]
-  },
-  {
-   "date": "2026-11-17T11:00:00Z",
-   "cat": "earnings",
-   "name": "Home Depot earnings",
-   "note": "Before the open. A read on housing and the US consumer.",
-   "keys": [
-    "home depot"
-   ],
-   "impact": 2,
-   "find": [
-    [
-     "home depot"
-    ]
-   ]
-  },
-  {
-   "date": "2026-11-17T13:30:00Z",
-   "cat": "econ",
-   "name": "Retail sales (Oct)",
-   "source": "Census",
-   "note": "How much Americans spent last month. Big for recession and consumer markets.",
-   "keys": [
-    "retail sales"
-   ],
-   "impact": 2,
-   "find": [
-    [
-     "us retail sales",
-     "oct"
-    ],
-    [
-     "retail sales",
-     "oct"
-    ]
-   ],
-   "not": [
-    "uk ",
-    "china",
-    "canada"
-   ]
-  },
-  {
-   "date": "2026-11-17T21:20:00Z",
-   "cat": "earnings",
-   "name": "Nvidia earnings",
-   "note": "After the close (results ~4:20 PM ET, call 5 PM). The AI trade's biggest event of the quarter.",
-   "keys": [
-    "nvidia",
-    "nvda"
-   ],
-   "impact": 3,
-   "find": [
-    [
-     "nvidia",
-     "earnings"
-    ],
-    [
-     "nvidia",
-     "revenue"
-    ],
-    [
-     "nvidia",
-     "eps"
-    ],
-    [
-     "nvda",
-     "earnings"
-    ]
-   ]
-  },
-  {
-   "date": "2026-11-17T23:00:00Z",
-   "allday": true,
-   "cat": "fyi",
-   "name": "Leonid meteor shower peaks",
-   "note": "Night of Nov 17-18. Nothing to trade, but a nice break from the screens.",
-   "keys": [],
-   "impact": 1
-  },
-  {
-   "date": "2026-11-18T08:00:00Z",
-   "allday": true,
-   "end": "2026-11-19",
-   "cat": "world",
-   "name": "APEC leaders' summit, Shenzhen",
-   "note": "Pacific leaders meet in China, Nov 18-19. Watch for US-China trade and tariff headlines.",
-   "keys": [
-    "apec",
-    "xi jinping",
-    "trump and xi",
-    "trump-xi"
-   ],
-   "impact": 2,
-   "find": [
-    [
-     "apec"
-    ],
-    [
-     "trump",
-     "xi",
-     "meet"
-    ]
-   ]
-  },
-  {
-   "date": "2026-11-18T19:00:00Z",
-   "cat": "fed",
-   "name": "Fed minutes (Oct meeting)",
-   "source": "Federal Reserve",
-   "note": "Notes from the last Fed meeting. Hints about the December rate decision.",
-   "keys": [
-    "fed ",
-    "fed?",
-    "rate cut",
-    "interest rate",
-    "fomc"
-   ],
-   "impact": 2,
-   "find": [
-    [
-     "fed decision",
-     "dec"
-    ],
-    [
-     "fed",
-     "rate",
-     "hike"
-    ],
-    [
-     "fed",
-     "dec"
-    ],
-    [
-     "fomc"
-    ]
-   ]
-  },
-  {
-   "date": "2026-11-19T12:00:00Z",
-   "allday": true,
-   "est": true,
-   "cat": "earnings",
-   "name": "Walmart earnings",
-   "note": "Expected date, not yet confirmed. The biggest read on the US shopper before the holidays.",
-   "keys": [
-    "walmart"
-   ],
-   "impact": 2,
-   "find": [
-    [
-     "walmart",
-     "earnings"
-    ],
-    [
-     "walmart",
-     "revenue"
-    ]
-   ]
-  },
-  {
-   "date": "2026-11-20T15:00:00Z",
-   "cat": "econ",
-   "name": "Consumer sentiment, final (Nov)",
-   "source": "Univ. of Michigan",
-   "note": "How confident households feel. It has been near record lows all year.",
-   "keys": [
-    "consumer sentiment"
-   ],
-   "impact": 1,
-   "find": [
-    [
-     "consumer sentiment",
-     "nov"
-    ]
-   ]
-  },
-  {
-   "date": "2026-11-20T20:00:00Z",
-   "allday": true,
-   "cat": "markets",
-   "name": "Monthly options expiration",
-   "note": "Third Friday. Stock moves can get jumpy into the close.",
-   "keys": [],
-   "impact": 1
-  },
-  {
    "date": "2026-11-24T14:53:00Z",
    "allday": true,
    "cat": "fyi",
@@ -365,6 +65,69 @@
    ]
   },
   {
+   "date": "2026-11-25T13:30:00Z",
+   "cat": "econ",
+   "name": "Durable goods orders (Oct)",
+   "source": "Census",
+   "note": "Factory orders for long-lasting goods; a read on business investment.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "durable goods",
+     "oct"
+    ]
+   ],
+   "not": [
+    "china",
+    "uk "
+   ]
+  },
+  {
+   "date": "2026-11-25T13:30:00Z",
+   "cat": "econ",
+   "name": "Weekly jobless claims (week to Nov 21)",
+   "source": "Department of Labor",
+   "note": "Moved to Wednesday for Thanksgiving. Kalshi lists a market on the number.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "jobless claims",
+     "nov"
+    ],
+    [
+     "initial claims",
+     "nov"
+    ]
+   ],
+   "not": [
+    "continuing",
+    "canada",
+    "uk "
+   ]
+  },
+  {
+   "date": "2026-11-25T15:00:00Z",
+   "cat": "econ",
+   "name": "New home sales (Oct)",
+   "source": "Census",
+   "note": "Sales of newly built homes, 10 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "new home sales",
+     "oct"
+    ]
+   ],
+   "not": [
+    "canada",
+    "uk ",
+    "china"
+   ]
+  },
+  {
    "date": "2026-11-25T19:00:00Z",
    "cat": "fed",
    "name": "Fed Beige Book",
@@ -418,7 +181,7 @@
    "date": "2026-11-29T12:00:00Z",
    "allday": true,
    "cat": "world",
-   "name": "OPEC+ monthly meeting",
+   "name": "OPEC+ monthly meeting (8-country group)",
    "note": "Saudi Arabia, Russia and five others decide January oil output. Moves oil and gas-price markets.",
    "keys": [
     "opec",
@@ -435,6 +198,91 @@
    "note": "Small runoffs only: Georgia House District 151 and a Savannah-Chatham school board seat. No statewide or congressional race.",
    "keys": [],
    "impact": 1
+  },
+  {
+   "date": "2026-12-01T15:00:00Z",
+   "cat": "econ",
+   "name": "ISM Manufacturing PMI (Nov)",
+   "source": "ISM",
+   "note": "Factory survey, 10 AM ET. Above 50 means growth.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "ism manufacturing",
+     "nov"
+    ],
+    [
+     "manufacturing pmi",
+     "nov"
+    ]
+   ],
+   "not": [
+    "china",
+    "euro",
+    "uk ",
+    "caixin",
+    "japan"
+   ]
+  },
+  {
+   "date": "2026-12-01T15:00:00Z",
+   "cat": "econ",
+   "name": "Job openings, JOLTS (Oct)",
+   "source": "BLS",
+   "note": "Job openings and quits, 10 AM ET. Watched for cooling in the labour market.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "job openings",
+     "oct"
+    ],
+    [
+     "jolts",
+     "oct"
+    ]
+   ],
+   "not": [
+    "canada",
+    "uk "
+   ]
+  },
+  {
+   "date": "2026-12-01T21:05:00Z",
+   "cat": "earnings",
+   "name": "CrowdStrike and Marvell earnings",
+   "note": "After the close. Marvell's date is expected, not yet confirmed; CrowdStrike's is confirmed.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "crowdstrike",
+     "earnings"
+    ],
+    [
+     "marvell",
+     "earnings"
+    ]
+   ]
+  },
+  {
+   "date": "2026-12-02T13:15:00Z",
+   "cat": "econ",
+   "name": "ADP private payrolls (Nov)",
+   "source": "ADP",
+   "note": "ADP's private-sector jobs count, 8:15 AM ET, two days before the official jobs report.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "adp",
+     "nov"
+    ]
+   ],
+   "not": [
+    "canada"
+   ]
   },
   {
    "date": "2026-12-02T14:00:00Z",
@@ -462,6 +310,49 @@
    ]
   },
   {
+   "date": "2026-12-02T21:05:00Z",
+   "est": true,
+   "cat": "earnings",
+   "name": "Salesforce earnings",
+   "note": "After the close. Date expected, not yet confirmed by the company.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "salesforce",
+     "earnings"
+    ],
+    [
+     "salesforce",
+     "revenue"
+    ]
+   ]
+  },
+  {
+   "date": "2026-12-03T13:30:00Z",
+   "cat": "econ",
+   "name": "Weekly jobless claims (week to Nov 28)",
+   "source": "Department of Labor",
+   "note": "First-time unemployment claims, 8:30 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "jobless claims",
+     "nov"
+    ],
+    [
+     "initial claims",
+     "nov"
+    ]
+   ],
+   "not": [
+    "continuing",
+    "canada",
+    "uk "
+   ]
+  },
+  {
    "date": "2026-12-03T14:00:00Z",
    "allday": true,
    "est": true,
@@ -482,6 +373,32 @@
    ]
   },
   {
+   "date": "2026-12-03T15:00:00Z",
+   "cat": "econ",
+   "name": "ISM Services PMI (Nov)",
+   "source": "ISM",
+   "note": "Survey of the service sector, most of the US economy. 10 AM ET.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "ism services",
+     "nov"
+    ],
+    [
+     "services pmi",
+     "nov"
+    ]
+   ],
+   "not": [
+    "china",
+    "euro",
+    "uk ",
+    "caixin",
+    "japan"
+   ]
+  },
+  {
    "date": "2026-12-04T13:30:00Z",
    "cat": "econ",
    "name": "Jobs report (Nov)",
@@ -499,6 +416,10 @@
      "nov"
     ],
     [
+     "jobs added",
+     "nov"
+    ],
+    [
      "payroll",
      "nov"
     ],
@@ -506,6 +427,39 @@
      "unemployment",
      "nov"
     ]
+   ],
+   "not": [
+    "canada",
+    "uk ",
+    "jobless",
+    "claims",
+    "lost to ai",
+    "china",
+    "euro"
+   ]
+  },
+  {
+   "date": "2026-12-04T15:00:00Z",
+   "cat": "econ",
+   "name": "Consumer sentiment, preliminary (Dec)",
+   "source": "University of Michigan",
+   "note": "University of Michigan survey, 10 AM ET. Includes inflation expectations.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "consumer sentiment",
+     "dec"
+    ],
+    [
+     "michigan",
+     "dec"
+    ]
+   ],
+   "not": [
+    "conference board",
+    "china",
+    "canada"
    ]
   },
   {
@@ -521,6 +475,51 @@
     [
      "golden globe"
     ]
+   ]
+  },
+  {
+   "date": "2026-12-08T13:30:00Z",
+   "cat": "econ",
+   "name": "Trade balance (Oct)",
+   "source": "BEA / Census",
+   "note": "US imports and exports; moves with tariffs.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "trade deficit",
+     "oct"
+    ],
+    [
+     "trade balance",
+     "oct"
+    ]
+   ],
+   "not": [
+    "china",
+    "uk ",
+    "canada",
+    "japan",
+    "euro"
+   ]
+  },
+  {
+   "date": "2026-12-09T15:00:00Z",
+   "cat": "econ",
+   "name": "Existing home sales (Nov)",
+   "source": "NAR",
+   "note": "NAR's count of previously owned homes sold, 10 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "existing home sales",
+     "nov"
+    ]
+   ],
+   "not": [
+    "canada",
+    "uk "
    ]
   },
   {
@@ -553,6 +552,25 @@
     ],
     [
      "fomc"
+    ]
+   ]
+  },
+  {
+   "date": "2026-12-09T21:05:00Z",
+   "est": true,
+   "cat": "earnings",
+   "name": "Adobe earnings",
+   "note": "After the close. Date expected, not yet confirmed by the company.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "adobe",
+     "earnings"
+    ],
+    [
+     "adobe",
+     "revenue"
     ]
    ]
   },
@@ -613,6 +631,30 @@
    ]
   },
   {
+   "date": "2026-12-10T13:30:00Z",
+   "cat": "econ",
+   "name": "Weekly jobless claims (week to Dec 5)",
+   "source": "Department of Labor",
+   "note": "First-time unemployment claims, 8:30 AM ET, same time as CPI.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "jobless claims",
+     "dec"
+    ],
+    [
+     "initial claims",
+     "dec"
+    ]
+   ],
+   "not": [
+    "continuing",
+    "canada",
+    "uk "
+   ]
+  },
+  {
    "date": "2026-12-10T15:00:00Z",
    "allday": true,
    "cat": "politics",
@@ -629,6 +671,49 @@
     ],
     [
      "lutnick"
+    ]
+   ],
+   "est": true
+  },
+  {
+   "date": "2026-12-10T21:15:00Z",
+   "est": true,
+   "cat": "earnings",
+   "name": "Broadcom earnings",
+   "note": "After the close. Big AI-chip name. Date expected (sources say Dec 9 or 10), not yet confirmed.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "broadcom",
+     "earnings"
+    ],
+    [
+     "broadcom",
+     "revenue"
+    ],
+    [
+     "avgo",
+     "earnings"
+    ]
+   ]
+  },
+  {
+   "date": "2026-12-10T21:15:00Z",
+   "est": true,
+   "cat": "earnings",
+   "name": "Costco earnings",
+   "note": "After the close. Date expected, not yet confirmed by the company.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "costco",
+     "earnings"
+    ],
+    [
+     "costco",
+     "revenue"
     ]
    ]
   },
@@ -681,6 +766,29 @@
    ],
    "not": [
     "margin"
+   ]
+  },
+  {
+   "date": "2026-12-14T21:05:00Z",
+   "allday": true,
+   "cat": "earnings",
+   "name": "Oracle earnings",
+   "note": "After the close. AI cloud spending and data-centre plans in focus.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "oracle",
+     "earnings"
+    ],
+    [
+     "oracle",
+     "revenue"
+    ],
+    [
+     "orcl",
+     "earnings"
+    ]
    ]
   },
   {
@@ -739,6 +847,138 @@
    ]
   },
   {
+   "date": "2026-12-16T21:05:00Z",
+   "allday": true,
+   "est": true,
+   "cat": "earnings",
+   "name": "Micron earnings",
+   "note": "After the close. Memory prices and AI demand. Date expected (sources say Dec 16 or later), not yet confirmed.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "micron",
+     "earnings"
+    ],
+    [
+     "micron",
+     "revenue"
+    ]
+   ]
+  },
+  {
+   "date": "2026-12-17T09:00:00Z",
+   "allday": true,
+   "cat": "world",
+   "name": "EU leaders' summit, Dec 17-18 (European Council)",
+   "source": "European Council",
+   "note": "Two-day meeting of EU heads of government in Brussels (Dec 17-18).",
+   "keys": [],
+   "impact": 2
+  },
+  {
+   "date": "2026-12-17T12:00:00Z",
+   "cat": "world",
+   "name": "Bank of England rate decision",
+   "source": "Bank of England",
+   "note": "BoE interest-rate announcement and minutes, noon UK time.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "bank of england",
+     "dec"
+    ],
+    [
+     "boe",
+     "dec"
+    ]
+   ]
+  },
+  {
+   "date": "2026-12-17T13:15:00Z",
+   "cat": "world",
+   "name": "ECB rate decision",
+   "source": "ECB",
+   "note": "European Central Bank decision at 14:15 CET; press conference 30 minutes later.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "ecb",
+     "dec"
+    ],
+    [
+     "european central bank",
+     "dec"
+    ]
+   ]
+  },
+  {
+   "date": "2026-12-17T13:30:00Z",
+   "cat": "econ",
+   "name": "Housing starts (Nov)",
+   "source": "Census",
+   "note": "New residential construction and building permits, 8:30 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "housing starts",
+     "nov"
+    ]
+   ],
+   "not": [
+    "canada",
+    "uk ",
+    "china"
+   ]
+  },
+  {
+   "date": "2026-12-17T13:30:00Z",
+   "cat": "econ",
+   "name": "Weekly jobless claims (week to Dec 12)",
+   "source": "Department of Labor",
+   "note": "First-time unemployment claims, 8:30 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "jobless claims",
+     "dec"
+    ],
+    [
+     "initial claims",
+     "dec"
+    ]
+   ],
+   "not": [
+    "continuing",
+    "canada",
+    "uk "
+   ]
+  },
+  {
+   "date": "2026-12-18T03:00:00Z",
+   "allday": true,
+   "cat": "world",
+   "name": "Bank of Japan rate decision",
+   "source": "Bank of Japan",
+   "note": "End of the Dec 17-18 BoJ meeting; the decision usually comes around midday Tokyo time.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "bank of japan",
+     "dec"
+    ],
+    [
+     "boj",
+     "dec"
+    ]
+   ]
+  },
+  {
    "date": "2026-12-18T14:00:00Z",
    "allday": true,
    "cat": "fyi",
@@ -761,6 +1001,30 @@
    ]
   },
   {
+   "date": "2026-12-18T15:00:00Z",
+   "cat": "econ",
+   "name": "Consumer sentiment, final (Dec)",
+   "source": "University of Michigan",
+   "note": "University of Michigan survey, final reading, 10 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "consumer sentiment",
+     "dec"
+    ],
+    [
+     "michigan",
+     "dec"
+    ]
+   ],
+   "not": [
+    "conference board",
+    "china",
+    "canada"
+   ]
+  },
+  {
    "date": "2026-12-18T20:00:00Z",
    "allday": true,
    "cat": "markets",
@@ -768,6 +1032,14 @@
    "note": "Quarterly options and futures all expire at once. Often the busiest, jumpiest day of the quarter.",
    "keys": [],
    "impact": 2
+  },
+  {
+   "date": "2026-12-21T20:50:00Z",
+   "cat": "fyi",
+   "name": "Winter solstice",
+   "note": "Shortest day of the year in the Northern Hemisphere.",
+   "keys": [],
+   "impact": 1
   },
   {
    "date": "2026-12-23T13:30:00Z",
@@ -792,11 +1064,120 @@
    ]
   },
   {
+   "date": "2026-12-23T13:30:00Z",
+   "cat": "econ",
+   "name": "Durable goods orders (Nov)",
+   "source": "Census",
+   "note": "Factory orders for long-lasting goods, 8:30 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "durable goods",
+     "nov"
+    ]
+   ],
+   "not": [
+    "china",
+    "uk "
+   ]
+  },
+  {
+   "date": "2026-12-23T15:00:00Z",
+   "cat": "econ",
+   "name": "New home sales (Nov)",
+   "source": "Census",
+   "note": "Sales of newly built homes, 10 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "new home sales",
+     "nov"
+    ]
+   ],
+   "not": [
+    "canada",
+    "uk ",
+    "china"
+   ]
+  },
+  {
+   "date": "2026-12-24T12:00:00Z",
+   "allday": true,
+   "cat": "fyi",
+   "name": "Full Cold Moon",
+   "note": "Last full moon of 2026 (late Dec 23 in the Americas).",
+   "keys": [],
+   "impact": 1
+  },
+  {
+   "date": "2026-12-24T13:30:00Z",
+   "est": true,
+   "cat": "econ",
+   "name": "Weekly jobless claims (week to Dec 19)",
+   "source": "Department of Labor",
+   "note": "Expected on Thursday despite Christmas Eve; the Labor Department can move it in holiday weeks.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "jobless claims",
+     "dec"
+    ],
+    [
+     "initial claims",
+     "dec"
+    ]
+   ],
+   "not": [
+    "continuing",
+    "canada",
+    "uk "
+   ]
+  },
+  {
+   "date": "2026-12-24T18:00:00Z",
+   "allday": true,
+   "cat": "markets",
+   "name": "Christmas Eve: stocks close at 1 PM ET",
+   "source": "NYSE",
+   "note": "Shortened session.",
+   "keys": [],
+   "impact": 2
+  },
+  {
+   "date": "2026-12-25T14:00:00Z",
+   "allday": true,
+   "cat": "markets",
+   "name": "Christmas: US markets closed",
+   "source": "NYSE",
+   "note": "Stock and bond markets shut.",
+   "keys": [],
+   "impact": 2
+  },
+  {
+   "date": "2026-12-29T14:00:00Z",
+   "cat": "econ",
+   "name": "Case-Shiller home prices (Oct)",
+   "source": "S&P Dow Jones Indices",
+   "note": "S&P Cotality Case-Shiller index, 9 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "case-shiller"
+    ],
+    [
+     "case shiller"
+    ]
+   ]
+  },
+  {
    "date": "2026-12-29T15:00:00Z",
    "cat": "econ",
    "name": "Consumer confidence (Dec)",
-   "note": "Conference Board survey, 10 AM ET (last Tuesday of the month; holiday weeks can move it).",
-   "est": true,
+   "note": "Conference Board survey, 10 AM ET. A read on how households feel about jobs and spending.",
    "impact": 2,
    "keys": [
     "consumer confidence"
@@ -821,12 +1202,409 @@
    ]
   },
   {
+   "date": "2026-12-30T19:00:00Z",
+   "est": true,
+   "cat": "fed",
+   "name": "Fed minutes (Dec meeting)",
+   "source": "Federal Reserve",
+   "note": "Detailed notes from the Dec 8-9 meeting, 2 PM ET. Usual three-week gap; the Fed hasn't posted the date yet.",
+   "keys": [],
+   "impact": 2
+  },
+  {
+   "date": "2026-12-31T13:30:00Z",
+   "est": true,
+   "cat": "econ",
+   "name": "Weekly jobless claims (week to Dec 26)",
+   "source": "Department of Labor",
+   "note": "Expected Thursday, 8:30 AM ET; holiday weeks can shift it.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "jobless claims",
+     "dec"
+    ],
+    [
+     "initial claims",
+     "dec"
+    ]
+   ],
+   "not": [
+    "continuing",
+    "canada",
+    "uk "
+   ]
+  },
+  {
+   "date": "2026-12-31T23:59:00Z",
+   "allday": true,
+   "cat": "fyi",
+   "name": "New Year's Eve",
+   "note": "Last trading day of 2026; year-end price and 'by end of 2026' markets settle.",
+   "keys": [],
+   "impact": 1
+  },
+  {
+   "date": "2027-01-01T14:00:00Z",
+   "allday": true,
+   "cat": "markets",
+   "name": "New Year's Day: US markets closed",
+   "source": "NYSE",
+   "note": "Stock and bond markets shut.",
+   "keys": [],
+   "impact": 2
+  },
+  {
    "date": "2027-01-03T17:00:00Z",
    "allday": true,
    "cat": "politics",
    "name": "New Congress sworn in",
    "est": true,
    "note": "The 120th Congress, elected Nov 3, takes over. Jan 3 is a Sunday, so the first session could be set for another day.",
+   "keys": [],
+   "impact": 2
+  },
+  {
+   "date": "2027-01-04T15:00:00Z",
+   "est": true,
+   "cat": "econ",
+   "name": "ISM Manufacturing PMI (Dec)",
+   "source": "ISM",
+   "note": "Factory survey, 10 AM ET (first business day of the month).",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "ism manufacturing",
+     "dec"
+    ],
+    [
+     "manufacturing pmi",
+     "dec"
+    ]
+   ],
+   "not": [
+    "china",
+    "euro",
+    "uk ",
+    "caixin",
+    "japan"
+   ]
+  },
+  {
+   "date": "2027-01-05T15:00:00Z",
+   "cat": "econ",
+   "name": "Job openings, JOLTS (Nov)",
+   "source": "BLS",
+   "note": "Job openings and quits, 10 AM ET.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "job openings",
+     "nov"
+    ],
+    [
+     "jolts",
+     "nov"
+    ]
+   ],
+   "not": [
+    "canada",
+    "uk "
+   ]
+  },
+  {
+   "date": "2027-01-06T13:15:00Z",
+   "est": true,
+   "cat": "econ",
+   "name": "ADP private payrolls (Dec)",
+   "source": "ADP",
+   "note": "ADP's private-sector jobs count, 8:15 AM ET.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "adp",
+     "dec"
+    ]
+   ],
+   "not": [
+    "canada"
+   ]
+  },
+  {
+   "date": "2027-01-06T15:00:00Z",
+   "est": true,
+   "cat": "econ",
+   "name": "ISM Services PMI (Dec)",
+   "source": "ISM",
+   "note": "Service-sector survey, 10 AM ET (third business day of the month).",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "ism services",
+     "dec"
+    ],
+    [
+     "services pmi",
+     "dec"
+    ]
+   ],
+   "not": [
+    "china",
+    "euro",
+    "uk ",
+    "caixin",
+    "japan"
+   ]
+  },
+  {
+   "date": "2027-01-07T13:30:00Z",
+   "cat": "econ",
+   "name": "Trade balance (Nov)",
+   "source": "BEA / Census",
+   "note": "US imports and exports, 8:30 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "trade deficit",
+     "nov"
+    ],
+    [
+     "trade balance",
+     "nov"
+    ]
+   ],
+   "not": [
+    "china",
+    "uk ",
+    "canada",
+    "japan",
+    "euro"
+   ]
+  },
+  {
+   "date": "2027-01-07T13:30:00Z",
+   "cat": "econ",
+   "name": "Weekly jobless claims (week to Jan 2)",
+   "source": "Department of Labor",
+   "note": "First-time unemployment claims, 8:30 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "jobless claims",
+     "jan"
+    ],
+    [
+     "initial claims",
+     "jan"
+    ]
+   ],
+   "not": [
+    "continuing",
+    "canada",
+    "uk "
+   ]
+  },
+  {
+   "date": "2027-01-08T13:30:00Z",
+   "cat": "econ",
+   "name": "Jobs report (Dec)",
+   "source": "BLS",
+   "note": "Payrolls and unemployment rate. The biggest monthly data release.",
+   "keys": [
+    "unemployment",
+    "payroll"
+   ],
+   "impact": 3,
+   "find": [
+    [
+     "jobs numbers",
+     "dec"
+    ],
+    [
+     "jobs added",
+     "dec"
+    ],
+    [
+     "payroll",
+     "dec"
+    ],
+    [
+     "unemployment",
+     "dec"
+    ]
+   ],
+   "not": [
+    "canada",
+    "uk ",
+    "jobless",
+    "claims",
+    "lost to ai",
+    "china",
+    "euro"
+   ]
+  },
+  {
+   "date": "2027-01-10T20:00:00Z",
+   "allday": true,
+   "cat": "fyi",
+   "name": "Golden Globe Awards",
+   "source": "Golden Globes",
+   "note": "84th Golden Globes ceremony. Winner markets settle that night.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "golden globe",
+     "winner"
+    ],
+    [
+     "golden globes",
+     "winner"
+    ]
+   ]
+  },
+  {
+   "date": "2027-01-13T13:30:00Z",
+   "cat": "econ",
+   "name": "CPI inflation report (Dec)",
+   "source": "BLS",
+   "note": "Consumer prices, 8:30 AM ET. The key inflation number before the Jan 26-27 Fed meeting.",
+   "keys": [
+    "cpi",
+    "inflation"
+   ],
+   "impact": 3,
+   "find": [
+    [
+     "inflation us",
+     "monthly",
+     "dec"
+    ],
+    [
+     "cpi in",
+     "dec"
+    ],
+    [
+     "cpi",
+     "dec"
+    ],
+    [
+     "inflation",
+     "dec"
+    ]
+   ],
+   "not": [
+    "core",
+    "china",
+    "uk ",
+    "yoy",
+    "annual",
+    "canada"
+   ]
+  },
+  {
+   "date": "2027-01-13T19:00:00Z",
+   "est": true,
+   "cat": "fed",
+   "name": "Fed Beige Book",
+   "source": "Federal Reserve",
+   "note": "Fed's district-by-district survey of the economy, two weeks before the January meeting. Date expected; the Fed hasn't posted 2027 dates.",
+   "keys": [],
+   "impact": 2
+  },
+  {
+   "date": "2027-01-14T13:30:00Z",
+   "cat": "econ",
+   "name": "Producer prices, PPI (Dec)",
+   "source": "BLS",
+   "note": "Wholesale inflation, 8:30 AM ET.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "ppi mom",
+     "dec"
+    ],
+    [
+     "ppi",
+     "dec"
+    ],
+    [
+     "producer price",
+     "dec"
+    ]
+   ],
+   "not": [
+    "china",
+    "core"
+   ]
+  },
+  {
+   "date": "2027-01-14T15:00:00Z",
+   "cat": "econ",
+   "name": "Existing home sales (Dec)",
+   "source": "NAR",
+   "note": "NAR's count of previously owned homes sold, 10 AM ET.",
+   "keys": [],
+   "impact": 1,
+   "find": [
+    [
+     "existing home sales",
+     "dec"
+    ]
+   ],
+   "not": [
+    "canada",
+    "uk "
+   ]
+  },
+  {
+   "date": "2027-01-15T13:30:00Z",
+   "cat": "econ",
+   "name": "Retail sales (Dec)",
+   "source": "Census",
+   "note": "Holiday-season spending, 8:30 AM ET.",
+   "keys": [],
+   "impact": 2,
+   "find": [
+    [
+     "us retail sales",
+     "dec"
+    ],
+    [
+     "retail sales",
+     "dec"
+    ]
+   ],
+   "not": [
+    "uk ",
+    "china",
+    "canada"
+   ]
+  },
+  {
+   "date": "2027-01-15T21:00:00Z",
+   "allday": true,
+   "cat": "markets",
+   "name": "Monthly options expiration",
+   "note": "Third Friday of the month; can add volume and swings near the close.",
+   "keys": [],
+   "impact": 1
+  },
+  {
+   "date": "2027-01-18T14:00:00Z",
+   "allday": true,
+   "cat": "markets",
+   "name": "Martin Luther King Jr. Day: US markets closed",
+   "source": "NYSE",
+   "note": "Stock and bond markets shut.",
    "keys": [],
    "impact": 2
   },
