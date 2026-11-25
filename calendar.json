@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T00:54:55Z",
+ "updated": "2026-11-25T01:42:40Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "items": [
   {
@@ -34,17 +34,68 @@
      "price": 59.5,
      "url": "https://polymarket.com/event/core-pce-yoy-october-2026",
      "end": "2026-11-25T13:30:00Z",
-     "volume": 44609
+     "volume": 44619
     },
     "kalshi": {
      "title": "How much will core PCE increase in Oct 2026?",
      "outcome": "Above 0.2%",
-     "price": 80.0,
+     "price": 81.5,
      "url": "https://kalshi.com/markets/kxpcecore",
      "end": "2026-11-25T15:00:00Z",
-     "volume": 43677
+     "volume": 44117
     }
    },
+   "market": null
+  },
+  {
+   "date": "2026-11-25T13:30:00Z",
+   "name": "Durable goods orders (Oct)",
+   "source": "Census",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Factory orders for long-lasting goods; a read on business investment.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-11-25T13:30:00Z",
+   "name": "Weekly jobless claims (week to Nov 21)",
+   "source": "Department of Labor",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Moved to Wednesday for Thanksgiving. Kalshi lists a market on the number.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": {
+    "kalshi": {
+     "title": "Initial jobless claims for the week ending November 21, 2026",
+     "outcome": "At least 200,000",
+     "price": 48.0,
+     "url": "https://kalshi.com/markets/kxjoblessclaims",
+     "end": "2026-11-25T14:59:00Z",
+     "volume": 8227
+    }
+   },
+   "market": null
+  },
+  {
+   "date": "2026-11-25T15:00:00Z",
+   "name": "New home sales (Oct)",
+   "source": "Census",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Sales of newly built homes, 10 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
    "market": null
   },
   {
@@ -134,7 +185,7 @@
   },
   {
    "date": "2026-11-29T12:00:00Z",
-   "name": "OPEC+ monthly meeting",
+   "name": "OPEC+ monthly meeting (8-country group)",
    "source": "",
    "kind": "scheduled",
    "cat": "world",
@@ -148,7 +199,7 @@
     "title": "Crude Oil all-time high by...?",
     "outcome": "December 31",
     "prices": {
-     "polymarket": 3.1,
+     "polymarket": 3.4,
      "kalshi": null,
      "alpha": null
     },
@@ -237,7 +288,7 @@
     "outcome": "Software or configuration error",
     "prices": {
      "polymarket": 72.5,
-     "kalshi": 72.0,
+     "kalshi": 68.5,
      "alpha": null
     },
     "urls": {
@@ -258,7 +309,7 @@
     "title": "Will Trump praise Allah again by November 30?",
     "outcome": "Yes",
     "prices": {
-     "polymarket": 29.5,
+     "polymarket": 29.0,
      "kalshi": null,
      "alpha": null
     },
@@ -280,7 +331,7 @@
     "title": "What price will XRP hit in November?",
     "outcome": "\u2191 1.00",
     "prices": {
-     "polymarket": 37.5,
+     "polymarket": 35.0,
      "kalshi": null,
      "alpha": null
     },
@@ -302,7 +353,7 @@
     "title": "What price will Hyperliquid hit in November?",
     "outcome": "\u2193 52",
     "prices": {
-     "polymarket": 26.5,
+     "polymarket": 27.5,
      "kalshi": null,
      "alpha": null
     },
@@ -324,7 +375,7 @@
     "title": "What price will BNB hit in November?",
     "outcome": "\u2193 500",
     "prices": {
-     "polymarket": 39.5,
+     "polymarket": 41.0,
      "kalshi": null,
      "alpha": null
     },
@@ -333,7 +384,7 @@
      "kalshi": "https://kalshi.com/markets/kxbnbminmon"
     },
     "label": "SIMILAR",
-    "coiled": false
+    "coiled": true
    }
   },
   {
@@ -348,6 +399,114 @@
    "est": false,
    "impact": 1,
    "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-01T15:00:00Z",
+   "name": "ISM Manufacturing PMI (Nov)",
+   "source": "ISM",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Factory survey, 10 AM ET. Above 50 means growth.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 2,
+   "links": {
+    "polymarket": {
+     "title": "ISM Manufacturing PMI - November 2026",
+     "outcome": "55.0 to 55.9",
+     "price": 24.5,
+     "url": "https://polymarket.com/event/ism-manufacturing-pmi-november-2026",
+     "end": "2026-12-01T15:00:00Z",
+     "volume": 19552
+    },
+    "kalshi": {
+     "title": "ISM Manufacturing PMI in November",
+     "outcome": "At least 55",
+     "price": 60.5,
+     "url": "https://kalshi.com/markets/kxismpmi",
+     "end": "2026-12-02T15:00:00Z",
+     "volume": 1079
+    }
+   },
+   "market": null
+  },
+  {
+   "date": "2026-12-01T15:00:00Z",
+   "name": "Job openings, JOLTS (Oct)",
+   "source": "BLS",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Job openings and quits, 10 AM ET. Watched for cooling in the labour market.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 2,
+   "links": {
+    "polymarket": {
+     "title": "JOLTS Job Openings: October 2026",
+     "outcome": "7.3M to 7.4M",
+     "price": 24.5,
+     "url": "https://polymarket.com/event/jolts-job-openings-october-2026",
+     "end": "2026-12-01T15:00:00Z",
+     "volume": 34585
+    },
+    "kalshi": {
+     "title": "US job openings in October",
+     "outcome": "Above 7.40M",
+     "price": 52.0,
+     "url": "https://kalshi.com/markets/kxjoltsopen",
+     "end": "2026-12-08T16:30:00Z",
+     "volume": 196
+    }
+   },
+   "market": null
+  },
+  {
+   "date": "2026-12-01T21:05:00Z",
+   "name": "CrowdStrike and Marvell earnings",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "earnings",
+   "note": "After the close. Marvell's date is expected, not yet confirmed; CrowdStrike's is confirmed.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": {
+    "polymarket": {
+     "title": "Will Marvell (MRVL) beat quarterly earnings?",
+     "outcome": "Will Marvell (MRVL) beat quarterly earnings?",
+     "price": 53.0,
+     "url": "https://polymarket.com/event/mrvl-quarterly-earnings-nongaap-eps-12-01-2026-1pt11",
+     "end": "2026-12-01T22:00:00Z",
+     "volume": 2717
+    }
+   },
+   "market": null
+  },
+  {
+   "date": "2026-12-02T13:15:00Z",
+   "name": "ADP private payrolls (Nov)",
+   "source": "ADP",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "ADP's private-sector jobs count, 8:15 AM ET, two days before the official jobs report.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 2,
+   "links": {
+    "kalshi": {
+     "title": "ADP employment change in Nov 2026?",
+     "outcome": "Above 75000",
+     "price": 60.5,
+     "url": "https://kalshi.com/markets/kxadp",
+     "end": "2026-12-02T15:00:00Z",
+     "volume": 1560
+    }
+   },
    "market": null
   },
   {
@@ -374,6 +533,34 @@
    "market": null
   },
   {
+   "date": "2026-12-02T21:05:00Z",
+   "name": "Salesforce earnings",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "earnings",
+   "note": "After the close. Date expected, not yet confirmed by the company.",
+   "end": null,
+   "allday": false,
+   "est": true,
+   "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-03T13:30:00Z",
+   "name": "Weekly jobless claims (week to Nov 28)",
+   "source": "Department of Labor",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "First-time unemployment claims, 8:30 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
    "date": "2026-12-03T14:00:00Z",
    "name": "Google Year in Search 2026",
    "source": "",
@@ -385,6 +572,29 @@
    "est": true,
    "impact": 1,
    "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-03T15:00:00Z",
+   "name": "ISM Services PMI (Nov)",
+   "source": "ISM",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Survey of the service sector, most of the US economy. 10 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 2,
+   "links": {
+    "kalshi": {
+     "title": "US ISM Services PMI for November",
+     "outcome": "Above 55.40",
+     "price": 51.0,
+     "url": "https://kalshi.com/markets/kxusismserv",
+     "end": "2026-12-10T15:00:00Z",
+     "volume": 437
+    }
+   },
    "market": null
   },
   {
@@ -400,12 +610,12 @@
    "impact": 3,
    "links": {
     "polymarket": {
-     "title": "November 2026 Unemployment Rate - Canada",
-     "outcome": "\u22646.4%",
-     "price": 25.4,
-     "url": "https://polymarket.com/event/november-2026-unemployment-rate-canada",
+     "title": "How many jobs added in November?",
+     "outcome": "150k+",
+     "price": 22.0,
+     "url": "https://polymarket.com/event/how-many-jobs-added-in-november-2026",
      "end": "2026-12-04T13:30:00Z",
-     "volume": 34971
+     "volume": 9176
     },
     "kalshi": {
      "title": "Jobs numbers in Nov 2026?",
@@ -463,6 +673,20 @@
    }
   },
   {
+   "date": "2026-12-04T15:00:00Z",
+   "name": "Consumer sentiment, preliminary (Dec)",
+   "source": "University of Michigan",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "University of Michigan survey, 10 AM ET. Includes inflation expectations.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
    "date": "2026-12-07T05:00:00Z",
    "name": "Black swan on this date, 1941: Pearl Harbor",
    "source": "",
@@ -500,6 +724,43 @@
    "market": null
   },
   {
+   "date": "2026-12-08T13:30:00Z",
+   "name": "Trade balance (Oct)",
+   "source": "BEA / Census",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "US imports and exports; moves with tariffs.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-09T15:00:00Z",
+   "name": "Existing home sales (Nov)",
+   "source": "NAR",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "NAR's count of previously owned homes sold, 10 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": {
+    "kalshi": {
+     "title": "US existing home sales for November",
+     "outcome": "Above 3.60M",
+     "price": 53.5,
+     "url": "https://kalshi.com/markets/kxehsales",
+     "end": "2026-12-16T16:30:00Z",
+     "volume": 16264
+    }
+   },
+   "market": null
+  },
+  {
    "date": "2026-12-09T19:00:00Z",
    "name": "Fed rate decision",
    "source": "Federal Reserve",
@@ -525,7 +786,7 @@
      "price": 93.5,
      "url": "https://polymarket.com/event/fed-decision-in-december-20260729232808632",
      "end": "2026-12-09T23:59:00Z",
-     "volume": 56262278
+     "volume": 56272900
     },
     "kalshi": {
      "title": "Fed decision in Dec 2026?",
@@ -533,9 +794,23 @@
      "price": 92.5,
      "url": "https://kalshi.com/markets/kxfeddecision",
      "end": "2026-12-09T19:05:00Z",
-     "volume": 24406437
+     "volume": 24417928
     }
    },
+   "market": null
+  },
+  {
+   "date": "2026-12-09T21:05:00Z",
+   "name": "Adobe earnings",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "earnings",
+   "note": "After the close. Date expected, not yet confirmed by the company.",
+   "end": null,
+   "allday": false,
+   "est": true,
+   "impact": 2,
+   "links": null,
    "market": null
   },
   {
@@ -554,8 +829,8 @@
     "title": "TIME Person of the Year 2026",
     "outcome": "James Talarico",
     "prices": {
-     "polymarket": 30.0,
-     "kalshi": 30.5,
+     "polymarket": 31.0,
+     "kalshi": 31.5,
      "alpha": null
     },
     "urls": {
@@ -592,9 +867,23 @@
      "price": 31.5,
      "url": "https://kalshi.com/markets/kxcpi",
      "end": "2026-12-10T14:56:00Z",
-     "volume": 856819
+     "volume": 856842
     }
    },
+   "market": null
+  },
+  {
+   "date": "2026-12-10T13:30:00Z",
+   "name": "Weekly jobless claims (week to Dec 5)",
+   "source": "Department of Labor",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "First-time unemployment claims, 8:30 AM ET, same time as CPI.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
    "market": null
   },
   {
@@ -606,14 +895,14 @@
    "note": "Commerce Secretary Howard Lutnick appears before the Senate Banking Committee over the Megaspeed / Nvidia chip-export scandal. Markets on whether he leaves office react to it. Our Dossier: alphainteldesk.com/dossier/howard-lutnick.html",
    "end": null,
    "allday": true,
-   "est": false,
+   "est": true,
    "impact": 2,
    "links": null,
    "market": {
     "title": "Howard Lutnick out as Secretary of Commerce by...?",
     "outcome": "March 31, 2027",
     "prices": {
-     "polymarket": 23.5,
+     "polymarket": 25.5,
      "kalshi": 33.0,
      "alpha": null
     },
@@ -624,6 +913,43 @@
     "label": "SAME",
     "coiled": false
    }
+  },
+  {
+   "date": "2026-12-10T21:15:00Z",
+   "name": "Broadcom earnings",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "earnings",
+   "note": "After the close. Big AI-chip name. Date expected (sources say Dec 9 or 10), not yet confirmed.",
+   "end": null,
+   "allday": false,
+   "est": true,
+   "impact": 2,
+   "links": {
+    "polymarket": {
+     "title": "Will Broadcom (AVGO) Q4 AI revenue be above __?",
+     "outcome": "$24B",
+     "price": 24.6,
+     "url": "https://polymarket.com/event/will-broadcom-avgo-q4-ai-revenue-be-above-20261008120151000",
+     "end": "2026-12-10T23:00:00Z",
+     "volume": 1720
+    }
+   },
+   "market": null
+  },
+  {
+   "date": "2026-12-10T21:15:00Z",
+   "name": "Costco earnings",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "earnings",
+   "note": "After the close. Date expected, not yet confirmed by the company.",
+   "end": null,
+   "allday": false,
+   "est": true,
+   "impact": 2,
+   "links": null,
+   "market": null
   },
   {
    "date": "2026-12-11T23:00:00Z",
@@ -656,10 +982,10 @@
     "kalshi": {
      "title": "Government shutdown on Dec 12, 2026?",
      "outcome": "Yes",
-     "price": 29.0,
+     "price": 27.5,
      "url": "https://kalshi.com/markets/kxgovtshutdown",
      "end": "2026-12-13T15:00:00Z",
-     "volume": 565331
+     "volume": 565746
     }
    },
    "market": null
@@ -679,7 +1005,7 @@
     "polymarket": {
      "title": "LA-05 House Election Winner",
      "outcome": "Democratic Party",
-     "price": 4.8,
+     "price": 4.5,
      "url": "https://polymarket.com/event/la-05-house-election-winner",
      "end": "2026-12-13T04:59:00Z",
      "volume": 38318
@@ -693,6 +1019,20 @@
      "volume": 277634
     }
    },
+   "market": null
+  },
+  {
+   "date": "2026-12-14T21:05:00Z",
+   "name": "Oracle earnings",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "earnings",
+   "note": "After the close. AI cloud spending and data-centre plans in focus.",
+   "end": null,
+   "allday": true,
+   "est": false,
+   "impact": 2,
+   "links": null,
    "market": null
   },
   {
@@ -742,6 +1082,173 @@
    "market": null
   },
   {
+   "date": "2026-12-16T21:05:00Z",
+   "name": "Micron earnings",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "earnings",
+   "note": "After the close. Memory prices and AI demand. Date expected (sources say Dec 16 or later), not yet confirmed.",
+   "end": null,
+   "allday": true,
+   "est": true,
+   "impact": 2,
+   "links": {
+    "polymarket": {
+     "title": "Will Micron Q1 DRAM revenue be above __?",
+     "outcome": "$46B",
+     "price": 59.0,
+     "url": "https://polymarket.com/event/will-micron-q1-dram-revenue-be-above",
+     "end": "2026-12-23T23:00:00Z",
+     "volume": 4882
+    }
+   },
+   "market": null
+  },
+  {
+   "date": "2026-12-17T09:00:00Z",
+   "name": "EU leaders' summit, Dec 17-18 (European Council)",
+   "source": "European Council",
+   "kind": "scheduled",
+   "cat": "world",
+   "note": "Two-day meeting of EU heads of government in Brussels (Dec 17-18).",
+   "end": null,
+   "allday": true,
+   "est": false,
+   "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-17T12:00:00Z",
+   "name": "Bank of England rate decision",
+   "source": "Bank of England",
+   "kind": "scheduled",
+   "cat": "world",
+   "note": "BoE interest-rate announcement and minutes, noon UK time.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 2,
+   "links": {
+    "polymarket": {
+     "title": "Bank of England decision in December?",
+     "outcome": "25 bps increase",
+     "price": 76.0,
+     "url": "https://polymarket.com/event/bank-of-england-decision-in-december-2026",
+     "end": "2026-12-17T23:59:00Z",
+     "volume": 145856
+    },
+    "kalshi": {
+     "title": "Bank of England rate decision in December",
+     "outcome": "Hike 1-25bps",
+     "price": 76.5,
+     "url": "https://kalshi.com/markets/kxcbdecisionengland",
+     "end": "2026-12-17T11:56:00Z",
+     "volume": 53705
+    }
+   },
+   "market": null
+  },
+  {
+   "date": "2026-12-17T13:15:00Z",
+   "name": "ECB rate decision",
+   "source": "ECB",
+   "kind": "scheduled",
+   "cat": "world",
+   "note": "European Central Bank decision at 14:15 CET; press conference 30 minutes later.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 2,
+   "links": {
+    "polymarket": {
+     "title": "ECB Interest Rates: December 2026",
+     "outcome": "25 bps increase",
+     "price": 97.3,
+     "url": "https://polymarket.com/event/ecb-interest-rates-december-2026",
+     "end": "2026-12-17T11:59:00Z",
+     "volume": 113010
+    },
+    "kalshi": {
+     "title": "European Central Bank rate decision in December",
+     "outcome": "Hike more than 25bps",
+     "price": 5.0,
+     "url": "https://kalshi.com/markets/kxcbdecisioneu",
+     "end": "2026-12-17T13:15:00Z",
+     "volume": 16735
+    }
+   },
+   "market": null
+  },
+  {
+   "date": "2026-12-17T13:30:00Z",
+   "name": "Housing starts (Nov)",
+   "source": "Census",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "New residential construction and building permits, 8:30 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": {
+    "kalshi": {
+     "title": "US housing starts for November",
+     "outcome": "Above 1.250M",
+     "price": 61.5,
+     "url": "https://kalshi.com/markets/kxhousingstart",
+     "end": "2026-12-24T15:00:00Z",
+     "volume": 1715
+    }
+   },
+   "market": null
+  },
+  {
+   "date": "2026-12-17T13:30:00Z",
+   "name": "Weekly jobless claims (week to Dec 12)",
+   "source": "Department of Labor",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "First-time unemployment claims, 8:30 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-18T03:00:00Z",
+   "name": "Bank of Japan rate decision",
+   "source": "Bank of Japan",
+   "kind": "scheduled",
+   "cat": "world",
+   "note": "End of the Dec 17-18 BoJ meeting; the decision usually comes around midday Tokyo time.",
+   "end": null,
+   "allday": true,
+   "est": false,
+   "impact": 2,
+   "links": {
+    "polymarket": {
+     "title": "Bank of Japan Decision in December?",
+     "outcome": "25 bps increase",
+     "price": 84.0,
+     "url": "https://polymarket.com/event/bank-of-japan-decision-in-december-20260918",
+     "end": "2026-12-18T00:00:00Z",
+     "volume": 95292
+    },
+    "kalshi": {
+     "title": "Bank of Japan rate decision in December",
+     "outcome": "Hike 25bps",
+     "price": 86.0,
+     "url": "https://kalshi.com/markets/kxcbdecisionjapan",
+     "end": "2026-12-18T03:30:00Z",
+     "volume": 57424
+    }
+   },
+   "market": null
+  },
+  {
    "date": "2026-12-18T14:00:00Z",
    "name": "Avengers: Doomsday and Dune: Part Three open",
    "source": "",
@@ -759,7 +1266,7 @@
      "price": 78.5,
      "url": "https://polymarket.com/event/avengers-doomsday-opening-weekend-box-office",
      "end": "2026-12-20T12:00:00Z",
-     "volume": 253132
+     "volume": 253391
     },
     "kalshi": {
      "title": "Avengers: Doomsday: Rotten Tomatoes score",
@@ -767,9 +1274,23 @@
      "price": 47.5,
      "url": "https://kalshi.com/markets/kxrt",
      "end": "2026-12-21T15:00:00Z",
-     "volume": 1755779
+     "volume": 1840816
     }
    },
+   "market": null
+  },
+  {
+   "date": "2026-12-18T15:00:00Z",
+   "name": "Consumer sentiment, final (Dec)",
+   "source": "University of Michigan",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "University of Michigan survey, final reading, 10 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
    "market": null
   },
   {
@@ -783,6 +1304,20 @@
    "allday": true,
    "est": false,
    "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-21T20:50:00Z",
+   "name": "Winter solstice",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "fyi",
+   "note": "Shortest day of the year in the Northern Hemisphere.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
    "links": null,
    "market": null
   },
@@ -804,9 +1339,107 @@
      "price": 51.0,
      "url": "https://kalshi.com/markets/kxpcecore",
      "end": "2026-12-23T15:00:00Z",
-     "volume": 2548
+     "volume": 2550
     }
    },
+   "market": null
+  },
+  {
+   "date": "2026-12-23T13:30:00Z",
+   "name": "Durable goods orders (Nov)",
+   "source": "Census",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Factory orders for long-lasting goods, 8:30 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-23T15:00:00Z",
+   "name": "New home sales (Nov)",
+   "source": "Census",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Sales of newly built homes, 10 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-24T12:00:00Z",
+   "name": "Full Cold Moon",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "fyi",
+   "note": "Last full moon of 2026 (late Dec 23 in the Americas).",
+   "end": null,
+   "allday": true,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-24T13:30:00Z",
+   "name": "Weekly jobless claims (week to Dec 19)",
+   "source": "Department of Labor",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Expected on Thursday despite Christmas Eve; the Labor Department can move it in holiday weeks.",
+   "end": null,
+   "allday": false,
+   "est": true,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-24T18:00:00Z",
+   "name": "Christmas Eve: stocks close at 1 PM ET",
+   "source": "NYSE",
+   "kind": "scheduled",
+   "cat": "markets",
+   "note": "Shortened session.",
+   "end": null,
+   "allday": true,
+   "est": false,
+   "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-25T14:00:00Z",
+   "name": "Christmas: US markets closed",
+   "source": "NYSE",
+   "kind": "scheduled",
+   "cat": "markets",
+   "note": "Stock and bond markets shut.",
+   "end": null,
+   "allday": true,
+   "est": false,
+   "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-29T14:00:00Z",
+   "name": "Case-Shiller home prices (Oct)",
+   "source": "S&P Dow Jones Indices",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "S&P Cotality Case-Shiller index, 9 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
    "market": null
   },
   {
@@ -815,10 +1448,66 @@
    "source": "",
    "kind": "scheduled",
    "cat": "econ",
-   "note": "Conference Board survey, 10 AM ET (last Tuesday of the month; holiday weeks can move it).",
+   "note": "Conference Board survey, 10 AM ET. A read on how households feel about jobs and spending.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-30T19:00:00Z",
+   "name": "Fed minutes (Dec meeting)",
+   "source": "Federal Reserve",
+   "kind": "scheduled",
+   "cat": "fed",
+   "note": "Detailed notes from the Dec 8-9 meeting, 2 PM ET. Usual three-week gap; the Fed hasn't posted the date yet.",
    "end": null,
    "allday": false,
    "est": true,
+   "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-31T13:30:00Z",
+   "name": "Weekly jobless claims (week to Dec 26)",
+   "source": "Department of Labor",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Expected Thursday, 8:30 AM ET; holiday weeks can shift it.",
+   "end": null,
+   "allday": false,
+   "est": true,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2026-12-31T23:59:00Z",
+   "name": "New Year's Eve",
+   "source": "",
+   "kind": "scheduled",
+   "cat": "fyi",
+   "note": "Last trading day of 2026; year-end price and 'by end of 2026' markets settle.",
+   "end": null,
+   "allday": true,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2027-01-01T14:00:00Z",
+   "name": "New Year's Day: US markets closed",
+   "source": "NYSE",
+   "kind": "scheduled",
+   "cat": "markets",
+   "note": "Stock and bond markets shut.",
+   "end": null,
+   "allday": true,
+   "est": false,
    "impact": 2,
    "links": null,
    "market": null
@@ -849,6 +1538,113 @@
    "est": true,
    "impact": 2,
    "links": null,
+   "market": null
+  },
+  {
+   "date": "2027-01-04T15:00:00Z",
+   "name": "ISM Manufacturing PMI (Dec)",
+   "source": "ISM",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Factory survey, 10 AM ET (first business day of the month).",
+   "end": null,
+   "allday": false,
+   "est": true,
+   "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2027-01-05T15:00:00Z",
+   "name": "Job openings, JOLTS (Nov)",
+   "source": "BLS",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Job openings and quits, 10 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2027-01-06T13:15:00Z",
+   "name": "ADP private payrolls (Dec)",
+   "source": "ADP",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "ADP's private-sector jobs count, 8:15 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": true,
+   "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2027-01-06T15:00:00Z",
+   "name": "ISM Services PMI (Dec)",
+   "source": "ISM",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Service-sector survey, 10 AM ET (third business day of the month).",
+   "end": null,
+   "allday": false,
+   "est": true,
+   "impact": 2,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2027-01-07T13:30:00Z",
+   "name": "Trade balance (Nov)",
+   "source": "BEA / Census",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "US imports and exports, 8:30 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2027-01-07T13:30:00Z",
+   "name": "Weekly jobless claims (week to Jan 2)",
+   "source": "Department of Labor",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "First-time unemployment claims, 8:30 AM ET.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 1,
+   "links": null,
+   "market": null
+  },
+  {
+   "date": "2027-01-08T13:30:00Z",
+   "name": "Jobs report (Dec)",
+   "source": "BLS",
+   "kind": "scheduled",
+   "cat": "econ",
+   "note": "Payrolls and unemployment rate. The biggest monthly data release.",
+   "end": null,
+   "allday": false,
+   "est": false,
+   "impact": 3,
+   "links": {
+    "kalshi": {
+     "title": "Jobs numbers in Dec 2026?",
+     "outcome": "Above 100,000",
+     "price": 52.0,
+     "url": "https://kalshi.com/markets/kxpayrolls",
+     "end": "2027-01-08T15:00:00Z",
+     "volume": 1414
+    }
+   },
    "market": null
   }
  ]
