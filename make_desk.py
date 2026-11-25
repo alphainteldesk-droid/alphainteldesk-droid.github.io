@@ -51,14 +51,17 @@ def trends(geo, n=3):
 
 # ---------- Conflict Radar ----------
 CONFLICT_Q = ("(war OR military OR troops OR missile OR airstrike OR drone OR ceasefire OR invasion OR "
-              "sanctions OR clashes OR insurgents OR shelling OR \"peace talks\" OR coup OR \"naval drills\" OR blockade) when:1d")
+              "sanctions OR clashes OR insurgents OR shelling OR \"peace talks\" OR coup OR \"naval drills\" OR blockade OR "
+              "cyberattack OR \"cyber attack\" OR hackers OR ransomware) when:1d")   # Nov 25 (James): + cyber incidents
 CONFLICT_WORDS = ("war", "military", "troops", "missile", "strike", "drone", "ceasefire", "invasion", "invade",
                   "sanction", "clash", "attack", "shelling", "peace", "coup", "army", "navy", "rebel", "militant",
                   "hostage", "nuclear", "border", "offensive", "bomb", "killed", "forces", "drill", "naval",
-                  "warship", "tension", "blockade", "escalat", "retaliat", "occupation")
+                  "warship", "tension", "blockade", "escalat", "retaliat", "occupation",
+                  "cyber", " hack", "ransomware", "malware", "ddos", "data breach")   # Nov 25 (James): cyber incidents
 NOT_CONFLICT = ("nfl", "nba", "mlb", "nhl", "game", "season", "coach", "box office", "movie", "trailer",
                 "video game", "star wars", "price war", "culture war", "bidding war", "recipe", "stock",
-                "holy war", "rivalry", "podcast", "lifestyle", "fashion", "album", "byu", "playoff", "tournament")
+                "holy war", "rivalry", "podcast", "lifestyle", "fashion", "album", "byu", "playoff", "tournament",
+                "life hack", "lifehack", "hackathon")
 # Paywalled outlets: their links make visitors pay, so the radar only shows free-to-read sources.
 PAYWALLED = ("wsj.com", "washingtonpost.com", "nytimes.com", "bloomberg.com", "ft.com", "economist.com",
              "theatlantic.com", "barrons.com", "thetimes.co.uk", "thetimes.com", "telegraph.co.uk", "haaretz.com",

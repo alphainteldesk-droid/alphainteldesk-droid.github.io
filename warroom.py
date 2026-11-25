@@ -81,7 +81,8 @@ HOTSPOTS = [
      "gdelt": '(Venezuela OR Maduro OR Caracas OR Cuba)',
      "terms": "venezuela, venezuelan, maduro, caracas, cuba, cuban", "choke": ["Panama Canal"]},
 ]
-GDELT_CONFLICT = "(military OR strike OR missile OR attack OR troops OR drone OR warship OR invasion OR airstrike OR ceasefire)"
+GDELT_CONFLICT = ("(military OR strike OR missile OR attack OR troops OR drone OR warship OR invasion OR airstrike OR ceasefire "
+                  "OR cyberattack OR \"cyber attack\" OR hackers OR ransomware)")   # Nov 25 (James): cyber incidents count too
 # conflict words in the languages of the watched countries (Trends titles come in local scripts)
 CONFLICT_WORDS = [
     "war", "attack", "missile", "strike", "airstrike", "drone", "bomb", "explosion", "army", "military", "troops",
@@ -97,6 +98,12 @@ CONFLICT_WORDS = [
     "जंग", "युद्ध", "मिसाइल", "हमला", "ड्रोन", "سرحد",                                                          # Hindi / Urdu
     "guerra", "ataque", "misil", "bombardeo", "militar", "ejército", "invasión",                           # Spanish
     "wojna", "atak", "rakieta", "dron",                                                                    # Polish
+    # Nov 25 (James): cyber incidents and hacks add to the heat like any other conflict signal
+    "cyberattack", "cyberattacks", "cyber attack", "cyber attacks", "cyber-attack", "cyber-attacks", "cyberwar",
+    "hacker", "hackers", "hacked", "hacking", "ransomware", "malware", "ddos", "breach", "breached", "cyber", "cyber espionage",
+    "סייבר", "האקרים", "سيبراني", "قراصنة", "سایبری", "هکر", "هکرها", "кибератака", "кибератаки", "хакеры",
+    "хакер", "кібератака", "хакери", "网络攻击", "網路攻擊", "黑客", "駭客", "해킹", "사이버공격", "サイバー攻撃",
+    "ハッカー", "साइबर", "ciberataque", "hackeo", "cyberatak",
 ]
 NOTABLE = {  # aircraft types that matter to analysts (weight 3), ICAO type codes
     "K35R": "tanker", "K35E": "tanker", "KC10": "tanker", "KC46": "tanker", "K46": "tanker", "A332": "tanker", "MRTT": "tanker",
