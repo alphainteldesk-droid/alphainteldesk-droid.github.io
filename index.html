@@ -1288,8 +1288,8 @@
     <div class="stamp" id="st-trends">UPDATED EVERY 20 MIN</div>
   </div>
 </div>
-<section class="wrp" id="warroom" aria-label="Situation Room: where conflict signals are adding up">   <!-- Nov 24 (James) -->
-  <div class="wr-hd"><span class="wr-t">SITUATION ROOM <i class="wr-live">&#9679; LIVE</i></span>
+<section class="wrp" id="warroom" aria-label="Intel Hub Decision Room: where conflict signals are adding up">   <!-- Nov 24 (James) -->
+  <div class="wr-hd"><span class="wr-t">INTEL HUB DECISION ROOM <i class="wr-live">&#9679; LIVE</i></span>
     <span class="wr-tabs" role="tablist"><button class="on" data-w="map">HEAT MAP</button><button data-w="news">HEADLINES</button><button data-w="trend">TRENDING</button><button data-w="fuel">GAS PRICES</button><button data-w="ship">SHIPPING TRAFFIC</button><button data-w="hist">THIS WEEK IN HISTORY</button></span>
     <span class="wr-upd" id="wr-upd"></span></div>
   <div class="wr-body" id="wr-body">
@@ -1503,7 +1503,7 @@
     [].forEach.call(box.querySelectorAll('.wr-tabs button'), function (x) { x.classList.toggle('on', x === b); });
     [].forEach.call(box.querySelectorAll('.wr-pane'), function (x) { x.classList.toggle('on', x.getAttribute('data-w') === b.getAttribute('data-w')); });
   });
-  var HASH = { 'gas-prices': 'fuel', 'gas': 'fuel', 'shipping-traffic': 'ship', 'shipping': 'ship', 'war-room': 'map', 'situation-room': 'map' };
+  var HASH = { 'gas-prices': 'fuel', 'gas': 'fuel', 'shipping-traffic': 'ship', 'shipping': 'ship', 'war-room': 'map', 'situation-room': 'map', 'intel-hub': 'map' };
   function fromHash() {
     var w = HASH[(location.hash || '').slice(1).toLowerCase()]; if (!w) return;
     var b = box.querySelector('.wr-tabs button[data-w="' + w + '"]'); if (b) b.click();
@@ -1580,7 +1580,7 @@
       : '<div class="wr-li"><small>No anniversaries or past shocks this week.</small></div>';
     document.getElementById('wr-upd').textContent = w.updated ? 'UPDATED ' + new Date(w.updated).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
     var cal = (w.hotspots || []).some(function (h) { return (h.calibrating || []).length; });
-    document.getElementById('wr-ft').innerHTML = (cal ? '<b style="color:#ffb347">Calibrating:</b> scores sharpen as the Situation Room learns what normal looks like (about a week). ' : '') +
+    document.getElementById('wr-ft').innerHTML = (cal ? '<b style="color:#ffb347">Calibrating:</b> scores sharpen as the Intel Hub learns what normal looks like (about a week). ' : '') +
       'Click a dot for its evidence and markets. White dots = new places where 2+ signals agree.' + (w.updated ? ' Updated ' + new Date(w.updated).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '.' : '') + ' Not financial advice.';
   }
   function feeds(d) {
@@ -1638,7 +1638,7 @@
   }
   function load() {
     fetch('warroom.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(draw).catch(function () {
-      document.getElementById('wr-top').innerHTML = '<div class="wr-w" style="grid-column:1/-1">The Situation Room is warming up: first readings arrive within the hour.</div>'; });
+      document.getElementById('wr-top').innerHTML = '<div class="wr-w" style="grid-column:1/-1">The Intel Hub is warming up: first readings arrive within the hour.</div>'; });
     fetch('desk.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(feeds).catch(function () {});
     (REG ? Promise.resolve(REG) : fetch('/us-regions.json').then(function (r) { return r.json(); }).then(function (x) { return REG = x; }))
       .then(function () { return fetch('gas.json?v=' + Date.now()); }).then(function (r) { return r.json(); }).then(fuel).catch(function () {});

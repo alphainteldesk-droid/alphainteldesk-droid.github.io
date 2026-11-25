@@ -297,12 +297,12 @@ def history_dates():
         return []
     NAMES = {"gulf": "Iran & the Gulf", "levant": "Israel, Gaza & Lebanon", "redsea": "Red Sea & Yemen", "ukraine": "Ukraine & Russia",
              "taiwan": "Taiwan Strait", "korea": "Korean Peninsula", "southasia": "India & Pakistan", "caribbean": "Venezuela & the Caribbean"}
-    rows = [(x["md"], "Anniversary: " + x["what"], hid, "Anniversary in the Situation Room's %s region. Dates like this can bring "
-             "protests, speeches, drills or attacks; the Situation Room adds a little heat to the region around it." % NAMES.get(hid, hid), 1)
+    rows = [(x["md"], "Anniversary: " + x["what"], hid, "Anniversary in the Intel Hub's %s region. Dates like this can bring "
+             "protests, speeches, drills or attacks; the Intel Hub adds a little heat to the region around it." % NAMES.get(hid, hid), 1)
             for hid, xs in (cfg.get("dates") or {}).items() for x in xs]
     rows += [(x["md"], "Black swan on this date, %s: %s" % (x["year"], x["what"]), x.get("hotspot"),
               "A past market or world shock on this date. History doesn't repeat on schedule, but traders remember."
-              + (" Counts toward the Situation Room's %s score." % NAMES.get(x["hotspot"], x["hotspot"]) if x.get("hotspot") else ""), 2)
+              + (" Counts toward the Intel Hub's %s score." % NAMES.get(x["hotspot"], x["hotspot"]) if x.get("hotspot") else ""), 2)
              for x in cfg.get("black_swans") or []]
     out = []
     for md, name, hid, note, imp in rows:
