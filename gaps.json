@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T14:20:53Z",
+ "updated": "2026-11-25T15:10:08Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -9,13 +9,13 @@
    "close": "2027-01-01T04:59:00Z",
    "prices": {
     "polymarket": 11.5,
-    "kalshi": 8.5,
+    "kalshi": 8.0,
     "alpha": 11.7
    },
    "low": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 8.5,
+    "price": 8.0,
     "url": "https://kalshi.com/markets/kxhegsethout"
    },
    "high": {
@@ -31,21 +31,21 @@
    },
    "volumes": {
     "alpha": 10660,
-    "polymarket": 3273972,
-    "kalshi": 3438563
+    "polymarket": 3274824,
+    "kalshi": 3439081
    },
    "volumes24": {
     "alpha": 3707,
-    "polymarket": 16562,
-    "kalshi": 76793
+    "polymarket": 17372,
+    "kalshi": 77080
    },
-   "raw": 3.2,
-   "fees": 1.3,
-   "net": 1.9,
+   "raw": 3.7,
+   "fees": 1.2,
+   "net": 2.5,
    "all3": true,
-   "fee_low": 0.54,
+   "fee_low": 0.52,
    "fee_high": 0.72,
-   "fair": 11.3,
+   "fair": 11.2,
    "grade": "B",
    "fine": {
     "src": "similar",
@@ -61,10 +61,10 @@
    "rate_high": 0.07,
    "category": "Politics",
    "fill": {
-    "usd": 59,
-    "shares": 60,
-    "exec": 1.2,
-    "t": 1795616453,
+    "usd": 68,
+    "shares": 70,
+    "exec": 1.1,
+    "t": 1795619409,
     "buy": {
      "site": "kalshi",
      "yes": 9.0,
@@ -72,14 +72,16 @@
     },
     "sell": {
      "site": "alpha",
-     "no": 88.5,
+     "no": 88.6,
      "fee": 0.71
     },
-    "avg": 1.2,
+    "avg": 1.1,
     "profit": 1,
     "ladder": []
    },
-   "chg": {}
+   "chg": {
+    "kalshi": -0.5
+   }
   },
   {
    "title": "Who will be the next to leave the Trump Cabinet?",
@@ -108,11 +110,11 @@
    },
    "volumes": {
     "polymarket": 43183,
-    "kalshi": 155073
+    "kalshi": 155434
    },
    "volumes24": {
     "polymarket": 146,
-    "kalshi": 4961
+    "kalshi": 5300
    },
    "raw": 8.7,
    "fees": 0.7,
@@ -138,7 +140,7 @@
     "usd": 45,
     "shares": 49,
     "exec": 7.1,
-    "t": 1795616454,
+    "t": 1795619409,
     "buy": {
      "site": "kalshi",
      "yes": 9.2,
@@ -154,6 +156,103 @@
     "ladder": []
    },
    "chg": {}
+  },
+  {
+   "title": "Howard Lutnick out as Secretary of Commerce by...?",
+   "outcome": "March 31, 2027",
+   "close": "2027-04-01T03:59:00Z",
+   "prices": {
+    "polymarket": 23.5,
+    "kalshi": 32.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 23.5,
+    "url": "https://polymarket.com/event/howard-lutnick-out-as-secretary-of-commerce-by-december-31"
+   },
+   "high": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 32.5,
+    "url": "https://kalshi.com/markets/kxlutnickout"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/howard-lutnick-out-as-secretary-of-commerce-by-december-31",
+    "kalshi": "https://kalshi.com/markets/kxlutnickout"
+   },
+   "volumes": {
+    "polymarket": 796050,
+    "kalshi": 564059
+   },
+   "volumes24": {
+    "polymarket": 32096,
+    "kalshi": 23479
+   },
+   "raw": 9.0,
+   "fees": 1.7,
+   "net": 7.3,
+   "all3": false,
+   "fee_low": 0.18,
+   "fee_high": 1.54,
+   "fair": 25.2,
+   "grade": "B",
+   "fine": {
+    "src": "similar",
+    "srcs": [
+     "AP",
+     "Credible reporting",
+     "Reuters"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.01,
+   "rate_high": 0.07,
+   "category": "Politics",
+   "fill": {
+    "usd": 3451,
+    "shares": 3686,
+    "exec": 6.3,
+    "t": 1795619409,
+    "buy": {
+     "site": "polymarket",
+     "yes": 24.0,
+     "fee": 0.18
+    },
+    "sell": {
+     "site": "kalshi",
+     "no": 68.0,
+     "fee": 1.52
+    },
+    "avg": 4.7,
+    "profit": 173,
+    "ladder": [
+     [
+      100,
+      5.8
+     ],
+     [
+      250,
+      5.5
+     ],
+     [
+      500,
+      5.4
+     ],
+     [
+      1000,
+      5.4
+     ],
+     [
+      2500,
+      4.8
+     ]
+    ]
+   },
+   "chg": {
+    "kalshi": 1.0
+   }
   },
   {
    "title": "New pandemic before 2028?",
@@ -210,7 +309,7 @@
     "usd": 287,
     "shares": 302,
     "exec": 5.9,
-    "t": 1795616454,
+    "t": 1795619409,
     "buy": {
      "site": "polymarket",
      "yes": 11.0,
@@ -237,99 +336,90 @@
    "chg": {}
   },
   {
-   "title": "Howard Lutnick out as Secretary of Commerce by...?",
+   "title": "OpenAI IPO by...?",
    "outcome": "March 31, 2027",
-   "close": "2027-04-01T03:59:00Z",
+   "close": "2027-07-01T03:59:00Z",
    "prices": {
-    "polymarket": 23.5,
-    "kalshi": 31.5,
+    "polymarket": 16.5,
+    "kalshi": 24.0,
     "alpha": null
    },
    "low": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 23.5,
-    "url": "https://polymarket.com/event/howard-lutnick-out-as-secretary-of-commerce-by-december-31"
+    "price": 16.5,
+    "url": "https://polymarket.com/event/openai-ipo-by"
    },
    "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 31.5,
-    "url": "https://kalshi.com/markets/kxlutnickout"
+    "price": 24.0,
+    "url": "https://kalshi.com/markets/kxipoopenai"
    },
    "urls": {
-    "polymarket": "https://polymarket.com/event/howard-lutnick-out-as-secretary-of-commerce-by-december-31",
-    "kalshi": "https://kalshi.com/markets/kxlutnickout"
+    "polymarket": "https://polymarket.com/event/openai-ipo-by",
+    "kalshi": "https://kalshi.com/markets/kxipoopenai"
    },
    "volumes": {
-    "polymarket": 795415,
-    "kalshi": 563282
+    "polymarket": 3159177,
+    "kalshi": 456097
    },
    "volumes24": {
-    "polymarket": 31723,
-    "kalshi": 23262
+    "polymarket": 1853,
+    "kalshi": 2758
    },
-   "raw": 8.0,
-   "fees": 1.7,
-   "net": 6.3,
+   "raw": 7.5,
+   "fees": 2.0,
+   "net": 5.5,
    "all3": false,
-   "fee_low": 0.18,
-   "fee_high": 1.51,
-   "fair": 25.0,
+   "fee_low": 0.69,
+   "fee_high": 1.28,
+   "fair": 16.8,
    "grade": "B",
    "fine": {
     "src": "similar",
     "srcs": [
-     "AP",
+     "BBC",
+     "Bloomberg",
      "Credible reporting",
-     "Reuters"
+     "New York Times"
     ],
     "void": "none"
    },
-   "rate_low": 0.01,
+   "rate_low": 0.05,
    "rate_high": 0.07,
-   "category": "Politics",
+   "category": "OpenAI IPO",
    "fill": {
-    "usd": 3427,
-    "shares": 3658,
-    "exec": 5.3,
-    "t": 1795616454,
+    "usd": 313,
+    "shares": 327,
+    "exec": 4.1,
+    "t": 1795619410,
     "buy": {
      "site": "polymarket",
-     "yes": 24.0,
-     "fee": 0.18
+     "yes": 17.0,
+     "fee": 0.71
     },
     "sell": {
      "site": "kalshi",
-     "no": 69.0,
-     "fee": 1.5
+     "no": 77.0,
+     "fee": 1.24
     },
-    "avg": 4.7,
-    "profit": 171,
+    "avg": 2.4,
+    "profit": 8,
     "ladder": [
      [
       100,
-      5.3
+      3.4
      ],
      [
       250,
-      5.3
-     ],
-     [
-      500,
-      5.3
-     ],
-     [
-      1000,
-      5.3
-     ],
-     [
-      2500,
-      4.8
+      2.6
      ]
     ]
    },
-   "chg": {}
+   "chg": {
+    "kalshi": 2.0
+   }
   },
   {
    "title": "Marco Rubio out as Secretary of State by...?",
@@ -357,12 +447,12 @@
     "kalshi": "https://kalshi.com/markets/kxrubioannounceout"
    },
    "volumes": {
-    "polymarket": 780957,
+    "polymarket": 784566,
     "kalshi": 279589
    },
    "volumes24": {
-    "polymarket": 206707,
-    "kalshi": 25603
+    "polymarket": 202337,
+    "kalshi": 21352
    },
    "raw": 7.0,
    "fees": 1.6,
@@ -386,10 +476,10 @@
    "rate_high": 0.07,
    "category": "Trump",
    "fill": {
-    "usd": 1505,
-    "shares": 1584,
+    "usd": 1467,
+    "shares": 1544,
     "exec": 4.5,
-    "t": 1795616454,
+    "t": 1795619410,
     "buy": {
      "site": "polymarket",
      "yes": 21.0,
@@ -400,8 +490,8 @@
      "no": 73.0,
      "fee": 1.38
     },
-    "avg": 3.5,
-    "profit": 55,
+    "avg": 3.4,
+    "profit": 53,
     "ladder": [
      [
       100,
@@ -413,86 +503,13 @@
      ],
      [
       500,
-      4.5
+      4.3
      ],
      [
       1000,
-      4.0
+      3.9
      ]
     ]
-   },
-   "chg": {}
-  },
-  {
-   "title": "Will Trump be impeached before his term ends?",
-   "outcome": "Yes",
-   "close": "2029-01-20T17:00:00Z",
-   "prices": {
-    "polymarket": 73.5,
-    "kalshi": 66.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 66.5,
-    "url": "https://kalshi.com/markets/kximpeach"
-   },
-   "high": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 73.5,
-    "url": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends",
-    "kalshi": "https://kalshi.com/markets/kximpeach"
-   },
-   "volumes": {
-    "polymarket": 155538,
-    "kalshi": 1118898
-   },
-   "volumes24": {
-    "polymarket": 502,
-    "kalshi": 8235
-   },
-   "raw": 7.0,
-   "fees": 1.8,
-   "net": 5.2,
-   "all3": false,
-   "fee_low": 1.56,
-   "fee_high": 0.19,
-   "fair": 67.7,
-   "grade": "B",
-   "fine": {
-    "src": "similar",
-    "srcs": [
-     "Congress",
-     "Credible reporting"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.07,
-   "rate_high": 0.01,
-   "category": "Politics",
-   "fill": {
-    "usd": 18,
-    "shares": 19,
-    "exec": 3.3,
-    "t": 1795616454,
-    "buy": {
-     "site": "kalshi",
-     "yes": 67.0,
-     "fee": 1.55
-    },
-    "sell": {
-     "site": "polymarket",
-     "no": 28.0,
-     "fee": 0.2
-    },
-    "avg": 2.8,
-    "profit": 1,
-    "ladder": []
    },
    "chg": {}
   },
@@ -549,10 +566,10 @@
    "rate_high": 0.07,
    "category": "Politics",
    "fill": {
-    "usd": 86,
-    "shares": 89,
+    "usd": 39,
+    "shares": 40,
     "exec": 1.7,
-    "t": 1795616454,
+    "t": 1795619410,
     "buy": {
      "site": "polymarket",
      "yes": 11.0,
@@ -570,84 +587,79 @@
    "chg": {}
   },
   {
-   "title": "OpenAI IPO by...?",
-   "outcome": "March 31, 2027",
-   "close": "2027-07-01T03:59:00Z",
+   "title": "Will Trump be impeached before his term ends?",
+   "outcome": "Yes",
+   "close": "2029-01-20T17:00:00Z",
    "prices": {
-    "polymarket": 16.5,
-    "kalshi": 22.0,
+    "polymarket": 73.5,
+    "kalshi": 68.5,
     "alpha": null
    },
    "low": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 16.5,
-    "url": "https://polymarket.com/event/openai-ipo-by"
-   },
-   "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 22.0,
-    "url": "https://kalshi.com/markets/kxipoopenai"
+    "price": 68.5,
+    "url": "https://kalshi.com/markets/kximpeach"
+   },
+   "high": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 73.5,
+    "url": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends"
    },
    "urls": {
-    "polymarket": "https://polymarket.com/event/openai-ipo-by",
-    "kalshi": "https://kalshi.com/markets/kxipoopenai"
+    "polymarket": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends",
+    "kalshi": "https://kalshi.com/markets/kximpeach"
    },
    "volumes": {
-    "polymarket": 3159161,
-    "kalshi": 454858
+    "polymarket": 155538,
+    "kalshi": 1118956
    },
    "volumes24": {
-    "polymarket": 1837,
-    "kalshi": 1817
+    "polymarket": 502,
+    "kalshi": 8279
    },
-   "raw": 5.5,
-   "fees": 1.9,
-   "net": 3.6,
+   "raw": 5.0,
+   "fees": 1.7,
+   "net": 3.3,
    "all3": false,
-   "fee_low": 0.69,
-   "fee_high": 1.2,
-   "fair": 16.7,
+   "fee_low": 1.51,
+   "fee_high": 0.19,
+   "fair": 69.3,
    "grade": "B",
    "fine": {
     "src": "similar",
     "srcs": [
-     "BBC",
-     "Bloomberg",
-     "Credible reporting",
-     "New York Times"
+     "Congress",
+     "Credible reporting"
     ],
     "void": "none"
    },
-   "rate_low": 0.05,
-   "rate_high": 0.07,
-   "category": "OpenAI IPO",
+   "rate_low": 0.07,
+   "rate_high": 0.01,
+   "category": "Politics",
    "fill": {
-    "usd": 187,
-    "shares": 194,
-    "exec": 2.1,
-    "t": 1795616455,
+    "usd": 22,
+    "shares": 23,
+    "exec": 1.3,
+    "t": 1795619411,
     "buy": {
-     "site": "polymarket",
-     "yes": 17.0,
-     "fee": 0.71
+     "site": "kalshi",
+     "yes": 69.0,
+     "fee": 1.5
     },
     "sell": {
-     "site": "kalshi",
-     "no": 79.0,
-     "fee": 1.16
+     "site": "polymarket",
+     "no": 28.0,
+     "fee": 0.2
     },
-    "avg": 1.8,
-    "profit": 3,
-    "ladder": [
-     [
-      100,
-      2.1
-     ]
-    ]
+    "avg": 1.3,
+    "profit": 0,
+    "ladder": []
    },
-   "chg": {}
+   "chg": {
+    "kalshi": 2.0
+   }
   },
   {
    "title": "Who will a Senate committee vote to subpoena before 2028?",
@@ -680,7 +692,7 @@
    },
    "volumes24": {
     "polymarket": 145,
-    "kalshi": 179
+    "kalshi": 168
    },
    "raw": 5.5,
    "fees": 1.2,
@@ -707,7 +719,7 @@
     "usd": 0,
     "shares": 0,
     "exec": 0.7,
-    "t": 1795616454,
+    "t": 1795619410,
     "buy": {
      "site": "kalshi",
      "yes": 20.0,
@@ -776,7 +788,7 @@
     "usd": 0,
     "shares": 0,
     "exec": -0.8,
-    "t": 1795616455,
+    "t": 1795619411,
     "buy": {
      "site": "kalshi",
      "yes": 61.0,
@@ -848,7 +860,7 @@
     "usd": 0,
     "shares": 0,
     "exec": 0.7,
-    "t": 1795616455,
+    "t": 1795619411,
     "buy": {
      "site": "polymarket",
      "yes": 72.0,
@@ -903,14 +915,14 @@
    "prices": {
     "polymarket": 26.5,
     "kalshi": 30.5,
-    "alpha": 26.6
+    "alpha": 26.4
    },
    "urls": {
     "alpha": "https://www.alphaarcade.com/market/jensen-huang-out-as-nvidia-ceo-again-by",
     "polymarket": "https://polymarket.com/event/jensen-huang-out-as-nvidia-ceo-again-byptptpt",
     "kalshi": "https://kalshi.com/markets/kxjensenout"
    },
-   "diff": 3.9,
+   "diff": 4.1,
    "vol24": 1084
   },
   {
@@ -918,7 +930,7 @@
    "outcome": "Riemann Hypothesis",
    "close": "2027-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 63.0,
+    "polymarket": 63.5,
     "kalshi": null,
     "alpha": 63.7
    },
@@ -926,7 +938,7 @@
     "alpha": "https://www.alphaarcade.com/market/which-math-problems-will-ai-solve-in-2026",
     "polymarket": "https://polymarket.com/event/which-math-problems-will-ai-solve-in-2026"
    },
-   "diff": 0.7,
+   "diff": 0.2,
    "vol24": 582
   },
   {
@@ -979,35 +991,19 @@
    "vol24": 361
   },
   {
-   "title": "US announces end of Iranian blockade by...?",
-   "outcome": "March 31, 2027",
-   "close": "2027-01-01T04:59:00Z",
-   "prices": {
-    "polymarket": 49.5,
-    "kalshi": null,
-    "alpha": 48.0
-   },
-   "urls": {
-    "alpha": "https://www.alphaarcade.com/market/us-announces-end-iranian-blockade-sep-2026",
-    "polymarket": "https://polymarket.com/event/us-announces-end-of-iranian-blockade-byptptpt-20260713152715080"
-   },
-   "diff": 1.5,
-   "vol24": 277
-  },
-  {
    "title": "GTA VI Online released by...?",
    "outcome": "June 30, 2027",
    "close": "2027-07-01T03:59:00Z",
    "prices": {
     "polymarket": 50.5,
     "kalshi": null,
-    "alpha": 50.1
+    "alpha": 50.0
    },
    "urls": {
     "alpha": "https://www.alphaarcade.com/market/gta-vi-online-released-by",
     "polymarket": "https://polymarket.com/event/gta-vi-online-released-by"
    },
-   "diff": 0.4,
+   "diff": 0.5,
    "vol24": 266
   },
   {
@@ -1025,6 +1021,22 @@
    },
    "diff": 1.7,
    "vol24": 206
+  },
+  {
+   "title": "AI bubble burst by...?",
+   "outcome": "June 30, 2027",
+   "close": "2027-07-01T03:59:00Z",
+   "prices": {
+    "polymarket": 53.5,
+    "kalshi": null,
+    "alpha": 52.0
+   },
+   "urls": {
+    "alpha": "https://www.alphaarcade.com/market/ai-bubble-burst-by",
+    "polymarket": "https://polymarket.com/event/ai-bubble-burst-by"
+   },
+   "diff": 1.5,
+   "vol24": 112
   }
  ]
 }
