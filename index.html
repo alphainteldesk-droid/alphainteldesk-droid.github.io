@@ -901,6 +901,24 @@
   .hx > * { min-width:0; } .hx-eb { overflow-wrap:anywhere; }
   @media (max-width:900px) { .hx-cta a { flex:1 1 100%; } .hx-eb { font-size:.72rem; letter-spacing:.06em; } .hx { grid-template-columns:minmax(0,1fr); padding:16px 14px 14px; gap:16px; } .hx h1 br { display:none; } .hx-sub { font-size:.98rem; margin:8px 0 12px; }
     .hx-cta a { flex:1 1 auto; text-align:center; padding:11px 14px; font-size:.92rem; } }
+  /* Nov 24 (James): shrink the first screen: smaller headline + site chips, tighter spacing, smaller "Today's biggest gap" card */
+  .hx { padding:14px 20px 12px; gap:14px 28px; }
+  .hx-top { margin-bottom:6px; }
+  .hx h1 { font-size:clamp(1.35rem,2.4vw,1.95rem); margin:0 0 6px; }
+  .hx-only { font-size:.74rem; margin:4px 0 8px; }
+  .hx .ib-sites { gap:6px 8px; margin:0 0 6px; }
+  .hx .ib-sites .site { padding:4px 10px; font-size:clamp(.78rem,1.1vw,.92rem); gap:6px; }
+  .hx .ib-sites .site i { width:7px; height:7px; }
+  .hx-sub { font-size:.95rem; margin:6px 0 10px; }
+  .hx-cta a { padding:9px 16px; font-size:.9rem; }
+  .hx-trust { margin-top:8px; font-size:.8rem; }
+  .hx-card { padding:11px 14px; max-width:520px; justify-self:end; width:100%; }
+  .hx-q { font-size:1rem; margin:6px 0 2px; }
+  .hx-px { gap:6px; margin:8px 0; } .hx-px span { padding:5px 8px; } .hx-px b { font-size:1.05rem; }
+  .hx-net { gap:10px; } .hx-net b { font-size:1.75rem; } .hx-net span { font-size:.8rem; }
+  .hx-more { margin-top:6px; } .hx-more span { padding:4px 0; font-size:.8rem; }
+  .hx-foot { margin-top:6px; font-size:.85rem; }
+  @media (max-width:900px) { .hx { padding:12px 14px 10px; gap:12px; } .hx-card { max-width:none; justify-self:stretch; } }
   /* Hero brand block (Nov 12 mockup) */
   .hero { text-align:center; padding:14px 16px 10px; border-bottom:1px solid var(--line);
     background:radial-gradient(ellipse at 50% 0%, rgba(255,179,71,.08), transparent 65%); }
