@@ -1505,11 +1505,7 @@
     var g = document.querySelector('.gbw'), dw = box.parentNode;
     var bk = document.getElementById('brk');   // Nov 25 (James): LATEST line matches the hub's width, sitting right on top of it
     if (!g || innerWidth <= 760) { box.style.left = box.style.width = ''; if (bk) { bk.classList.remove('hubw'); bk.style.width = bk.style.marginLeft = ''; }
-      var wb0 = document.getElementById('wire-bar'); if (wb0) wb0.style.width = wb0.style.marginLeft = wb0.style.maxWidth = '';
-      dw.style.marginTop = box.style.top = box.style.height = ''; return; }
-    // Nov 25 (James): lift the office photo up behind the LATEST line so there's no empty strip beside it; the hub starts just under the line
-    var lift = bk && !bk.hidden && g.getBoundingClientRect().width < dw.getBoundingClientRect().width * .7 ? bk.offsetHeight : 0;   // only when the hub sits beside the photo
-    dw.style.marginTop = lift ? -lift + 'px' : ''; box.style.top = lift ? lift + 'px' : ''; box.style.height = lift ? 'calc(100% - ' + lift + 'px)' : '';
+      var wb0 = document.getElementById('wire-bar'); if (wb0) wb0.style.width = wb0.style.marginLeft = wb0.style.maxWidth = ''; return; }
     var r = g.getBoundingClientRect(), d = dw.getBoundingClientRect();
     if (r.width) { box.style.left = (r.left - d.left) + 'px'; box.style.width = r.width + 'px';
       if (bk) { var pb = bk.parentNode.getBoundingClientRect(); bk.classList.add('hubw'); bk.style.marginLeft = (r.left - pb.left) + 'px'; bk.style.width = r.width + 'px'; } }
@@ -1518,7 +1514,6 @@
       if (a2.right > a1.left) { wb.style.marginLeft = (a1.left - pw.left) + 'px'; wb.style.width = (a2.right - a1.left) + 'px'; wb.style.maxWidth = 'none'; } }
   }
   addEventListener('resize', align); addEventListener('load', align); setTimeout(align, 0);
-  var bkw = document.getElementById('brk'); if (bkw && window.MutationObserver) new MutationObserver(align).observe(bkw, { attributes: true, attributeFilter: ['hidden'] });
   var W = null, ALL = [];
   box.querySelector('.wr-tabs').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
