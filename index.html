@@ -934,6 +934,18 @@
   .hx-sub { font-size:.95rem; margin:6px 0 10px; }
   .hx-cta a { padding:9px 16px; font-size:.9rem; }
   .hx-trust { margin-top:8px; font-size:.8rem; }
+  /* Nov 25 (James): the four things on the desk, each a link with a live stat */
+  .hx-eb .hx-dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:#3fdbe6; box-shadow:0 0 8px #3fdbe6; margin-right:8px; vertical-align:1px; animation:calpulse 1.4s infinite; }
+  .hx-tools { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:10px 0 12px; max-width:720px; }
+  .hx-t { display:flex; flex-direction:column; gap:3px; padding:9px 12px; border:1px solid rgba(63,219,230,.28); border-radius:8px; background:rgba(63,219,230,.04);
+    color:#c9d3dc !important; text-decoration:none !important; transition:border-color .2s, box-shadow .2s; }
+  .hx-t:hover { border-color:rgba(63,219,230,.7); box-shadow:0 0 16px rgba(63,219,230,.18); }
+  .hx-t b { font:800 .76rem "Space Grotesk",system-ui,sans-serif; letter-spacing:.07em; color:var(--cyan); }
+  .hx-t span { font-size:.86rem; line-height:1.35; }
+  .hx-t em { font:700 .78rem "Space Grotesk",system-ui,sans-serif; font-style:normal; color:#3ee88a; margin-top:auto; padding-top:2px; }
+  .hx-t.dz { border-color:rgba(255,92,92,.4); background:rgba(255,92,92,.05); } .hx-t.dz b { color:#ff6b6b; } .hx-t.dz:hover { border-color:#ff6b6b; box-shadow:0 0 16px rgba(255,92,92,.2); }
+  .hx-t.dz em { color:var(--amber); }
+  @media (max-width:640px) { .hx-tools { gap:6px; } .hx-t { padding:8px 10px; } .hx-t span { display:none; } .hx-t b { font-size:.7rem; } }   /* phones: 2x2, name + live stat only */
   .hx-card { padding:11px 14px; max-width:520px; justify-self:end; width:100%; }
   .hx-q { font-size:1rem; margin:6px 0 2px; }
   .hx-px { gap:6px; margin:8px 0; } .hx-px span { padding:5px 8px; } .hx-px b { font-size:1.05rem; }
@@ -1113,14 +1125,20 @@
      duplicate "Alpha Intel Desk" title + 4 stat boxes). Old blocks kept in git history (commit before this). -->
 <section class="hx" aria-label="Alpha Intel Desk: live price gaps across Polymarket, Kalshi and Alpha Arcade">
   <div class="hx-l">
-    <div class="hx-top"><span class="hx-eb">Real-time intelligence for prediction markets</span></div>
-    <h1>Same question. Different price. <br><em>We find the gap, after fees.</em></h1>
+    <!-- Nov 25 (James): reworked to show everything on the desk: scanners, Danger Zone, live data streams -->
+    <div class="hx-top"><span class="hx-eb"><i class="hx-dot"></i>Real-time intel for prediction markets</span></div>
+    <h1>Every live signal on one desk. <br><em>Make your best call.</em></h1>
     <p class="hx-only">The only desk tracking <b>Alpha Arcade on Algorand</b> side by side with Polymarket and Kalshi.</p>
     <div class="ib-sites" aria-label="Tracking Polymarket, Kalshi and Alpha Arcade"><span class="site s-poly"><i></i>POLYMARKET</span><span class="site s-kal"><i></i>KALSHI</span><span class="site s-alpha"><i></i>ALPHA ARCADE</span></div>
-    <p class="hx-sub">Live price gaps, high-odds contracts and the week's biggest debate, side by side. Free, no sign-up.</p>
+    <div class="hx-tools">
+      <a class="hx-t" href="/gap-scanner.html"><b>GAP SCANNER</b><span>Same question, different price. We find the gap, after fees.</span><em id="hx-t-gap">Live price gaps</em></a>
+      <a class="hx-t" href="/momentum-scanner.html"><b>MOMENTUM &amp; TOP TRADERS</b><span>The biggest odds moves with the news behind them, and who's winning this week.</span><em>Updated all day</em></a>
+      <a class="hx-t dz" href="/expiry-returns.html"><b>DANGER ZONE</b><span>Big risk, big reward: 80¢+ contracts close to settling. One miss can cost it all.</span><em id="hx-rec">Public track record</em></a>
+      <a class="hx-t" href="#warroom"><b>INTEL HUB</b><span>Live data streams: conflict heat map, headlines, gas prices and shipping traffic.</span><em>Live now</em></a>
+    </div>
     <div class="hx-cta"><a class="hx-go" href="/gap-scanner.html">See today's gaps &rarr;</a>
       <a class="hx-tg" href="https://t.me/alphainteldesk" rel="noopener">Get the 7 AM brief on Telegram</a></div>
-    <p class="hx-trust"><span>✓ Fees included</span><span>✓ Rules graded A–D</span><span id="hx-rec">✓ Public track record</span></p>
+    <p class="hx-trust"><span>✓ Fees included</span><span>✓ Rules graded A–D</span><span>✓ Free, no sign-up</span></p>
   </div>
   <a class="hx-card" id="hx-card" href="/gap-scanner.html" aria-label="Today's biggest price gap">
     <span class="hx-ch"><i></i>TODAY'S BIGGEST GAP <small id="hx-age"></small></span>
@@ -1139,6 +1157,7 @@
   function gkey(g) { var t = g.title + '|' + g.outcome, h = 5381; for (var k = 0; k < t.length; k++) h = ((h * 33) ^ t.charCodeAt(k)) >>> 0; return h.toString(36); }
   fetch('gaps.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     var gs = d.gaps || [], g = gs[0]; if (!g) return;
+    var hg = document.getElementById('hx-t-gap'); if (hg) hg.textContent = gs.length + ' gaps live · top ' + g.net.toFixed(1) + '¢';
     var m = Math.max(0, Math.round((Date.now() - Date.parse(d.updated)) / 60000));
     document.getElementById('hx-age').textContent = '· ' + (m < 60 ? m + ' min ago' : Math.round(m / 60) + ' h ago');
     document.getElementById('hx-q').textContent = g.title;
@@ -1155,7 +1174,7 @@
   }).catch(function () { document.getElementById('hx-q').textContent = 'Live gaps are loading late. Open the Gap Scanner for the latest.'; });
   fetch('track.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     var a = (d.summary || {}).all || {};
-    if (a.n >= 10) document.getElementById('hx-rec').innerHTML = '✓ <a href="/expiry-returns.html#track">Track record: ' + a.pct.toFixed(0) + '% paid out (' + a.won + ' of ' + a.n + ')</a>';
+    if (a.n >= 10) document.getElementById('hx-rec').textContent = a.pct.toFixed(0) + '% paid out (' + a.won + ' of ' + a.n + ')';
   }).catch(function () {});
 })();
 </script>
