@@ -64,6 +64,9 @@
   .brk { display:flex; align-items:center; gap:14px; max-width:1400px; margin:0 auto; padding:7px 20px; border-bottom:1px solid var(--line);
     background:linear-gradient(90deg, rgba(255,179,71,.08), rgba(255,179,71,0) 40%); font-size:.95rem; min-height:38px; }
   .brk[hidden] { display:none; }
+  /* Nov 25 (James): LATEST line sits on the Intel Hub, same left edge and width, so the two read as one section (JS sets width/margin) */
+  .brk.hubw { max-width:none; box-sizing:border-box; padding:7px 12px; gap:12px; background:linear-gradient(90deg, rgba(255,179,71,.1), rgba(5,12,20,.93) 45%), rgba(5,12,20,.93);
+    border:1px solid rgba(255,92,92,.55); border-bottom-color:rgba(255,92,92,.25); box-shadow:0 0 24px rgba(255,92,92,.14); position:relative; z-index:4; }
   .brk-tag { flex:none; display:inline-flex; align-items:center; gap:7px; font:800 .74rem/1 "Space Grotesk",system-ui,sans-serif; letter-spacing:.06em;
     color:#0b1420; background:var(--amber,#ffb347); padding:5px 9px; border-radius:3px; min-width:150px; }
   .brk-tag.hot { color:#fff; background:#d8262b; }
@@ -1219,7 +1222,7 @@
     var hot = m <= 30;
     tag.classList.toggle('hot', hot); lab.textContent = hot ? 'BREAKING' : 'LATEST'; srcEl.textContent = '\u00b7 ' + x.src;
     h.classList.remove('in'); void h.offsetWidth;
-    h.textContent = x.title + ' \u2197'; h.href = x.url; t.textContent = m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago';
+    h.textContent = x.title + ' \u2197'; h.href = x.url; h.title = x.title; t.textContent = m < 60 ? m + ' min ago' : Math.round(m / 60) + 'h ago';
     h.classList.add('in');
   }
   box.addEventListener('mouseenter', function () { paused = true; });
@@ -1492,9 +1495,11 @@
   var box = document.getElementById('warroom'); if (!box) return;
   function align() {   // James: exactly as wide as the scanners box below it, same left edge (CSS calc is the fallback)
     var g = document.querySelector('.gbw'), dw = box.parentNode;
-    if (!g || innerWidth <= 760) { box.style.left = box.style.width = ''; return; }
+    var bk = document.getElementById('brk');   // Nov 25 (James): LATEST line matches the hub's width, sitting right on top of it
+    if (!g || innerWidth <= 760) { box.style.left = box.style.width = ''; if (bk) { bk.classList.remove('hubw'); bk.style.width = bk.style.marginLeft = ''; } return; }
     var r = g.getBoundingClientRect(), d = dw.getBoundingClientRect();
-    if (r.width) { box.style.left = (r.left - d.left) + 'px'; box.style.width = r.width + 'px'; }
+    if (r.width) { box.style.left = (r.left - d.left) + 'px'; box.style.width = r.width + 'px';
+      if (bk) { var pb = bk.parentNode.getBoundingClientRect(); bk.classList.add('hubw'); bk.style.marginLeft = (r.left - pb.left) + 'px'; bk.style.width = r.width + 'px'; } }
   }
   addEventListener('resize', align); addEventListener('load', align); setTimeout(align, 0);
   var W = null, ALL = [];
