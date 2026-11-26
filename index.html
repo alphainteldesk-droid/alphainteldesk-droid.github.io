@@ -22,7 +22,7 @@
 <meta name="twitter:image" content="https://alphainteldesk.com/card.jpg?v=202611260319">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@alphainteldesk">
-<link rel="preload" as="image" href="banner.jpg?v=5">
+<link rel="preload" as="image" href="banner.jpg?v=6">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -69,7 +69,12 @@
   .brk-side { flex:none; display:flex; align-items:center; justify-content:center; box-sizing:border-box; border-bottom:1px solid var(--line);
     background:linear-gradient(90deg, rgba(255,179,71,.05), rgba(5,12,20,.6) 30%, rgba(5,12,20,.6) 70%, rgba(255,179,71,.05)); }
   .brk-side[hidden] { display:none; }
-  .brk-side .sign { position:static; transform:none; font-size:.8rem; letter-spacing:.14em; padding:4px 16px; }
+  /* Nov 25 (James): the sign runs the full width of the strip and keeps its neon flicker */
+  .brk-side { padding:5px 12px; background:rgba(5,12,20,.93); border-top:1px solid rgba(255,179,71,.18); }
+  .brk-side .sign { position:static; transform:none; flex:1; display:flex; align-items:center; justify-content:center; gap:.9em; height:100%; box-sizing:border-box;
+    font:700 .82rem/1 "Space Grotesk",system-ui,sans-serif; letter-spacing:.42em; padding:0 0 0 .42em; border-radius:4px; }
+  .brk-side .sign::before, .brk-side .sign::after { content:""; flex:0 1 90px; height:1px; background:linear-gradient(90deg, rgba(255,179,71,0), rgba(255,179,71,.7)); }
+  .brk-side .sign::after { transform:scaleX(-1); }
   /* Nov 25 (James): LATEST line sits on the Intel Hub, same left edge and width, so the two read as one section (JS sets width/margin) */
   .brk.hubw { max-width:none; box-sizing:border-box; padding:7px 12px; gap:12px; background:linear-gradient(90deg, rgba(255,179,71,.1), rgba(5,12,20,.93) 45%), rgba(5,12,20,.93);
     border:1px solid rgba(255,92,92,.55); border-bottom-color:rgba(255,92,92,.25); box-shadow:0 0 24px rgba(255,92,92,.14); position:relative; z-index:4; }
@@ -322,7 +327,7 @@
   }
   /* ===== Live Intel Desk ===== */
   .desk { position:relative; width:100%; aspect-ratio:3/1; overflow:hidden;
-    background:#0b1420 url(banner.jpg?v=5) center/cover no-repeat; }
+    background:#0b1420 url(banner.jpg?v=6) center/cover no-repeat; }
   /* Nov 15: the photo's dark wall ends at ~42.6%; widen it to just past the screens (which now reach 45.1%) */
   .desk::before { content:""; position:absolute; left:0; top:0; bottom:0; width:45.8%; pointer-events:none;
     background:linear-gradient(90deg, rgb(13,17,22) 0, rgb(13,17,22) calc(100% - 10px), rgba(13,17,22,0) 100%); }
@@ -1108,7 +1113,7 @@
      duplicate "Alpha Intel Desk" title + 4 stat boxes). Old blocks kept in git history (commit before this). -->
 <section class="hx" aria-label="Alpha Intel Desk: live price gaps across Polymarket, Kalshi and Alpha Arcade">
   <div class="hx-l">
-    <div class="hx-top"><span class="sign">THE DESK IS OPEN</span><span class="hx-eb">Real-time intelligence for prediction markets</span></div>
+    <div class="hx-top"><span class="hx-eb">Real-time intelligence for prediction markets</span></div>
     <h1>Same question. Different price. <br><em>We find the gap, after fees.</em></h1>
     <p class="hx-only">The only desk tracking <b>Alpha Arcade on Algorand</b> side by side with Polymarket and Kalshi.</p>
     <div class="ib-sites" aria-label="Tracking Polymarket, Kalshi and Alpha Arcade"><span class="site s-poly"><i></i>POLYMARKET</span><span class="site s-kal"><i></i>KALSHI</span><span class="site s-alpha"><i></i>ALPHA ARCADE</span></div>
