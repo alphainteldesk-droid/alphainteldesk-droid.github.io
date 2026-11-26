@@ -64,6 +64,12 @@
   .brk { display:flex; align-items:center; gap:14px; max-width:1400px; margin:0 auto; padding:7px 20px; border-bottom:1px solid var(--line);
     background:linear-gradient(90deg, rgba(255,179,71,.08), rgba(255,179,71,0) 40%); font-size:.95rem; min-height:38px; }
   .brk[hidden] { display:none; }
+  .brkrow { display:flex; align-items:stretch; }
+  .brkrow > .brk { flex:1 1 auto; min-width:0; } .brkrow > .brk.hubw { flex:none; margin-right:0; }
+  .brk-side { flex:none; display:flex; align-items:center; justify-content:center; box-sizing:border-box; border-bottom:1px solid var(--line);
+    background:linear-gradient(90deg, rgba(255,179,71,.05), rgba(5,12,20,.6) 30%, rgba(5,12,20,.6) 70%, rgba(255,179,71,.05)); }
+  .brk-side[hidden] { display:none; }
+  .brk-side .sign { position:static; transform:none; font-size:.8rem; letter-spacing:.14em; padding:4px 16px; }
   /* Nov 25 (James): LATEST line sits on the Intel Hub, same left edge and width, so the two read as one section (JS sets width/margin) */
   .brk.hubw { max-width:none; box-sizing:border-box; padding:7px 12px; gap:12px; background:linear-gradient(90deg, rgba(255,179,71,.1), rgba(5,12,20,.93) 45%), rgba(5,12,20,.93);
     border:1px solid rgba(255,92,92,.55); border-bottom-color:rgba(255,92,92,.25); box-shadow:0 0 24px rgba(255,92,92,.14); position:relative; z-index:4; }
@@ -1213,10 +1219,13 @@
 </script></div></div>
 <!-- LATEST news line (Nov 10): BBC, CNBC, The Hill, NPR merged, market-relevant only, one headline at a time.
      Red BREAKING tag only for stories under 30 minutes old, LATEST otherwise. -->
+<div class="brkrow">
 <div class="brk" id="brk" hidden aria-live="polite">
   <span class="brk-tag"><i></i><span class="brk-l">LATEST</span> <b class="brk-s"></b></span>
   <a class="brk-h" href="#" target="_blank" rel="noopener"></a>
   <span class="brk-t"></span>
+</div>
+<div class="brk-side" id="brk-side" hidden><span class="sign">THE DESK IS OPEN</span></div>   <!-- Nov 25 (James): fills the strip beside the LATEST line -->
 </div>
 <script>
 (function () {
@@ -1505,15 +1514,19 @@
     var g = document.querySelector('.gbw'), dw = box.parentNode;
     var bk = document.getElementById('brk');   // Nov 25 (James): LATEST line matches the hub's width, sitting right on top of it
     if (!g || innerWidth <= 760) { box.style.left = box.style.width = ''; if (bk) { bk.classList.remove('hubw'); bk.style.width = bk.style.marginLeft = ''; }
-      var wb0 = document.getElementById('wire-bar'); if (wb0) wb0.style.width = wb0.style.marginLeft = wb0.style.maxWidth = ''; return; }
+      var wb0 = document.getElementById('wire-bar'); if (wb0) wb0.style.width = wb0.style.marginLeft = wb0.style.maxWidth = '';
+      var sd0 = document.getElementById('brk-side'); if (sd0) sd0.hidden = true; return; }
     var r = g.getBoundingClientRect(), d = dw.getBoundingClientRect();
     if (r.width) { box.style.left = (r.left - d.left) + 'px'; box.style.width = r.width + 'px';
       if (bk) { var pb = bk.parentNode.getBoundingClientRect(); bk.classList.add('hubw'); bk.style.marginLeft = (r.left - pb.left) + 'px'; bk.style.width = r.width + 'px'; } }
+    var sd = document.getElementById('brk-side'), c2s = document.querySelector('.split > :last-child');   // Nov 25: DESK IS OPEN sign beside the LATEST line
+    if (sd && bk && c2s) { var w2 = d.right - r.right;   /* to the photo's right edge, so the whole top of the photo is covered */ sd.hidden = bk.hidden || w2 < 120; sd.style.width = w2 + 'px'; }
     var wb = document.getElementById('wire-bar'), c1 = document.querySelector('.split > :first-child'), c2 = document.querySelector('.split > :last-child');
     if (wb && c1 && c2) { var a1 = c1.getBoundingClientRect(), a2 = c2.getBoundingClientRect(), pw = wb.parentNode.getBoundingClientRect();
       if (a2.right > a1.left) { wb.style.marginLeft = (a1.left - pw.left) + 'px'; wb.style.width = (a2.right - a1.left) + 'px'; wb.style.maxWidth = 'none'; } }
   }
   addEventListener('resize', align); addEventListener('load', align); setTimeout(align, 0);
+  var bkw = document.getElementById('brk'); if (bkw && window.MutationObserver) new MutationObserver(align).observe(bkw, { attributes: true, attributeFilter: ['hidden'] });
   var W = null, ALL = [];
   box.querySelector('.wr-tabs').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
