@@ -75,6 +75,7 @@
     font:700 .82rem/1 "Space Grotesk",system-ui,sans-serif; letter-spacing:.42em; padding:0 0 0 .42em; border-radius:4px; }
   .brk-side .sign::before, .brk-side .sign::after { content:""; flex:0 1 90px; height:1px; background:linear-gradient(90deg, rgba(255,179,71,0), rgba(255,179,71,.7)); }
   .brk-side .sign::after { transform:scaleX(-1); }
+  .brk-side .sign { animation:none; text-shadow:0 0 6px rgba(255,179,71,.9), 0 0 18px rgba(255,179,71,.45); box-shadow:0 0 10px rgba(255,179,71,.45), inset 0 0 8px rgba(255,179,71,.2); }   /* Nov 25 (James): steady glow, no flicker */
   /* Nov 25 (James): LATEST line sits on the Intel Hub, same left edge and width, so the two read as one section (JS sets width/margin) */
   .brk.hubw { max-width:none; box-sizing:border-box; padding:7px 12px; gap:12px; background:linear-gradient(90deg, rgba(255,179,71,.1), rgba(5,12,20,.93) 45%), rgba(5,12,20,.93);
     border:1px solid rgba(255,92,92,.55); border-bottom-color:rgba(255,92,92,.25); box-shadow:0 0 24px rgba(255,92,92,.14); position:relative; z-index:4; }
