@@ -424,6 +424,8 @@
     -webkit-mask:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);
             mask:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent); }
   .wire-track { display:inline-block; animation:slide 50s linear infinite; }
+  /* Nov 25 (James): the Desk Wire no longer runs edge to edge; it lines up with the Intel Hub and the boxes below (JS sets exact edges) */
+  @media (min-width: 761px) { .wire { max-width:1400px; margin:0 auto; box-sizing:border-box; border:1px solid var(--line); } }
   .wire:hover .wire-track { animation-play-state:paused; }
   @keyframes slide { to { transform:translateX(-50%); } }
   .wi { margin-right:34px; font-size:.88rem; color:var(--text); }
@@ -612,6 +614,12 @@
   .mw-row i { font:700 .72rem "Space Grotesk",system-ui,sans-serif; letter-spacing:.06em; color:var(--muted); font-style:normal; }
   .mw-row em { font:700 .95rem "Space Grotesk",system-ui,sans-serif; color:var(--muted); font-style:normal; }
   .mw-row.now b { font-size:1.35rem; } .mw-px small { display:block; margin-top:4px; } .mw-px small em { font-style:normal; }
+  /* Nov 25 (James): site names get the same 2-line slot and label/value stack, so PICKED, NOW and the change line up across sites */
+  .mw-px > div { display:flex; flex-direction:column; min-width:0; }
+  .mw-px > div > span { min-height:2.5em; line-height:1.25; }
+  .mw-px .mw-row { display:block; margin:2px 0 0; } .mw-px .mw-row i { display:block; font-size:.66rem; }
+  .mw-px .mw-row em, .mw-px .mw-row.now b { display:block; white-space:nowrap; line-height:1.15; }
+  .mw-px .off .mw-na { margin:2px 0 0; }
   .mw-px .off { opacity:.5; } .mw-na { margin:10px 0 0; font:600 .8rem "Space Grotesk",system-ui,sans-serif; color:var(--muted); }
   .mw-svg { width:100%; height:auto; display:block; } .mw-svg .g { stroke:rgba(143,163,184,.15); } .mw-svg text { fill:#8fa3b8; font:11px "Space Grotesk",system-ui,sans-serif; }
   .mw-leg { display:flex; flex-wrap:wrap; gap:4px 14px; font-size:.78rem; color:var(--muted); margin-top:6px; }
@@ -1496,10 +1504,14 @@
   function align() {   // James: exactly as wide as the scanners box below it, same left edge (CSS calc is the fallback)
     var g = document.querySelector('.gbw'), dw = box.parentNode;
     var bk = document.getElementById('brk');   // Nov 25 (James): LATEST line matches the hub's width, sitting right on top of it
-    if (!g || innerWidth <= 760) { box.style.left = box.style.width = ''; if (bk) { bk.classList.remove('hubw'); bk.style.width = bk.style.marginLeft = ''; } return; }
+    if (!g || innerWidth <= 760) { box.style.left = box.style.width = ''; if (bk) { bk.classList.remove('hubw'); bk.style.width = bk.style.marginLeft = ''; }
+      var wb0 = document.getElementById('wire-bar'); if (wb0) wb0.style.width = wb0.style.marginLeft = wb0.style.maxWidth = ''; return; }
     var r = g.getBoundingClientRect(), d = dw.getBoundingClientRect();
     if (r.width) { box.style.left = (r.left - d.left) + 'px'; box.style.width = r.width + 'px';
       if (bk) { var pb = bk.parentNode.getBoundingClientRect(); bk.classList.add('hubw'); bk.style.marginLeft = (r.left - pb.left) + 'px'; bk.style.width = r.width + 'px'; } }
+    var wb = document.getElementById('wire-bar'), c1 = document.querySelector('.split > :first-child'), c2 = document.querySelector('.split > :last-child');
+    if (wb && c1 && c2) { var a1 = c1.getBoundingClientRect(), a2 = c2.getBoundingClientRect(), pw = wb.parentNode.getBoundingClientRect();
+      if (a2.right > a1.left) { wb.style.marginLeft = (a1.left - pw.left) + 'px'; wb.style.width = (a2.right - a1.left) + 'px'; wb.style.maxWidth = 'none'; } }
   }
   addEventListener('resize', align); addEventListener('load', align); setTimeout(align, 0);
   var W = null, ALL = [];
