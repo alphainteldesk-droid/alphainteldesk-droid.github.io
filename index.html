@@ -75,6 +75,11 @@
     font:700 .82rem/1 "Space Grotesk",system-ui,sans-serif; letter-spacing:.42em; padding:0 0 0 .42em; border-radius:4px; }
   .brk-side .sign::before, .brk-side .sign::after { content:""; flex:0 1 90px; height:1px; background:linear-gradient(90deg, rgba(255,179,71,0), rgba(255,179,71,.7)); }
   .brk-side .sign::after { transform:scaleX(-1); }
+  /* Nov 25 (James): the strip rotates live facts: scanners, Danger Zone track record, live data streams */
+  .brk-side .sign { letter-spacing:.2em; padding:0 0 0 .2em; text-decoration:none; min-width:0; }
+  .brk-side .sign:hover { color:#ffd08a; text-decoration:none; }
+  #ds-t { flex:none; max-width:calc(100% - 40px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; transition:opacity .35s; }
+  #ds-t.out { opacity:0; } #ds-t b { color:#fff; font-weight:800; }
   /* Nov 25 (James): LATEST line sits on the Intel Hub, same left edge and width, so the two read as one section (JS sets width/margin) */
   .brk.hubw { max-width:none; box-sizing:border-box; padding:7px 12px; gap:12px; background:linear-gradient(90deg, rgba(255,179,71,.1), rgba(5,12,20,.93) 45%), rgba(5,12,20,.93);
     border:1px solid rgba(255,92,92,.55); border-bottom-color:rgba(255,92,92,.25); box-shadow:0 0 24px rgba(255,92,92,.14); position:relative; z-index:4; }
@@ -1230,7 +1235,7 @@
   <a class="brk-h" href="#" target="_blank" rel="noopener"></a>
   <span class="brk-t"></span>
 </div>
-<div class="brk-side" id="brk-side" hidden><span class="sign">THE DESK IS OPEN</span></div>   <!-- Nov 25 (James): fills the strip beside the LATEST line -->
+<div class="brk-side" id="brk-side" hidden><a class="sign" id="ds" href="/gap-scanner.html"><span id="ds-t">REAL-TIME INTEL FOR PREDICTION MARKETS</span></a></div>   <!-- Nov 25 (James): fills the strip beside the LATEST line -->
 </div>
 <script>
 (function () {
@@ -1531,6 +1536,19 @@
       if (a2.right > a1.left) { wb.style.marginLeft = (a1.left - pw.left) + 'px'; wb.style.width = (a2.right - a1.left) + 'px'; wb.style.maxWidth = 'none'; } }
   }
   addEventListener('resize', align); addEventListener('load', align); setTimeout(align, 0);
+  (function () {   // Nov 25 (James): rotating messages in the neon strip, built from live data
+    var a = document.getElementById('ds'), t = document.getElementById('ds-t'); if (!a || !t) return;
+    var M = [{ h: 'REAL-TIME INTEL FOR PREDICTION MARKETS', u: '/gap-scanner.html' },
+             { h: 'LIVE DATA STREAMS · CONFLICT HEAT · NEWS · GAS · SHIPPING', u: '#warroom' }], k = 0, hold = false;
+    var J = function (f) { return fetch(f + '?v=' + Date.now()).then(function (r) { return r.json(); }); };
+    J('gaps.json').then(function (d) { var g = (d.gaps || [])[0]; if (g) M.splice(1, 0, { h: 'GAP SCANNER · <b>' + d.gaps.length + '</b> PRICE GAPS LIVE · TOP <b>' + g.net.toFixed(1) + '¢</b> AFTER FEES', u: '/gap-scanner.html' }); }).catch(function () {});
+    J('track.json').then(function (d) { var x = (d.summary || {}).all || {}; if (x.n >= 10) M.push({ h: 'DANGER ZONE · BIG RISK, BIG REWARD · <b>' + x.pct.toFixed(0) + '%</b> PAID OUT', u: '/expiry-returns.html' }); }).catch(function () {});
+    a.addEventListener('mouseenter', function () { hold = true; }); a.addEventListener('mouseleave', function () { hold = false; });
+    setInterval(function () {
+      if (hold || M.length < 2) return; k = (k + 1) % M.length; t.classList.add('out');
+      setTimeout(function () { t.innerHTML = M[k].h; a.href = M[k].u; t.classList.remove('out'); }, 350);
+    }, 5000);
+  })();
   var bkw = document.getElementById('brk'); if (bkw && window.MutationObserver) new MutationObserver(align).observe(bkw, { attributes: true, attributeFilter: ['hidden'] });
   var W = null, ALL = [];
   box.querySelector('.wr-tabs').addEventListener('click', function (e) {
