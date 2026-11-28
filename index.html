@@ -677,32 +677,26 @@
   }
   .hub .cal-h h2 { gap:12px; }
   .hub-tag { display:block; color:#ff7a7a; font-weight:700; margin-bottom:2px; }
-  /* Nov 27 (James): Danger Zone heading = the button. A heartbeat trace runs across it; the border sweeps red; hover speeds the pulse up */
+  /* Nov 27 (James): Danger Zone heading = the button. the border sweeps red (heartbeat removed); hover speeds the sweep up */
   .dz-hero { position:relative; display:flex; align-items:center; gap:18px; margin:0 0 10px; padding:16px 20px; border-radius:10px; overflow:hidden; isolation:isolate;
     text-decoration:none !important; color:inherit !important; background:linear-gradient(100deg, rgba(255,59,59,.12), rgba(10,14,20,.6) 55%, rgba(255,59,59,.08)); }
   .dz-hero::before { content:""; position:absolute; inset:-60%; z-index:-2; background:conic-gradient(from 0deg, transparent 0 70%, rgba(255,90,90,.15) 80%, #ff4d4d 90%, #ffb347 93%, transparent 96%);
     animation:dzSpin 4s linear infinite; }
   .dz-hero::after { content:""; position:absolute; inset:2px; z-index:-1; border-radius:8px; background:linear-gradient(100deg, #1a0e12, #0d131b 55%, #150d11); }
   @keyframes dzSpin { to { transform:rotate(1turn); } }
-  .dz-ekg { position:absolute; inset:2px; width:calc(100% - 4px); height:calc(100% - 4px); z-index:0; pointer-events:none; }
-  .dz-ekg path { fill:none; stroke-linejoin:round; stroke-linecap:round; vector-effect:non-scaling-stroke; }
-  .ekg-base { stroke:rgba(255,90,90,.13); stroke-width:1.5; }
-  .ekg-beat { stroke:#ff4d4d; stroke-width:2.5; stroke-dasharray:140 1000; stroke-dashoffset:140; filter:drop-shadow(0 0 4px #ff3b3b); opacity:.55; animation:ekg 3.2s linear infinite; }
-  @keyframes ekg { to { stroke-dashoffset:-1000; } }
   .dz-h-in { position:relative; z-index:1; flex:1; min-width:0; }
   .dz-hero h2 { display:flex; align-items:center; gap:12px; margin:0 0 6px; font:800 clamp(1.35rem, 2.2vw, 1.9rem) "Space Grotesk",system-ui,sans-serif; letter-spacing:.08em; color:#ff5c5c;
-    text-shadow:0 0 14px rgba(255,60,60,.65); animation:dzBeat 3.2s ease-in-out infinite; }
-  @keyframes dzBeat { 0%, 30%, 100% { text-shadow:0 0 14px rgba(255,60,60,.65); } 36% { text-shadow:0 0 26px rgba(255,60,60,1), 0 0 4px #fff; } 44% { text-shadow:0 0 14px rgba(255,60,60,.65); } }
+    text-shadow:0 0 14px rgba(255,60,60,.65); }
   .dz-hero .hub-tag { font-size:.95rem; line-height:1.4; color:#ffb3b3; margin:0; }
   .dz-h-go { position:relative; z-index:1; flex:none; display:flex; align-items:center; gap:8px; padding:10px 16px; border:1px solid #ff5c5c; border-radius:8px;
     font:800 .9rem "Space Grotesk",system-ui,sans-serif; letter-spacing:.14em; color:#fff; background:rgba(255,59,59,.18); box-shadow:0 0 14px rgba(255,60,60,.35); }
   .dz-h-go i { font-style:normal; display:inline-block; animation:dzNudge 1.6s ease-in-out infinite; }
   @keyframes dzNudge { 50% { transform:translateX(5px); } }
-  .dz-hero:hover .ekg-beat { animation-duration:1.3s; opacity:.9; } .dz-hero:hover::before { animation-duration:1.6s; }
-  .dz-hero:hover h2 { animation-duration:1.3s; } .dz-hero:hover .dz-h-go { background:#ff3b3b; box-shadow:0 0 24px rgba(255,60,60,.7); }
+  .dz-hero:hover::before { animation-duration:1.6s; }
+  .dz-hero:hover h2 { text-shadow:0 0 22px rgba(255,60,60,.9); } .dz-hero:hover .dz-h-go { background:#ff3b3b; box-shadow:0 0 24px rgba(255,60,60,.7); }
   .dz-h-sub { margin:0 0 12px; color:var(--muted); font-size:.88rem; }
   @media (max-width:640px) { .dz-hero { flex-direction:column; align-items:flex-start; gap:12px; padding:14px; } .dz-h-go { align-self:stretch; justify-content:center; } }
-  @media (prefers-reduced-motion:reduce) { .dz-hero::before, .ekg-beat, .dz-hero h2, .dz-h-go i { animation:none; } .ekg-beat { stroke-dasharray:none; opacity:.35; } }
+  @media (prefers-reduced-motion:reduce) { .dz-hero::before, .dz-h-go i { animation:none; } }
   .hub-cols, .hub-r { display:grid; grid-template-columns:minmax(0,1fr) 46px 58px 62px 42px 80px; gap:9px; align-items:center; }
   .hub-r > .dzg { justify-self:center; min-width:20px; text-align:center; padding:1px 4px; border-radius:4px; border:1px solid; font:700 .74rem "Space Grotesk",system-ui,sans-serif; }   /* Nov 15: DZ Grade */
   .dzg.a { color:#3ddc84; border-color:rgba(61,220,132,.6); background:rgba(61,220,132,.13); } .dzg.b { color:#3fdbe6; border-color:rgba(63,219,230,.55); background:rgba(63,219,230,.1); }
@@ -1414,12 +1408,8 @@
 <section class="calsec hub" id="closing-soon" aria-label="The Danger Zone: contracts settling within 6 months">
   <i class="cal-br tl"></i><i class="cal-br tr"></i><i class="cal-br bl"></i><i class="cal-br brr"></i>
   <span id="expiry-hub"></span>
-  <!-- Nov 27 (James): the heading itself is the way in; the door button is gone. Heartbeat (EKG) trace runs across it -->
+  <!-- Nov 27 (James): the heading itself is the way in; the door button is gone. Moving border only (heartbeat removed) -->
   <a class="dz-hero" href="/expiry-returns.html" aria-label="Enter The Danger Zone: every contract, every filter, plus tools to research your call">
-    <svg class="dz-ekg" viewBox="0 0 600 80" preserveAspectRatio="none" aria-hidden="true">
-      <path class="ekg-base" d="M0 40 H70 L80 34 L90 40 H110 L118 52 L130 6 L142 72 L150 40 H175 L190 30 L205 40 H270 L280 34 L290 40 H310 L318 52 L330 6 L342 72 L350 40 H375 L390 30 L405 40 H470 L480 34 L490 40 H510 L518 52 L530 6 L542 72 L550 40 H575 L590 30 L600 40"/>
-      <path class="ekg-beat" pathLength="1000" d="M0 40 H70 L80 34 L90 40 H110 L118 52 L130 6 L142 72 L150 40 H175 L190 30 L205 40 H270 L280 34 L290 40 H310 L318 52 L330 6 L342 72 L350 40 H375 L390 30 L405 40 H470 L480 34 L490 40 H510 L518 52 L530 6 L542 72 L550 40 H575 L590 30 L600 40"/>
-    </svg>
     <span class="dz-h-in">
       <h2><span class="beacon" aria-hidden="true"></span>THE DANGER ZONE<span class="beacon b2" aria-hidden="true"></span></h2>
       <b class="hub-tag">80¢+ contracts settling in 1 week to 6 months. Up to <span id="hub-best">25%</span> return with a current hit rate of <span id="hub-hit">83%</span>, but one wrong call could cost it all.</b>
