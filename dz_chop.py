@@ -129,6 +129,11 @@ def main(path="expiry.json"):
     print("Chop: %d of %d rows have 48h history (%d failed) | %d choppy (>= %.0fc swing): %s"
           % (done, len(rows), fail, len(choppy), CHOPPY,
              "; ".join("%s %s %s %.1fc" % (r["site"], r["title"][:30], r["side"], r["ch"]["sw"]) for r in choppy[:8])))
+    try:                                               # Nov 27 (James): DZ Grade v2 (Liquidity + Rules + Type + Flip risk)
+        import dz_grade
+        dz_grade.apply(rows)
+    except Exception as e:
+        print("DZ grade v2 skipped (%s)" % e)
     json.dump(d, open(path, "w"), separators=(",", ":"))
 
 

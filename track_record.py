@@ -101,6 +101,20 @@ def grades(x):
     return {"g": g, "lg": lg or "-", "rg": rg or "-"}
 
 
+RESULT_COLS = ["site", "title", "outcome", "side", "price", "days", "close", "g", "liq", "rules", "g2", "type_g", "flip_g",
+               "type", "story", "chop_max", "won", "settled_at"]
+
+
+def grades2(x):
+    """Nov 27 (James): DZ Grade v2 (Liquidity + Rules + Type + Flip risk, dz_grade.py) as listed, plus its parts."""
+    z = x.get("dz") or {}
+    if not z.get("g"):
+        return {}
+    p = z.get("parts") or {}
+    return {"g2": z["g"], "tg": p.get("type", "-"), "fg": p.get("flip", "-"), "ty": z.get("type") or "",
+            "sto": (x.get("story") or {}).get("name") or ""}
+
+
 def bucket(days):
     return "1-6 months" if days >= 30 else "under 1 month"
 
@@ -135,6 +149,8 @@ def main():
                 st["open"][k]["cm"] = max(sw, st["open"][k].get("cm", 0))
             if "g" not in st["open"][k]:              # Nov 17: contracts logged before grades were saved get today's grade
                 st["open"][k].update(grades(x), gl=1)
+            if "g2" not in st["open"][k] and x.get("dz"):   # Nov 27: same for DZ Grade v2 (marked g2l = graded later)
+                st["open"][k].update(grades2(x), g2l=1)
             continue
         if k in st.get("done", {}):
             continue
@@ -142,6 +158,7 @@ def main():
                          "r": x["ret"], "c": x["close"], "d": x["days"], "u": x["url"], "fs": now, "ls": now,
                          "px": bool(x["days"] < 3 and PX.search(x["title"] + " " + (x.get("cat") or "")))}
         st["open"][k].update(grades(x))
+        st["open"][k].update(grades2(x))
         if sw is not None:
             st["open"][k].update(ch=sw, cm=sw)
         new += 1
@@ -203,12 +220,26 @@ def main():
             cg["n"] += 1                          # on the page yet: checked once there are 30+ results
             cg["won"] += won
             cg["pl"] += v["r"] / 100 if won else -1.0
+        cost = v["a"] + (v.get("f") or 0)                # Nov 27: what you paid per contract, for the break-even line
+        if not v["px"] and v.get("g2"):           # Nov 27: results by DZ Grade v2, by market type and by flip risk
+            for name, key in (("by_grade2", v["g2"]), ("by_type", v.get("ty") or "?"), ("by_flip", v.get("fg") or "-")):
+                a = st.setdefault(name, {}).setdefault(key, {"n": 0, "won": 0, "pl": 0.0, "cost": 0.0})
+                a["n"] += 1
+                a["won"] += won
+                a["pl"] += v["r"] / 100 if won else -1.0
+                a["cost"] += cost
+        if not v["px"]:                           # Nov 27 (James): keep every settled contract with its details, so we can
+            st.setdefault("results", []).insert(0, [   # test which signals really predict a miss (only totals were kept)
+                k.split("|")[0], v["t"][:60], v["o"][:30], v["s"], v["a"], round(v["d"], 1), v["c"][:10], v.get("g"), v.get("lg"),
+                v.get("rg"), v.get("g2"), v.get("tg"), v.get("fg"), v.get("ty"), v.get("sto"), v.get("cm"), int(won), int(now)])
         settled += 1
         paid += won
         if not won:
             st["misses"].insert(0, {"t": v["t"], "o": v["o"], "s": v["s"], "a": v["a"], "c": datetime.now(timezone.utc).strftime("%Y-%m-%d"),   # the day we saw it settle (some settle early)
                                     "u": v["u"], "d": round(v["d"]), "px": v["px"]})
     st["misses"] = st["misses"][:25]
+    st["results"] = (st.get("results") or [])[:1500]   # columns: RESULT_COLS
+    st["result_cols"] = RESULT_COLS
     for k in [k for k, t in done.items() if now - t > 200 * 86400]:   # forget scored keys after 200 days (longest window is 180)
         del done[k]
 
@@ -227,6 +258,11 @@ def main():
                             "ret": round(100 * g["pl"] / g["n"], 2)} for k, g in sorted((st.get("by_grade") or {}).items()) if g["n"]}
     summ["by_chop"] = {k: {"n": g["n"], "won": g["won"], "pct": round(100 * g["won"] / g["n"], 1),
                            "ret": round(100 * g["pl"] / g["n"], 2)} for k, g in sorted((st.get("by_chop") or {}).items()) if g["n"]}
+    rnd = lambda g: {"n": g["n"], "won": g["won"], "pct": round(100 * g["won"] / g["n"], 1), "ret": round(100 * g["pl"] / g["n"], 2),
+                     "be": round(g["cost"] / g["n"], 1)}       # be = average price paid incl. fee = the % you need to break even
+    for name in ("by_grade2", "by_type", "by_flip"):
+        summ[name] = {k: rnd(g) for k, g in sorted((st.get(name) or {}).items()) if g["n"]}
+    summ["waiting_by_grade2"] = dict(__import__("collections").Counter(v.get("g2", "?") for v in st["open"].values() if not v["px"]))
     summ["waiting_by_grade"] = dict(__import__("collections").Counter(v.get("g", "?") for v in st["open"].values() if not v["px"]))
     if st.get("removed"):
         summ["removed"] = st["removed"]               # Nov 21: results taken out (shown on the page, so it's open about it)

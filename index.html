@@ -1843,8 +1843,8 @@
       var L = { A: 4, B: 3, C: 2, D: 1 }, R = { clear: 4, mixed: 3, none: 2, judgement: 1 }, G = ['', 'D', 'C', 'B', 'A'];
       var l = x.ex ? (x.ex.usd ? L[x.ex.g] : 1) : 0, r = x.st ? R[x.st.g] : 0;
       if (!l || !r) return '<span class="dzg n" title="' + 'Not graded yet' + '">–</span>';
-      var g = G[Math.floor((l + r) / 2)];
-      return '<span class="dzg ' + g.toLowerCase() + '" title="DZ Grade ' + g + ': Liquidity ' + G[l] + ' + Rules ' + G[r] + '. Details on the Danger Zone page.">' + g + '</span>'; }
+      var g = (x.dz && x.dz.g) || G[Math.floor((l + r) / 2)];   /* Nov 27 (James): v2 = + Type + Flip risk, worked out by the update */
+      return '<span class="dzg ' + g.toLowerCase() + '" title="DZ Grade ' + g + ': Liquidity ' + G[l] + ' + Rules ' + G[r] + (x.dz && x.dz.parts ? ' + Type ' + x.dz.parts.type + (x.dz.parts.flip ? ' + Flip risk ' + x.dz.parts.flip : '') : '') + '. Details on the Danger Zone page.">' + g + '</span>'; }
     function expRow(x) {   // Nov 15 (James): just the side, the price now, the return if right, and the close date
       var cd = new Date(x.close), y = cd.getFullYear() !== new Date().getFullYear();
       return '<a class="hub-r" href="/expiry-returns.html#c=' + ckey(x) + '" title="Open on the Danger Zone page. Return after a ' + x.fee.toFixed(2) + '¢ fee, if it resolves this way">' +

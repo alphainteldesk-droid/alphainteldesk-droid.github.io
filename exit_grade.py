@@ -75,7 +75,12 @@ def score(r):
     (a stronger one pushed nearly every Polymarket geopolitics market out, since most say "consensus of credible reporting")."""
     w = EXIT_W.get((r.get("ex") or {}).get("g"), 0.6)
     rw = RULES_W.get((r.get("st") or {}).get("g"), 0.9)
-    return min(r["ret"], 10) * w * rw * min(1, math.log10(max(r.get("volume") or 0, 10)) / 5.3)
+    try:                                               # Nov 27 (James): count/range, price-path and live-vote markets miss most
+        from dz_grade import market_type
+        tw = 0.7 if market_type(r)[0] == "D" else 1.0
+    except Exception:
+        tw = 1.0
+    return min(r["ret"], 10) * w * rw * tw * min(1, math.log10(max(r.get("volume") or 0, 10)) / 5.3)
 
 
 def curate(rows):
@@ -91,9 +96,43 @@ def curate(rows):
         if k not in best or score(r) > score(best[k]):
             best[k] = r
     ok = list(best.values())
-    alpha = sorted([r for r in ok if r["site"] == "alpha"], key=lambda r: -(r.get("volume") or 0))[:ALPHA_SPOTS]
-    rest = sorted([r for r in ok if r["site"] != "alpha"], key=lambda r: -score(r))[:TOP - len(alpha)]
-    return sorted(alpha + rest, key=lambda r: r["days"])
+    # Nov 27 (James): one contract per news story (4 Jensen Huang contracts missed on one headline). Alpha's spots pick
+    # first, then the rest by score; a row that shares a story with one already kept is skipped. Each kept row says how
+    # many listed contracts ride on the same story (dz_grade.story_tokens / same_story).
+    try:
+        from dz_grade import story_tokens, same_story
+        tok = [story_tokens(r) for r in ok]
+    except Exception as e:
+        print("Danger Zone: stories skipped (%s)" % e)
+        story_tokens = same_story = None
+        tok = [set() for r in ok]
+    idx = {id(r): i for i, r in enumerate(ok)}
+    same = (lambda a, b: same_story(a, b, tok[idx[id(a)]], tok[idx[id(b)]])) if same_story else (lambda a, b: False)
+    alpha_pool = sorted([r for r in ok if r["site"] == "alpha"], key=lambda r: -(r.get("volume") or 0))
+    rest_pool = sorted([r for r in ok if r["site"] != "alpha"], key=lambda r: -score(r))
+    keep, na, skipped = [], 0, 0
+    for pool, cap in ((alpha_pool, ALPHA_SPOTS), (rest_pool, TOP)):
+        for r in pool:
+            if len(keep) >= TOP or (pool is alpha_pool and na >= cap):
+                break
+            if any(same(r, k) for k in keep):
+                skipped += 1
+                continue
+            keep.append(r)
+            na += pool is alpha_pool
+    for r in keep:
+        grp = [x for x in ok if x is not r and same(r, x)]
+        if grp:
+            names = sorted(tok[idx[id(r)]] & set().union(*[tok[idx[id(x)]] for x in grp])) or [r["title"][:60]]
+            r["story"] = {"name": " / ".join(names[:2]), "n": len(grp) + 1,
+                          "also": [{"site": x["site"], "t": x["title"], "o": x["outcome"], "s": x["side"], "a": x["ask"]}
+                                   for x in sorted(grp, key=lambda x: -score(x))[:4]]}
+        else:
+            r.pop("story", None)
+    print("Danger Zone: one per story (%d skipped); kept rows with a story: %s" % (skipped,
+          ", ".join("%s %d" % (r["story"]["name"], r["story"]["n"]) for r in keep if r.get("story"))[:400]))
+    keep = [(r, 0) for r in keep]
+    return sorted([r for r, _ in keep], key=lambda r: r["days"])
 
 
 LO, HI = 80, 98.5        # same price window as match_markets.EXP_LO / EXP_HI
