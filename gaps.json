@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-28T01:35:20Z",
+ "updated": "2026-11-28T02:31:05Z",
  "note": "Matches are automatic. Always check each site's rules before you trade. Fees are estimates; prices are midpoints and don't include the bid/ask spread.",
  "alpha_fresh": true,
  "gaps": [
@@ -31,13 +31,13 @@
    },
    "volumes": {
     "alpha": 10660,
-    "polymarket": 3319245,
-    "kalshi": 3495280
+    "polymarket": 3319458,
+    "kalshi": 3499017
    },
    "volumes24": {
     "alpha": 0,
-    "polymarket": 17670,
-    "kalshi": 33728
+    "polymarket": 17793,
+    "kalshi": 36971
    },
    "raw": 3.0,
    "fees": 0.7,
@@ -61,10 +61,10 @@
    "rate_high": 0.01,
    "category": "Politics",
    "fill": {
-    "usd": 322,
-    "shares": 328,
+    "usd": 1546,
+    "shares": 1577,
     "exec": 1.3,
-    "t": 1795829721,
+    "t": 1795833066,
     "buy": {
      "site": "kalshi",
      "yes": 10.0,
@@ -76,7 +76,7 @@
      "fee": 0.11
     },
     "avg": 1.3,
-    "profit": 4,
+    "profit": 20,
     "ladder": [
      [
       100,
@@ -84,6 +84,14 @@
      ],
      [
       250,
+      1.3
+     ],
+     [
+      500,
+      1.3
+     ],
+     [
+      1000,
       1.3
      ]
     ]
@@ -95,20 +103,20 @@
    "outcome": "December 31, 2026",
    "close": "2028-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 93.0,
-    "kalshi": 64.0,
+    "polymarket": 78.2,
+    "kalshi": 58.0,
     "alpha": null
    },
    "low": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 64.0,
+    "price": 58.0,
     "url": "https://kalshi.com/markets/kxanthropicmillennium"
    },
    "high": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 93.0,
+    "price": 78.2,
     "url": "https://polymarket.com/event/anthropic-announces-a-millennium-prize-solution-byptptpt"
    },
    "urls": {
@@ -116,20 +124,20 @@
     "kalshi": "https://kalshi.com/markets/kxanthropicmillennium"
    },
    "volumes": {
-    "polymarket": 182612,
-    "kalshi": 187278
+    "polymarket": 186867,
+    "kalshi": 187661
    },
    "volumes24": {
-    "polymarket": 21313,
-    "kalshi": 10892
+    "polymarket": 23163,
+    "kalshi": 11003
    },
-   "raw": 29.0,
-   "fees": 1.9,
-   "net": 27.1,
+   "raw": 20.2,
+   "fees": 2.6,
+   "net": 17.6,
    "all3": false,
-   "fee_low": 1.61,
-   "fee_high": 0.33,
-   "fair": 81.5,
+   "fee_low": 1.71,
+   "fee_high": 0.85,
+   "fair": 70.8,
    "grade": "A",
    "fine": {
     "src": "match",
@@ -142,118 +150,40 @@
    "rate_high": 0.05,
    "category": "AI",
    "fill": {
-    "usd": 499,
-    "shares": 554,
-    "exec": 9.0,
-    "t": 1795829721,
+    "usd": 558,
+    "shares": 628,
+    "exec": 15.7,
+    "t": 1795833066,
     "buy": {
      "site": "kalshi",
-     "yes": 67.0,
-     "fee": 1.55
+     "yes": 59.0,
+     "fee": 1.69
     },
     "sell": {
      "site": "polymarket",
-     "no": 21.6,
-     "fee": 0.85
+     "no": 22.7,
+     "fee": 0.88
     },
-    "avg": 7.7,
-    "profit": 43,
+    "avg": 8.6,
+    "profit": 54,
     "ladder": [
      [
       100,
-      8.8
+      11.3
      ],
      [
       250,
-      8.4
-     ]
-    ]
-   },
-   "chg": {}
-  },
-  {
-   "title": "Will Trump be impeached before his term ends?",
-   "outcome": "Yes",
-   "close": "2029-01-20T17:00:00Z",
-   "prices": {
-    "polymarket": 75.0,
-    "kalshi": 64.5,
-    "alpha": null
-   },
-   "low": {
-    "site": "kalshi",
-    "name": "Kalshi",
-    "price": 64.5,
-    "url": "https://kalshi.com/markets/kximpeach"
-   },
-   "high": {
-    "site": "polymarket",
-    "name": "Polymarket",
-    "price": 75.0,
-    "url": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends"
-   },
-   "urls": {
-    "polymarket": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends",
-    "kalshi": "https://kalshi.com/markets/kximpeach"
-   },
-   "volumes": {
-    "polymarket": 155603,
-    "kalshi": 1136484
-   },
-   "volumes24": {
-    "polymarket": 34,
-    "kalshi": 6546
-   },
-   "raw": 10.5,
-   "fees": 1.8,
-   "net": 8.7,
-   "all3": false,
-   "fee_low": 1.6,
-   "fee_high": 0.19,
-   "fair": 66.3,
-   "grade": "B",
-   "fine": {
-    "src": "similar",
-    "srcs": [
-     "Congress",
-     "Credible reporting"
-    ],
-    "void": "none"
-   },
-   "rate_low": 0.07,
-   "rate_high": 0.01,
-   "category": "Politics",
-   "fill": {
-    "usd": 316,
-    "shares": 328,
-    "exec": 6.2,
-    "t": 1795829721,
-    "buy": {
-     "site": "kalshi",
-     "yes": 65.0,
-     "fee": 1.59
-    },
-    "sell": {
-     "site": "polymarket",
-     "no": 27.0,
-     "fee": 0.2
-    },
-    "avg": 2.1,
-    "profit": 7,
-    "ladder": [
-     [
-      100,
-      3.8
+      10.9
      ],
      [
-      250,
-      2.3
+      500,
+      9.2
      ]
     ]
    },
    "chg": {
-    "polymarket": 0.5,
-    "kalshi": -3.0
+    "polymarket": -14.8,
+    "kalshi": -6.0
    }
   },
   {
@@ -283,11 +213,11 @@
    },
    "volumes": {
     "polymarket": 45671,
-    "kalshi": 164962
+    "kalshi": 165778
    },
    "volumes24": {
     "polymarket": 240,
-    "kalshi": 3764
+    "kalshi": 4579
    },
    "raw": 9.5,
    "fees": 1.1,
@@ -310,25 +240,109 @@
    "rate_high": 0.01,
    "category": "Trump",
    "fill": {
-    "usd": 63,
-    "shares": 65,
-    "exec": 1.8,
-    "t": 1795829722,
+    "usd": 17,
+    "shares": 18,
+    "exec": 2.8,
+    "t": 1795833066,
     "buy": {
      "site": "kalshi",
-     "yes": 18.0,
-     "fee": 1.03
+     "yes": 17.0,
+     "fee": 0.99
     },
     "sell": {
      "site": "polymarket",
      "no": 79.0,
      "fee": 0.17
     },
-    "avg": 1.8,
-    "profit": 1,
+    "avg": 2.1,
+    "profit": 0,
     "ladder": []
    },
    "chg": {}
+  },
+  {
+   "title": "Will Trump be impeached before his term ends?",
+   "outcome": "Yes",
+   "close": "2029-01-20T17:00:00Z",
+   "prices": {
+    "polymarket": 74.5,
+    "kalshi": 64.5,
+    "alpha": null
+   },
+   "low": {
+    "site": "kalshi",
+    "name": "Kalshi",
+    "price": 64.5,
+    "url": "https://kalshi.com/markets/kximpeach"
+   },
+   "high": {
+    "site": "polymarket",
+    "name": "Polymarket",
+    "price": 74.5,
+    "url": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends"
+   },
+   "urls": {
+    "polymarket": "https://polymarket.com/event/will-trump-be-impeached-before-his-term-ends",
+    "kalshi": "https://kalshi.com/markets/kximpeach"
+   },
+   "volumes": {
+    "polymarket": 155603,
+    "kalshi": 1136576
+   },
+   "volumes24": {
+    "polymarket": 34,
+    "kalshi": 6337
+   },
+   "raw": 10.0,
+   "fees": 1.8,
+   "net": 8.2,
+   "all3": false,
+   "fee_low": 1.6,
+   "fee_high": 0.19,
+   "fair": 66.3,
+   "grade": "B",
+   "fine": {
+    "src": "similar",
+    "srcs": [
+     "Congress",
+     "Credible reporting"
+    ],
+    "void": "none"
+   },
+   "rate_low": 0.07,
+   "rate_high": 0.01,
+   "category": "Politics",
+   "fill": {
+    "usd": 407,
+    "shares": 423,
+    "exec": 5.2,
+    "t": 1795833066,
+    "buy": {
+     "site": "kalshi",
+     "yes": 65.0,
+     "fee": 1.59
+    },
+    "sell": {
+     "site": "polymarket",
+     "no": 28.0,
+     "fee": 0.2
+    },
+    "avg": 2.0,
+    "profit": 9,
+    "ladder": [
+     [
+      100,
+      3.9
+     ],
+     [
+      250,
+      2.5
+     ]
+    ]
+   },
+   "chg": {
+    "polymarket": -0.5
+   }
   },
   {
    "title": "Who will a Senate committee vote to subpoena before 2028?",
@@ -360,7 +374,7 @@
     "kalshi": 18700
    },
    "volumes24": {
-    "polymarket": 147,
+    "polymarket": 127,
     "kalshi": 551
    },
    "raw": 8.5,
@@ -388,7 +402,7 @@
     "usd": 94,
     "shares": 100,
     "exec": 4.7,
-    "t": 1795829722,
+    "t": 1795833067,
     "buy": {
      "site": "kalshi",
      "yes": 20.0,
@@ -410,20 +424,20 @@
    "outcome": "March 31, 2027",
    "close": "2027-04-01T03:59:00Z",
    "prices": {
-    "polymarket": 18.5,
-    "kalshi": 26.5,
+    "polymarket": 15.5,
+    "kalshi": 23.5,
     "alpha": null
    },
    "low": {
     "site": "polymarket",
     "name": "Polymarket",
-    "price": 18.5,
+    "price": 15.5,
     "url": "https://polymarket.com/event/marco-rubio-out-as-secretary-of-state-byptptpt"
    },
    "high": {
     "site": "kalshi",
     "name": "Kalshi",
-    "price": 26.5,
+    "price": 23.5,
     "url": "https://kalshi.com/markets/kxrubioannounceout"
    },
    "urls": {
@@ -431,20 +445,20 @@
     "kalshi": "https://kalshi.com/markets/kxrubioannounceout"
    },
    "volumes": {
-    "polymarket": 853787,
-    "kalshi": 289127
+    "polymarket": 853837,
+    "kalshi": 290125
    },
    "volumes24": {
-    "polymarket": 34170,
+    "polymarket": 33840,
     "kalshi": 5148
    },
    "raw": 8.0,
-   "fees": 1.5,
-   "net": 6.5,
+   "fees": 1.4,
+   "net": 6.6,
    "all3": false,
-   "fee_low": 0.15,
-   "fee_high": 1.36,
-   "fair": 19.2,
+   "fee_low": 0.13,
+   "fee_high": 1.26,
+   "fair": 16.1,
    "grade": "B",
    "fine": {
     "src": "similar",
@@ -460,35 +474,40 @@
    "rate_high": 0.07,
    "category": "Trump",
    "fill": {
-    "usd": 287,
-    "shares": 298,
-    "exec": 4.5,
-    "t": 1795829723,
+    "usd": 749,
+    "shares": 776,
+    "exec": 3.7,
+    "t": 1795833067,
     "buy": {
      "site": "polymarket",
-     "yes": 19.0,
-     "fee": 0.15
+     "yes": 16.0,
+     "fee": 0.13
     },
     "sell": {
      "site": "kalshi",
-     "no": 75.0,
-     "fee": 1.31
+     "no": 79.0,
+     "fee": 1.16
     },
     "avg": 2.1,
-    "profit": 6,
+    "profit": 16,
     "ladder": [
      [
       100,
-      2.9
+      3.1
      ],
      [
       250,
-      2.2
+      2.9
+     ],
+     [
+      500,
+      2.3
      ]
     ]
    },
    "chg": {
-    "kalshi": -0.5
+    "polymarket": -3.0,
+    "kalshi": -3.0
    }
   },
   {
@@ -522,7 +541,7 @@
    },
    "volumes24": {
     "polymarket": 515,
-    "kalshi": 344
+    "kalshi": 308
    },
    "raw": 7.5,
    "fees": 2.0,
@@ -549,7 +568,7 @@
     "usd": 348,
     "shares": 361,
     "exec": 3.0,
-    "t": 1795829723,
+    "t": 1795833067,
     "buy": {
      "site": "polymarket",
      "yes": 50.0,
@@ -630,7 +649,7 @@
     "usd": 10,
     "shares": 10,
     "exec": 3.0,
-    "t": 1795829723,
+    "t": 1795833067,
     "buy": {
      "site": "polymarket",
      "yes": 12.0,
@@ -673,11 +692,11 @@
     "kalshi": "https://kalshi.com/markets/kxlutnickout"
    },
    "volumes": {
-    "polymarket": 822168,
-    "kalshi": 547650
+    "polymarket": 822564,
+    "kalshi": 547913
    },
    "volumes24": {
-    "polymarket": 3890,
+    "polymarket": 4286,
     "kalshi": 10492
    },
    "raw": 7.0,
@@ -704,7 +723,7 @@
     "usd": 1495,
     "shares": 1558,
     "exec": 3.3,
-    "t": 1795829723,
+    "t": 1795833067,
     "buy": {
      "site": "polymarket",
      "yes": 25.0,
@@ -765,11 +784,11 @@
    },
    "volumes": {
     "polymarket": 384979,
-    "kalshi": 738408
+    "kalshi": 738415
    },
    "volumes24": {
     "polymarket": 18842,
-    "kalshi": 4979
+    "kalshi": 4986
    },
    "raw": 6.2,
    "fees": 2.0,
@@ -790,10 +809,10 @@
    "rate_high": 0.07,
    "category": "Fed",
    "fill": {
-    "usd": 4388,
-    "shares": 4570,
+    "usd": 3970,
+    "shares": 4135,
     "exec": 3.2,
-    "t": 1795829723,
+    "t": 1795833067,
     "buy": {
      "site": "polymarket",
      "yes": 50.8,
@@ -805,7 +824,7 @@
      "fee": 1.72
     },
     "avg": 2.0,
-    "profit": 91,
+    "profit": 83,
     "ladder": [
      [
       100,
@@ -884,10 +903,10 @@
    "rate_high": 0.07,
    "category": "Politics",
    "fill": {
-    "usd": 338,
-    "shares": 348,
+    "usd": 366,
+    "shares": 377,
     "exec": 1.7,
-    "t": 1795829724,
+    "t": 1795833067,
     "buy": {
      "site": "polymarket",
      "yes": 11.0,
@@ -948,11 +967,27 @@
    "vol24": 157
   },
   {
+   "title": "Which math problems will AI solve in 2026?",
+   "outcome": "Riemann Hypothesis",
+   "close": "2027-01-01T04:59:00Z",
+   "prices": {
+    "polymarket": 80.0,
+    "kalshi": null,
+    "alpha": 68.8
+   },
+   "urls": {
+    "alpha": "https://www.alphaarcade.com/market/which-math-problems-will-ai-solve-in-2026",
+    "polymarket": "https://polymarket.com/event/which-math-problems-will-ai-solve-in-2026"
+   },
+   "diff": 11.2,
+   "vol24": 147
+  },
+  {
    "title": "Fed Decision in December?",
    "outcome": "No change",
    "close": "2027-01-28T04:59:59Z",
    "prices": {
-    "polymarket": 4.1,
+    "polymarket": 3.4,
     "kalshi": null,
     "alpha": 5.7
    },
@@ -960,7 +995,7 @@
     "alpha": "https://www.alphaarcade.com/market/fed-decision-december-2026",
     "polymarket": "https://polymarket.com/event/fed-decision-in-december-20260729232808632"
    },
-   "diff": 1.6,
+   "diff": 2.3,
    "vol24": 106
   },
   {
@@ -968,7 +1003,7 @@
    "outcome": "Yes",
    "close": "2026-12-10T04:59:00Z",
    "prices": {
-    "polymarket": 95.5,
+    "polymarket": 95.7,
     "kalshi": null,
     "alpha": 93.2
    },
@@ -976,7 +1011,7 @@
     "alpha": "https://www.alphaarcade.com/market/another-fed-rate-hike-in-2026",
     "polymarket": "https://polymarket.com/event/another-fed-rate-hike-in-2026"
    },
-   "diff": 2.3,
+   "diff": 2.5,
    "vol24": 95
   },
   {
@@ -1000,7 +1035,7 @@
    "outcome": "December 31, 2027",
    "close": "2028-01-01T04:59:00Z",
    "prices": {
-    "polymarket": 34.5,
+    "polymarket": 33.5,
     "kalshi": 34.0,
     "alpha": 27.3
    },
@@ -1009,7 +1044,7 @@
     "polymarket": "https://polymarket.com/event/jensen-huang-out-as-nvidia-ceo-again-byptptpt",
     "kalshi": "https://kalshi.com/markets/kxjensenout"
    },
-   "diff": 7.2,
+   "diff": 6.7,
    "vol24": 46
   },
   {
@@ -1059,22 +1094,6 @@
    },
    "diff": 0.0,
    "vol24": 18
-  },
-  {
-   "title": "Iran agrees to surrender enriched uranium stockpile by...?",
-   "outcome": "December 31",
-   "close": "2026-12-31T23:59:00Z",
-   "prices": {
-    "polymarket": 2.5,
-    "kalshi": null,
-    "alpha": 2.9
-   },
-   "urls": {
-    "alpha": "https://www.alphaarcade.com/market/iran-agrees-to-surrender-enriched-uranium-stockpile-by",
-    "polymarket": "https://polymarket.com/event/iran-agrees-to-surrender-enriched-uranium-stockpile-by"
-   },
-   "diff": 0.4,
-   "vol24": 11
   }
  ]
 }
