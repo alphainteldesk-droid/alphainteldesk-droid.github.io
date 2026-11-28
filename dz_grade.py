@@ -159,8 +159,33 @@ def grade(r):
     return {"g": g, "parts": parts, "why": why, "type": tname, "flip": f, "v": 2}
 
 
+# ---------------------------------------------------------------- exit watch
+def exit_watch(r, listed):
+    """Nov 27 (James): facts that say "take another look", never "sell". listed = this contract's track-record entry
+    (price when we first listed it "a", its cushion letter then "fg", the most buy orders seen since "exm")."""
+    out, z = [], r.get("dz") or {}
+    f = z.get("flip") or {}
+    if listed:
+        a = listed.get("a")
+        if a is not None and r["ask"] <= a - 5:
+            out.append({"k": "price", "t": "Down %.0f¢ since we first listed it (%.0f¢ then, %.0f¢ now)" % (a - r["ask"], a, r["ask"])})
+        if listed.get("fg") in ("A", "B") and f.get("g") in ("C", "D"):
+            out.append({"k": "cushion", "t": "Cushion was comfortable when we listed it; now %s" % f.get("word", "thin").lower()})
+        m, e = listed.get("exm") or 0, (r.get("ex") or {}).get("usd")
+        if e is not None and m >= 1000 and e <= 0.4 * m:
+            out.append({"k": "exit", "t": "Fewer buyers to sell to: about $%s of buy orders now, down from $%s" % (format(round(e), ","), format(round(m), ","))})
+    if f.get("falling"):
+        out.append({"k": "slide", "t": "Sliding: %s" % f["t"].split("sliding: ")[-1] if "sliding: " in f.get("t", "") else "Sliding over the last 2 days"})
+    return out
+
+
 def apply(rows):
     n = 0
+    try:
+        import json
+        listed = (json.load(open("track.json")).get("open") or {})
+    except Exception:
+        listed = {}
     for r in rows:
         try:
             d = grade(r)
@@ -170,6 +195,12 @@ def apply(rows):
         if d:
             r["dz"] = d
             n += 1
+            try:
+                w = exit_watch(r, listed.get("%s|%s|%s" % (r.get("site"), r.get("id"), r.get("side"))))
+                if w:
+                    d["watch"] = w
+            except Exception as err:
+                print("Exit watch: %s skipped (%s)" % ((r.get("title") or "")[:30], err))
     from collections import Counter
     print("DZ grade v2: %d of %d rows graded %s | types %s | flip %s" % (
         n, len(rows), dict(Counter(r["dz"]["g"] for r in rows if r.get("dz"))),

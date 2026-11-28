@@ -145,6 +145,9 @@ def main():
         sw = (x.get("ch") or {}).get("sw")              # Nov 22 (James): Chop = 48h swing; keep the biggest seen while listed
         if k in st["open"]:
             st["open"][k]["ls"] = now
+            eu = (x.get("ex") or {}).get("usd")              # Nov 27 (James): most buy-side depth seen while listed (Exit watch)
+            if eu is not None:
+                st["open"][k]["exm"] = max(eu, st["open"][k].get("exm", 0))
             if sw is not None:
                 st["open"][k]["cm"] = max(sw, st["open"][k].get("cm", 0))
             if "g" not in st["open"][k]:              # Nov 17: contracts logged before grades were saved get today's grade
