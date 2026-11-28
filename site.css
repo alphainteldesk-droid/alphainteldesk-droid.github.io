@@ -140,3 +140,8 @@ footer .wrap { max-width: 1120px !important; }
 .cmt p{margin:0 0 12px;color:var(--muted);max-width:70ch}
 .cmt-w{max-width:1120px !important;padding-top:0 !important}
 .cmt-x{display:flex;flex-wrap:wrap;gap:10px}
+/* Nov 28, 2026 (James): page headings centered on every page (nav.js marks them .pg-head). Tables, boxes and the
+   longer text further down stay left-aligned so they're easy to read. */
+main.wrap > .pg-head { text-align: center; margin-left: auto !important; margin-right: auto !important; }
+main.wrap > .pg-tags > .tag { margin-left: 4px; margin-right: 4px; }
+main.wrap > .pg-head.howpay { text-align: left; }
