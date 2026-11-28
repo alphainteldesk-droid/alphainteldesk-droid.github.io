@@ -7,7 +7,9 @@ Signals per hotspot (each scored against its own normal, learned in warroom_hist
   radar    - our Conflict Radar headlines (desk.json) about the region
   markets  - the biggest 24 h price move on the region's prediction markets (movers.json + Alpha history)
   ships    - IMF PortWatch transit calls through the region's chokepoints vs their 30-day normal (a drop = stress)
-Heat = half "how much is going on" (level, compared across hotspots) + half "how unusual is it" (vs its own normal).
+Heat = 25% "how much is going on" (level, compared across hotspots) + 75% "how unusual is it" (vs its own normal).
+Nov 27 (James): escalation must be earned. ELEVATED needs 2+ signals clearly above normal, HOT needs 3+; a level has to
+show on 2 updates in a row before the label goes up, and comes down one step at a time. Peace/talks news does not count.
 Also writes the Chokepoint Watch (PortWatch, incl. the 7-day average the Alpha Hormuz market settles on) and
 the USDC-on-Algorand tracker (issued supply as defined in the Alpha market's own rules).
 Writes warroom.json (page) + warroom_hist.json (baselines). Runs inside "Update markets"; does the slow feeds
@@ -81,12 +83,13 @@ HOTSPOTS = [
      "gdelt": '(Venezuela OR Maduro OR Caracas OR Cuba)',
      "terms": "venezuela, venezuelan, maduro, caracas, cuba, cuban", "choke": ["Panama Canal"]},
 ]
-GDELT_CONFLICT = ("(military OR strike OR missile OR attack OR troops OR drone OR warship OR invasion OR airstrike OR ceasefire "
-                  "OR cyberattack OR \"cyber attack\" OR hackers OR ransomware)")   # Nov 25 (James): cyber incidents count too
+GDELT_CONFLICT = ("(military OR strike OR missile OR attack OR troops OR drone OR warship OR invasion OR airstrike "
+                  "OR cyberattack OR \"cyber attack\" OR hackers OR ransomware)"   # Nov 25 (James): cyber incidents count too
+                  " -\"peace talks\" -\"peace deal\" -\"peace plan\" -\"peace agreement\" -negotiations")   # Nov 27: talks are not escalation
 # conflict words in the languages of the watched countries (Trends titles come in local scripts)
 CONFLICT_WORDS = [
     "war", "attack", "missile", "strike", "airstrike", "drone", "bomb", "explosion", "army", "military", "troops",
-    "invasion", "ceasefire", "sirens", "rocket", "nuclear", "navy", "warship", "mine", "killed", "shelling", "evacuation",
+    "invasion", "sirens", "rocket", "nuclear", "navy", "warship", "mine", "killed", "shelling", "evacuation",
     "מלחמה", "טיל", "טילים", "אזעקה", "צבע אדום", "פיגוע", "תקיפה", "צה\"ל", "חיזבאללה", "חמאס",          # Hebrew
     "حرب", "صاروخ", "صواريخ", "غارة", "قصف", "هجوم", "انفجار", "مسيرة", "الحوثي", "جيش",                  # Arabic
     "جنگ", "موشک", "حمله", "انفجار", "پهپاد", "مین", "سپاه", "آژیر",                                      # Persian
@@ -171,6 +174,21 @@ def hit(text, h):
     return matches(text, h["terms"]) and not matches(text, h["exclude"]) and not matches(text, IGNORE)
 
 
+# Nov 27 (James): peace / talks words. A headline or search with these and no hard violence word does not count as conflict.
+PEACE_WORDS = ["ceasefire", "cease-fire", "truce", "peace", "talks", "negotiation", "negotiations", "negotiators", "summit", "deal",
+               "agreement", "diplomacy", "diplomatic", "envoy", "sanctions", "перемирие", "переговоры", "мир", "перемир'я", "переговори",
+               "هدنة", "مفاوضات", "اتفاق", "آتش‌بس", "مذاکره", "הפסקת אש", "משא ומתן", "停火", "和谈", "和談", "휴전", "停戦", "alto el fuego", "negociaciones"]
+HARD_WORDS = ["killed", "dead", "strike", "strikes", "airstrike", "missile", "missiles", "attack", "attacks", "shelling", "explosion",
+              "bombing", "drone", "drones", "invasion", "troops", "casualties", "убиты", "удар", "обстрел", "загиблі", "удар", "قتلى", "غارة", "قصف"]
+
+
+def peace_only(text):
+    """True when the text is about talks / ceasefires / deals and has no hard violence word."""
+    low = " " + (text or "").lower() + " "
+    has = lambda ws: any((re.search(r"(?<![a-z])" + re.escape(w) + r"(?![a-z])", low) if w.isascii() else w in low) for w in ws)
+    return has(PEACE_WORDS) and not has(HARD_WORDS)
+
+
 CJK = re.compile(r"[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]")
 
 
@@ -237,6 +255,22 @@ for h in HOTSPOTS:
 news = prev.get("news_raw") or {}
 # GDELT limits shared servers hard, so each run refreshes ONE hotspot (the stalest); its data is daily anyway.
 todo = sorted(HOTSPOTS, key=lambda h: (news.get(h["id"]) or {}).get("at", 0))[:1 if "--all" not in sys.argv else 8]
+def news_normal(days):
+    """Nov 27 (James): GDELT sometimes loses most of a day's stories. Days below 30% of a typical busy day (75th
+    percentile) are treated as broken and left out, so they can't drag 'normal' down and make every region look 3x."""
+    xs = sorted(days)
+    if not xs:
+        return 0, 0
+    p75 = xs[min(len(xs) - 1, int(len(xs) * .75))]
+    good = [x for x in xs if x >= 0.3 * p75]
+    if len(good) < 5:
+        good = xs
+    return good[len(good) // 2], len(xs) - len(good)
+
+
+for _k, _v in list(news.items()):                         # older readings: re-figure 'normal' from their stored days
+    if _v.get("v") != 2 and len(_v.get("series") or []) >= 8:
+        _v["normal"], _v["gaps"] = news_normal(_v["series"][:-2]); _v["v"] = 2
 for h in todo:
     if (news.get(h["id"]) or {}).get("at", 0) > NOW - 40 * 60:
         continue
@@ -251,8 +285,8 @@ for h in todo:
         continue
     frac = max(0.25, (NOW % 86400) / 86400)               # last full day, or today so far scaled to a full day
     last = max(pts[-2], pts[-1] / frac)
-    base = sorted(pts[:-2])[len(pts[:-2]) // 2]           # median day of the 4 weeks before
-    news[h["id"]] = {"day": round(last), "normal": base, "series": pts[-14:], "at": NOW}
+    base, gaps = news_normal(pts[:-2])                    # Nov 27: median of the 4 weeks before, GDELT's broken days left out
+    news[h["id"]] = {"day": round(last), "normal": base, "series": pts[-14:], "at": NOW, "v": 2, "gaps": gaps}
     if "--all" in sys.argv:
         time.sleep(12)
 news = {k: v for k, v in news.items() if NOW - v.get("at", NOW) < 2 * 86400}     # drop stale readings
@@ -284,18 +318,18 @@ if SLOW:
         hits = []
         for g in h["geos"]:
             for t, nt in per.get(g, []):
-                if not matches(t, IGNORE) and not matches(t, h["exclude"]) and (is_conflict(t) or (is_conflict(nt) and hit(nt, h))):
+                if not matches(t, IGNORE) and not matches(t, h["exclude"]) and not peace_only(t) and (is_conflict(t) or (is_conflict(nt) and hit(nt, h))):
                     hits.append({"geo": g, "q": t})
         for g in ("US", "GB"):                           # the world's biggest audiences searching about the region
             for t, nt in per.get(g, []):
-                if hit(t + " " + nt, h) and is_conflict(t + " " + nt):
+                if hit(t + " " + nt, h) and is_conflict(t + " " + nt) and not peace_only(t):
                     hits.append({"geo": g, "q": t})
         trends[h["id"]] = hits[:6]
     print("WR trends:", {k: len(v) for k, v in trends.items()})
 
 # ---------------------------------------------------------------- 4. Conflict Radar headlines (every run)
 radar_items = (load("desk.json", {}) or {}).get("conflict") or []
-radar = {h["id"]: [c for c in radar_items if hit(c.get("title"), h)] for h in HOTSPOTS}
+radar = {h["id"]: [c for c in radar_items if hit(c.get("title"), h) and not peace_only(c.get("title"))] for h in HOTSPOTS}   # Nov 27: talks/deals don't count
 
 # ---------------------------------------------------------------- 5. markets (every run)
 movers = (load("movers.json", {}) or {}).get("movers") or []
@@ -528,7 +562,10 @@ print("WR dates:", {k: len(v) for k, v in dates.items() if v})
 
 # ---------------------------------------------------------------- score
 SIG = ("flights", "news", "trends", "radar", "markets", "ships", "oil")
-cur = {}
+cur, mk_norm = {}, {}
+oil_norm = normal("g:oilabs")                              # Nov 27: a usual day's oil move (size), so +2% means more on a calm week
+if oilchg is not None:
+    remember("g:oilabs", round(abs(oilchg), 2))
 for h in HOTSPOTS:
     i = h["id"]
     c = {"flights": flights[i]["w"], "radar": len(radar[i]), "trends": len(trends.get(i) or []),
@@ -543,13 +580,18 @@ for h in HOTSPOTS:
     cur[i] = c
     for k in ("flights", "radar", "trends"):
         remember(i + ":" + k, c[k])
+    mk_norm[i] = normal(i + ":markets")                  # Nov 27: each region's usual biggest daily move
+    remember(i + ":markets", c["markets"])
 
 hot = []
+MIX = float(CFG.get("mix_unusual", 0.75))                 # Nov 27 (James): 75% of each signal = unusual for THIS region
+RANK, TH = ["CALM", "ACTIVE", "ELEVATED", "HOT"], [0, 25, 50, 75]
+PREVH = {x.get("id"): x for x in prev.get("hotspots") or []}
 FLOOR = dict({"flights": 12, "news": 300, "trends": 4, "radar": 4, "markets": 15, "ships": 60, "oil": 4}, **(CFG.get("floor") or {}))   # "a lot" for each signal
 maxv = {k: max([cur[i].get(k, 0) for i in cur] + [FLOOR[k]]) for k in SIG}
 for h in HOTSPOTS:
     i, c = h["id"], cur[h["id"]]
-    parts, why, calib = {}, [], []
+    parts, why, calib, us = {}, [], [], {}
     for k in SIG:
         if k not in c:
             continue
@@ -558,15 +600,20 @@ for h in HOTSPOTS:
             u = unusual(news[i]["day"], news[i]["normal"], floor=5)
         elif k == "markets":
             u = max(0.0, min(1.0, (c[k] - 3) / 12))                    # 3c move = 0, 15c+ = 1
+            if mk_norm.get(i) is not None and c[k] >= 3:               # Nov 27: and vs this region's usual biggest move
+                u = min(u, unusual(c[k], mk_norm[i], floor=3)) if c[k] < 15 else u
         elif k == "ships":
             u = max(0.0, min(1.0, c[k] / 60))                          # traffic 60%+ below normal = 1
         elif k == "oil":
             level, u = clamp(c[k] / FLOOR["oil"]), clamp((c[k] - 1) / 4)  # +1% = 0, +5% = 1
+            if oil_norm is not None and c[k] > 0:                      # Nov 27: and vs a usual day's oil move
+                u = min(u, unusual(c[k], oil_norm, floor=0.75)) if c[k] < 5 else u
         else:
             u = unusual(c[k], normal(i + ":" + k))
             if u is None:
                 calib.append(k); u = level * 0.5                       # until we know "normal", lean on the level
-        parts[k] = round(100 * (0.5 * level + 0.5 * u))
+        parts[k] = round(100 * ((1 - MIX) * level + MIX * u))
+        us[k] = u
     wt = {k: WEIGHTS.get(k, 1) * (h["oil"] if k == "oil" else 1) for k in parts}
     score = round(sum(parts[k] * wt[k] for k in parts) / sum(wt.values())) if parts and sum(wt.values()) else 0
     # dots that amplify, not create: the fear gauge and a key date lift a hotspot that already shows activity
@@ -608,8 +655,43 @@ for h in HOTSPOTS:
     for r in dates[i][:2]:
         when = "today" if r["days"] == 0 else ("in %d day%s" % (r["days"], "s" * (r["days"] != 1)) if r["days"] > 0 else "%d day%s ago" % (-r["days"], "s" * (r["days"] != -1)))
         why.append({"k": "date", "t": {"anniversary": "Anniversary: ", "scheduled": "Scheduled: ", "black swan": "Black swan on this date: "}[r["kind"]] + "%s, %s" % (r["what"], when)})
-    lvl = "HOT" if score >= 75 else "ELEVATED" if score >= 50 else "ACTIVE" if score >= 25 else "CALM"
+    # Nov 27 (James): escalation must be earned. Signals "clearly up" = at least half-way to 3x their own normal.
+    strong = sorted([k for k, u in us.items() if u >= 0.5 and k != "oil"], key=lambda k: -us[k])   # oil is world-wide, not this region's own signal
+    raw_score, gate = score, None
+    if len(strong) < 3 and score >= 75:
+        score, gate = 74, "HOT needs 3 signals clearly above normal"
+    if len(strong) < 2 and score >= 50:
+        score, gate = 49, "ELEVATED needs 2 signals clearly above normal"
+    raw = sum(score >= t for t in TH) - 1
+    p = PREVH.get(i) or {}
+    shown_prev = RANK.index(p["level"]) if p.get("level") in RANK else raw
+    raw_prev = p.get("raw_level", shown_prev)
+    note = None
+    if raw > shown_prev:                                   # going up: the higher level has to show twice in a row
+        shown = min(raw, raw_prev) if raw_prev > shown_prev else shown_prev
+        if shown < raw:
+            note = "Rising toward %s: confirms if it holds on the next update" % RANK[raw]
+    elif raw < shown_prev:                                 # coming down: one step at a time, with a 5-point buffer
+        shown = shown_prev - 1 if score < TH[shown_prev] - 5 else shown_prev
+        if shown > raw:
+            note = "Cooling: holding at %s until the score clears the buffer" % RANK[shown]
+    else:
+        shown = raw
+    shown = min(shown, 1 if len(strong) < 2 else 2 if len(strong) < 3 else 3)   # the 2/3-signal rule always wins
+    score = max(TH[shown], min(score, (TH[shown + 1] - 1) if shown < 3 else 100))   # number stays inside its label's band
+    lvl = RANK[shown]
+    names = {"flights": "military flights", "news": "news", "trends": "searches", "radar": "Conflict Radar", "markets": "market moves", "ships": "shipping", "oil": "oil"}
+    if gate and shown == raw:
+        why.append({"k": "gate", "t": "Held below %s: %s (now: %s)" % ("HOT" if "HOT" in gate else "ELEVATED", gate,
+                    ", ".join(names[k] for k in strong) or "none")})
+    if note:
+        why.append({"k": "gate", "t": note})
+    first = min([t for t, v in hist["obs"].get(i + ":flights", [])] or [NOW])
+    bdays = int((NOW - first) / 86400)
+    if bdays < 14:
+        why.append({"k": "base", "t": "Baselines still building: %d of 14 days of history" % bdays})
     hot.append({"id": i, "name": h["name"], "lat": h["lat"], "lon": h["lon"], "score": score, "level": lvl, "parts": parts,
+                "raw_score": raw_score, "raw_level": raw, "strong": strong, "baseline_days": bdays,
                 "why": why, "calibrating": calib, "markets": mk[i], "flights": f, "news": news.get(i), "trends": trends.get(i) or [],
                 "radar": radar[i][:3], "dates": dates[i], "lift": {"fear": lift_fear, "date": lift_date}})
 hot.sort(key=lambda x: -x["score"])

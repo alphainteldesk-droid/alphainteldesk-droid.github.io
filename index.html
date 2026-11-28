@@ -1641,8 +1641,10 @@
     document.getElementById('wr-hist').innerHTML = hist.length ? hist.join('') + '<div class="wr-li"><small>Anniversaries and past shocks near today. They add a little heat only to a region that is already active. Full list on the calendar under HISTORY.</small></div>'
       : '<div class="wr-li"><small>No anniversaries or past shocks this week.</small></div>';
     document.getElementById('wr-upd').textContent = w.updated ? 'UPDATED ' + new Date(w.updated).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : '';
-    var cal = (w.hotspots || []).some(function (h) { return (h.calibrating || []).length; });
-    document.getElementById('wr-ft').innerHTML = (cal ? '<b style="color:#ffb347">Calibrating:</b> scores sharpen as the Intel Hub learns what normal looks like (about a week). ' : '') +
+    var cal = (w.hotspots || []).some(function (h) { return (h.calibrating || []).length; }),
+        bd = Math.min.apply(null, (w.hotspots || []).map(function (h) { return h.baseline_days == null ? 99 : h.baseline_days; }).concat([99]));   // Nov 27 (James)
+    document.getElementById('wr-ft').innerHTML = (cal || bd < 14 ? '<b style="color:#ffb347">Calibrating:</b> each region is scored against its own normal' + (bd < 14 ? ' (day ' + bd + ' of 14)' : '') + '. ' : '') +
+      'ELEVATED needs 2 signals well above normal, HOT needs 3. ' +
       'Click a dot for its evidence and markets. White dots = new places where 2+ signals agree.' + (w.updated ? ' Updated ' + new Date(w.updated).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '.' : '') + ' Not financial advice.';
   }
   function feeds(d) {
