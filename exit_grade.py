@@ -75,12 +75,7 @@ def score(r):
     (a stronger one pushed nearly every Polymarket geopolitics market out, since most say "consensus of credible reporting")."""
     w = EXIT_W.get((r.get("ex") or {}).get("g"), 0.6)
     rw = RULES_W.get((r.get("st") or {}).get("g"), 0.9)
-    try:                                               # Nov 27 (James): count/range, price-path and live-vote markets miss most
-        from dz_grade import market_type
-        tw = 0.7 if market_type(r)[0] == "D" else 1.0
-    except Exception:
-        tw = 1.0
-    return min(r["ret"], 10) * w * rw * tw * min(1, math.log10(max(r.get("volume") or 0, 10)) / 5.3)
+    return min(r["ret"], 10) * w * rw * min(1, math.log10(max(r.get("volume") or 0, 10)) / 5.3)
 
 
 def curate(rows):
@@ -90,6 +85,13 @@ def curate(rows):
     ok = [r for r in rows if not (r["days"] < 3 and PX.search(r["title"] + " " + (r.get("cat") or "")))
           and not short_crypto(r["title"]) and r["days"] >= MIN_DAYS
           and (r["site"] == "alpha" or (r.get("ex") or {}).get("g") != "D")]   # Nov 17 (James): Alpha keeps its 10 spots even when its book is thin
+    try:                                               # Nov 27 (James): counting, price-target and live-vote markets are not
+        from dz_grade import market_type               # listed at all (11 of our first 12 misses were these or one story)
+        cut = [r for r in ok if market_type(r)[0] == "D"]
+        ok = [r for r in ok if market_type(r)[0] != "D"]
+        print("Danger Zone: %d counting / price-target / live-vote contracts left out" % len(cut))
+    except Exception as e:
+        print("Danger Zone: market-kind filter skipped (%s)" % e)
     best = {}
     for r in ok:
         k = (r["site"], r["title"])

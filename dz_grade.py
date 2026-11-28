@@ -10,8 +10,9 @@ now has four parts:
   Type       - what kind of market it is (market_type below)
   Flip risk  - how big the price cushion is against how much the price has been moving (flip below; replaces "Chop")
 
-Combined: the average of the parts, rounded toward the weaker, and a D in Type or Flip risk caps the grade at C (both D
--> D). Every row also gets a "story" (story_keys): contracts that ride on the same news. The top 50 keeps one per story.
+Nov 27 update (James): counting, price-target and live-vote markets are no longer listed at all (exit_grade.curate), so
+the grade is Liquidity + Rules + Cushion (flip() below, shown on the site as "Cushion"): the average, rounded toward the
+weaker, and a very thin cushion (D) caps it at C. market_type() is still used for that filter. Every row also gets a "story" (story_keys): contracts that ride on the same news. The top 50 keeps one per story.
 
 Public data only. Nothing here raises: a row that can't be graded keeps no "dz".
 """
@@ -72,11 +73,12 @@ def flip(r):
     if falling:
         g = LET[max(1, N[g] - 1)]
     level = {"A": "LOW", "B": "LOW", "C": "MEDIUM", "D": "HIGH"}[g]
-    txt = ("%.0f¢ cushion above 50¢ against a likely swing of about %.0f¢ before it settles (it moved %.1f¢ in the last %s)"
-           % (cushion, expect, c["sw"], "48h" if c.get("h", 48) >= 46 else "%sh" % c.get("h")))
+    word = {"A": "Comfortable", "B": "Comfortable", "C": "Thin", "D": "Very thin"}[g]   # Nov 27 (James): plain words
+    txt = ("%.0f¢ above the 50/50 line. Prices like this usually move about %.0f¢ before they settle. %s"
+           % (cushion, expect, word))
     if falling:
-        txt += "; falling: %.0f¢ under its 48-hour high" % (max(pts) - pts[-1])
-    return {"g": g, "lvl": level, "ratio": round(ratio, 2), "falling": falling, "t": txt}
+        txt += ", and sliding: %.0f¢ below its high of the last 2 days" % (max(pts) - pts[-1])
+    return {"g": g, "lvl": level, "word": word, "ratio": round(ratio, 2), "falling": falling, "t": txt}
 
 
 # ---------------------------------------------------------------- stories
@@ -145,19 +147,14 @@ def grade(r):
         parts["liq"] = e["g"] if e.get("usd") else "D"
     if s.get("g") in RULES:
         parts["rules"] = RULES[s["g"]]
-    tg, tname, ttxt = market_type(r)
-    parts["type"], why["type"] = tg, tname + ": " + ttxt
+    tg, tname, ttxt = market_type(r)                # Nov 27 (James): kept for the record only; risky kinds aren't listed
     f = flip(r)
     if f:
         parts["flip"], why["flip"] = f["g"], f["t"]
     if "liq" not in parts or "rules" not in parts:
         return None
-    use = [v for k, v in parts.items() if not (k == "type" and v == "B")]   # an ordinary event market is neutral: it neither lifts nor drags
-    g = LET[math.floor(sum(N[v] for v in use) / len(use))]
-    bad = [k for k in ("type", "flip") if parts.get(k) == "D"]
-    if len(bad) == 2:
-        g = "D"
-    elif bad and N[g] > N["C"]:
+    g = LET[math.floor(sum(N[v] for v in parts.values()) / len(parts))]   # Liquidity + Rules + Cushion, toward the weaker
+    if parts.get("flip") == "D" and N[g] > N["C"]:        # a very thin cushion caps the grade at C
         g = "C"
     return {"g": g, "parts": parts, "why": why, "type": tname, "flip": f, "v": 2}
 
