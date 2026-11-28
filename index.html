@@ -1202,6 +1202,7 @@
   }).catch(function () { document.getElementById('hx-q').textContent = 'Live gaps are loading late. Open the Gap Scanner for the latest.'; });
   fetch('track.json?' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
     var a = (d.summary || {}).all || {};
+    var hh = document.getElementById('hub-hit'); if (hh && a.n >= 10) hh.textContent = a.pct.toFixed(1) + '%';   // Nov 27 (James): live hit rate in the Danger Zone heading
     if (a.n >= 10) document.getElementById('hx-rec').textContent = a.pct.toFixed(0) + '% paid out (' + a.won + ' of ' + a.n + ')';
   }).catch(function () {});
 })();
@@ -1421,7 +1422,7 @@
     </svg>
     <span class="dz-h-in">
       <h2><span class="beacon" aria-hidden="true"></span>THE DANGER ZONE<span class="beacon b2" aria-hidden="true"></span></h2>
-      <b class="hub-tag">80¢+ contracts settling in 1 week to 6 months. Up to <span id="hub-best">25%</span> return, but one wrong call could cost it all.</b>
+      <b class="hub-tag">80¢+ contracts settling in 1 week to 6 months. Up to <span id="hub-best">25%</span> return with a <span id="hub-hit">83%</span> hit rate so far, but one wrong call could cost it all.</b>
     </span>
     <span class="dz-h-go" aria-hidden="true">ENTER <i>&rarr;</i></span>
   </a>
